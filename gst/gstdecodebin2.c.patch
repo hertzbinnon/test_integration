@@ -1,0 +1,82 @@
+--- gst/playback/gstdecodebin2.c	2018-08-20 16:21:16.807809850 +0800
++++ gst/playback/gstdecodebin2.c.new	2018-08-20 16:21:48.406810443 +0800
+@@ -155,6 +155,7 @@
+   guint64 max_size_time;
+   gboolean post_stream_topology;
+   guint64 connection_speed;
++  gint program_number;
+ 
+   GstElement *typefind;         /* this holds the typefind object */
+ 
+@@ -261,6 +262,7 @@
+ #define DEFAULT_POST_STREAM_TOPOLOGY FALSE
+ #define DEFAULT_EXPOSE_ALL_STREAMS  TRUE
+ #define DEFAULT_CONNECTION_SPEED    0
++#define DEFAULT_PROGRAM_NUMBER      -1
+ 
+ /* Properties */
+ enum
+@@ -277,7 +279,8 @@
+   PROP_MAX_SIZE_TIME,
+   PROP_POST_STREAM_TOPOLOGY,
+   PROP_EXPOSE_ALL_STREAMS,
+-  PROP_CONNECTION_SPEED
++  PROP_CONNECTION_SPEED,
++  PROP_PROGRAM_NUMBER
+ };
+ 
+ static GstBinClass *parent_class;
+@@ -990,7 +993,11 @@
+           0, G_MAXUINT64 / 1000, DEFAULT_CONNECTION_SPEED,
+           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+ 
+-
++  g_object_class_install_property (gobject_klass, PROP_PROGRAM_NUMBER,
++      g_param_spec_int ("program-number", "Program Number",
++          "Program Number to demux for (-1 to ignore)",
++          -1, G_MAXINT, DEFAULT_PROGRAM_NUMBER,
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+ 
+   klass->autoplug_continue =
+       GST_DEBUG_FUNCPTR (gst_decode_bin_autoplug_continue);
+@@ -1106,6 +1113,7 @@
+ 
+   decode_bin->expose_allstreams = DEFAULT_EXPOSE_ALL_STREAMS;
+   decode_bin->connection_speed = DEFAULT_CONNECTION_SPEED;
++  decode_bin->program_number = DEFAULT_PROGRAM_NUMBER;
+ }
+ 
+ static void
+@@ -1296,6 +1304,9 @@
+       dbin->connection_speed = g_value_get_uint64 (value) * 1000;
+       GST_OBJECT_UNLOCK (dbin);
+       break;
++    case PROP_PROGRAM_NUMBER:
++	dbin->program_number = g_value_get_int (value);
++      break;
+     default:
+       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+       break;
+@@ -1348,6 +1359,9 @@
+       g_value_set_uint64 (value, dbin->connection_speed / 1000);
+       GST_OBJECT_UNLOCK (dbin);
+       break;
++    case PROP_PROGRAM_NUMBER:
++      g_value_set_int (value, dbin->program_number);
++      break;
+     default:
+       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+       break;
+@@ -2668,6 +2682,12 @@
+   gboolean dynamic = FALSE;
+   GList *to_connect = NULL;
+ 
++  { // itv++
++    gchar *name = gst_element_get_name (element);
++    if (g_str_has_prefix (name, "tsdemux")) {
++      g_object_set (G_OBJECT (element), "program-number", dbin->program_number, NULL);
++    }
++  }
+   GST_DEBUG_OBJECT (dbin, "Attempting to connect element %s [chain:%p] further",
+       GST_ELEMENT_NAME (element), chain);
+ 

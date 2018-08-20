@@ -1,0 +1,32 @@
+
+; <<>> DiG 9.9.5-P1-geoip-1.4 <<>> -t NS
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 63158
+;; flags: qr rd ra; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;.				IN	NS
+
+;; ANSWER SECTION:
+.			344751	IN	NS	a.root-servers.net.
+.			344751	IN	NS	f.root-servers.net.
+.			344751	IN	NS	j.root-servers.net.
+.			344751	IN	NS	e.root-servers.net.
+.			344751	IN	NS	h.root-servers.net.
+.			344751	IN	NS	b.root-servers.net.
+.			344751	IN	NS	l.root-servers.net.
+.			344751	IN	NS	g.root-servers.net.
+.			344751	IN	NS	i.root-servers.net.
+.			344751	IN	NS	c.root-servers.net.
+.			344751	IN	NS	k.root-servers.net.
+.			344751	IN	NS	d.root-servers.net.
+.			344751	IN	NS	m.root-servers.net.
+
+;; Query time: 4 msec
+;; SERVER: 202.106.196.115#53(202.106.196.115)
+;; WHEN: Fri Jul 21 10:46:30 CST 2017
+;; MSG SIZE  rcvd: 239
+

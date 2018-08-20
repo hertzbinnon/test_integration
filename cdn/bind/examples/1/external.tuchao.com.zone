@@ -1,0 +1,13 @@
+$TTL 600
+@	IN	SOA	dns.tuchchao.com.	admin.tuchao.com. (
+		2017072112
+		1H
+		10M
+		1W
+		5H )
+		IN	NS		dns
+		IN	MX	10	mail
+dns	IN	A			192.168.61.23
+mail	IN	A			192.168.61.23
+www	IN	A			1.1.1.1
+ftp	IN	A			2.2.2.2

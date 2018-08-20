@@ -1,0 +1,42 @@
+# define access control list 
+options{
+	directory "/tmp/named";
+	pid-file "/tmp/named.pid";
+};
+
+view "us"{
+	// Match clients for US & China
+	match-clients{country_US; country_CN;};
+	recursion yes;
+	zone "cdn.unixy.net"{
+		type master;
+		file "unixy-us.db";
+	};
+
+	zone "." IN {
+		type hint;
+		file "named.ca";
+	};
+};
+view "latin" {
+	// Match clients from Brazil, argentina, cchile
+	match-clients{country_AR; country_CL; country_BR;};
+	recursion yes;
+	zone "cdn.unixy.net"{
+		type master;
+		file "unixy-latin.db";
+	};
+
+	zone "." IN {
+		type hint;
+		file "named.ca";
+	};
+};
+
+view external {
+	match-clients { any; };
+	zone "cdn.unixy.net" IN {
+		type master;
+		file "unixy.db";
+	};
+};

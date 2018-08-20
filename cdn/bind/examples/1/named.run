@@ -1,0 +1,1702 @@
+21-Jul-2017 13:41:55.657 now using logging configuration from config file
+21-Jul-2017 13:41:55.657 load_configuration: success
+21-Jul-2017 13:41:55.657 managed-keys-zone/internal: starting load
+21-Jul-2017 13:41:55.657 managed-keys-zone/internal: loading from master file 3bed2cb3a3acf7b6a8ef408420cc682d5520e26976d354254f528c965612054f.mkeys failed: file not found
+21-Jul-2017 13:41:55.657 managed-keys-zone/internal: creating SOA
+21-Jul-2017 13:41:55.657 managed-keys-zone/internal: journal rollforward completed successfully: no journal
+21-Jul-2017 13:41:55.657 managed-keys-zone/internal: loaded; checking validity
+21-Jul-2017 13:41:55.657 managed-keys-zone/internal: synchronizing trusted keys
+21-Jul-2017 13:41:55.657 decrement_reference: delete from rbt: 0x7fac379d5220 .
+21-Jul-2017 13:41:55.657 zone_settimer: managed-keys-zone /internal: enter
+21-Jul-2017 13:41:55.657 managed-keys-zone/internal: loaded serial 0
+21-Jul-2017 13:41:55.657 managed-keys-zone/external: starting load
+21-Jul-2017 13:41:55.657 managed-keys-zone/external: loading from master file 3c4623849a49a53911c4a3e48d8cead8a1858960bccdea7a1b978d73ec2f06d7.mkeys failed: file not found
+21-Jul-2017 13:41:55.657 managed-keys-zone/external: creating SOA
+21-Jul-2017 13:41:55.657 managed-keys-zone/external: journal rollforward completed successfully: no journal
+21-Jul-2017 13:41:55.657 managed-keys-zone/external: loaded; checking validity
+21-Jul-2017 13:41:55.657 managed-keys-zone/external: synchronizing trusted keys
+21-Jul-2017 13:41:55.657 decrement_reference: delete from rbt: 0x7fac39eae170 .
+21-Jul-2017 13:41:55.657 zone_settimer: managed-keys-zone /external: enter
+21-Jul-2017 13:41:55.657 managed-keys-zone/external: loaded serial 0
+21-Jul-2017 13:41:55.657 Initializing GeoIP Country DB
+21-Jul-2017 13:41:55.657 GEO-106FREE 20090201 Build 1 Copyright (c) 2007 MaxMind LLC All Rights Reserved
+21-Jul-2017 13:41:55.657 GeoIP City DB Revision 0 or 1 not available
+21-Jul-2017 13:41:55.657 GeoIP Region DB Revision 0 or 1 not available
+21-Jul-2017 13:41:55.657 GeoIP ISP DB not available
+21-Jul-2017 13:41:55.657 GeoIP Organization DB not available
+21-Jul-2017 13:41:55.658 GeoIP AS DB not available
+21-Jul-2017 13:41:55.658 GeoIP NetSpeed DB not available
+21-Jul-2017 13:41:55.658 GeoIP Domain DB not available
+21-Jul-2017 13:41:55.658 GeoIP Country DB IPv6 not available
+21-Jul-2017 13:41:55.658 zone 0.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 0.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.658 zone_settimer: zone 0.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.658 zone 105.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 105.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.658 zone_settimer: zone 105.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.658 zone 10.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 10.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.658 zone_settimer: zone 10.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.658 zone 113.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 113.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.658 zone_settimer: zone 113.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.658 zone 100.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 100.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.658 zone_settimer: zone 100.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.658 zone 109.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 109.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.658 zone_settimer: zone 109.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.658 zone 101.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 101.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.658 zone_settimer: zone 101.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.658 zone 126.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.658 zone 126.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 126.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 102.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 102.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 102.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 121.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 121.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 121.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 103.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 103.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 103.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 104.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 104.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 104.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 107.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 107.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 107.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 110.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 110.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 110.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 108.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 108.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 108.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 116.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 116.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.659 zone_settimer: zone 116.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.659 zone 114.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.659 zone 114.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 114.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 74.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 74.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 74.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 124.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 124.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 124.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 77.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 77.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 77.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 106.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 106.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 106.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 115.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 115.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 115.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 118.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 118.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 118.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 70.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 70.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 70.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 123.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 123.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.660 zone_settimer: zone 123.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.660 zone 125.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.660 zone 125.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 125.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 127.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 127.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 127.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 75.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 75.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 75.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 78.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 78.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 78.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 92.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 92.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 92.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 111.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 111.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 111.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 112.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 112.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 112.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 122.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 122.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 122.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 66.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 66.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.661 zone_settimer: zone 66.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.661 zone 117.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.661 zone 117.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 117.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 119.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 119.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 119.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 80.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 80.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 80.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 17.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 17.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 17.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 18.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 18.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 18.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 19.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 19.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 19.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 69.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 69.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 69.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 97.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 97.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 97.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 83.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 83.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.662 zone_settimer: zone 83.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.662 zone 91.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.662 zone 91.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 91.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 64.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 64.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 64.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 67.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 67.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 67.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 85.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 85.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 85.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 86.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 86.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 86.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 25.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 25.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 25.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 100.51.198.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 100.51.198.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 100.51.198.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 65.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 65.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 65.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 82.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 82.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.663 zone_settimer: zone 82.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.663 zone 71.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.663 zone 71.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.664 zone_settimer: zone 71.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.664 zone 79.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.664 zone 79.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.664 zone_settimer: zone 79.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.664 zone 120.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.664 zone 120.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.664 zone_settimer: zone 120.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.664 zone 68.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.664 zone 68.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.664 zone_settimer: zone 68.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.664 zone 30.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.664 zone 30.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.664 zone_settimer: zone 30.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.664 zone 112.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.664 zone 112.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.664 zone_settimer: zone 112.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.664 zone 9.E.F.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.664 zone 9.E.F.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.664 zone_settimer: zone 9.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.664 zone localhost/IN/internal: starting load
+21-Jul-2017 13:41:55.664 zone localhost/IN/internal: journal rollforward completed successfully: no journal
+21-Jul-2017 13:41:55.664 zone localhost/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.665 decrement_reference: delete from rbt: 0x7fac39eaf070 localhost
+21-Jul-2017 13:41:55.665 zone_settimer: zone localhost/IN/internal: enter
+21-Jul-2017 13:41:55.665 zone localhost/IN/internal: loaded serial 2017072112
+21-Jul-2017 13:41:55.665 zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.665 zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.665 zone_settimer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.665 zone 113.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.665 zone 113.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.665 zone_settimer: zone 113.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.665 zone 98.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.665 zone 98.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.665 zone_settimer: zone 98.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.665 zone 16.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.665 zone 16.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.665 zone_settimer: zone 16.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.665 zone 73.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.665 zone 73.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.665 zone_settimer: zone 73.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.665 zone 81.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.665 zone 81.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.665 zone_settimer: zone 81.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.665 zone 93.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.665 zone 93.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.665 zone_settimer: zone 93.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.665 zone 0.0.127.in-addr.arpa/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone 0.0.127.in-addr.arpa/IN/internal: journal rollforward completed successfully: no journal
+21-Jul-2017 13:41:55.666 zone 0.0.127.in-addr.arpa/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 decrement_reference: delete from rbt: 0x7fac39eb51d0 0.0.127.in-addr.arpa
+21-Jul-2017 13:41:55.666 zone_settimer: zone 0.0.127.in-addr.arpa/IN/internal: enter
+21-Jul-2017 13:41:55.666 zone 0.0.127.in-addr.arpa/IN/internal: loaded serial 2017072112
+21-Jul-2017 13:41:55.666 zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 zone_settimer: zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.666 zone B.E.F.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone B.E.F.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 zone_settimer: zone B.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.666 zone 84.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone 84.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 zone_settimer: zone 84.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.666 zone 87.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone 87.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 zone_settimer: zone 87.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.666 zone 90.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone 90.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 zone_settimer: zone 90.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.666 zone 94.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone 94.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 zone_settimer: zone 94.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.666 zone 72.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.666 zone 72.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.666 zone_settimer: zone 72.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.667 zone 76.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.667 zone 76.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 76.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.667 zone 125.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.667 zone 125.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 125.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.667 zone 65.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.667 zone 65.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 65.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.667 zone 0.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.667 zone 0.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 0.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.667 zone 104.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.667 zone 104.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 104.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.667 zone 116.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.667 zone 116.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 116.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.667 zone 117.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.667 zone 117.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 117.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.667 zone 20.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.667 zone 20.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 20.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.667 zone 28.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.667 zone 28.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.667 zone_settimer: zone 28.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.668 zone 96.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.668 zone 96.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 96.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.668 zone 99.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.668 zone 99.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 99.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.668 zone 254.169.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.668 zone 254.169.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 254.169.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.668 zone 102.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.668 zone 102.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 102.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.668 zone 103.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.668 zone 103.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 103.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.668 zone 121.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.668 zone 121.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 121.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.668 zone 88.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.668 zone 88.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 88.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.668 zone 95.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.668 zone 95.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.668 zone_settimer: zone 95.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.668 zone 23.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.668 zone 23.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 23.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.669 zone 27.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.669 zone 27.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 27.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.669 zone 89.100.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.669 zone 89.100.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 89.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.669 zone 10.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.669 zone 10.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 10.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.669 zone 81.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.669 zone 81.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 81.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.669 zone 82.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.669 zone 82.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 82.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.669 zone 109.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.669 zone 109.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 109.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.669 zone 114.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.669 zone 114.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 114.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.669 zone 119.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.669 zone 119.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.669 zone_settimer: zone 119.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.669 zone 68.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.669 zone 68.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 68.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.670 zone D.F.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.670 zone D.F.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone D.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.670 zone 110.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.670 zone 110.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 110.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.670 zone 24.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.670 zone 24.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 24.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.670 zone 29.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.670 zone 29.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 29.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.670 zone 64.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.670 zone 64.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 64.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.670 zone 67.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.670 zone 67.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 67.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.670 zone 122.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.670 zone 122.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 122.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.670 zone 71.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.670 zone 71.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.670 zone_settimer: zone 71.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.670 zone 21.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.670 zone 21.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 21.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.671 zone 31.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.671 zone 31.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 31.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.671 zone 2.0.192.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.671 zone 2.0.192.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 2.0.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.671 zone 105.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.671 zone 105.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 105.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.671 zone 124.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.671 zone 124.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 124.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.671 zone 88.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.671 zone 88.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 88.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.671 zone 254.169.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.671 zone 254.169.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 254.169.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.671 zone 120.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.671 zone 120.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 120.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.671 zone 123.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.671 zone 123.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.671 zone_settimer: zone 123.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.671 zone 73.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.671 zone 73.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 73.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.672 zone 74.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.672 zone 74.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 74.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.672 zone 111.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.672 zone 111.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 111.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.672 zone 127.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.672 zone 127.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 127.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.672 zone 168.192.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.672 zone 168.192.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 168.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.672 zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.672 zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.672 zone 86.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.672 zone 86.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 86.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.672 zone 96.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.672 zone 96.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 96.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.672 zone 75.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.672 zone 75.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.672 zone_settimer: zone 75.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.672 zone 79.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.672 zone 79.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 79.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.673 zone 22.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.673 zone 22.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 22.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.673 zone 26.172.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.673 zone 26.172.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 26.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.673 zone 8.E.F.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.673 zone 8.E.F.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 8.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.673 zone 66.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.673 zone 66.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 66.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.673 zone 92.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.673 zone 92.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 92.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.673 zone 94.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.673 zone 94.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 94.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.673 zone 19.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.673 zone 19.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 19.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.673 zone 21.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.673 zone 21.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.673 zone_settimer: zone 21.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.673 zone 127.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.673 zone 127.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.674 zone_settimer: zone 127.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.674 zone 25.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.674 zone 25.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.674 zone_settimer: zone 25.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.674 zone 80.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.674 zone 80.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.674 zone_settimer: zone 80.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.674 zone 8.E.F.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.674 zone 8.E.F.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.674 zone_settimer: zone 8.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.674 zone 69.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.674 zone 69.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.674 zone_settimer: zone 69.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.674 zone 77.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.674 zone 77.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.674 zone_settimer: zone 77.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.674 zone tuchao.com/IN/internal: starting load
+21-Jul-2017 13:41:55.674 zone tuchao.com/IN/internal: journal rollforward completed successfully: no journal
+21-Jul-2017 13:41:55.674 zone tuchao.com/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.674 decrement_reference: delete from rbt: 0x7fac39eaf0d0 tuchao.com
+21-Jul-2017 13:41:55.674 zone_settimer: zone tuchao.com/IN/internal: enter
+21-Jul-2017 13:41:55.674 zone tuchao.com/IN/internal: loaded serial 2017072112
+21-Jul-2017 13:41:55.674 zone 101.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.675 zone 101.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone 101.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.675 zone 99.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.675 zone 99.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone 99.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.675 zone 31.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.675 zone 31.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone 31.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.675 zone 23.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.675 zone 23.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone 23.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.675 zone hostname.bind/CH: starting load
+21-Jul-2017 13:41:55.675 zone hostname.bind/CH: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone hostname.bind/CH: enter
+21-Jul-2017 13:41:55.675 zone 113.0.203.IN-ADDR.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.675 zone 113.0.203.IN-ADDR.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone 113.0.203.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.675 zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.675 zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.675 zone 70.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.675 zone 70.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.675 zone_settimer: zone 70.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.675 zone 76.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.675 zone 76.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 76.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 16.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 16.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 16.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 20.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 20.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 20.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 27.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 27.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 27.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 28.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 28.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 28.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone A.E.F.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone A.E.F.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone A.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 78.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 78.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 78.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 85.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 85.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.676 zone_settimer: zone 85.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.676 zone 107.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.676 zone 107.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone 107.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.677 zone 108.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.677 zone 108.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone 108.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.677 zone authors.bind/CH: starting load
+21-Jul-2017 13:41:55.677 zone authors.bind/CH: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone authors.bind/CH: enter
+21-Jul-2017 13:41:55.677 zone A.E.F.IP6.ARPA/IN/internal: starting load
+21-Jul-2017 13:41:55.677 zone A.E.F.IP6.ARPA/IN/internal: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone A.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.677 zone 100.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.677 zone 100.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone 100.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.677 zone 84.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.677 zone 84.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone 84.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.677 zone 93.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.677 zone 93.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone 93.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.677 zone 24.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.677 zone 24.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.677 zone_settimer: zone 24.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.677 zone D.F.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.677 zone D.F.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone D.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone id.server/CH: starting load
+21-Jul-2017 13:41:55.678 zone id.server/CH: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone id.server/CH: enter
+21-Jul-2017 13:41:55.678 zone 87.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 87.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone 87.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone 90.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 90.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone 90.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone 72.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 72.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone 72.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone 89.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 89.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone 89.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone 106.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 106.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone 106.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone 115.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 115.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone 115.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone 26.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 26.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.678 zone_settimer: zone 26.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.678 zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.678 zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 91.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 91.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 91.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 97.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 97.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 97.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 95.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 95.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 95.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 2.0.192.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 2.0.192.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 2.0.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 118.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 118.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 118.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 126.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 126.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 126.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 17.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 17.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 17.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 18.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 18.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.679 zone_settimer: zone 18.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.679 zone 168.192.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.679 zone 168.192.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 168.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 83.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 83.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 83.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 98.100.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 98.100.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 98.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 29.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 29.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 29.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 30.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 30.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 30.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 22.172.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 22.172.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 22.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 100.51.198.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 100.51.198.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 100.51.198.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 9.E.F.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 9.E.F.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.680 zone_settimer: zone 9.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.680 zone 113.0.203.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.680 zone 113.0.203.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.681 zone_settimer: zone 113.0.203.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.681 zone 255.255.255.255.IN-ADDR.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.681 zone 255.255.255.255.IN-ADDR.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.681 zone_settimer: zone 255.255.255.255.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.681 zone B.E.F.IP6.ARPA/IN/external: starting load
+21-Jul-2017 13:41:55.681 zone B.E.F.IP6.ARPA/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.681 zone_settimer: zone B.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.681 zone tuchao.com/IN/external: starting load
+21-Jul-2017 13:41:55.681 zone tuchao.com/IN/external: journal rollforward completed successfully: no journal
+21-Jul-2017 13:41:55.681 zone tuchao.com/IN/external: loaded; checking validity
+21-Jul-2017 13:41:55.681 decrement_reference: delete from rbt: 0x7fac379da130 tuchao.com
+21-Jul-2017 13:41:55.681 zone_settimer: zone tuchao.com/IN/external: enter
+21-Jul-2017 13:41:55.681 zone tuchao.com/IN/external: loaded serial 2017072112
+21-Jul-2017 13:41:55.681 zone version.bind/CH: starting load
+21-Jul-2017 13:41:55.681 zone version.bind/CH: loaded; checking validity
+21-Jul-2017 13:41:55.681 zone_settimer: zone version.bind/CH: enter
+21-Jul-2017 13:41:55.681 all zones loaded
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone tuchao.com/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone tuchao.com/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone localhost/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone localhost/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 0.0.127.in-addr.arpa/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 0.0.127.in-addr.arpa/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: managed-keys-zone /internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: managed-keys-zone /internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 10.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 10.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 16.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 16.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 17.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 17.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 18.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 18.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 19.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 19.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 20.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 20.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 21.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 21.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 22.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 22.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 dns_zone_maintenance: zone 23.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.681 zone_settimer: zone 23.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 24.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 24.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 25.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 25.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 26.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 26.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 27.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 27.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 28.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 28.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 29.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 29.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 30.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 30.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 31.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 31.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 168.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 168.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 64.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 64.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 65.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 65.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 66.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 66.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 67.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 67.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 68.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 68.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 69.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 69.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 70.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 70.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 71.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 71.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 72.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 72.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 73.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 73.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 74.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 74.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 75.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 75.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 76.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 76.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 77.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 77.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 78.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 78.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 79.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 79.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 80.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 80.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 81.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 81.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 82.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 82.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 83.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 83.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 84.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 84.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 85.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 85.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 86.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 86.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 87.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 87.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 88.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 88.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 89.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 89.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 90.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 90.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 91.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 91.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 92.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 92.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 93.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 93.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 94.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 94.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 95.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 95.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 96.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 96.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 97.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 97.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 98.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 98.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 99.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 99.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 100.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 100.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 101.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 101.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 102.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 102.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 103.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 103.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 104.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 104.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 105.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 105.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 106.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 106.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 107.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 107.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 108.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 108.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 109.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 109.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 110.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 zone_settimer: zone 110.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.682 dns_zone_maintenance: zone 111.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 111.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 112.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 112.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 113.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 113.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 114.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 114.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 115.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 115.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 116.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 116.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 117.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 117.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 118.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 118.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 119.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 119.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 120.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 120.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 121.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 121.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 122.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 122.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 123.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 123.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 124.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 124.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 125.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 125.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 126.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 126.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 127.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 127.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 0.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 0.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 127.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 127.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 254.169.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 254.169.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 2.0.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 2.0.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 100.51.198.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 100.51.198.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 113.0.203.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 113.0.203.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone D.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone D.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 8.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 8.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 9.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 9.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone A.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone A.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone B.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone B.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone tuchao.com/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone tuchao.com/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: managed-keys-zone /external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: managed-keys-zone /external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 10.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 10.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 16.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 16.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 17.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 17.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 18.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 18.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 19.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 19.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 20.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 20.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 21.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 21.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 22.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 22.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 23.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 23.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 24.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 24.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 25.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 25.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 26.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 26.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 27.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 27.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 28.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 28.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 29.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 29.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 30.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 30.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 31.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 31.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 168.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 168.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 64.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 64.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 65.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 65.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 66.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 66.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 67.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 67.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 68.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 68.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 69.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 zone_settimer: zone 69.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.683 dns_zone_maintenance: zone 70.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 70.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 71.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 71.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 72.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 72.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 73.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 73.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 74.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 74.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 75.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 75.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 76.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 76.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 77.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 77.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 78.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 78.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 79.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 79.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 80.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 80.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 81.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 81.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 82.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 82.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 83.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 83.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 84.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 84.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 85.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 85.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 86.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 86.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 87.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 87.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 88.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 88.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 89.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 89.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 90.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 90.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 91.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 91.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 92.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 92.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 93.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 93.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 94.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 94.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 95.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 95.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 96.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 96.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 97.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 97.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 98.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 98.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 99.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 99.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 100.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 100.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 101.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 101.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 102.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 102.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 103.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 103.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 104.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 104.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 105.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 105.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 106.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 106.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 107.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 107.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 108.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 108.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 109.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 109.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 110.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 110.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 111.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 111.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 112.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 112.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 113.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 113.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 114.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 114.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 115.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 115.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 116.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 116.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 117.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 117.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 118.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 118.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 119.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 119.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 120.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 120.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 121.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 121.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 122.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 122.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 123.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 123.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 124.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 124.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 125.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 125.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 126.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 126.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 dns_zone_maintenance: zone 127.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.684 zone_settimer: zone 127.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 0.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 0.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 127.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 127.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 254.169.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 254.169.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 2.0.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 2.0.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 100.51.198.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 100.51.198.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 113.0.203.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 113.0.203.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 255.255.255.255.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 255.255.255.255.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone D.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone D.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 8.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 8.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 9.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 9.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone A.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone A.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone B.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone B.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone version.bind/CH: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone version.bind/CH: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone hostname.bind/CH: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone hostname.bind/CH: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone authors.bind/CH: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone authors.bind/CH: enter
+21-Jul-2017 13:41:55.685 dns_zone_maintenance: zone id.server/CH: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone id.server/CH: enter
+21-Jul-2017 13:41:55.685 running
+21-Jul-2017 13:41:55.685 zone_timer: zone 18.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 18.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 18.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 0.0.127.in-addr.arpa/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 0.0.127.in-addr.arpa/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 0.0.127.in-addr.arpa/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 20.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 20.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 20.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 25.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 25.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 25.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone localhost/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone localhost/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone localhost/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 10.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 10.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 10.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 23.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 23.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 23.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 26.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 26.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 26.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 27.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 27.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 27.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 28.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 28.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 28.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 17.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 17.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 17.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 64.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 64.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 64.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 21.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 21.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 21.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 22.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 22.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 22.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_timer: zone 31.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_maintenance: zone 31.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.685 zone_settimer: zone 31.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 65.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 65.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 65.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone tuchao.com/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone tuchao.com/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone tuchao.com/IN/internal: sending notifies (serial 2017072112)
+21-Jul-2017 13:41:55.686 zone_settimer: zone tuchao.com/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 19.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 19.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 19.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 68.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 68.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 68.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 73.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 73.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 73.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 168.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 168.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 168.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 80.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 80.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 80.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 30.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 30.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 30.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 85.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 85.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 85.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 16.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 16.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 16.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 24.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 24.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 24.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 29.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 29.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 29.172.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 69.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 69.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 69.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 77.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 77.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 77.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 87.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 87.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 87.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 67.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 67.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 67.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 71.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 71.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 71.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 72.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 72.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 72.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 76.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 76.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 76.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 70.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 70.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 70.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 78.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 78.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 78.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 90.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 90.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 90.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 111.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 111.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 111.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 74.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 74.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 74.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 97.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 97.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 97.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 84.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 84.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 84.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 105.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 105.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 105.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 86.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 86.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 86.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 92.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 92.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 92.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 66.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 66.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 66.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 75.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 75.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 75.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 95.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 95.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 95.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 112.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 112.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 112.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 93.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_maintenance: zone 93.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_settimer: zone 93.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.686 zone_timer: zone 108.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 108.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 108.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 89.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 89.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 89.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 96.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 96.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 96.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 81.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 81.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 81.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 83.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 83.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 83.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 79.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 79.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 79.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 88.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 88.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 88.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 120.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 120.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 120.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 127.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 127.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 127.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 99.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 99.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 99.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 107.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 107.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 107.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 109.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 109.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 109.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 118.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 118.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 118.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 100.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 100.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 100.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 102.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 102.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 102.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 82.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 82.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 82.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 101.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 101.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 101.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 126.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 126.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 126.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 254.169.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 254.169.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 254.169.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 110.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 110.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 110.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 116.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 116.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 116.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 103.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 103.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 103.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 119.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 119.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 119.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 91.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 91.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 91.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 114.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 114.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 114.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 94.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 94.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 94.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 98.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 98.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 98.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 255.255.255.255.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 9.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 9.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 9.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 113.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 113.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 113.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone A.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone A.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone A.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 124.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 124.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 124.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 67.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 67.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 67.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 104.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 104.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 104.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 106.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 106.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 106.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 8.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 8.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 8.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 27.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 27.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 27.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone B.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_maintenance: zone B.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_settimer: zone B.E.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.687 zone_timer: zone 121.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 121.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 121.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 123.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 123.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 123.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 19.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 19.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 19.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 23.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 23.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 23.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 115.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 115.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 115.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 117.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 117.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 117.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 2.0.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 2.0.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 2.0.192.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 113.0.203.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 113.0.203.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 113.0.203.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 65.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 65.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 65.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 77.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 77.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 77.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone tuchao.com/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone tuchao.com/IN/external: enter
+21-Jul-2017 13:41:55.688 zone tuchao.com/IN/external: sending notifies (serial 2017072112)
+21-Jul-2017 13:41:55.688 zone_settimer: zone tuchao.com/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 10.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 10.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 10.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 71.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 71.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 71.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 81.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 81.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 81.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 125.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 125.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 125.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 0.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 0.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 0.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 75.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 75.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 75.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 76.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 76.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 76.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 25.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 25.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 25.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 127.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 127.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 127.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 17.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 17.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 17.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 29.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 29.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 29.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 168.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 168.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 168.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 122.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 122.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 122.100.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 16.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 16.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 16.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 18.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 18.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 18.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 78.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 78.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 78.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 82.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 82.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 82.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 30.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 30.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 30.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 31.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 31.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 31.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 86.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 86.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 86.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 93.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 93.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 93.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 100.51.198.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone 100.51.198.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone 100.51.198.IN-ADDR.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone D.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_maintenance: zone D.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_settimer: zone D.F.IP6.ARPA/IN/internal: enter
+21-Jul-2017 13:41:55.688 zone_timer: zone 87.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 87.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 87.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 89.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 89.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 89.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 26.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 26.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 26.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 72.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 72.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 72.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 20.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 20.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 20.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 28.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 28.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 28.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 74.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 74.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 74.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 113.0.203.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 113.0.203.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 113.0.203.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 22.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 22.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 22.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 64.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 64.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 64.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 24.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 24.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 24.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 90.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 90.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 90.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 88.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 88.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 88.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 91.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 91.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 91.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 68.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 68.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 68.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 83.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 83.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 83.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 95.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 95.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 95.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 105.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 105.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 105.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 21.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 21.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 21.172.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 70.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 70.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 70.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 92.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 92.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 92.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 100.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 100.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 100.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 104.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 104.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 104.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 121.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 121.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 121.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 66.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 66.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 66.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 69.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 69.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 69.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 8.B.D.0.1.0.0.2.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone version.bind/CH: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone version.bind/CH: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone version.bind/CH: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 96.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 96.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 96.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 97.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 97.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 97.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 99.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 99.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 99.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 126.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 126.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 126.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 94.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 94.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 94.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 102.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 102.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 102.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 98.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 98.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 98.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 101.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 101.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 101.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 114.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 114.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 114.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 117.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 117.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 117.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 112.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_maintenance: zone 112.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_settimer: zone 112.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.689 zone_timer: zone 116.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 116.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 116.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 113.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 113.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 113.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 123.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 123.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 123.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone B.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone B.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone B.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 73.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 73.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 73.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 79.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 79.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 79.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone hostname.bind/CH: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone hostname.bind/CH: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone hostname.bind/CH: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 106.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 106.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 106.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 107.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 107.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 107.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 103.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 103.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 103.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 108.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 108.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 108.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 122.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 122.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 122.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 0.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 0.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 0.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 127.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 127.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 127.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 80.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 80.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 80.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 84.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 84.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 84.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone authors.bind/CH: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone authors.bind/CH: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone authors.bind/CH: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone id.server/CH: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone id.server/CH: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone id.server/CH: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 111.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 111.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 111.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 118.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 118.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 118.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 109.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 109.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 109.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 110.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 110.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 110.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 254.169.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 254.169.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 254.169.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 100.51.198.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 100.51.198.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 100.51.198.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 85.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 85.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 85.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 127.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 127.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 127.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 120.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 120.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 120.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 124.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 124.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 124.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 115.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 115.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 115.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 119.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 119.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 119.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 8.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 8.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 8.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 125.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 125.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 125.100.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_timer: zone 2.0.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_maintenance: zone 2.0.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.690 zone_settimer: zone 2.0.192.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_timer: zone 255.255.255.255.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_maintenance: zone 255.255.255.255.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_settimer: zone 255.255.255.255.IN-ADDR.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_timer: zone D.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_maintenance: zone D.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_settimer: zone D.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_timer: zone 9.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_maintenance: zone 9.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_settimer: zone 9.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_timer: zone A.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_maintenance: zone A.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 zone_settimer: zone A.E.F.IP6.ARPA/IN/external: enter
+21-Jul-2017 13:41:55.692 client 192.168.61.23#22885: view internal: received notify for zone 'tuchao.com'
+21-Jul-2017 13:46:05.277 createfetch: _ldap._tcp.dkb.itv.com.cn SRV
+21-Jul-2017 13:46:05.277 createfetch: a.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: b.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: c.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: d.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: e.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: f.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: g.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: h.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: i.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: j.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: k.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: l.root-servers.net A
+21-Jul-2017 13:46:05.277 createfetch: m.root-servers.net A
+21-Jul-2017 13:46:07.279 createfetch: cndkbpipaa01.dkb.itv.com.cn A
+21-Jul-2017 13:46:15.277 client 127.0.0.1#45842 (_ldap._tcp.dkb.itv.com.cn): view internal: query failed (SERVFAIL) for _ldap._tcp.dkb.itv.com.cn/IN/SRV at query.c:7005
+21-Jul-2017 13:46:17.279 client 127.0.0.1#35753 (cndkbpipaa01.dkb.itv.com.cn): view internal: query failed (SERVFAIL) for cndkbpipaa01.dkb.itv.com.cn/IN/A at query.c:7005
+21-Jul-2017 13:52:02.355 createfetch: 134.230.241.103.in-addr.arpa PTR
+21-Jul-2017 13:52:02.355 createfetch: a.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: b.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: c.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: d.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: e.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: f.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: g.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: h.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: i.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: j.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: k.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: l.root-servers.net A
+21-Jul-2017 13:52:02.356 createfetch: m.root-servers.net A
+21-Jul-2017 13:52:12.356 client 192.168.61.28#59325 (134.230.241.103.in-addr.arpa): view internal: query failed (SERVFAIL) for 134.230.241.103.in-addr.arpa/IN/PTR at query.c:7005
+21-Jul-2017 13:52:21.387 createfetch: www.baidu.com A
+21-Jul-2017 13:52:21.387 client 192.168.61.28#40030 (www.baidu.com): view internal: query failed (SERVFAIL) for www.baidu.com/IN/A at query.c:7005
+21-Jul-2017 13:52:26.392 createfetch: www.baidu.com A
+21-Jul-2017 13:52:26.392 client 192.168.61.28#44636 (www.baidu.com): view internal: query failed (SERVFAIL) for www.baidu.com/IN/A at query.c:7005
+21-Jul-2017 13:52:31.406 createfetch: www.baidu.com A
+21-Jul-2017 13:52:31.407 client 192.168.61.28#47895 (www.baidu.com): view internal: query failed (SERVFAIL) for www.baidu.com/IN/A at query.c:7005

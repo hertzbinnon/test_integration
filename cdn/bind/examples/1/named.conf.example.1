@@ -1,0 +1,37 @@
+# define access control list 
+acl Internal{
+	192.168.61.0/24;
+	127.0.0.1;
+};
+options{
+	directory "/tmp/named";
+	pid-file "/tmp/named.pid";
+};
+
+view internal{
+	match-clients { Internal; };
+	zone "tuchao.com" IN {
+		type master;
+		file "internal.tuchao.com.zone";
+	};
+	zone "." IN {
+		type hint;
+		file "named.ca";
+	};
+	zone "localhost" IN {
+		type master;
+		file "localhost.zone";
+	};
+	zone "0.0.127.in-addr.arpa" IN {
+		type master;
+		file "named.local";
+	};
+};
+
+view external {
+	match-clients { any; };
+	zone "tuchao.com" IN {
+		type master;
+		file "external.tuchao.com.zone";
+	};
+};

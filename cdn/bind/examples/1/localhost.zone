@@ -1,0 +1,9 @@
+$TTL 600
+@	IN	SOA	localhost.	admin.localhost. (
+		2017072112
+		1H
+		10M
+		1W
+		6H )
+		IN	NS	localhost.
+localhost.	IN	A	127.0.0.1
