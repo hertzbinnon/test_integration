@@ -1,0 +1,1 @@
+copy *.so from itv/contrib/native/itv/modules/.libs

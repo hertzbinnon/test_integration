@@ -1,0 +1,41 @@
+#!/bin/bash
+. /etc/init.d/functions
+. /etc/smsd.conf
+INTERVAL=1
+PROGRAM="/tmp/smsd.pid"
+
+setup() {
+	killproc smsd
+	daemon smsd /etc/smsd.conf
+}
+
+restart1() {
+	sysdate=$(date)
+	echo "$sysdate"
+	echo "restart $PROGRAM $1"
+	setup
+	sleep 1
+}
+
+while true
+do
+
+	if [ ! -f $PROGRAM ]; then
+		echo "restart $PROGRAM"
+		setup
+	else
+		pid=`cat $PROGRAM`
+		#echo "$pid"
+		if [ ! -d /proc/$pid ]; then
+			restart1 "crash"
+		fi
+		wget --timeout=2  -t 3 http://localhost:$HTTP_PORT -O /dev/null > /dev/null 2>&1
+		if [ $? != 0 ]; then
+			restart1 "zombie"
+		fi
+	fi
+
+	sleep $INTERVAL
+done
+
+exit 0
