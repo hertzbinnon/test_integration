@@ -1,0 +1,6 @@
+#!/bin/bash
+# boost > 1.55
+# cat /etc/redhat-release
+# CentOS Linux release 7.2.1511 (Core)
+# pkg-config >= 1.28
+yum install maven boost-devel opencv-devel glib2-devel libsigc++20-devel  glibmm24-devel libuuid-devel libvpx-devel libsoup-devel gtk-doc  libevent-devel opus-devel tesseract-devel gnutls-devel libcurl-devel
