@@ -1,0 +1,8 @@
+.
+├── aosp                  --> Android source code synced from qinghuadaxue
+├── aosp-20160806.tar     --> Android source code repo unsynced from ustc
+├── ../App					  --> Application develop tools,utils,examples
+├── pro_repo.sh           --> Daemon script being used sync to git source 
+├── readme		  --> Just this doc
+├── repo		  --> Command tools to sync source frome mirros or origin site
+└── steps.sh		  --> How to get this
