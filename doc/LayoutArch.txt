@@ -34,6 +34,8 @@ Project
 			-url			https://github.com/pygobject/pycairo.git
 		+cerbero
 			-url			git://anongit.freedesktop.org/gstreamer/cerbero
+		+gstreamer-java		
+			-url 			https://github.com/gstreamer-java
 		-examples
 							gst/examples
 							+webrtc
@@ -83,3 +85,6 @@ Project
 			-url 			https://github.com/yi5971/webbench-1.5.git commit:: 5235bef5a206d24f2aa6d82d85c2571e548a6e75
 			-patch 			
 			-url			https://github.com/alumae/kaldi-gstreamer-server
+	+web
+			+Tornado 
+			+Django
