@@ -72,11 +72,13 @@ export CC CXX		  --> optional compiler
 export CLAGS LDFLAGS CXXFLAGS 
 
 3.Building 
-1>Install Nvdia GPU drivers and cuda-9.2, export variable environment.
->Building VLC extra tools support,contrib support, export variable environment.
+>Install Nvdia GPU drivers and cuda-9.2, export variable environment.
+>Building Gstreamer-1.0 
+>Building VLC extra tools support,export variable environment.
+> export VLC contrib variable environment.
 >Building FFmpeg in vlc contrib with GPU support and more 3rd support in vlc 
-		according to contrib/src/ffmpeg/rules.mak and install on vlc native path.
->Building Gstreamer-1.0 and export variable environment.
+according to contrib/src/ffmpeg/rules.mak and install on vlc native path.
+> export Gstreamer variable environment.
 >Building Opencv with FFmpeg,Gstreamer,GPU support.
 >Building VLC with Opencv,Gstreamer,GPU support and more 3rd support, export variable environment.
 >Building Gstreamer plugins with Opencv and FFmpeg support. 
