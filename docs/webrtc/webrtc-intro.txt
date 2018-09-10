@@ -1,0 +1,15 @@
+
+Introduce
+
+	An RTCPeerConnection instance allows an application to establish peer-to-peer communications with another RTCPeerConnection instance in another browser, or to another endpoint implementing the required protocols. Communications are coordinated by the exchange of control messages (called a signaling protocol) over a signaling channel which is provided by unspecified means, but generally by a script in the page via the server, e.g. using XMLHttpRequest  or Web Sockets 
+
+
+
+Elements
+	RTCPeerConnection
+
+Terminology
+Reference:
+[1]API specs defines https://www.w3.org/TR/webrtc/
+[2]demos use js API https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample
+[2]Value demos developed by js library etc: screen-shared,file-transfer  https://deepstreamhub.com/tutorials/protocols/webrtc-intro

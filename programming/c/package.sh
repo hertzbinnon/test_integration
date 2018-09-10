@@ -25,7 +25,7 @@ cd $ngx_root_path
 make 
 echo "cp objs/nginx $basepath/org"
 cp objs/nginx $basepath/org/$ngx_exec
-cd - > dev/null
+cd - > /dev/null
 
 #rm -f $PACKAGENAME
 export PKG_CONFIG_PATH=/home/cerbero-1.14/build/dist/linux_x86_64/lib/pkgconfig:/usr/local/lib/pkgconfig

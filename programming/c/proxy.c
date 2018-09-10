@@ -345,17 +345,44 @@ char nginx_mime[]=
 
 static GPid pid=-1; //itvginx
 static gchar* temp_bin_pathname=NGX_PREFIX;
-static gchar* nginx_name=NGX_PREFIX"/"NGX_EXEC_NAME;
+static gchar* nginx_path_name=NGX_PREFIX"/"NGX_EXEC_NAME;
+static gchar* nginx_name=NGX_EXEC_NAME;
 static gchar* nginx_conf_name=NGX_PREFIX"/"NGX_CONFIG_PATH;
 static gchar* nginx_conf_mime=NGX_PREFIX"/"NGX_MIME_PATH;
 static gchar* enc_name = NGX_PREFIX"/"ENC_EXEC_NAME;
+static gchar* logs_name=NGX_PREFIX"/""logs";
+static gchar* conf_name=NGX_PREFIX"/""conf";
 static int exit_status=0;
 
 static gboolean 
 setup_itvginx(void){
 	GError* err=NULL;
 	gchar command_line[1024]="";
-	sprintf(command_line,"%s -p %s -c %s",nginx_name,temp_bin_pathname,nginx_conf_name);
+	gchar nginx_conf[10*1024]="";
+	int rtmp_port=1935;
+	int	fd = -1;
+	int http_port=80;
+	char host[] = "192.168.61.22";
+	g_message("%s",nginx_conf_name);
+	memset(nginx_conf,0,10*1024);
+	if( (fd = open(nginx_conf_name,O_RDWR|O_CREAT)) < 0){
+		g_error("open server conf failed!\n");
+	}else{
+		sprintf(nginx_conf,nginx_conf_format,rtmp_port,enc_name,rtmp_port,rtmp_port,http_port,host);
+		//g_printf("%s\n",nginx_conf);
+		write(fd,nginx_conf,strlen(nginx_conf));
+		close(fd);
+	}
+	fd=-1;
+	if( (fd = open(nginx_conf_mime,O_RDWR|O_CREAT)) < 0){
+		g_error("open server conf failed\n");
+	}else{
+		write(fd,nginx_mime,strlen(nginx_mime));
+		close(fd);
+	}
+	//sprintf(command_line,"%s -p %s -c %s",nginx_name,temp_bin_pathname,nginx_conf_name);
+	sprintf(command_line,"%s",nginx_name);
+	g_message("%s",command_line);
 	//g_printf("%s\n",command_line);
 	//g_spawn_command_line_async(command_line,&err);
 	gboolean retval;
@@ -365,10 +392,20 @@ setup_itvginx(void){
 	if (!g_shell_parse_argv (command_line,NULL, &argvs,&err))
 		return FALSE;
 	retval = g_spawn_async (NULL,argvs,NULL,G_SPAWN_SEARCH_PATH,NULL,NULL,&pid,&err);
-	if(!retval) 
-		return FALSE;
+	if(!retval){ 
+		g_error("==> %s %s",err->message,g_strerror(errno));
+	}
 	g_strfreev (argvs);
 	//g_print("child %d \n", pid);
+	sleep(1);
+	if(unlink(nginx_conf_name)){
+		g_error("open server conf failed!!!\n");
+		exit_status=1;
+	}
+	if(unlink(nginx_conf_mime)){
+		exit_status=1;
+		g_error("open server conf failed!!\n");
+	}
 	
 	return TRUE;
 }
@@ -412,9 +449,20 @@ static void signal_handler(GMainLoop *mainloop){
 int main(int argc, char** argv){
 	int itv_nginx_size=ITV_GINX_OFFSET;
 	int itv_enc_size=ITV_ENC_OFFSET;
-	int rtmp_port=1935;
-	int http_port=80;
-	char host[] = "192.168.61.22";
+  	int i,status;
+	const gchar *path;
+	struct stat st;
+	int size = 0;
+	char* ptr = NULL;
+	char c[1024*4]="";
+	char command_line[1024]="";
+
+	memset(c,0,1024*4);
+	path = g_getenv("PATH");
+	memset(c,0,4*1024);
+	sprintf(c,"%s:%s",temp_bin_pathname,path);
+  	g_setenv("PATH", c , 1);
+
 	// first get system info 
 	//get_system_info();
 	// check if system condition is fit to run proxy
@@ -426,20 +474,19 @@ int main(int argc, char** argv){
 	int src_fd=-1,dst_fd=-1;
 	int fd = -1;
 	if( access(temp_bin_pathname, F_OK|R_OK|W_OK) ==0){
-		char command_line[]="";
 		sprintf(command_line,"rm -rf %s\0",temp_bin_pathname);
 		system(command_line);
 		//exit(0);
 	}
-		if(mkdir(temp_bin_pathname, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) !=0){
-			printf("working path crate failed\n");
-			goto error;
-		}
-		char logs_name[]="/usr/share/lanTing/logs";
-		if(mkdir(logs_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) !=0){
-			printf("working path crate failed\n");
-			goto error;
-		}
+	if(mkdir(temp_bin_pathname, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) !=0){
+			 g_error("working path crate failed %s %s\n",temp_bin_pathname,g_strerror(errno));
+	}
+	if(mkdir(logs_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) !=0){
+			 g_error("working path crate failed %s %s\n",logs_name,g_strerror(errno));
+	}
+	if(mkdir(conf_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) !=0){
+			 g_error("working path crate failed %s %s\n",conf_name,g_strerror(errno));
+	}
 	
 	char exec_name[512];
 	int count;
@@ -456,11 +503,6 @@ int main(int argc, char** argv){
 		perror("??");
 		goto error;
 	}
-	struct stat st;
-	int size = 0;
-	char* ptr = NULL;
-	char c[1024*4]="";
-	memset(c,0,1024*4);
 
 	size = fstat(src_fd,&st);
 	if(size < 0){
@@ -479,7 +521,7 @@ int main(int argc, char** argv){
 	if( ptr == NULL || ptr==(void*)-1 ) { perror("mmap");close(dst_fd);goto error;}
 	//printf("%c %c %c %c %c \n",ptr[0],ptr[1],ptr[2],ptr[3],ptr[4]);
 	// 
-	if( (fd = open(nginx_name,O_RDWR|O_CREAT,S_IXUSR)) < 0){
+	if( (fd = open(nginx_path_name,O_RDWR|O_CREAT,S_IXUSR)) < 0){
 		perror("open server failed");
 		goto error;
 	}else{
@@ -501,38 +543,28 @@ int main(int argc, char** argv){
 	munmap(ptr,size);
 	close(dst_fd);
 
-	gchar nginx_conf[10*1024]="";
-	memset(nginx_conf,0,10*1024);
-	fd = -1;
-	if( (fd = open(nginx_conf_name,O_RDWR|O_CREAT)) < 0){
-		g_printf("open server conf failed\n");
-		goto error;
-	}else{
-		sprintf(nginx_conf,nginx_conf_format,rtmp_port,enc_name,rtmp_port,rtmp_port,http_port,host);
-		//g_printf("%s\n",nginx_conf);
-		write(fd,nginx_conf,strlen(nginx_conf));
-		close(fd);
-	}
-	fd=-1;
-	if( (fd = open(nginx_conf_mime,O_RDWR|O_CREAT)) < 0){
-		g_printf("open server conf failed\n");
-		goto error;
-	}else{
-		write(fd,nginx_mime,strlen(nginx_mime));
-		close(fd);
-	}
 	// process commline line params
 	// if itvginx 
 	GMainLoop *loop;
 	loop = g_main_loop_new (NULL, FALSE);
 	signal_handler(loop);
 	g_timeout_add(1000,on_sig_timeout,loop);
+	//chroot(temp_bin_pathname);error chroot is filesystem   
 	if(!setup_itvginx()){
 		g_printf("rtmp setup failed\n");
 		goto error;
 	}
+
 	g_main_loop_run (loop);
-	g_printf("exit\n");
+
+	memset(command_line,0,sizeof(command_line));
+	sprintf(command_line,"rm -rf %s",temp_bin_pathname);
+	g_spawn_command_line_sync(command_line,NULL, NULL, &status,NULL);
+	if(status != 0){
+		g_warning("uncomplete exit");
+	}
+	
+	g_message("Exit\n");
 	return ;
 error:
 	printf("error\n");

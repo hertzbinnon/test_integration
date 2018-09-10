@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <style>
+      .error { color: red; }
+    </style>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+	
+  </head>
+
+  <body>
+    <div><video id="video" autoplay>Your browser doesn't support video</video></div>
+    <div>Status: <span id="status">unknown</span></div>
+    <div>Our id is <b id="peer-id">unknown</b></div>
+    <br/>
+    <div>
+      <div>getUserMedia constraints being used:</div>
+      <div><textarea id="constraints" cols=40 rows=4></textarea></div>
+    </div>
+  </body>
+  <script type="text/javascript",defer=true>
+		var constraints = {
+				audio: false, 
+				video: {
+					"width": {"min": "50","ideal":"1280",  "max": "720"},
+					"height": {"min": "50","ideal":"768",  "max": "576"}
+				}
+			}
+		var textarea = document.getElementById('constraints');
+		var video = document.getElementById('video');
+		if( video == null) console.log("video is null");
+		if( textarea == null) console.log("document.getElementById");
+		if (textarea.value == '')
+        textarea.value = JSON.stringify(constraints);
+		navigator.mediaDevices.getUserMedia(constraints).then(gotStream);//, gotStream, logError);
+		//navigator.getUserMedia(constraints, gotStream, logError);  
+
+		function gotStream(stream) { 
+    
+		//video.src = window.URL.createObjectURL(stream);
+		video.srcObject = stream;
+		}
+
+		function logError() { 
+			console.log("error")
+		}
+	</script>
+</html>
