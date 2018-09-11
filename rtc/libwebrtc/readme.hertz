@@ -204,8 +204,45 @@ webrtc源码只提供客户端功能，没有流媒体服务器功能。真正�
 		这个镜像无法采用官方方法来构建源码。因为这个镜像有一个自己的分支chromium.org/master
 		另外这个镜像没有更改gclient等命令行工具中CHROMIUM_SRC_URL的地址，如'https://chromium.googlesource.com/chromium/src.git'。
 		
-		
 		git pull -v --no-rebase --progress origin chromium.org/master
+
+5.开发使用方法
+		libwebrtc 编译后生成的都是静态库，这些库位于out/Default/out目录下。为了方便的使用它们，头文件与库的路径务必逐一列出在编译的-L和-I上。
+		另外，这些库能在比构建机器，更低的版本上使用。同时，编译自己的程序时，依赖哪些库，可以参考examples/BUILD.gn,下面是片段:
+			rtc_executable("peerconnection_client") {
+			testonly = true
+			sources = [
+			  "peerconnection/client/conductor.cc",
+				...............
+			]
+			if (is_linux) {
+			  sources += [
+				"peerconnection/client/linux/main.cc",
+				...............
+			  ]
+			  cflags = [ "-Wno-deprecated-declarations" ]
+			  libs = [
+				"X11",
+				...............
+			  ]
+			  deps += [ "//build/config/linux/gtk" ]
+			}
+			configs += [ ":peerconnection_client_warnings_config" ]
+			deps += [
+			  "../api:libjingle_peerconnection_test_api",
+			  "../api:video_frame_api",
+			  "../base:rtc_base",
+			  "../base:rtc_base_approved",
+			  "../base:rtc_json",
+			  "../media:rtc_media",
+			  "../modules/video_capture:video_capture_module", # ':'号前为模块源目录，目录下又有一个BUILD.gn，在这个文件中又有类似的编译定义。
+			  "../pc:libjingle_peerconnection",
+			  "../system_wrappers:field_trial_default",
+			  "../system_wrappers:metrics_default",
+			  "//third_party/libyuv",
+			]
+		  }
+
 		
 （二） webrtc 源码
 1. 目录结构：								#voice_engine(2018-01.18) 已经被分解。存放音频引擎代码。主要是控制音频的采集，处理，编解码的操作。libjingle被删除。
