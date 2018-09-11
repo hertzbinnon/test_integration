@@ -1,11 +1,9 @@
 Signalling Server:
-1. https://github.com/centricular/gstwebrtc-demos.git
+ https://github.com/centricular/gstwebrtc-demos.git
 Client:
-2. App client using gstwebrtc
-3. App client using libwebrtc
+App client using libwebrtc
 
 Source code location(itv server):
-/home/cerbero-1.14/test.hertz/gstwebrtc-demos/gstwebrtcApp
 /home/webRTC/webrtc.src/src/webrtc/examples/libwebrtcApp
 
 
