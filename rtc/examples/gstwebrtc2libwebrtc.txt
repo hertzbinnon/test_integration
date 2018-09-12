@@ -1,7 +1,7 @@
 Signalling Server:
  https://github.com/centricular/gstwebrtc-demos.git
 Client:
-App client using libwebrtc
+App client using libwebrtc and libsoup
 
 Source code location(itv server):
 /home/webRTC/webrtc.src/src/webrtc/examples/libwebrtcApp
