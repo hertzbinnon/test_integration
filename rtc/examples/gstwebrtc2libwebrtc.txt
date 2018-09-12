@@ -6,5 +6,10 @@ App client using libwebrtc and libsoup
 Source code location(itv server):
 /home/webRTC/webrtc.src/src/webrtc/examples/libwebrtcApp
 
+libsoup 				 => websocket client
+gstappsrc ! xvimagesink ==> render remote video from libwebrtc video track.
+
+
+
 
 
