@@ -6,9 +6,23 @@ Introduce
 
 
 Elements
-	RTCPeerConnection
+	new RTCPeerConnection , onIcecandidate onAddstream
+	addTrack        	
+	addStream
+	setLocalDescription
+	setRemoteDescription
+	addIceCandidate
+: 无论是呼叫者还是被呼叫者，都会为对方在本地建立一个这样的结构。如，三方通话时，每个参与者有两个PC。
+：Stream中包含多个Track,其中一个Track是数据通道SCTP[文件传输]. 音频和视频可以有多个[从SDP中可以推断],例如共享桌面时，摄像头与桌面有两个VideoTrack.
+: Track, Stream、PeerConnection处理流如下：检查收集看有多少个Tracks, 为每个PC订制一个Stream,这个Stream随不同的PC而不同，例如有的参与者，不需要视频。
+: addStream这个动作当然要发生在setLocalDiscription之前，因为只有这样，才能确定SDP的媒体信息、以及到传输层映射信息。
+: setRemoteDescription 是在 remote answer SDP后执行，它触发了本地onIcecandidate和对方addIceCandidate,这就是ICE Check
+或者
+：setLocalDescription  使用  locale answer SDP后触发ICE Checks
+
 
 Terminology
+
 Reference:
 [1]API specs defines https://www.w3.org/TR/webrtc/
 [2]demos use js API https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample
