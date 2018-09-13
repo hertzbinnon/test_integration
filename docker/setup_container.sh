@@ -52,3 +52,4 @@ docker run \
 
 docker pull ubuntu:16.04
 docker exec -it android-vlc /bin/bash
+docker inspect container_name | grep Mounts -A 20 # 查看挂载目录
