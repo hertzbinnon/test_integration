@@ -90,3 +90,16 @@ Project
 			+Django
 
 	p2p-cdns
+
+---------------------------------------------------------------
+|Open source project worth reading the source code immediately|
+|		ats(高可用(容灾),高并发,DNS,cluster)				  |
+|		libwebrtc(AEC/AGC/NG/neteq FEC/JB BWE/RC 			  |
+|				audio/video udp/tcp/rtp/rtcp drm) 			  |
+|--------------------------------------------------------------
+|Open source project worth using to work					  |
+|		gstreamer ffmpeg nginx	vlc							  |
+|--------------------------------------------------------------
+|Open source projects directly related to mathematics         |
+|		x264/x265 fdk-aac/opus
+|-------------------------------------------------------------|

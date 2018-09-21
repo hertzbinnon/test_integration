@@ -66,7 +66,7 @@ Environment setup
 git checkout <tag/version> -b tag/version
 2.Version manager
 export PKG_CONFIG_PATH--> optional package
-export LD_LIBRARY_PATH--> optional *.so
+export LD_LIBRARY_PATH--> optional .so
 export PATH			  --> optional bin 
 export CC CXX		  --> optional compiler
 export CLAGS LDFLAGS CXXFLAGS 

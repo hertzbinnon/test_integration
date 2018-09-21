@@ -1,12 +1,10 @@
-
 Introduce
 
 	An RTCPeerConnection instance allows an application to establish peer-to-peer communications with another RTCPeerConnection instance in another browser, or to another endpoint implementing the required protocols. Communications are coordinated by the exchange of control messages (called a signaling protocol) over a signaling channel which is provided by unspecified means, but generally by a script in the page via the server, e.g. using XMLHttpRequest  or Web Sockets 
 
-
-
-Elements
-	new RTCPeerConnection , onIcecandidate onAddstream
+Elements and API 
+C++:
+	RTCPeerConnection , onIcecandidate onAddstream
 	addTrack        	
 	addStream
 	setLocalDescription
@@ -20,6 +18,8 @@ Elements
 或者
 ：setLocalDescription  使用  locale answer SDP后触发ICE Checks
 
+JS:
+	getDisplayMedia 共享桌面。
 
 Terminology
 
