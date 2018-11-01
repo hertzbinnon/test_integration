@@ -1,0 +1,131 @@
+libwebrtc vs libgstwebrtc
+
+Method 1:
+Prefer to integrated libwebrtc to vlc. Libwebrtc is leaded by google,
+but compiling libwebrtc for android is very difficult due to sync source code.
+while libgstwebrtc is currently not familiar to me,tying to do at first.
+
+The first thing to do is understand compiling env so that we can intergated gst or libwebrtc.
+Vlc building environment on android is strange to me. The method to grasp it is look at what it output.
+   Blows is four librarys depended on which vlc-android GUI() is build.
+   vlc-android GUI source code is locate in vlc-android/vlc-android directory.
+
+	./api/build/outputs/aar/api-release.aar,
+    ./libvlc/build/outputs/aar/libvlc-3.0.0-null.aar
+    ./medialibrary/build/outputs/aar/medialibrary-release.aar
+	./java-libs/axmlrpc/build/libs/axmlrpc.jar	
+	
+	*.jar is java archive file
+	*.aar is android archive file which is a andoird library same as linux *.ar.
+	the *.aar file could be rename *.zip or *.rar, then zipinfo check in :
+
+    # mv ./libvlc/build/outputs/aar/libvlc-3.0.0-null.aar /home/smsz/docs/libvlc-3.0.0-null.zip
+	# unzip /home/smsz/docs/libvlc-3.0.0-null.zip
+		Zip file size: 12044392 bytes, number of entries: 19
+		-rw-r--r--  2.0 unx      299 b- defN 17-Jun-09 07:51 AndroidManifest.xml
+		-rw-r--r--  2.0 unx   120018 b- defN 17-Jun-09 07:51 classes.jar
+		-rw-r--r--  2.0 unx    17872 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libanw.14.so
+		-rw-r--r--  2.0 unx    17872 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libanw.13.so
+		-rw-r--r--  2.0 unx   669136 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libc++_shared.so
+		-rw-r--r--  2.0 unx    17872 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libanw.18.so
+		-rw-r--r--  2.0 unx    17872 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libanw.10.so
+		-rw-r--r--  2.0 unx    71176 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libvlcjni.so
+		-rw-r--r--  2.0 unx    34264 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libiomx.10.so
+		-rw-r--r--  2.0 unx    34312 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libiomx.13.so
+		-rw-r--r--  2.0 unx    34312 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libiomx.14.so
+		-rw-r--r--  2.0 unx    17872 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libanw.21.so
+		-rw-r--r--  2.0 unx 21247224 b- defN 17-Nov-29 07:18 jni/armeabi-v7a/libvlc.so
+
+    # Or we can 
+    #zipinfo ./api/build/outputs/aar/api-release.aar
+		Zip file size: 33364 bytes, number of entries: 16
+		-rw-r--r--  2.0 unx       71 b- defN 17-Jun-09 07:05 aidl/org/videolan/vlc/extensions/api/VLCExtensionItem.aidl
+		-rw-r--r--  2.0 unx     1666 b- defN 17-Jun-09 07:05 AndroidManifest.xml
+		-rw-r--r--  2.0 unx    74198 b- defN 17-Jun-09 07:05 R.txt
+		-rw-r--r--  2.0 unx     1112 b- defN 17-Jun-09 07:05 res/values/values.xml
+		-rw-r--r--  2.0 unx    20872 b- defN 17-Jun-09 07:05 classes.jar
+
+	# zipinfo ./medialibrary/build/outputs/aar/medialibrary-release.aar
+		Archive:  ./medialibrary/build/outputs/aar/medialibrary-release.aar
+		Zip file size: 1588005 bytes, number of entries: 16
+		-rw-r--r--  2.0 unx      227 b- defN 17-Jun-09 07:51 AndroidManifest.xml
+		-rw-r--r--  2.0 unx      138 b- defN 17-Jun-09 07:51 R.txt
+		-rw-r--r--  2.0 unx    39158 b- defN 17-Jun-09 07:51 data-binding/bin-files/org.videolan.medialibrary-org.videolan.medialibrary-setter_store.bin
+		-rw-r--r--  2.0 unx      295 b- defN 17-Jun-09 07:51 data-binding/bin-files/org.videolan.medialibrary-org.videolan.medialibrary-layoutinfo.bin
+		-rw-r--r--  2.0 unx      265 b- defN 17-Jun-09 07:51 data-binding/bin-files/org.videolan.medialibrary-org.videolan.medialibrary-br.bin
+		-rw-r--r--  2.0 unx    45562 b- defN 17-Jun-09 07:51 classes.jar
+		-rw-r--r--  2.0 unx   669136 b- defN 17-Jun-09 07:51 jni/armeabi-v7a/libc++_shared.so
+		-rw-r--r--  2.0 unx  3347708 b- defN 17-Jun-09 07:51 jni/armeabi-v7a/libmla.so
+
+	Vlc source code which has nothing to do with andoird is located in vlc directory. All vlc library including
+	contrib librarys and vlc plugin librarys is all compilied staticly libvlccore.a libvlc.a etc. and then
+	libvlc/jni/libs/armeabi-v7a/libvlc.so  link these *.a on it. libanw.*.so()/modules/video_output/android/nativewindowpriv.c) 
+	is andoird native windows api,it was compiled by Andoird.mk at libvlc/private_libs.
+	Also libiomx.*.so(vlc/modules/codec/omxil/iomx.cpp) is build by it.
+
+		vlc-android-gui ---> libvlcjni.so --> libvlc.so --> libanw.*.so --> libiomx.*.so
+
+How to integreted libgstwebrtc
+
+	Add a new access plugin in vlc modules. Refer to opencv_plugin we can use git log at opencv_example.c to show
+	how to add a new plugin in vlc source code. For example:
+	Files to modified eg: 
+		AUTHORS
+		THANKS
+		configure.ac
+		modules/video_filter/Modules.am
+		modules\video_filter\filter_event_info.h
+		modules\video_filter\opencv_example.cpp
+		modules\video_filter\opencv_wrapper.c
+
+	We need to add files for webrtc access plugin:
+		configure.ac
+		modules/access/Modules.am
+		modules/access/gstwebrtc.c
+
+
+    
+	for vlc-3.0.0 Note:
+		NEWS
+		configure.ac
+		modules\MODULES_LIST
+		modules\access\Makefile.am
+		modules\access\webrtc.c
+		po\POTFILES.in
+	Modified(refer to x264): 
+		compile-libvlc.sh # add gstreamer-1.0 armv7 pkg_config_path to  PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/home/cerbero-1.14/build/dist/android_armv7/lib/pkgconfig
+				  # add --enable-webrtc to VLC_CONFIGURE_ARGS
+		configure.ac      # add PKG_ENABLE_MODULES_VLC([WEBRTC], [access_webrtc], [gstreamer-1.0 >= 1.14.0], (webrtc using libgstwebrtc), [auto])
+		modules\access\Makefile.am #  ### private ###
+					   # libaccess_webrtc_plugin_la_SOURCES = access/webrtc.c
+					   # libaccess_webrtc_plugin_la_CFLAGS = $(AM_CFLAGS) $(WEBRTC_CFLAGS) 
+					   # libaccess_webrtc_plugin_la_LIBADD = $(WEBRTC_LIBS)
+					   # libaccess_webrtc_plugin_la_LDFLAGS = $(AM_LDFLAGS) -rpath '$(accessdir)' 
+					   # access_LTLIBRARIES += $(LTLIBaccess_webrtc)
+					   # EXTRA_LTLIBRARIES += libaccess_webrtc_plugin.la
+
+
+
+
+
+
+Access plugin process steps:
+1. Open connection to signaling server (SS), sending REGISTER message, receiving USER_ID
+   returned by SS
+2. Start webrtc interface sdp,ice etc.
+3. Building gstreamer pipeline ready to send and playback local stream,Simultaneously 
+   build sdp access ready to receiving stream and playback remote stream. 
+   Problom: How to get view on vlc. 
+
+Method 2:
+   Important learning: add Gstreamer-sdk-build to VLC build system.
+   Refer to libvlc building and method by git log libvlc
+   1.add new directory `gstreamer-sdk'
+   #2.add building command to compile.sh
+   3.add compile task to gradle build system.
+	settings.gradle
+    vlc-android/build.gradle
+	gstreamer-sdk/build.gradle
+	gstreamer-sdk/jni
+    gstreamer-sdk/src
+    

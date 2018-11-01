@@ -1,0 +1,43 @@
+-----------------------------------------------------------------------------------------------------
+0. video capture functions called process   gst
+0. audio capture functions called process   gst
+0. video encoding functions called process  gst->ffm->x264/x265/av1/avsX/[vvc]
+0. audio encoding functions called process  gst->ffm->fdk-aac/opus
+1. stream muxing functions called process	
+2. stream output functions called process
+
+-----------------------------------------------------------------------------------------------------
+
+0. stream access_demux functions called process
+1. stream muxing functions called
+2. stream output functions called process
+
+-----------------------------------------------------------------------------------------------------
+0.stream access_demux functions called process
+1 video decoding functions called
+2.video output functions called process(opengl + x11):
+
+<1> call functions
+input_resource_RequestVout -> RequestVout -> vout_Request -> VoutCreate ->
+vout_display_window_New,Thread.
+
+Thread -> ThreadStart -> vout_OpenWrapper -> vout_NewDisplay -> DisplayNew => vout_display_New ->
+vlc_module_load -> opengl/display.c::Open -> vlc_gl_Create=>vgl.c, vout_display_opengl_New
+
+=>VoutDisplayCreateRender
+
+<2> VoutCreate
+new thread spawned ==> vout_thread_t
+new window created ==> voud_window_t x11/Qt/ANW/MACOS etc 
+new display created ==> vout_display_t Direct3d11/opengl
+							|  vd->sys
+							V
+					vout_display_sys_t 
+						|		vd->sys->gl vd->sys->vgl
+						V
+					vlc_gl_t
+						|		vd->sys->gl->sys
+						V
+					vout_display_sys_t
+						|		opengl/egl
+						V

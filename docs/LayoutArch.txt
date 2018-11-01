@@ -88,18 +88,20 @@ Project
 	+web
 			+Tornado 
 			+Django
+	+study_misc 			https://github.com/leandromoreira/digital_video_introduction
+	+pitivi
 
 	p2p-cdns
 
 ---------------------------------------------------------------
 |Open source project worth reading the source code immediately|
 |		ats(高可用(容灾),高并发,DNS,cluster)				  |
-|		libwebrtc(AEC/AGC/NG/neteq FEC/JB BWE/RC 			  |
+|		libwebrtc(HPF/AEC/AGC/NG/neteq FEC/JB BWE/RC		  |
 |				audio/video udp/tcp/rtp/rtcp drm) 			  |
 |--------------------------------------------------------------
 |Open source project worth using to work					  |
-|		gstreamer ffmpeg nginx	vlc							  |
+|		ats vlc opencv ffmpeg gstreamer (av of g)			  |
 |--------------------------------------------------------------
 |Open source projects directly related to mathematics         |
-|		x264/x265 fdk-aac/opus
+|		x264/x265/xavs2/av1/h.266 fdk-aac/opus				  |
 |-------------------------------------------------------------|
