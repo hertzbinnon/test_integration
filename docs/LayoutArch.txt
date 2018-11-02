@@ -92,16 +92,3 @@ Project
 	+pitivi
 
 	p2p-cdns
-
----------------------------------------------------------------
-|Open source project worth reading the source code immediately|
-|		ats(高可用(容灾),高并发,DNS,cluster)				  |
-|		libwebrtc(HPF/AEC/AGC/NG/neteq FEC/JB BWE/RC		  |
-|				audio/video udp/tcp/rtp/rtcp drm) 			  |
-|--------------------------------------------------------------
-|Open source project worth using to work					  |
-|		ats vlc opencv ffmpeg gstreamer (av of g)			  |
-|--------------------------------------------------------------
-|Open source projects directly related to mathematics         |
-|		x264/x265/xavs2/av1/h.266 fdk-aac/opus				  |
-|-------------------------------------------------------------|

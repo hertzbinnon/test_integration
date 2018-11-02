@@ -10,6 +10,7 @@
 |Open source projects directly related to mathematics         |
 |		x264/x265/xavs2/av1/h.266 fdk-aac/opus				  |
 |-------------------------------------------------------------|
+
 What knowledge is involved
 
 1.Streaming media service:
@@ -57,24 +58,25 @@ Webrtc,voip
 webrtc 连麦
 webrtc 浏览器兼容
 webrtc 屏幕共享
-aec,agc,ns,neteq,小波,傅立叶变换
+hpf,aec,agc,ns,neteq,小波,傅立叶变换
 fec,jitterbuffer。
 
 协定：
 1.TCP/IP 精通
-2.HTTP/RTMP/RTSP/RTP/RTCP/SDP HLS/DASH // 基本流程，关键参数。
-3.WEBRTC/P2P ICE/TURN/STUN // 原理，流程。
-4.FLV/MP4/TS			   // 结构
-5.H264/H265/AAC			   // 组成、原理、参数。
+2.HTTP/RTMP/RTSP/RTP/RTCP/SDP HLS/DASH 	// 基本流程，关键参数。
+3.WEBRTC/P2P ICE/TURN/STUN 				// 原理，流程。
+4.FLV/MP4/TS			   				// 结构
+5.H264/H265/AAC			   				// 组成、原理、参数。
+
 工具
-1.MySQL/Redis				// 基本应用
-2.ffmpeg/nginx/kurento/x264 // 扩展与应用
-3.LVS、DNS、Nginx			// 智能调度
-4.EPOLL/IO/THREADS/SOCKET   // ATS与nginx 并发、IO模型、GLIB2 
+1. MySQL/Redis					// 基本应用
+2. ffmpeg/nginx/kurento/x264 	// 扩展与应用
+3. LVS、DNS、Nginx				// 智能调度
+4. EPOLL/IO/THREADS/SOCKET   	// Ats与Nginx 并发、IO模型、GLIB2 
+
 算法
 1. Codecs的一般原理，H.264/H.265的对比.
-2. 负载均衡算法，DNS原理，高可用，分布式，集群。
-应用于CDN，分布式编码，MCU/SFU的云部署。
-3. AEC/AGC/NG/neteq // 客户端
-4. FEC/JB			// 两端
-5. 带宽估计/码率控制。// 发送端
+2. 负载均衡算法，DNS原理，高可用，分布式，集群。应用于CDN，分布式编码，MCU/SFU的云部署。
+3. HPF/AEC/AGC/NG/neteq 	// 客户端
+4. FEC/JB					// 两端
+5. 带宽估计/码率控制。		// 发送端

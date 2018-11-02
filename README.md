@@ -1,5 +1,5 @@
 # test_integration
-It is a recording for my job on centos7.
+It is a recording for my study of streaming media.
 
-The doc dirs include all of the archivements on theory、paper、protocol etc,
-other dirs include source code、pacth、tools、buildings script.
+It include all of the archivements of theory,paper,protocol,
+also include source code,pacth,tools,buildings script.
