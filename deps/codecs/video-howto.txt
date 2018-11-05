@@ -1,0 +1,30 @@
+https://docs.opencv.org/master/d6/d6d/tutorial_mat_the_basic_image_container.html
+https://docs.opencv.org/master/db/da5/tutorial_how_to_scan_images.html
+https://github.com/leandromoreira/digital_video_introduction
+
+Basic knowledge:
+	Pixel -
+		Image is a matrix containing all the intensity values of the pixel points. 
+	How we get and store the pixels values may vary according to our needs, 
+	but in the end all images inside a computer world may be reduced to numerical
+	matrices and other information describing the matrix itself.
+	One pixel represents the intensity which may be only one numerical value or multi numerical
+	value stored in memory: 
+		If the color system is a gray scale, one pixel is represent by two numerical value.
+		If the color system is an BGR color system, one pixel is represent by three numerical value.
+	And each color intensity requires a certain amount of bits, this quantity is known as bit depth. 
+	Let's say we spend 8 bits (accepting values from 0 to 255) per color (plane or channel), 
+	therefore we have a color depth of 24 (8 * 3) bits and we can also infer that we could use 2 to the power of 24 different colors
+	Using a representative numeric range from 0 to 255, 
+		the pink pixel is defined by Red=255, Green=192 and Blue=203
+	Record struct in memory:
+					(255,192,203)
+
+	Resolution - 
+		Which is the number of pixels in one dimension.
+
+	Display Aspect Ratio vs Pixel Aspect Ratio -
+		Although the real resolution of a DVD is 704x480 it still keeps a 4:3 DAR because it has a PAR of 10:11 (704x10/480x11)
+				704 x 10   	4
+				-------- = ---
+				480 x 11	3	
