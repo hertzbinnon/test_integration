@@ -58,7 +58,7 @@ Webrtc,voip
 webrtc 连麦
 webrtc 浏览器兼容
 webrtc 屏幕共享
-hpf,aec,agc,ns,neteq,小波,傅立叶变换
+hpf,aec,agc,ans,neteq,小波,傅立叶变换
 fec,jitterbuffer。
 
 协定：

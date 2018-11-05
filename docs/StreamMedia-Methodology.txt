@@ -1,0 +1,133 @@
+Refer to https://www.linkedin.com/pulse/video-streaming-methodology-reema-majumdar
+
+1. Content Creation / Capture 
+The first step is to create / capture the content that you want to stream. Below are the points to remember when generating content -
+Resolution - These are the number of distinct pixels displayed in each dimension. For example : 1280 x 780 etc.
+Quality / Display Standard -  These are a set of parameters that determine the quality of video. It includes display resolution, pixel aspect ratio and color depth. For e.g. : VGA, HD, 4K UHD etc.
+Type - What kind of content is it? Live (Real time ), VOD (video on demand :  streaming a file stored on a system by breaking them into stream-able component) or Linear (VOD content streamed in live fashion).
+Method - How of the process. E.g : usage of video capture card that can convert the analog signals to digital form and compresses the data.  
+Input / Output Format - These are the container formats selected prior to streaming. These would define container specification for audio and video. E.g : AVI, ActiveMovie, Cinepak, Indeo, motion-JPEG, flv, mkv, mp4, 3gp, TS etc.
+Codecs - These are coding techniques to compress video data. E.g. of Video codecs as MPEG, H.261 (teleconferencing applications), H.263 (low bit-rate communication, supports 5 resolutions). Audio codec such as AAC or MP3.
+Frame Rates - Considering video to be a compilation of images (or frames), frame rate is the number of such frames showed on screen per second. E.g : One would use 11-14 fps for video conferencing whereas 30 fps for full motion video. 
+Protocol - RTMP , HLS, HDS
+Keyframe Frequency / interval -   Keyframe is the full frame of an image. Subsequent frames (p-frames) have information about what has changed between each frame or "delta". Keyframes are placed at regular intervals throughout a video; these intervals are set in the encoder and is called keyframe frequency. E.g. its between 1 to 4 seconds for live streaming.
+Bitrate / datarate - It is the data rate specification for video content that runs at x bits per second. A higher bitrate accommodates higher image quality in the video output. E.g. 8 megabits per second (8 mbps) of audio or video.
+Bitrate Encoding - Constant bit rate (CBR) encoding persists same data rate over the whole video clip. Useful when there is similar motion level across the entire video. Variable bit rate (VBR) encoding adjusts the data rate as per the motion level in the clip. It produces the most favorable results.
+Audio channel - mono / stereo. 
+Profile - The encoder and decoder agree on a feature set that they can both handle. They can be high, baseline or main.
+------------------------------------------------------------------------------------
+Camera / Audio card< capute[Progressive/Interlace] samples,SD/HD/UHD/4K/8K,SDR/HDR/HFR/WCG >
+ |
+ V
+[RGB,YUV,PCM etc memory format]  (--> render --> blend --> display)
+ |
+ V
+Filter < AR/VR HPF/ANS/AGC/AEC/Neteq>
+ |
+ V
+Encoder < x264,x265,vp8,vp9,AV1,avsX,vvc,aac,vorbis,opus >
+------------------------------------------------------------------------------------
+
+2. Content Formatting (Compression) / Packaging 
+
+Once you  have decided what kind of content needs to be streamed, we need to package this properly as per necessity. Content now needs to be encoded (analog to digital conversion of data) and / or transcoded (digital to digital conversion of data).
+
+Hardware encoders (Teradek , Harmonic, Elemental, Cisco etc.), software encoders (Wirecast , Adobe Flash Media Live Encoder, Procaster, QuickTime Broadcaster) are responsible to generate required renditions of the same content depending upon bitrates chosen by the user. One can also use Cloud encoders like : encoding.com, Zencoder, and iStreamPlanet to generate various formats like : RTMP, RTP, RTSP.
+
+Published stream are fed to packaging servers e.g. : Adobe Media Server, Wowza or Adobe Primetime Packager. They create content understandable by devices e.g. HDS, HLS, or DASH. One can also use mediastreamsegmenter command-line tool with MPEG-2 TS input file and generate series of equal-length files to enable HTTP Live Streaming.
+
+Transcoding is used to convert once digital video file format to the other (e.g. between mp4 to flv). This is not an absolute necessity, but certain video frameworks can crunch a format better than the other. One can create profiles of multi bitrates such as 64kbps , 2K/4K , 4Mbps or 8Mbps. They should follow the profiles as per requirement of various client end devices. 
+------------------------------------------------------------------------------------
+ |
+ V
+mux    < TS/MP4/RTP >
+ |
+ V
+streaming_out < RTSP/HTTP/RTMP/SIP >
+ |
+ V
+transport < UDP/TCP/QUIC DRM  FEC/jitter/BWE/CC >
+------------------------------------------------------------------------------------
+
+
+3. Content Management : This is a critical component of the video server architecture . This is used to catalog, organize, store, create, collect , add thumbnails, make comments, create playlists, editing video by trimming and access multimedia information. E.g. OOyala, Brightcove, theplatform, Kaltura, mDialog, YouTube etc.  One can ingest VOD content, create live episodes, generate and map ad timelines on them, chose video player type, serve specific analytics services. Most high-end OVPs will assign different rights and capabilities to different users. These user data can be used by the video player to create personalized ads.
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+4. Delivery / Distribution : Once the packaged data is ready to be seen by the world, we need a proper distribution mechanism. The delivery platform one choses would be the primary cause of good performance of the architecture. One can use many protocols available in the market : TCP, HTTP,UDP. Some real time transmission protocols are : RTP, VDP, RTSP, RSVP. HLS, HDS, RTMP. We have to make sure load balancers are placed, support for failover and traffic management is available. The structure should also be scalable to handle traffic of million users.
+
+Caching servers and CDNs are an efficient way to optimize video delivery. E.g: Akamai, Level3, Limelight, Amazon (ec2 instances with cloudfront caching), Edgecast. User can deliver various streaming formats of the same content with ease of scalability and optimum performance.
+------------------------------------------------------------------------------------
+Cluster :
+	Load balancing clusters
+	High-availability clusters
+	High-perfomance clusters eg: distribute transcoding
+Loading banlance:
+	HAproxy/LVS/Nginx,keeplive,DNS poll
+
+Web proxy:
+	Nginx,ATS
+
+Web cache:
+	ATS,Redis,Memcache
+
+Web server:
+	Nginx,lighttpd,tornado,Django
+------------------------------------------------------------------------------------
+
+5. Content Entitlement - Authentication / Authorization 
+
+Subscribers should be able to access the content they are already paying for, across multiple devices and platforms, both in and out of their homes. There is a requirement to entitle the user who watches content between the Programmer + Publisher (CNN, Hulu, AMC etc.) and such Pay TV providers (AT&T, Charter, Verizon etc).
+
+Before a viewer accesses subscription content, this component determines whether they are entitled to that access. It is two part in nature : Authentication - does the user have a subscription with a Pay TV provider? Authorization - does that subscription include the content that is being requested? thePlatform's TVE (TV Everywhere), Akamai and Adobe Pass provide such products in the industry. 
+------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+
+6. View Control - Content protection (DRM) : This is one of the most crucial components to ensure the safety and security of the content delivery itself. A premier content owner is worried about piracy and hack to their content. DRM (Digital Rights Management) is the way to go. Some examples are: Adobe AAXS, Apple Fairplay, Microsoft Playready and Google Widevine.
+
+This is the practice of imposing technological restrictions that control what users can do with the digital video. It should support policies to control viewing of content by preventing copying, specifying a time period in which the content can be accessed or limits the number of devices the media can be installed on (Restrictive Licensing Agreement and encryption methodologies).
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+7.  Decoding + Presentation / Viewing : The transferred data is decoded and played back in this part of the component. The decoder is a stand-alone player or a plugin that works as part of a web browser. The server, information stream and decoder work together to let people watch live or prerecorded broadcasts.
+
+There are many features one looks for in a good player : streaming format support, subtitles, thumbnails, playlist creations, bitrate change, resolutions/quality change, multiple audio languages, closed captioning, trickplay, ABR switching, autoplay, sharing to social networking, volume, play / pause. E.g. of Video player SDKs : Adobe Primetime TVSDK, Google IMA SDK, Kaltura SDK , NexStreaming, VisualOn, Microsoft Azure Media Player, Brightcove, OOyala , JW player.
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+8. Monetizing / Advertising : 
+
+This is the revenue gear of the whole framework. The user while creating content and playing back, would want to generate money by targeting the correct user base. Digital ads come to rescue. They are placed / streamed alongside the main content in the player. The video player is responsible to integrate the ad workflow.
+
+Example products in the industry are : Comcast Freewheel, Google DFP, Videoplaza (Ooyala) , Auditude (Adobe), BrightRoll, Facebook LiveRail, AOL adap.tv etc. User should also understand the formats the ad content (or ad creatives) should be. They can be MP4, HLS, DASH. There are broadly three kinds of ads:
+
+a. Linear : presented before (pre-roll), middle of (mid-roll), or after the video content is consumed by the user (post roll).
+b. Non-linear : It runs concurrently with the video content. They can be in the form of overlay / banner ads.
+c. Companion : Commonly text, display ads, rich media, or skins that wrap around the video experience.
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+ 
+
+9. Video Analytics & QoS data
+
+Once the streaming is done, user might want to make future decisions based on user streaming pattern, their viewing categories, age, gender, geo location, device information, number of streams, type of ads etc. for better targeting in future. Reporting structure would help in understanding which segment is watching the content. Analytics platform should be compatible with the other components of the framework specially the player, since that is where the actual integration resides.
+
+Various products in the industry that provide such services are : Conviva, Webtrends, Localytics, Mixpanel (for mobile analytics), Kissmetrics, Google, Ominture - Site Catalyst (Adobe).
+
+ Optimizing Performance
+
+With a framework in hand, once would want to get the maximum benefit out of it. Performance optimization of their platform can be done with the below attributes in their architecture:
+
+    Start Time – the elapsed time from when ‘play’ is pushed to when video starts on the screen. Reducing this should be the aim of the developer while integration.
+    Rebuffer Rate – the number of times a rebuffering event occurs during viewing. This should be minimal for the smooth streaming experience by the end user.
+    Average Bit Rate – the average rate of the video streams, measured in Mbps. Its the average bandwidth consumed by the video stream from origin server to the client system. The bit rate may vary for different videos streamed based on the resolution, bandwidth available in the network path and congestion in the network. In the case of Adaptive Bit Rate (ABR) streaming, the bit rate may vary in real time during the stream based on network congestion. A higher average will ensure less rebuffering. This metric can be readily measured / reported in a consistent manner.
+    Keyframe interval : Correct keyframe interval would result in optimal encoding artifacts. It should be between 1 to 4 seconds (recommended is 2).
+    Good internet connection: This would ensure minimal fluctuation while streaming the content. One should also check with the IT department of their company whether they can open certain ports and dedicate bandwidth to the particular content to be streamed. This ensures better quality. 
+    Good Bandwidth / Bitrate Profiles : The correct bitrate payback is important to stream better. Rule of thumb is the bitrate of stream shouldn't use more than 50% of the upload bandwidth capacity. E.g. If 4Mbps is the upload speed, combined audio and video bitrate should not exceed 2Mbps. Also , make sure that the bitrate should be less if bandwidth and resolution are less. Some settings such as maintaining 16:9 aspect ratio for an approx player size of 640 x 360 will help.
+    CPU resources : The streaming server should make sure that it has the CPU resources as per the streaming profiles.
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+With a good architecture in hand, and taking care of the optimizing parameters, one is sure to stream in great quality. The end user experience is what matters, and should be ensured by the developer.
