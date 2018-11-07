@@ -1,0 +1,128 @@
+Refer to https://hpbn.co/
+
+1.Latency 
+------------
+	
+Propagation delay
+
+    Amount of time required for a message to travel from the sender to receiver, which is a function of distance over speed with which the signal propagates. 
+Transmission delay
+	Propagation time is dictated by the distance and the medium through which the signal travels
+	eg:
+		58.95ms Propagation latency between NewrYork and London 
+
+    Amount of time required to push all the packet’s bits into the link, which is a function of the packet’s length and data rate of the link. 
+Processing delay
+
+    Amount of time required to process the packet header, check for bit-level errors, and determine the packet’s destination. 
+Queuing delay
+
+    Amount of time the packet is waiting in the queue until it can be processed. 
+
+2.Bandwidth
+------------
+	Maximum throughput of a logical or physical communication path 
+
+2.1 Bandwidth Estimation
+	Sender pseudocode (send_side_bandwidth_estimation.cc):
+  onFeedbackFromReceiver(lossRate):
+    if (lossRate < 2%)  video_bitrate *= 1.08
+    if (lossRate > 10%) video_bitrate *= (1 - 0.5*lossRate)
+    if (video_bitrate > bwe) video_bitrate = bwe;
+
+	sdp:
+		a=extmap:5 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01
+		a=rtcp-fb:100 transport-cc
+
+3.protocol
+------------
+	V---------------------------MTU ---------------------V
+	|---------|------------------------|------------------|
+	|IP header|		TCP header		   | max segment size |
+	|20 Bytes |	[20,32,40,60] bytes	   |  mss = 1460	  |
+	|		  |						   |				  |
+	|---------|------------------------|------------------|
+	|         |		UDP header		   | no  max segment  |
+	|         |     [20] bytes		   |  	  			  |
+	|		  |						   |				  |
+	|---------|------------------------|------------------|
+	|IP segment, only the first ip package have udp header|
+	|		  						   				      |
+	|---------|------------------------|------------------|
+
+3.1	The IP, or Internet Protocol, which is a pure datagram protocol, is what provides the host-to-host routing and addressing.
+
+3.2	TCP, or Transmission Control Protocol, is what provides the abstraction of a reliable network running over an unreliable channel. 
+	TCP provides retransmission of lost data, in-order delivery, congestion control and avoidance, data integrity, and more to our applications
+	Three-Way Handshake Open.
+	If Toundtrip Time > the maximum retransmission interval then congestion collapse.
+	Flow control,slow-start, congestion avoidance, fast retransmit, and fast recovery. 
+	Flow control:
+		Each side of the TCP connection advertises its own receive window (rwnd), which communicates the size of the available buffer space to hold the incoming data. 
+		If, for any reason, one of the sides is not able to keep up, then it can advertise a smaller window to the sender. If the window reaches zero, then it is treated as a signal that no more data should be sent until the existing data in the buffer has been cleared by the application layer.
+		This workflow continues throughout the lifetime of every TCP connection: each ACK packet carries the latest rwnd value for each side, allowing both sides to dynamically adjust the data flow rate to the capacity and processing speed of the sender and receiver
+ 	Window Scaling:
+		 The window scaling option is communicated during the three-way handshake and carries a value that represents the number of bits to left-shift the 16-bit window size field in future ACKs. 
+	Slow-Start:
+		Despite the presence of flow control in TCP, network congestion collapse became a real issue in the mid to late 1980s. The problem was that flow control prevented the sender from overwhelming the receiver, but there was no mechanism to prevent either side from overwhelming the underlying network: neither the sender nor the receiver knows the available bandwidth at the beginning of a new connection, and hence need a mechanism to estimate it and also to adapt their speeds to the continuously changing conditions within the network. 
+		The only way to estimate the available capacity between the client and the server is to measure it by exchanging data, and this is precisely what slow-start is designed to do. To start, the server initializes a new congestion window (cwnd) variable per TCP connection and sets its initial value to a conservative, system-specified value (initcwnd on Linux).
+		Congestion window size (cwnd):Sender-side limit on the amount of data the sender can have in flight before receiving an acknowledgment (ACK) from the client.  The cwnd variable is not advertised or exchanged between the sender and receiver.
+		The maximum amount of data in flight (not ACKed) between the client and the server is the minimum of the rwnd and cwnd variables. 
+		How do the server and the client determine optimal values for their congestion window sizes? Slow-Start
+	Head-of-Line Blocking: 
+		If one of the packets is lost en route to the receiver, then all subsequent packets must be held in the receiver’s TCP buffer until the lost packet is retransmitted and arrives at the receiver.(jitter)
+	 	
+	Summary:
+		TCP sender sent a group of segments once while receiver sents ACK per segment. If one segment of the group is lost (no ack),the rest of the group can not be submit to application. The segment mount of the group is depend on cwnd and rwnd(cwnd < rwnd). The max cwnd is eque to rwnd while the min cwnd is 10 segments(14600bits).
+
+4. The UDP
+------------
+	NAT -- mapping table. internal IP -> enternal IP
+	Connection-State Timeouts
+
+No guarantee of message delivery
+    No acknowledgments, retransmissions, or timeouts 
+
+No guarantee of order of delivery
+    No packet sequence numbers, no reordering, no head-of-line blocking 
+
+No connection state tracking
+    No connection establishment or teardown state machines 
+
+No congestion control
+    No built-in client or network feedback mechanisms 
+
+5. STUN - RFC 5389
+------------
+	Session Traversal Utilities for NAT
+    The application discovers its public IP and port tuple and is then able to use this information as part of its application data when communicating with its peers.
+
+    The outbound binding request to the STUN server establishes NAT routing entries along the path, such that the inbound packets arriving at the public IP and port tuple can now find their way back to the host application on the internal network.
+
+    The STUN protocol defines a simple mechanism for keepalive pings to keep the NAT routing entries from timing out. 
+
+6.TURN - (RFC 5766)
+	Traversal Using Relays around NAT (TURN) protocol 
+	
+7.ICE - (RFC 5245) libjingle vs libnice
+  	Interactive Connectivity Establishment (ICE) protocol 
+  	It is a protocol, and a set of methods, that seek to establish the most efficient tunnel between the participants : direct connection where possible, leveraging STUN negotiation where needed, and finally fallback to TURN if all else fails. 
+	refer to RFC 5405 for udp uses.
+
+8.DTLS - RFC 6347,
+	The Datagram Transport Layer Security (DTLS) protocol,  is based on the TLS protocol and is able to provide similar security guarantees while preserving the datagram delivery model. 
+	
+Encryption
+    A mechanism to obfuscate what is sent from one host to another. 
+Authentication
+
+    A mechanism to verify the validity of provided identification material. 
+Integrity
+
+    A mechanism to detect message tampering and forgery. 
+
+9.SDP - RFC 4566
+
+10.SCTP 4960 replace quic VS SRTP RTC 3711
+	the application protocols used to multiplex the different streams, provide congestion and flow control, and provide partially reliable delivery and other additional services on top of UDP. 
+	
