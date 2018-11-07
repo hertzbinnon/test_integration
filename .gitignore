@@ -4,3 +4,4 @@
 *.class
 *.pyo
 *.tmp
+deps/prg/rust/target
