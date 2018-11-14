@@ -53,6 +53,9 @@ Project
 			-url			https://gitee.com/pkuvcl/FFmpegAVS2.git
 		+av1
 			-url 			https://aomedia.googlesource.com/aom
+		+vmaf				
+			-url			https://github.com/Netflix/vmaf 
+							#https://medium.com/netflix-techblog/vmaf-the-journey-continues-44b51ee9ed12?source=collection_home---4------1---------------------
 	+rtc
 		+knockplop 
 			-url			https://github.com/so010/knockplop.git
