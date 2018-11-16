@@ -1,0 +1,64 @@
+gstreamer:
+native:
+ ./cerbero-uninstalled wipe
+ ./cerbero-uninstalled bootstrap
+ ./cerbero-uninstalled package gstreamer-1.0
+android:
+ ./cerbero-uninstalled -c config/cross-android-armv7.cbc wipe
+ ./cerbero-uninstalled -c config/cross-android-armv7.cbc bootstrap
+ ./cerbero-uninstalled -c config/cross-android-armv7.cbc  package gstreamer-1.0
+android-app-build:
+	ndk-build
+	ant debug
+
+vlc-android:
+build.gradle if jcenter not be resolved
+	repositories {
+        	flatDir dirs: "gradle/plugins"
+        	maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        	google()
+        	jcenter()
+        }
+
+aom codecs in rules.mk: 
+	cd /home/codecs/aom.git && git archive --format=tar.gz  $(AOM_HASH) > aom-$(AOM_VERSION).tar.gz        
+        cp /home/codecs/aom.git/aom-$(AOM_VERSION).tar.gz $@
+./compile.sh -a armeabi-v7a
+
+INSTALL android(adb command):
+	adb push ./vlc-android/build/outputs/apk/vanillaARMv7/debug/VLC-Android-3.0.13-ARMv7.apk /data/local/tmp
+	adb shell pm install  -r /data/local/tmp/VLC-Android-3.0.13-ARMv7.apk
+logcat:
+	adb logcat | grep -E 'VLC' # -E indicate error  
+
+	adb devices
+	# or
+	adb -s <device-ID> shell
+	adb shell pm list packages [-f]
+	adb uninstall <package-name>
+	adb pull <package-name> <location>
+
+aplay -l
+aplay -L
+arecord -l
+arecord -L
+cat /proc/asound/cards
+./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! alsasink device="hw:0,0"  # only open device once if define 'device'
+./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! alsasink    
+./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink    
+./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink		   # multiopen device 
+
+vlc-windows build:
+	apt-get install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 mingw-w64-tools
+
+ats:
+	#push content to cache
+
+
+
+X11 loop login error:
+	Don`t modified revolution,otherwise x11 configure fils for Nvidia is lost 
+	if error occur,reinstall Nvidia drivers:
+	# service lightdm stop
+	#/home/hebin/Download/Nvid_**.run
+	# service lightdm start
