@@ -94,4 +94,7 @@ Project
 	+study_misc 			https://github.com/leandromoreira/digital_video_introduction
 	+pitivi
 
+	+cheat-sheet 
+							http://lzone.de/cheat-sheet
+
 	p2p-cdns
