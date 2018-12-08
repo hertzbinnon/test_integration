@@ -8,5 +8,6 @@ cmake -DCMAKE_C_FLAGS="-L/home/cerbero-1.14/build/dist/linux_x86_64/lib -Wl,-Bsy
 # configure  libtiff in cerbero  --enable-ld-version-script at cerbero
 
 # before building gst-plugin-bad/ext/opencv
+# cp fdk-aac.pc x265.pc opencv.pc /home/cerbero/build/dist/x86_64_linux/lib/pkgconfig
 #  ln -s /home/ocv/installed/include/opencv2 /usr/include/opencv2
 #  ln -s /home/ocv/installed/include/opencv /usr/include/opencv  
