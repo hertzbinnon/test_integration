@@ -96,5 +96,6 @@ Project
 
 	+cheat-sheet 
 							http://lzone.de/cheat-sheet
+	+Flatpak
 
 	p2p-cdns

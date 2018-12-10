@@ -33,9 +33,11 @@ Basic knowledge:
 	Bit Rate = width * height * bit depth * frames per second
 
 --------------------------------------------------------
-https://slhck.info/video/2017/03/01/rate-control.html
 Codec knowledge:
-	Rate Control Modes -
+--------------------------------------------------------
+https://slhck.info/video/2017/03/01/rate-control.html
+
+Rate Control Modes -
 		Constant QP (CQP): libvpx does not have a fixed QP mode.Setting a fixed QP means that the resulting bitrate will be varying strongly depending on each scene’s complexity, and it will result in rather inefficient encodes for your input video. You may waste space and you have no control of the actual bitrate.
 		Average Bitrate (ABR) : never to use
 		Constant Bitrate (CBR) : Keeping a constant bitrate (duh); video streaming 
@@ -43,10 +45,39 @@ Codec knowledge:
 		Constant Quality (CQ) / Constant Rate Factor (CRF):  Archival; achieving the best possible quality
 		Constrained Encoding (VBV): Streaming under bandwith constraints; live streaming (with CRF, 1-pass); VoD streaming (with target bitrate, 2-pass)
 		
-			Archival — CRF that gives you the quality you want.
-			Streaming — Two-pass CRF or ABR with VBV-constained bitrate.
-			Live Streaming — One-pass CRF or ABR with VBV-constained bitrate, or CBR if you can waste bits.
-			Encoding for Devices — Two-pass ABR, typically.
-	Encoding:
-			 picture partitioning/macroblock --> inter/intra prediction,motion vector,the residual --> the residual transform (DCT) --> the residual quantizing --> 
-			 entropy coding -->  bitstream format
+		Archival — CRF that gives you the quality you want.
+		Streaming — Two-pass CRF or ABR with VBV-constained bitrate.
+		Live Streaming — One-pass CRF or ABR with VBV-constained bitrate, or CBR if you can waste bits.
+		Encoding for Devices — Two-pass ABR, typically.
+
+--------------------------------------------------------
+https://github.com/leandromoreira/digital_video_introduction
+https://en.wikipedia.org/wiki/Rec._2020
+https://people.xiph.org/~tterribe/pubs/lca2012/auckland/intro_to_video1.pdf
+http://inst.eecs.berkeley.edu/~ee290t/sp04/lectures/02-Motion_Compensation_girod.pdf
+https://en.wikipedia.org/wiki/Inter_frame
+
+Color model: RGB <==> YUV
+		Y = 0.299R + 0.587G + 0.114B
+Chroma subsampling YUV:
+		4:4:4 (no subsampling), 4:2:2, 4:1:1, 4:2:0(U=Y/2,V=y/2), 4:1:0 4:0:0 and 3:1:1.
+Frame type:
+		I Frame (intra, keyframe),P Frame (predicted),B Frame (bi-predictive)
+Temporal redundancy (inter prediction):
+		Motion Compensation to eliminate temporal redundancy
+Spatial redundancy (intra prediction):
+		A 2D transform (usually the DCT) to eliminate spatial redundancy
+
+Encoding steps:
+		 picture partitioning/macroblock --> inter/intra prediction,motion vector,the residual --> the residual transform (DCT) --> the residual quantizing --> 
+		 entropy coding -->  bitstream format
+		1st step - picture partitioning
+		2nd step - predictions
+		3rd step - transform
+		4th step - quantization
+			Quantization to throw out unimportant details (this is the “lossy” part)
+		5th step - entropy coding
+		6th step - bitstream format
+
+Predictions:
+		
