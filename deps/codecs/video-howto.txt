@@ -1,4 +1,4 @@
---------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 https://docs.opencv.org/master/d6/d6d/tutorial_mat_the_basic_image_container.html
 https://docs.opencv.org/master/db/da5/tutorial_how_to_scan_images.html
 https://github.com/leandromoreira/digital_video_introduction
@@ -32,9 +32,9 @@ Basic knowledge:
 
 	Bit Rate = width * height * bit depth * frames per second
 
---------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 Codec knowledge:
---------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 https://slhck.info/video/2017/03/01/rate-control.html
 
 Rate Control Modes -
@@ -50,12 +50,13 @@ Rate Control Modes -
 		Live Streaming — One-pass CRF or ABR with VBV-constained bitrate, or CBR if you can waste bits.
 		Encoding for Devices — Two-pass ABR, typically.
 
---------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 https://github.com/leandromoreira/digital_video_introduction
 https://en.wikipedia.org/wiki/Rec._2020
 https://people.xiph.org/~tterribe/pubs/lca2012/auckland/intro_to_video1.pdf
 http://inst.eecs.berkeley.edu/~ee290t/sp04/lectures/02-Motion_Compensation_girod.pdf
 https://en.wikipedia.org/wiki/Inter_frame
+https://people.xiph.org/~xiphmont/demo/av1/demo1.shtml
 
 Color model: RGB <==> YUV
 		Y = 0.299R + 0.587G + 0.114B
@@ -69,8 +70,7 @@ Spatial redundancy (intra prediction):
 		A 2D transform (usually the DCT) to eliminate spatial redundancy
 
 Encoding steps:
-		 picture partitioning/macroblock --> inter/intra prediction,motion vector,the residual --> the residual transform (DCT) --> the residual quantizing --> 
-		 entropy coding -->  bitstream format
+	picture partitioning/macroblock --> inter/intra prediction,motion vector,the residual --> the residual transform (DCT) --> the residual quantizing --> entropy coding -->  bitstream format
 		1st step - picture partitioning
 		2nd step - predictions
 		3rd step - transform
@@ -80,4 +80,3 @@ Encoding steps:
 		6th step - bitstream format
 
 Predictions:
-		

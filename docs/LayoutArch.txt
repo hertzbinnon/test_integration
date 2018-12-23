@@ -27,26 +27,32 @@ Project
 						tests.hertz
 	+gst
 		+pygobject
-			-url			https://git.gnome.org/browse/pygobject
+			-url		https://git.gnome.org/browse/pygobject
 		+gst-python
-			-url			https://anongit.freedesktop.org/git/gstreamer/gst-python.git
+			-url		https://anongit.freedesktop.org/git/gstreamer/gst-python.git
 		+pycairo
-			-url			https://github.com/pygobject/pycairo.git
+			-url		https://github.com/pygobject/pycairo.git
 		+cerbero
-			-url			git://anongit.freedesktop.org/gstreamer/cerbero
+			-url		git://anongit.freedesktop.org/gstreamer/cerbero
 		+gstreamer-java		
-			-url 			https://github.com/gstreamer-java
+			-url 		https://github.com/gstreamer-java
 		-examples
-							gst/examples
-							+webrtc
-								-url https://github.com/centricular/gstwebrtc-demos.git
-								-patch (SOUP_SESSION_SSL_STRICT, FALSE)
+						gst/examples
+						+webrtc
+							-url https://github.com/centricular/gstwebrtc-demos.git
+							-patch (SOUP_SESSION_SSL_STRICT, FALSE)
 		-plugins
 					+ gst-plugin-base
 							-patchs gst/gstdecodebin2.c.patch
+		-enternal-plugins
+					+ GstInference
+							https://github.com/RidgeRun/r2inference
+							https://github.com/RidgeRun/gst-inference
+					+ NNStreamer
+					+ Opencv DNN
 	+codec
 		+avs+				
-			-url			http://xavs.sourceforge.net/
+			-url		http://xavs.sourceforge.net/
 		+avs2
 			-url			https://github.com/pkuvcl/xavs2
 			-url			https://gitee.com/pkuvcl/davs2.git
