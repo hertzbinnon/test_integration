@@ -99,3 +99,7 @@ Project
 	+Flatpak
 
 	p2p-cdns
+	+xdm 
+					https://subhra74.github.io/xdm/#downloads
+	+yolo
+					https://pjreddie.com/darknet/yolo/

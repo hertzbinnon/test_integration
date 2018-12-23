@@ -11,3 +11,5 @@ cmake -DCMAKE_C_FLAGS="-L/home/cerbero-1.14/build/dist/linux_x86_64/lib -Wl,-Bsy
 # cp fdk-aac.pc x265.pc opencv.pc /home/cerbero/build/dist/x86_64_linux/lib/pkgconfig
 #  ln -s /home/ocv/installed/include/opencv2 /usr/include/opencv2
 #  ln -s /home/ocv/installed/include/opencv /usr/include/opencv  
+
+python object_detection.py  --config=/home/ai/yolo/darknet/cfg/yolov3.cfg --model=/home/ai/yolo/darknet/yolov3.weights --classes=object_detection_classes_pascal_voc.txt --width=416 --height=416 --scale=0.00392 --input=/home/ai/yolo/darknet/data/dog.jpg --rgb
