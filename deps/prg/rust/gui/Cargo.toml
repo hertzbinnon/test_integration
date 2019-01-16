@@ -1,0 +1,8 @@
+[package]
+
+name = "hello_world"
+version = "0.0.1"
+authors = [ "Your name <you@example.com>" ]
+
+[dependencies]
+gtk = "0.5.0"

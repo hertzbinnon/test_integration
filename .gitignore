@@ -4,4 +4,5 @@
 *.class
 *.pyo
 *.tmp
-deps/prg/rust/target
+deps/prg/rust/*/target
+*.lock

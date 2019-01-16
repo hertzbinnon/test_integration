@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 """
+ffmpeg -v quiet -re  -i /home/hebin/klg.ts -c copy -f mpegts - | gst-launch-1.0 fdsrc fd=0 ! udpsink  host=192.168.8.62 port=12346
+curl http://example.com:8000/stream1.ogg ! gst-launch fdsrc fd=0 ! decodebin ! autoaudiosink
+gst-launch filesrc location=/dev/stdin ! decodebin ! autoaudiosink < /path/to/file.mp3
+
 gst-launch-1.0 filesrc location=/home/hebin/xinyule-concat.ts ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0  ! tsdemux name=d program-number=171 d. ! queue ! mpegvideoparse  ! mpegtsmux name=mux alignment=7  ! udpsink  host=192.168.8.62 port=12346  d. ! queue ! mpegaudioparse ! mux.
 /home/hebin/.temp/cerbero/build/dist/linux_x86_64/bin/gst-launch-1.0 --gst-debug=tee:4,udpsrc:4,decodebin:4,h264parse:4  udpsrc uri=udp://239.100.198.103:12347 multicast-iface=eth1 ! tee name=teer_raw ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0 !  decodebin  name=decoder  decoder. ! tee name=teer ! yadif mode=1 ! queue ! videorate drop-only=true  ! autovideoconvert !  videoscale ! video/x-raw,width=1920,height=1080,framerate=25/1 !  queue ! x264enc byte-stream=TRUE bframes=3 key-int-max=25 qp-max=41 interlaced=false threads=0 vbv-buf-capacity=3000 bitrate=3000  ! queue ! mpegtsmux name=muxer alignment=7 ! queue ! udpsink host=192.168.8.62  port=12349  max-bitrate=4000000 sync=true decoder. ! queue ! audioconvert ! audioresample ! queue ! avenc_aac compliance=-2 ! queue ! muxer. teer_raw. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0 ! tsdemux name=d d. ! queue ! h264parse ! queue ! mpegtsmux name=mux alignment=7 ! queue ! udpsink  host=192.168.8.62 port=12348  d. ! queue ! ac3parse ! mux.
 
