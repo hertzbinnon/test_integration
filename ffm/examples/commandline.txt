@@ -7,3 +7,7 @@ ffmpeg -v quiet -re -i /home/hebin/klg.ts -c copy -f mpegts - | gst-launch-1.0 f
 ffmpeg -v quiet -re -i /home/hebin/klg.ts -c copy -f mpegts - | python gst-demuxerbin.py
 ffmpeg -v quiet -re  -i /home/hebin/2-2.ts  -c copy -f mpegts - | ./bin/vlc-static fd://0  -vvv --sout="#std{access=udp,mux=ts,dst=192.168.8.62:12346}"
 ffmpeg -v quiet -re  -i /home/hebin/2-2.ts  -c copy -f mpegts - | ./bin/vlc-static - -vvv --sout="#std{access=udp,mux=ts,dst=192.168.8.62:12346}" # vlc must be close all interface 
+ffmpeg -report -re -fflags +genpts -fflags nobuffer -probesize 50 -analyzeduration 100 -stream_loop -1 -i /home/hebin/CHC/100M.mp4 -acodec copy -f flv rtmp://localhost:1936/big/test
+# backgroud executing 
+nohup ./ffmpeg -report -re -fflags +genpts -fflags nobuffer -probesize 50 -analyzeduration 100  -stream_loop -1 -i /home/fjcmcc/100M.mp4 -c:v copy  -acodec copy  -f flv rtmp://localhost/big/test > /dev/null 2>&1 &
+
