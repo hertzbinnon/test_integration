@@ -20,9 +20,11 @@ Basic knowledge:
 		the pink pixel is defined by Red=255, Green=192 and Blue=203
 	Record struct in memory:
 					(255,192,203)
-
 	Resolution - 
 		Which is the number of pixels in one dimension.
+		1920x1080,30fps,8bits  ~ 1.5Gbps ==> 5M
+		3840x2160,60fps,10bits ~ 15 Gbps(7.5Gbps) ==> 50 (40M)
+		7680x4320,60fps,10bits ~ 60 Gbps ==> 200M (160M)
 
 	Display Aspect Ratio vs Pixel Aspect Ratio -
 		Although the real resolution of a DVD is 704x480 it still keeps a 4:3 DAR because it has a PAR of 10:11 (704x10/480x11)
@@ -60,6 +62,7 @@ https://people.xiph.org/~xiphmont/demo/av1/demo1.shtml
 
 Color model: RGB <==> YUV
 		Y = 0.299R + 0.587G + 0.114B
+
 Chroma subsampling YUV:
 		4:4:4 (no subsampling), 4:2:2, 4:1:1, 4:2:0(U=Y/2,V=y/2), 4:1:0 4:0:0 and 3:1:1.
 Frame type:

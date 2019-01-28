@@ -11,3 +11,10 @@ ffmpeg -report -re -fflags +genpts -fflags nobuffer -probesize 50 -analyzedurati
 # backgroud executing 
 nohup ./ffmpeg -report -re -fflags +genpts -fflags nobuffer -probesize 50 -analyzeduration 100  -stream_loop -1 -i /home/fjcmcc/100M.mp4 -c:v copy  -acodec copy  -f flv rtmp://localhost/big/test > /dev/null 2>&1 &
 
+ffmpeg -nostats -report  -i /home/hebin/hunan2.ts -filter:a volumedetect -vn -sn -dn  -f null /dev/null
+
+ffmpeg -i /home/hebin/2-2.ts -vf "select='eq(pict_type,I)', showinfo" -f mpegts /dev/null
+ffmpeg -i /home/hebin/2-2.ts -filter_complex "select='gt(scene,0.3)',metadata=print:file=time.txt" -vsync vfr img%03d.png
+
+ffmpeg -re -i CHC_frag.ts -c copy -map 0 -f segment -segment_list playlist.m3u8 -segment_time 15 chc_%5d.ts
+ffmpeg -re -i CHC.ts -g 50 -strict experimental -c:a aac -ab 64k -c:v libx264 -vb 3M -f mp4 -movflags frag_keyframe+empty_moov out_put.mp4

@@ -6,7 +6,7 @@ native:
 android:
  ./cerbero-uninstalled -c config/cross-android-armv7.cbc wipe
  ./cerbero-uninstalled -c config/cross-android-armv7.cbc bootstrap
- ./cerbero-uninstalled -c config/cross-android-armv7.cbc  package gstreamer-1.0
+ ./cerbero-uninstalled -c config/cross-android-armv7.cbc package gstreamer-1.0
 android-app-build:
 	ndk-build
 	ant debug

@@ -28,7 +28,14 @@ def main(args):
     print Gst.version()
     print Gst.version_string()
 
-    pipeline = Gst.parse_launch('uridecodebin name=demuxer uri=file:///dev/stdin ! queue ! mpegvideoparse ! mpegtsmux name=mux alignment=7 ! udpsink  host=192.168.8.62 port=12346 demuxer. ! queue ! mpegaudioparse ! mux.')
+    """
+    ffmpeg -v quiet -re  -i /home/hebin/klg.ts -c copy -f mpegts - | python gst-demuxerbin.py
+    gst-launch-1.0 -v -e filesrc location=/tmp/klg.ts ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0  ! tsdemux name=d  d. ! queue ! mpegvideoparse  ! splitmuxsink location=%05d.ts muxer=mpegtsmux  name=mux max-size-time=10000000000  d. ! queue ! mpegaudioparse  ! mux.audio_%u
+    """
+    #pipeline = Gst.parse_launch('uridecodebin name=demuxer uri=file:///dev/stdin ! queue ! mpegvideoparse ! mpegtsmux name=mux alignment=7 ! udpsink  host=192.168.8.62 port=12346 demuxer. ! queue ! mpegaudioparse ! mux.')
+    #pipeline = Gst.parse_launch('uridecodebin name=demuxer uri=file:///dev/stdin ! queue ! mpegvideoparse ! queue !  splitmuxsink location=%05d.mp4 name=splitter demuxer. ! queue ! mpegaudioparse ! splitter.')
+    pipeline = Gst.parse_launch('uridecodebin name=demuxer uri=file:///tmp/klg.ts ! queue ! mpegvideoparse gop-split=true ! queue !  splitmuxsink location=%05d.ts  muxer=mpegtsmux name=splitter  max-size-time=10000000000 demuxer. ! queue ! mpegaudioparse ! splitter.audio_%u')
+    #pipeline = Gst.parse_launch('uridecodebin name=demuxer uri=file:///dev/stdin ! queue ! h264parse ! queue ! mpegtsmux name=mux alignment=7 ! udpsink  host=192.168.8.62 port=12346 demuxer. ! queue ! ac3parse ! queue ! mux.')
     if not pipeline:
         sys.stderr.write("'pipeline' gstreamer plugin missing\n")
         sys.exit(1)

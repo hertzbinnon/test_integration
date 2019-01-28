@@ -27,4 +27,4 @@ Terminology
 Reference:
 [1]API specs defines https://www.w3.org/TR/webrtc/
 [2]demos use js API https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Simple_RTCDataChannel_sample
-[2]Value demos developed by js library etc: screen-shared,file-transfer  https://deepstreamhub.com/tutorials/protocols/webrtc-intro
+[3]Value demos developed by js library etc: screen-shared,file-transfer  https://deepstreamhub.com/tutorials/protocols/webrtc-intro
