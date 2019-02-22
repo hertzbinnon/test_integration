@@ -10,7 +10,7 @@ ReverseProxylayer	ATS
 -------------------------------------------> nginx L7 LB
 Weblayer			NGX web	front
 -------------------------------------------> link pools
-Servicelayer		Terndo 
+Servicelayer		Tornado 
 -------------------------------------------> data balance,request balance
 Datalayer		    mysql/mongodb cluster
 						|
