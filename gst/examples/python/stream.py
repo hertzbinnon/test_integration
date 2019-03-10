@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 """
+./build/dist/linux_x86_64/bin/gst-launch-1.0 -v -e filesrc location=/media/hertz/b901d1b9-1b63-46ca-a706-86f7401fee63/hebin/4K 体验视频.mp4 ! typefind ! queue ! qtdemux name=demuxer ! h264parse ! queue ! nvdec !  autovideoconvert ! nvh265enc bitrate=1000 ! mpegtsmux name=muxer !  filesink location=/tmp/gst.ts demuxer. ! queue ! avdec_aac ! audioconvert ! fdkaacenc ! muxer.
+
+./build/dist/linux_x86_64/bin/gst-launch-1.0 -v -e filesrc location=/media/hertz/b901d1b9-1b63-46ca-a706-86f7401fee63/hebin/4K 体验视频.mp4 ! queue ! qtdemux name=demuxer ! h264parse ! queue ! nvdec !  autovideoconvert ! nvh265enc bitrate=1000 ! mpegtsmux name=muxer !  filesink location=/tmp/gst.ts demuxer. ! queue ! avdec_aac ! audioconvert ! fdkaacenc ! muxer.
+
+./build/dist/linux_x86_64/bin/gst-launch-1.0 uridecodebin name=decoder uri=file:///media/hertz/b901d1b9-1b63-46ca-a706-86f7401fee63/hebin/4K体验视频.mp4 ! autovideoconvert ! nvh265enc ! mpegtsmux name=muxer !  filesink location=/tmp/gst.ts decoder. ! audioconvert ! fdkaacenc ! muxer.
+
 gst-launch-1.0 -v -e   filesrc location=/home/hebin/2-2.ts ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0  ! tsdemux name=d d. ! queue ! h264parse  ! splitmuxsink location=%05d.ts muxer=mpegtsmux  name=mux max-size-time=10000000000  d. ! queue ! aacparse  ! mux.audio_%u
 
 gst-launch-1.0 splitmuxsrc location=*.ts ! filesink location=yes.ts

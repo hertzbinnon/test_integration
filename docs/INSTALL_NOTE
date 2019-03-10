@@ -62,3 +62,9 @@ X11 loop login error:
 	# service lightdm stop
 	#/home/hebin/Download/Nvid_**.run
 	# service lightdm start
+
+~/.lantern/bin/lantern -addr 127.0.0.1:33103
+# gstreamer for nvenc nvdec
+ ln -s /usr/local/cuda/pkgconfig/cuda-9.2.pc build/dist/linux_x86_64/lib/pkgconfig/cuda-9.2.pc
+ ln -s /usr/local/cuda/pkgconfig/cudart-9.2.pc build/dist/linux_x86_64/lib/pkgconfig/cudart-9.2.pc
+
