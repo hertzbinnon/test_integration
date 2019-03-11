@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 """
+gst-launch-1.0  filesrc location=/home/hebin/Game.Of.Thrones.S01.E09.2011.1080p.mkv ! queue ! matroskademux name=demuxer ! queue ! h264parse ! queue ! mpegtsmux name=mux alignment=7 ! queue ! udpsink  host=192.168.61.26 port=12345 demuxer. ! queue ! avdec_dca ! audioconvert ! audioresample ! queue ! fdkaacenc ! audio/mpeg,channels=6 ! mux.
+
+gst-launch-1.0 multifilesrc location=/tmp/h264+aac/%d.ts ! tsdemux name=d ! queue ! h264parse ! queue ! mpegtsmux name=mux alignment=7  ! udpsink  host=192.168.8.62 port=12346  d. ! queue ! aacparse  ! mux.
+
+gst-launch-1.0 splitfilesrc location=/tmp/h264+aac/*.ts ! tsdemux name=d ! queue ! h264parse ! queue ! mpegtsmux name=mux alignment=7  ! udpsink  host=192.168.8.62 port=12346  d. ! queue ! aacparse  ! mux.
+
 ./build/dist/linux_x86_64/bin/gst-launch-1.0 -v -e filesrc location=/media/hertz/b901d1b9-1b63-46ca-a706-86f7401fee63/hebin/4K 体验视频.mp4 ! typefind ! queue ! qtdemux name=demuxer ! h264parse ! queue ! nvdec !  autovideoconvert ! nvh265enc bitrate=1000 ! mpegtsmux name=muxer !  filesink location=/tmp/gst.ts demuxer. ! queue ! avdec_aac ! audioconvert ! fdkaacenc ! muxer.
 
 ./build/dist/linux_x86_64/bin/gst-launch-1.0 -v -e filesrc location=/media/hertz/b901d1b9-1b63-46ca-a706-86f7401fee63/hebin/4K 体验视频.mp4 ! queue ! qtdemux name=demuxer ! h264parse ! queue ! nvdec !  autovideoconvert ! nvh265enc bitrate=1000 ! mpegtsmux name=muxer !  filesink location=/tmp/gst.ts demuxer. ! queue ! avdec_aac ! audioconvert ! fdkaacenc ! muxer.
