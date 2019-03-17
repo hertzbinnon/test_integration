@@ -73,7 +73,7 @@ class EngineGST(Engineer):
 			args= self.chainner.pattern_lists[stream_num]['args_list'][1]
 			if caps == 'aac':
 				if lib== 'fdkaac':
-					e.element_propertys['bitrate']=args['ab']
+					e.element_propertys['bitrate']=int(args['ab'])
 			#####
 			p ='audio/x-raw,%s,%s'
 			plb = len(p)
@@ -95,7 +95,9 @@ class EngineGST(Engineer):
 			args= self.chainner.pattern_lists[stream_num]['args_list'][1]
 			if caps == 'h264':
 				if lib== 'x264':
-					e.element_propertys['bitrate']=args['ab']
+					e.element_propertys['bitrate']=int(args['bitrate'])
+					e.element_propertys['bframes']=int(args['bframes'])
+					e.element_propertys['vbv-buf-capacity']=(1000/float(args['fps'])) ## cbr or vbr or abr
 
 			#####
 		elif cat == 'access_out':
