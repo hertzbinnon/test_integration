@@ -88,7 +88,7 @@ class EngineGST(Engineer):
 		import chain
 		self.chainner = chain.Chain(usage[1])
 		self['args']  = self.chainner.profile_lists
-            
+		
 		if self.access == 'udp':
 			self.ele_access_in = Gst.ElementFactory.make("udpsrc","access")
 			print(self['url'])
@@ -115,6 +115,8 @@ class EngineGST(Engineer):
 			typefind = Gst.element_factory_make("typefind","typefinder")
 			typefind.connect("have-type", findedtype, pipeline)
 		"""
+		for i in range(self['args']):
+			profile = copy.deepcopy(self['args'][i])
 		if self.ele_typefind is not None:
 			self['pipeline'].add(self.ele_access_in)
 			self['pipeline'].add(self.ele_typefind)
@@ -131,9 +133,11 @@ class EngineGST(Engineer):
             for i in range(len(gstobject.chainner.profile_lists)):
                profile = copy.deepcopy(gstobject.chainner.profile_lists[i])
                print("--------------------------------------------------------------------------------------------------------------------------------",'\n\n')
+               queue = None
                if profile['chain'][track_str] is not None: 
                    if profile['chain'][track_str]['decoder'][0] != 'no':
                        profile['chain'][track_str]['decoder'][1] = track_name
+                       #queue = Gst.ElementFactory.make("queue",'queue_%d_%d'%(i,profile['track_id']))
                    #build element
                    for e in profile['chain'][track_str].items():
                        ele = pipeline.get_by_name(e[1][0])
@@ -172,16 +176,31 @@ class EngineGST(Engineer):
                    #link element
                    if track_str == 'video_track':
                        last = gstobject.ele_video_preparser
+                       queue = Gst.ElementFactory.make("queue",'vqueue_%d_%d'%(i,profile['track_id']))
+                       last.link(queue)
+                       queue.set_state(Gst.State.PLAYING)
+                       last=queue
+                       print('video ==>',last)
                    elif track_str == 'audio_track':
                        last = gstobject.ele_audio_preparser
+                       queue = Gst.ElementFactory.make("queue",'aqueue_%d_%d'%(i,profile['track_id']))
+                       last.link(queue)
+                       queue.set_state(Gst.State.PLAYING)
+                       last=queue
+                       print('audio ==>',last)
 
                    for e in profile['chain'][track_str].items():
                        element = e[1][3]
+                       #print('debuging',e)
                        if element != '' and e[1][0] != 'no':
                            pipeline.add(element)
                            last.link(element)
                            print('linked',last,'->',element)
+                           element.set_state(Gst.State.PLAYING)
                            last = element
+                       if e[0][-6:] == 'public' and e[1][0] != 'no':
+                           last = pipeline.get_by_name(e[1][0])
+			
                    # build wrapper
                    for wrapper in profile['chain']['wrappers']:
                        muxer = wrapper['muxer_private']
@@ -201,7 +220,7 @@ class EngineGST(Engineer):
                        #else:
                            #muxer[2] = ele.get_factory().get_plugin_name()
                            #muxer[3] = ''
-                       print("------------",muxer)
+                       #print("------------",muxer)
                            
                        teer = wrapper['tee4_private']
                        ele = pipeline.get_by_name(teer[0])
@@ -209,28 +228,40 @@ class EngineGST(Engineer):
                            teer[3] =  Gst.ElementFactory.make('tee',teer[0])
                        
                        outer = wrapper['outer_private']
-                       print("------------",outer)
+                       #print("------------",outer)
+                       property_sets={}
                        ele = pipeline.get_by_name(outer[0])
                        if outer[0] != 'no' and ele is None:
-                           print('yes',outer[1])
+                           #print('yes',outer,'\n')
                            if outer[1][:3] == 'udp':
                                ele_mod_name = 'udpsink'
+                               property_sets['host']= outer[1].split('/')[2].split(':')[0]
+                               property_sets['port']= int(outer[1].split('/')[2].split(':')[1])
                            elif outer[0][:3] == 'fil':
                                ele_mod_name = 'filesink'
+                               property['location']=outer[1][7:]
                            elif outer[1][:3] == 'htt':
-                               ele_mod_name = 'filesink'
+                               ele_mod_name = 'httpsink'
                            elif outer[1][:3] == 'rtm':
                                ele_mod_name = 'rtmpsink'
                            elif outer[1][:3] == 'hls':
                                ele_mod_name = 'httpsink'
+                           else:
+                               print('Output not support')
+                               return
                            element= Gst.ElementFactory.make(ele_mod_name,outer[0])
+                           for p in property_sets.items():
+                              print(p)
+                              element.set_property(p[0],p[1]) 
                            outer[2] = ele_mod_name
                            outer[3] = element 
+                       elif outer[0] != 'no' and ele is not None:
+                           print('......')
                        else:
-                           print('error',outer[0])
+                           print('error',outer)
                        #    muxer[2] = ele.get_factory().get_plugin_name()
                        #    muxer[3] = ''
-                       print("------------",outer)
+                       #print("------------",outer)
                     # link wrapper
                    linker=last
                    for wrapper in profile['chain']['wrappers']:
@@ -238,20 +269,58 @@ class EngineGST(Engineer):
                       tee = wrapper['tee4_private']
                       out = wrapper['outer_private']
                       print('linking',mux,tee,out)
-                      if mux[0] != 'no' and mux[3] != '':
+
+                      ele = pipeline.get_by_name(mux[0])
+                      if ele is not None:
+                          if mux[3] != '':
+                              linker.link(mux[3])
+                              print('linked',linker,'->',mux[3])
+                              linker= mux[3]
+                          else:
+                              linker.link(ele)
+                              print('linked',linker,'->',ele)
+                              linker= ele
+                              mux[3] = ele
+                      else:
                           pipeline.add(mux[3])
                           linker.link(mux[3])
                           print('linked',linker,'->',mux[3])
                           linker= mux[3]
-                      if tee[0] != 'no' and tee[3] != '':
-                          pipeline.add(tee[3])
-                          linker.link(tee[3])
-                          print('linked',linker,'->',tee[3])
-                          linker = tee[3]
-                      if out[0] != 'no' and out[3] != '':
+                          mux[3].set_state(Gst.State.PLAYING)
+
+                      ele = pipeline.get_by_name(tee[0])
+                      if ele is not None:
+                          if tee[3] != '':
+                              linker.link(tee[3])
+                              print('linked',linker,'->',tee[3])
+                              linker = tee[3]
+                          else:
+                              linker.link(ele)
+                              print('linked',linker,'->',ele)
+                              tee[3] = ele
+                             #tee[3].set_state(Gst.State.PLAYING)
+                      else :
+                          if tee[0] != 'no':
+                              pipeline.add(tee[3])
+                              linker.link(tee[3])
+                              print('linked',linker,'->',tee[3])
+                              linker = tee[3]
+                              tee[3].set_state(Gst.State.PLAYING)
+
+                      ele = pipeline.get_by_name(out[0])
+                      if ele is not None:
+                          if out[3] != '':
+                              linker.link(out[3])
+                              print('linked',linker,'->',out[3])
+                          else:
+                              linker.link(ele)
+                              print('linked',linker,'->',ele)
+                              out[3] = ele
+                      else:
                           pipeline.add(out[3])
                           linker.link(out[3])
-                          print('linked',linker,'->',out[3])
+                          print('linked over',linker,'->',out[3])
+                          out[3].set_state(Gst.State.PLAYING)
 
 	def __pad_added(src, new_pad, gstobject):
 		preparser = None
@@ -263,7 +332,12 @@ class EngineGST(Engineer):
 		new_pad_type = new_pad_struct.get_name()
 		new_pad_name = new_pad.get_name()
 
-		print("Received new pad '%s' type '%s' \n from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
+		print("Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
+		queue = Gst.ElementFactory.make("queue","demuxer_%s"%(new_pad_type))
+		pipeline.add(queue)
+		demuxer=pipeline.get_by_name('demuxer')
+		demuxer.link(queue)
+		queue.set_state(Gst.State.PLAYING)
 		if new_pad_type == 'video/x-h265':
 			preparser = Gst.ElementFactory.make("h265parse","video_preparser")
 			type_name = 'h265'
@@ -280,12 +354,12 @@ class EngineGST(Engineer):
 			type_name = 'mpeg'
 			gstobject.ele_video_preparser = preparser
 		elif new_pad_type == 'audio/mpeg':
-			preparser = Gst.ElementFactory.make("mpegvideoparse","audio_preparser")
+			preparser = Gst.ElementFactory.make("mpegaudioparse","audio_preparser_")
 			pipeline.add(preparser)
 			type_name = 'mpeg'
 			gstobject.ele_audio_preparser = preparser
 		elif new_pad_type == 'audio/aac':
-			preparser = Gst.ElementFactory.make("aacparse","audio_preparser")
+			preparser = Gst.ElementFactory.make("aacparse","audio_preparser_%d")
 			pipeline.add(preparser)
 			type_name = 'aac'
 			gstobject.ele_audio_preparser = preparser
@@ -298,8 +372,8 @@ class EngineGST(Engineer):
 			print(track_name,' is not support')
 			exit()
 			
-		demuxer=pipeline.get_by_name('demuxer')
-		demuxer.link(preparser)
+		queue.link(preparser)
+		preparser.set_state(Gst.State.PLAYING)
         
 		if new_pad_type[:5] == 'video':
 			EngineGST.__build_link(gstobject,'video_track',type_name)
@@ -331,8 +405,9 @@ class EngineGST(Engineer):
 		typefind=pipeline.get_by_name('typefinder')
 		typefind.link(demuxer)
 		gstobject.ele_demuxer =demuxer
-		pipeline.set_state(Gst.State.READY)
-		pipeline.set_state(Gst.State.PLAYING)
+		demuxer.set_state(Gst.State.PLAYING)
+		#pipeline.set_state(Gst.State.READY)
+		#pipeline.set_state(Gst.State.PLAYING)
 		#fake = Gst.ElementFactory.make("fakesink","fakesink")
 		#pipeline.add(fake)
 		#demuxer.link(fake)

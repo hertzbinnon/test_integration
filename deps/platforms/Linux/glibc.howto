@@ -1,0 +1,2 @@
+#glibc be installed in /home/.temp/installed/lib 
+/home/.temp/installed/lib/ld-2.17.so --library-path /home/.temp/installed/lib:/lib64:$LD_LIBRARY_PATH  /home/.temp/nginx -c /home/.temp/nginx.conf -p /home/.temp/
