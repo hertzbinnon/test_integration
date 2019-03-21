@@ -3,6 +3,8 @@ import os,sys
 import copy
 """
 	gst-launch-1.0 -e -v udpsrc uri=udp://@192.168.61.26:12346 ! tee name=teer_in ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0  ! decodebin name=decoder !  queue !  autovideoconvert ! tee name=tee_vcodec ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0 ! x264enc !  queue ! mpegtsmux name=muxer alignment=7 ! udpsink host=192.168.61.22 port=22345 decoder. ! queue !  audioconvert ! tee name=tee_acodec ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0   ! fdkaacenc ! queue ! muxer. teer_in. !  queue max-size-buffers=0 max-size-time=0 max-size-bytes=0  !  typefind ! tsdemux name=demuxer !  queue ! mpegvideoparse ! queue ! mpegtsmux name=muxer1 alignment=7 ! udpsink host=192.168.61.22 port=22346 demuxer. ! queue ! mpegaudioparse ! queue ! muxer1. tee_vcodec. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0 ! x264enc !  queue ! mpegtsmux name=muxer2 alignment=7 ! udpsink host=192.168.61.22 port=22347 tee_acodec. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0   ! fdkaacenc ! queue ! muxer2.
+
+gst-launch-1.0 -e -v udpsrc uri=udp://@192.168.61.26:12346 ! decodebin name=decoder !  queue !  autovideoconvert !  x264enc !  queue ! mpegtsmux name=muxer alignment=7 ! udpsink host=192.168.61.22 port=22345 decoder. ! queue !  audioconvert !  fdkaacenc ! queue ! muxer.
 """
 def string_sub(First,Second):
 	for i in First :
@@ -18,12 +20,22 @@ class Element_link():
 		self.name=name # eg. access_in
 		self.caps_name=''
 		self.mod_name=''
-		self.element_name=''
-		self.element_obj=None
-		self.element_propertys={}
+		self.ele_name=''
+		self.ele_obj=None
+		self.ele_propertys={}
+		self.last=[]#
 		self.next =[]#
-		self.last =[]#
-		self.queue=None#{'name':'queue','property':'queue max-size-buffers=0 max-size-time=0 max-size-bytes=0'}
+		self.caps_property =None
+		#self.queue=None#{'name':'queue','property':'queue max-size-buffers=0 max-size-time=0 max-size-bytes=0'}
+		# link info
+		self.upstreams=0
+		self.downstreams=0
+		self.nums_linkedup=0
+		self.nums_linkeddown=0
+		self.up_name =''# %s-%s-%s
+		self.is_add_padded=False
+	def get_link_state(self):
+		return self.downstreams == self.nums_linkedown
 	def set_caps(self,caps):
 		self.caps_name=caps
 	def set_mod_name(self,mod):
@@ -112,6 +124,16 @@ class Chain():
 		if lists is not None and isinstance(lists,list):
 			self.__config_pasing__(lists)
 
+	def make_element_link(self,name,up_name,is_dyn=False,up=[],down=[]):
+		ep = self.el_pool
+		if name not in ep:
+			e = Element_link(name)
+			ep[name]=e
+			e.up_name = up_name
+			e.is_add_padded = is_dyn
+			return e
+
+
 	def __track_parse__(self,track,track_type):
 		if len(track) > 2:#transcode
 			if track_type == 'v':
@@ -135,7 +157,9 @@ class Chain():
 	
 	def __config_pasing__(self,lists):
 		self.streams=len(lists)
+		ep = self.el_pool
 		stream_id = 0
+		upstream_ptr=''
 		for args in lists:
 			stream_pattern={}
 			stream_pattern['id'] = stream_id
@@ -151,6 +175,9 @@ class Chain():
 			del(stream_pattern)
 			stream_id += 1
 
+			self.make_element_link('access_in','')
+			upstream_ptr = 'access_in'
+
 		if self.streams < self.access_out_total:
 			print('Wrapper may be multiplexing')
 
@@ -162,6 +189,8 @@ class Chain():
 			if self.tee_in :
 				for sp in pl:
 					sp['pattern'].append('tee_in')
+					self.make_element_link('tee_in','access_in')
+					upstream_ptr = 'tee_in'
 			
 		#for sp in self.pattern_lists:
 		#	print(sp)
@@ -171,24 +200,41 @@ class Chain():
 			vlen = len(sp['args_list'][0])
 			alen = len(sp['args_list'][1])
 			slen = len(sp['args_list'][2])
+
+			if upstream_ptr == '':
+				print('no upstream element')
+
 			if vlen > 2 and alen > 2 and slen > 2 : # 111
 				sp['pattern'].append('demux_decode')
+				self.make_element_link('demux_decode',upstream_ptr,True)
 			elif vlen == 0 and alen == 0 and slen == 0 : # 000
 				sp['pattern'].append('typefind')
+				self.make_element_link('typefind',upstream_ptr)
 				sp['pattern'].append('demux')
+				self.make_element_link('demux','typefind',True)
 			else:
 				if vlen >= 1 and vlen < 2 or alen >= 1 and alen < 2 or slen >= 1 and slen < 2:# no track
 					if (vlen > 2 or alen > 2 or slen > 2) and (vlen == 0 or alen == 0 or slen == 0):# _01
 						sp['pattern'].append('demux_decode')
+						self.make_element_link('demux_decode',upstream_ptr,True)
 						sp['pattern'].append('typefind')
+						self.make_element_link('typefind',upstream_ptr)
 						sp['pattern'].append('demux')
+						self.make_element_link('demux','typefind',True)
 					else:
 						sp['pattern'].append('demux_decode')
+						self.make_element_link('demux_decode',upstream_ptr,True)
 				else:
 					sp['pattern'].append('typefind')
+					self.make_element_link('typefind',upstream_ptr)
 					sp['pattern'].append('demux')
+					self.make_element_link('demux','typefind',True)
 
 		for sp in pl:
+			upstream_ptr=''
+			aupstream_ptr=''
+			vupstream_ptr=''
+			spstream_ptr=''
 			args = sp['args_list']
 			vlen = len(args[0])
 			alen = len(args[1])
@@ -196,56 +242,88 @@ class Chain():
 			mlen = len(args[3])
 			if vlen > 1 :
 				sp['pattern'].append('vconvert')
+				self.make_element_link('vconvert','demux_decode')
+				upstream_ptr = 'vconvert'
 				if self.vcodecs > 1:
 					sp['pattern'].append('tee_vcon')
-				sp['pattern'].append('vencode_%s_%s_%d' % (sp['args_list'][0]['vcodec'],sp['args_list'][0]['venc'],sp['id']))
+					self.make_element_link('tee_vcon','vconvert')
+					upstream_ptr = 'tee_vcon'
+				sp['pattern'].append(  'vencode_%s_%s_%d' % (sp['args_list'][0]['vcodec'],sp['args_list'][0]['venc'],sp['id']))
+				self.make_element_link('vencode_%s_%s_%d' % (sp['args_list'][0]['vcodec'],sp['args_list'][0]['venc'],sp['id']),upstream_ptr)
+				vupstream_ptr = 'vencode_%s_%s_%d' % (sp['args_list'][0]['vcodec'],sp['args_list'][0]['venc'],sp['id'])
 			elif vlen == 0 :
 				sp['pattern'].append('vpreparse')
+				self.make_element_link('vpreparse','demux')
+				upstream_ptr = 'vpreparse'
 				if self.vtrans > 1 or mlen>1:
 					sp['pattern'].append('tee_vtrans')
+					self.make_element_link('tee_vtrans',upstream_ptr)
 			else:
 				pass
 
 			if alen > 1 :
 				sp['pattern'].append('aconvert')
+				self.make_element_link('aconvert','demux_decode')
+				upstream_ptr = 'aconvert'
 				if self.acodecs > 1:
 					sp['pattern'].append('tee_acon')
-				sp['pattern'].append('aencode_%s_%s_%d'% (sp['args_list'][1]['acodec'],sp['args_list'][1]['aenc'],sp['id']))
+					self.make_element_link('tee_acon','aconvert')
+					upstream_ptr = 'tee_acon'
+				sp['pattern'].append(  'aencode_%s_%s_%d' % (sp['args_list'][1]['acodec'],sp['args_list'][1]['aenc'],sp['id']))
+				self.make_element_link('aencode_%s_%s_%d' % (sp['args_list'][1]['acodec'],sp['args_list'][1]['aenc'],sp['id']),upstream_ptr)
+				aupstream_ptr = 'aencode_%s_%s_%d' % (sp['args_list'][1]['acodec'],sp['args_list'][1]['aenc'],sp['id'])
 			elif alen == 0 :
 				sp['pattern'].append('apreparse')
-				if self.vtrans > 1 or mlen>1:
+				self.make_element_link('apreparse','demux')
+				upstream_ptr = 'apreparse'
+				if self.atrans > 1 or mlen>1:
 					sp['pattern'].append('tee_atrans')
+					self.make_element_link('tee_atrans',upstream_ptr)
 			else:
 				pass
 
 			if slen > 1 :
 				sp['pattern'].append('sconvert')
+				self.make_element_link('sconvert','demux_decode')
+				upstream_ptr = 'sconvert'
 				if self.scodecs > 1:
 					sp['pattern'].append('tee_scon')
-				sp['pattern'].append('sencode_%s_%s_%d'% (sp['args_list'][2]['scodec'],sp['args_list'][2]['senc'],sp['id']))
+					self.make_element_link('tee_scon','sconvert')
+					upstream_ptr = 'tee_scon'
+				sp['pattern'].append(  'sencode_%s_%s_%d' % (sp['args_list'][2]['scodec'],sp['args_list'][2]['senc'],sp['id']))
+				self.make_element_link('sencode_%s_%s_%d' % (sp['args_list'][2]['scodec'],sp['args_list'][2]['senc'],sp['id']),upstream_ptr)
+				supstream_ptr = 'sencode_%s_%s_%d' % (sp['args_list'][2]['scodec'],sp['args_list'][2]['senc'],sp['id'])
 			elif slen == 0 :
 				sp['pattern'].append('spreparse')
+				self.make_element_link('spreparse','demux')
+				upstream_ptr = 'spreparse'
 				if self.strans > 1 or mlen>1:
 					sp['pattern'].append('tee_strans')
+					self.make_element_link('tee_strans',upstream_ptr)
 			else:
 				pass
 
+			#upstream_ptr = ''
 			if mlen > 1:
 				if vlen > 1:
 					sp['pattern'].append('tee_ven_%d' % sp['id'])
+					self.make_element_link('tee_ven_%d' % sp['id'],vupstream_ptr)
 				if alen > 1:
 					sp['pattern'].append('tee_aen_%d' % sp['id'])
+					self.make_element_link('tee_aen_%d' % sp['id'],aupstream_ptr)
 				if slen > 1:
 					sp['pattern'].append('tee_sen_%d' % sp['id'])
+					self.make_element_link('tee_sen_%d' % sp['id'],supstream_ptr)
 
-			sp['tee_track_num']=mlen
-			sp['wrap_num']=mlen
-			sp['tee_wrap_num']=0
+			sp['tee_track_num'] =mlen
+			sp['wrap_num'] =mlen
+			sp['tee_wrap_num'] =0
 			for i in range(mlen):
 				sp['pattern'].append('wrap_%s_%d_%d'%(args[3][i]['mux'],i,sp['id']))
+				sp['pattern'].append('xxxxtee')
 				sp['pattern'].append('access_out-%s-%d_%d'%(args[3][i]['access_out'][:3],i,sp['id']))
-			#print('==',sp['pattern'])
-			#print('**',sp['args_list'],'\n')
+			print('1=',sp['pattern'])
+			print('**',sp['args_list'],'\n')
 			
 		# merge muxing and outputing
 		#mux_caps_vorg_aorg_sorg__id1_id2_...
@@ -319,13 +397,16 @@ class Chain():
 			#print('>>',token)
 			for t in token:
 				keys[t]=[]
-			#print('<<',keys)
+			print('<<',keys)
 			sp['wrap_num']= len(keys)
 			sp['tee_track_num'] = len(keys)
 			aorg = ''
 			vorg = ''
 			sorg = ''
-			#print('-------',sp['pattern'])
+			print('-------',sp['pattern'])
+			naorg = ''
+			nvorg = ''
+			nsorg = ''
 			if len(keys) == 1 and len(sp['args_list'][3]) != 1: # merge tee_track
 				for key in keys.items():
 					p = key[0].split('-')
@@ -337,56 +418,86 @@ class Chain():
 					for p in tmp:
 						if aorg == p or vorg == p or sorg == p:
 							if aorg != 'tee_atrans' and vorg != 'tee_vtrans' and sorg != 'tee_strans' :
-								pattern.remove(p)
+								#pattern.remove(p)
+								pattern[pattern.index(p)]=''
+								# fix wrap name
+								if 'tee_ven' in p:
+									nvorg = ep[p].up_name
+								elif 'tee_aen' in p:
+									naorg = ep[p].up_name
+								else:
+									nsorg = ep[p].up_name
+								del ep[p]
+					print('de--',naorg,nvorg,nsorg)
+					#pattern[index]=new_wrap_name+'-'+naorg+'-'+nvorg+'-'+nsorg+'-'+suffix
+			if naorg != '' or nvorg != '' or nsorg != '':
+				for p in pattern:
+					if 'wrap-' in p:
+						i = pattern.index(p)
+						l = p.split('-')
+						suf = l[len(l)-1]
+						pattern[i]=l[0]+'-'+l[1]+'-'+naorg+'-'+nvorg+'-'+nsorg+'-'+suf
+						print('----')
+						self.make_element_link(pattern[i],naorg+'-'+nvorg+'-'+nsorg)
+						keys={}
+						keys[l[0]+'-'+l[1]+'-'+naorg+'-'+nvorg+'-'+nsorg]=[]
+						# TODO
+					
 			#print('\n',sp['args_list'])			
-			#print('=======',sp['pattern'],'\n')			
+			print('=======',sp['pattern'],'\n')			
 
 			#merge output
 			#sp['tee_wrap_num'] =  
 			#if len(token) != len(keys) :#and len(sp['args_list'][3]) != 1:
 			if True:
-				out_index_list=[]
+				#out_index_list=[]
 				wrap_index_list=[]
 				tee_wrap = ''
 				for p in pattern:
-					if 'access_out' in p:
-						out_index_list.append(pattern.index(p))
+				#	if 'access_out' in p:
+				#		out_index_list.append(pattern.index(p))
 					if 'wrap-' in p:
 						wrap_index_list.append(pattern.index(p))
 				for key in keys:
 					for i in wrap_index_list:
 						if key in pattern[i]:
 							keys[key].append(i)
+							#print('==>',i)
 					if len(keys[key]) > 1:
-						tee_wrap='tee_wrap-%s' % key.split('-')[1]
+						tee_wrap='tee_wrap-%s-%d' % (key.split('-')[1],sp['id'])
 						first =1
 						for i in keys[key]:
 							if first == 1:
 								pattern[i] = key+'-'+str(sp['id'])
+								self.make_element_link(pattern[i],key.split('-')[2]+'-'+key.split('-')[3]+'-'+key.split('-')[4])
 								first =0
+								pattern[i+1]=tee_wrap
+								self.make_element_link(pattern[i+1],pattern[i])
 							else:
 								pattern[i]=''
-							pattern[i+1] = pattern[i+1] + '-'+ key.split('-')[1]
-						pattern.append(tee_wrap)
+								pattern[i+1]=''
+							pattern[i+2] = pattern[i+2] + '-'+ key.split('-')[1]
+							self.make_element_link(pattern[i+2],tee_wrap)
+						#pattern.append(tee_wrap)
 					else:
+						print('....=>',keys)
 						index=keys[key][0]
 						pattern[index] = key+'-'+str(sp['id'])
-						pattern[index+1]=pattern[index+1] + '-'+ key.split('-')[1]
+						self.make_element_link(pattern[index],key.split('-')[2]+'-'+key.split('-')[3]+'-'+key.split('-')[4])
+						pattern[index+1]=''
+						pattern[index+2]=pattern[index+2] + '-'+ key.split('-')[1]
+						self.make_element_link(pattern[index+2],pattern[index])
 						#pattern.remove(pattern[i])
 			#else:
 				
-			#print('MMMMMMMMM',sp['pattern'],'\n')			
-						
-		self.build_element_link()
+			print('MMMMMMMMM',sp['pattern'],'\n')			
+			#fix trans count			
+		#self.build_element_link()
 		
 		i = 0
-		for	el in self.element_link_lists:
-			sp = self.pattern_lists[i]
-			print('MMMMMMMMM',sp['pattern'])			
-			for e in el:
-				print(e,':                   \t\t\t',el[e])
-			i += 1
-
+		for	e in self.el_pool:
+			print('MMMMMMMMM',self.el_pool[e].name,self.el_pool[e].up_name)			
+	"""
 	def build_element_link(self):
 		pls = self.pattern_lists
 		ell= self.element_link_lists
@@ -411,7 +522,7 @@ class Chain():
 		#for	e in el_p_pool:
 		#	print(e,':',el_p_pool[e])
 			
-		
+	"""	
 			
 example_lists=[
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'}]),
@@ -419,18 +530,19 @@ example_lists=[
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'mp4','access_out':'http://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
         #({},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb',},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'mp4','access_out':'udp://:12346'}]),
-        ({},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8','ab':'128'},{'scodec':'dvb',},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
+        #({},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8','ab':'128'},{'scodec':'dvb',},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({'vcodec':'h264','venc':'x264'},{'acodec':'aac','channels':'2','aenc':'fdkaac','samples':'8'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'rtp','access_out':'udp://:12346'},{'mux':'mp4','access_out':'udp://:12346'}]),
-        #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'udp://:12346'}]),
+        #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25','vb':'3000','keyint':'25','height':'720','width':'576','bframes':'3'},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'udp://:12346'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'256'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
-        ({'vcodec':'h264','venc':'x264','vb':'2400','bframes':'3','fps':'25','keyint':'25','bframes':'3'},{'acodec':'aac','channels':'2','aenc':'fdkaac','ab':'128','samplerate':'44100'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///tmp/gst.mp4'},{'mux':'mp4','access_out':'file:///tmp/gst1.mp4'}]),
-        ({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'}]),
-        #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file:///mtp'}]),
+        #({'vcodec':'h264','venc':'x264','vb':'2400','bframes':'3','fps':'25','keyint':'25','bframes':'3'},{'acodec':'aac','channels':'2','aenc':'fdkaac','ab':'128','samplerate':'44100'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///tmp/gst.mp4'},{'mux':'mp4','access_out':'file:///tmp/gst1.mp4'}]),
+        ({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
+        #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'128'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file:///mtp'}]),
         #({'vcodec':'h264','venc':'open264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///mtp'},{'mux':'mp4','access_out':'file:///mtp1'}]),
       ]
 usage=[{'url':'udp://@192.168.61.26:12346','chanid':'1'},example_lists]
 
 if __name__ == '__main__':
 	chainner = Chain(example_lists); 
+	print(chainner.vcodecs,chainner.acodecs,chainner.scodecs,chainner.vtrans,chainner.atrans,chainner.strans)

@@ -23,9 +23,9 @@ class EngineGST(engineer.Engineer):
 				'ac3--apreparse': 		{'name':'ac3parse','propertys':		{}},
 				'dvd--spreparse': 		{'name':'dvdsubparse','propertys':	{}},
 				'dvb--spreparse': 		{'name':'subparse','propertys':		{}},
-				'--vconvert': 			{'name':'autovideoconvert','propertys':{}},
-				'--aconvert': 			{'name':'audioconvert','propertys':{}},
-				'--sconvert': 			{'name':'','propertys':				{}},
+				'vconvert--vconvert': 			{'name':'autovideoconvert','propertys':{}},
+				'aconvert--aconvert': 			{'name':'audioconvert','propertys':{}},
+				'sconvert--sconvert': 			{'name':'','propertys':				{}},
 				'h264-x264-vencode':	{'name':'x264enc','propertys':		{}},
 				'h264-openh264-vencode':		{'name':'openh264enc','propertys':{}},
 				'h265-x265-vencode':	{'name':'x265enc','propertys':{}},
@@ -55,9 +55,40 @@ class EngineGST(engineer.Engineer):
 		self.is_dynamic = False
 		self.chainner = chain.Chain(usage[1])
 		self.__build_pipeline__()
+					
+		
+	def __build_element__(self,caps_lib_cat,e):
+		caps = caps_lib_cat.split('-')[0]
+		lib = caps_lib_cat.split('-')[1]
+		cat = caps_lib_cat.split('-')[2]
+		e.caps_name = caps 
+		try:
+			e.mod_name = EngineGST.__ele_list[caps_lib_cat]['name']
+		except Exception as ex:
+			print('xxxx',ex)
+			return None
+		e.element_name = e.name
+		if caps != '' and e.mod_name != '':
+			e.ele_obj = Gst.ElementFactory.make(e.mod_name,e.name)
+			e.element_propertys=EngineGST.__ele_list[caps_lib_cat]['propertys']
+			self.__config_element__(caps,lib,cat,e)
+			for pp in e.element_propertys:
+				e.ele_obj.set_property(pp,e.element_propertys[pp])
+		return e
 
+	def insert_queue(self,e):
+		queue = Gst.ElementFactory.make('queue')
+		queue.set_property('max-size-buffers',0) 
+		queue.set_property('max-size-time',0) 
+		queue.set_property('max-size-bytes',0)
+		el=chain.Element_link('queue'+e.element_name)
+		el.set_caps('queue')
+		el.set_mod_name('queue')
+		el.element_name= el.name
+		el.ele_obj = queue
+		e.last.append(el)
+	
 	def __config_element__(self,caps,lib,cat,e):
-		chain = self.chainner
 		propertys = e.element_propertys
 		
 		if cat == 'src':
@@ -67,6 +98,11 @@ class EngineGST(engineer.Engineer):
 			elif caps == 'fil':
 				if lib == '':
 					e.element_propertys['location']=self['url'][8:]
+		elif cat == 'typefind':
+			e.ele_obj.connect("have-type",EngineGST.__findedtype, self)
+		elif cat == 'demux' :
+			if lib == '':
+				e.ele_obj.connect("pad-added",EngineGST.__pad_added, self)
 		elif cat == 'aencode':
 			l= e.name.split('_')#aencode_aac_fdkaac_3 
 			ll = len(l)
@@ -76,16 +112,7 @@ class EngineGST(engineer.Engineer):
 				if lib== 'fdkaac':
 					e.element_propertys['bitrate']=int(args['ab'])
 			#####
-			queue = Gst.ElementFactory.make('queue')
-			queue.set_property('max-size-buffers',0) 
-			queue.set_property('max-size-time',0) 
-			queue.set_property('max-size-bytes',0)
-			el=chain.Element_link('queue'+e.element_name)
-			el.set_caps('queue')
-			el.set_mod_name('queue')
-			el.element_name= el.name
-			el.element_obj = queue
-			e.last.append(el)
+			self.insert_queue(e)
 			#####
 			p ='audio/x-raw'
 			plb = len(p)
@@ -96,15 +123,15 @@ class EngineGST(engineer.Engineer):
 					p += (',rate='+args[a])
 			pla = len(p)
 			print(p)
+			#if False:#plb != pla:
 			if plb != pla:
-				capsfilter = Gst.ElementFactory.make('capsfilter','afilter_%s'%stream_num)
-				cap_property = Gst.Caps.from_string(p)
-				capsfilter.set_property('caps',cap_property)
-				el=chain.Element_link('afilter_%s'%stream_num)
-				el.set_caps('capsfilter')
-				el.set_mod_name = 'capsfilter'
+				el=chain.Element_link('aresample_%s'%stream_num)
+				el.ele_obj= Gst.ElementFactory.make('audioresample','aresample_%s'%stream_num)
 				el.element_name= el.name
-				el.element_obj = capsfilter
+				el.caps_property = Gst.Caps.from_string(p)
+				print('---><<',el.caps_property.to_string())
+				el.set_caps('audioresample')
+				el.set_mod_name = 'audioresample'
 				e.last.append(el)
 		elif cat == 'vencode':
 			l= e.name.split('_')#vencode_h264_x264_3 
@@ -119,11 +146,7 @@ class EngineGST(engineer.Engineer):
 					e.element_propertys['byte-stream']= True ## cbr or vbr or abr
 					e.element_propertys['key-int-max']= int(args['keyint'])## cbr or vbr or abr
 			#####
-			queue = Gst.ElementFactory.make('queue')
-			queue.set_property('max-size-buffers',0) 
-			queue.set_property('max-size-time',0) 
-			queue.set_property('max-size-bytes',0)
-			e.last.append(queue)
+			self.insert_queue(e)
 			#####
 			p ='video/x-raw'
 			plb = len(p)
@@ -136,13 +159,17 @@ class EngineGST(engineer.Engineer):
 					p += (',framerate=%s/1'%args[a])
 			pla = len(p)
 			print(p)
-			if plb != pla:
-				videoscale = Gst.ElementFactory.make('videoscale','vscale_%s'%stream_num)
-				capsfilter = Gst.ElementFactory.make('capsfilter','vfilter_%s'%stream_num)
-				cap_property = Gst.Caps.from_string(p)
-				capsfilter.set_property('caps',cap_property)
-				e.last.append(videoscale)
-				e.last.append(capsfilter)
+			if False:
+			#if plb != pla:
+				el=chain.Element_link('videocapsfilter_%s'%stream_num)
+				el.ele_obj= Gst.ElementFactory.make('capsfilter','videocapsfilter_%s'%stream_num)
+				vcaps = Gst.Caps.from_string(p)
+				el.ele_obj.set_property("caps", vcaps)
+				#help(el.ele_obj)
+				el.set_caps('vcapsfilter')
+				el.set_mod_name('capsfilter')
+				el.element_name= el.name
+				e.last.append(el)
 		elif cat == 'access_out':
 			l= e.name.split('-')#access_out-udp-0_2-ts
 			ll = len(l)
@@ -151,7 +178,7 @@ class EngineGST(engineer.Engineer):
 			args= self.chainner.pattern_lists[stream_num]['args_list'][3][out_num]
 			if caps == 'fil':
 				if lib == '':
-					e.element_propertys['location']=args['access_out'][8:]
+					e.element_propertys['location']=args['access_out'][7:]
 			elif caps == 'udp':
 				if lib == '':
 					l = args['access_out'].split('/')[2]
@@ -162,38 +189,27 @@ class EngineGST(engineer.Engineer):
 						e.element_propertys['multicast-iface']=multicast_iface
 					e.element_propertys['host']=host
 					e.element_propertys['port']=int(port)
-		elif cat == 'demux_decode':
-			queue = Gst.ElementFactory.make('queue')
-			queue.set_property('max-size-buffers',0) 
-			queue.set_property('max-size-time',0) 
-			queue.set_property('max-size-bytes',0)
-			e.last.append(queue)
+					print(host,port)
+		elif cat == 'decode':
+			self.insert_queue(e)
+			e.ele_obj.connect("pad-added",EngineGST.__pad_added, self)
+		elif cat == 'vpreparse' or cat == 'apreparse' or cat == 'spreparse':
+			self.insert_queue(e)
+		elif cat == 'vconvert' or cat == 'aconvert' or cat == 'sconvert':
+			#self.insert_queue(e)
+			pass
 		elif cat == 'dup':
 			pass
 		else:
 			print('elemnt ',e.name,' no property config')
-					
-		
-	def __build_element__(self,caps_lib_cat,e):
-		caps = caps_lib_cat.split('-')[0]
-		lib = caps_lib_cat.split('-')[1]
-		cat = caps_lib_cat.split('-')[2]
-		e.caps_name = caps 
-		e.mod_name = EngineGST.__ele_list[caps_lib_cat]['name']
-		e.element_name = e.name
-		if e.name != 'demux':
-			e.element_obj = Gst.ElementFactory.make(e.mod_name,e.name)
-			e.element_propertys=EngineGST.__ele_list[caps_lib_cat]['propertys']
-			self.__config_element__(caps,lib,cat,e)
-			for pp in e.element_propertys:
-				e.element_obj.set_property(pp,e.element_propertys[pp])
-	
+
 	def __build_pipeline__(self):
 		el_pool = self.chainner.el_pool
-		ell = self.chainner.element_link_lists
+		#ell = self.chainner.element_link_lists
 		pipeline = self['pipeline']
             
 		for e in el_pool:
+			print('==>',e)
 			if e == 'access_in':
 				self.__build_element__(self.access+'--src',el_pool[e])
 			elif e[:3] == 'tee':
@@ -201,18 +217,17 @@ class EngineGST(engineer.Engineer):
 			elif e == 'typefind' :
 				self.is_dynamic = True 
 				self.__build_element__(e + '--typefind',el_pool[e])
-				el_pool[e].element_obj.connect("have-type",EngineGST.__findedtype, self)
 			elif e == 'demux' :
 				self.is_dynamic = True 
 				self.__build_element__('--demux',el_pool[e])
 			elif e == 'demux_decode' :
 				self.__build_element__(e +'--decode',el_pool[e])
 			elif e == 'vconvert' :
-				self.__build_element__('--vconvert',el_pool[e])
+				self.__build_element__('vconvert--vconvert',el_pool[e])
 			elif e == 'aconvert' :
-				self.__build_element__('--aconvert',el_pool[e])
+				self.__build_element__('aconvert--aconvert',el_pool[e])
 			elif e == 'sconvert' :
-				self.__build_element__('--sconvert',el_pool[e])
+				self.__build_element__('sconvert--sconvert',el_pool[e])
 			elif e[:4] == 'aenc' :
 				self.__build_element__(e.split('_')[1]+'-'+e.split('_')[2]+'-aencode',el_pool[e])
 			elif e[:4] == 'venc' :
@@ -221,11 +236,13 @@ class EngineGST(engineer.Engineer):
 				self.__build_element__(e.split('_')[1]+'-'+e.split('_')[2]+'-sencode',el_pool[e])
 			elif e == 'apreparse' :
 				self.is_dynamic = True 
-				#self.__build_element__('v_'+'unkown'+'-preparse',el_pool[e])
+				self.__build_element__('--apreparse',el_pool[e])
 			elif e == 'vpreparse' :
 				self.is_dynamic = True 
+				self.__build_element__('--vpreparse',el_pool[e])
 			elif e == 'spreparse' :
 				self.is_dynamic = True 
+				self.__build_element__('--spreparse',el_pool[e])
 			elif e[:4] == 'wrap' :
 				self.__build_element__(e.split('-')[1]+'--wrap',el_pool[e])
 			elif e[:10] == 'access_out':
@@ -233,63 +250,151 @@ class EngineGST(engineer.Engineer):
 			else:
 				print("Something wrong!!!")
 
-			if not el_pool[e].element_obj:
+			if not el_pool[e].ele_obj:
 				print('Obj of ',e,' is null!!!' )
 			else:
-				ret = pipeline.add(el_pool[e].element_obj)
+				ret = pipeline.add(el_pool[e].ele_obj)
 				if ret:
 					print('add element',e)
-
+			el = el_pool[e]
+			print('***',el.name,' ',el.caps_name,' ',el.mod_name,' ' ,el.ele_obj,el.up_name)
+		
 		if self.is_dynamic:
 			print('This is dynamic links')
-
-		for el in ell:
-			print('link:>')
-			head=None;cur=None;next=None;#tail=None;
-			#last != next means have no tee
+#['access_in', 'tee_in', 'demux_decode', 'vconvert', 'tee_vcon', 'vencode_h264_x264_1', 'aconvert', 'tee_acon', 'aencode_aac_fdkaac_1', 'tee_ven_1', 'tee_aen_1', 'wrap-ts-tee_aen_1-tee_ven_1--1', 'tee_wrap-ts', 'access_out-udp-0_1-ts', '', '', 'access_out-udp-1_1-ts', 'wrap-mp4-tee_aen_1-tee_ven_1--1', 'tee_wrap-mp4', 'access_out-fil-2_1-mp4', '', '', 'access_out-fil-3_1-mp4']
+#['access_in', 'tee_in', 'demux_decode', 'typefind', 'demux', 'vpreparse', 'tee_vtrans', 'aconvert', 'tee_acon', 'aencode_aac_fdkaac_0', 'tee_aen_0', 'wrap-ts-tee_aen_0-tee_vtrans--0', 'tee_wrap-ts', 'access_out-udp-0_0-ts', '', '', 'access_out-udp-1_0-ts']
+		for key in el_pool:
+			print("start link >>:", key)
+			e = el_pool[key]
 			linked=None;linking=None;
-			for e in el:
-				cur = el[e]
-				if not head:
-					head = cur
-					next = head	
-					continue
-				elif e[:3] == 'tee':
-					pass
-				elif e == 'typefind ' or e == 'demux':
-					head = cur = None
-					continue
-				else :
-					head = cur
+			if e.mod_name == '' or e.caps_name == '':
+				continue
+			elif e.name  == 'access_in':
+				continue
+			elif e.up_name == '':
+				print('last element is null')
+				continue
+			elif key[0:4] == 'wrap':
+				list = e.up_name.split('-')
+				print(list)
+				for i in range(0,3):
+					if list[i] != '' and el_pool[list[i]].mod_name != '':
+						self.linked_link(el_pool[list[i]],e)
+			elif el_pool[e.up_name].mod_name == '' or el_pool[e.up_name].caps_name == '' or el_pool[e.up_name].is_add_padded:
+				print('can`t be link ', e.up_name,e.name)
+				continue
+			else:
+				linked=el_pool[e.up_name]
+				linking=e
+				self.linked_link(linked,linking)
 
-				linked = head
-				linking= cur
-				for i in linking.last:	
-				 	ret=linked.element_obj.link(i)
-				 	if not ret:
-				 		print('linked ', linked.name,'==>',i.name ,' failure')
-				 	linked=i
+	def linked_link(self,linked,linking):
+		for i in linking.last:
+			print('linkin>> ',linked.name,' ',i.name)
+			self['pipeline'].add(i.ele_obj)
+			if not i.caps_property :
+				ret=linked.ele_obj.link(i.ele_obj)
+			else:
+				ret=linked.ele_obj.link_filtered(i.ele_obj,i.caps_property)
+			if not ret:
+				print('linkin ', linked.name,'==>',i.name ,' failure')
+			linked=i
 					
-				if linked.element_obj is not None:
-					ret=linked.element_obj.link(linking.element_obj)
-					if not ret:
-						print('linked ', linked.name,'==>',linking.name,' failure')
-				
-	def __build_link(gstobject,track_str,track_name):
-		pipeline  = gstobject['pipeline']
-
+		if linked.ele_obj is not None:
+			print('linking>>',linked.name,linking.name)
+			ret=linked.ele_obj.link(linking.ele_obj)
+			if not ret:
+				print('linked ', linked.name,'==>',linking.name,' failure')
+			
 	def __pad_added(src, new_pad, gstobject):
 		pipeline  = gstobject['pipeline']
+		ep = gstobject.chainner.el_pool
+		new_pad_caps = Gst.Pad.get_current_caps(new_pad)
+		new_pad_struct = new_pad_caps.get_structure(0)
+		new_pad_type = new_pad_struct.get_name()
+		new_pad_name = new_pad.get_name()
+		cas_lib_cat = ''
 
+		e_name = src.get_name()
+		e=None
+		print("Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
+		if new_pad_type == 'video/x-h265':
+			caps_lib_cat = 'h265'+'--vpreparse'
+			e = ep['vpreparse']
+		elif new_pad_type == 'video/x-h264':
+			caps_lib_cat = 'h264'+'--vpreparse'
+			e = ep['vpreparse']
+		elif new_pad_type == 'video/mpeg':
+			caps_lib_cat = 'mpeg'+'--vpreparse'
+			e = ep['vpreparse']
+		elif new_pad_type == 'audio/mpeg':
+			caps_lib_cat = 'mpeg'+'--apreparse'
+			e = ep['apreparse']
+		elif new_pad_type == 'audio/aac':
+			caps_lib_cat = 'aac'+'--apreparse'
+			e = ep['apreparse']
+		elif new_pad_type == 'audio/x-ac3':
+			caps_lib_cat = 'ac3'+'--apreparse'
+			e = ep['apreparse']
+		elif new_pad_type == 'audio/x-raw':
+			if 'aconvert' in ep:
+				e = ep['aconvert']
+		elif new_pad_type == 'video/x-raw':
+			e = ep['vconvert']
+		else:
+			print(new_pad_type,' is not support')
+			exit()
+		if e_name == 'demux':
+			ret = self.__build_element__(caps_lib_cat,e)
+			if ret is None:
+				print("parse failed",)
+				exit()
+			ret = pipeline.add(e.ele_obj)
+			if ret is None:
+				print(e.caps_name,' add error')
+		if not e:
+			return
+		gstobject.linked_link(ep[e_name],e)
+		e.ele_obj.set_state(Gst.State.PLAYING)
+		
 	def __findedtype(typefinder,probability,caps,gstobject):
 		pipeline  = gstobject['pipeline']
-
+		ep = gstobject.el_pool
+		e=ep['demux']
+		caps_lib_cat =''
+		size = caps.get_size()
+		print('caps size :',size)
+		for i in range(size):
+			structure =  caps.get_structure(i)
+			name = structure.get_name()
+			print('find new type ',name)
+			if name == 'video/mpegts':
+				#obj= Gst.ElementFactory.make("tsdemux","demuxer")
+				caps_lib_cat = 'ts'+'--demux'
+			elif name == 'video/quicktime':
+				#obj = Gst.element_factory_make("qtdemux","demuxer")
+				caps_lib_cat = 'mp4'+'--demux'
+			else:
+				print('No support ',name)
+				exit()
+		ret = self.__build_element__(caps_lib_cat,e)
+		if ret is None:
+			print("typefind failed")
+			exit()
+		ret = pipeline.add(e.ele_obj)
+		if ret is None:
+			print('add demux error')
+		gstobject.linked_link(ep['typefind'].ele_obj,e.ele_obj)
+		e.ele_obj.set_state(Gst.State.PLAYING)
+		
+		
 	def __bus_call(bus, message, loop):
+		import sys
 		t = message.type
 		if t == Gst.MessageType.EOS:
 			sys.stdout.write("End-of-stream\n")
-			loop.quit()
 			print("End of ")
+			loop.quit()
 			#pipeline.set_state(Gst.State.READY)
 			#pipeline.set_state(Gst.State.PLAYING)
 		elif t == Gst.MessageType.ERROR:
@@ -335,4 +440,11 @@ class EngineGST(engineer.Engineer):
 		return 0
 
 if __name__ == '__main__':
+	help(Gst.Caps)
 	gstengineer = EngineGST(chain.usage)
+	gstengineer.start()
+	import time
+	time.sleep(10000)
+
+
+
