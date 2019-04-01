@@ -1,0 +1,6 @@
+centos7
+example 
+	setup  'nginx' init shell file to /etc/inid.d
+	add 'service nginx start' line to /etc/rc.local file tail
+	chmod +x /etc/rc.d/rc.local
+	systemctl enable rc-local.service

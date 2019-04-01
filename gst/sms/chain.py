@@ -5,6 +5,8 @@ import copy
 	gst-launch-1.0 -e -v udpsrc uri=udp://@192.168.61.26:12346 ! tee name=teer_in ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0  ! decodebin name=decoder !  queue !  autovideoconvert ! tee name=tee_vcodec ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0 ! x264enc !  queue ! mpegtsmux name=muxer alignment=7 ! udpsink host=192.168.61.22 port=22345 decoder. ! queue !  audioconvert ! tee name=tee_acodec ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0   ! fdkaacenc ! queue ! muxer. teer_in. !  queue max-size-buffers=0 max-size-time=0 max-size-bytes=0  !  typefind ! tsdemux name=demuxer !  queue ! mpegvideoparse ! queue ! mpegtsmux name=muxer1 alignment=7 ! udpsink host=192.168.61.22 port=22346 demuxer. ! queue ! mpegaudioparse ! queue ! muxer1. tee_vcodec. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0 ! x264enc !  queue ! mpegtsmux name=muxer2 alignment=7 ! udpsink host=192.168.61.22 port=22347 tee_acodec. ! queue max-size-buffers=0 max-size-time=0 max-size-bytes=0   ! fdkaacenc ! queue ! muxer2.
 
 gst-launch-1.0 -e -v udpsrc uri=udp://@192.168.61.26:12346 ! decodebin name=decoder !  queue !  autovideoconvert !  x264enc !  queue ! mpegtsmux name=muxer alignment=7 ! udpsink host=192.168.61.22 port=22345 decoder. ! queue !  audioconvert !  fdkaacenc ! queue ! muxer.
+
+gst-launch-1.0 -e -v udpsrc uri=udp://@192.168.61.26:12346 ! decodebin name=decoder !  queue ! autovideoconvert ! videoscale ! video/x-raw,format=I420,width=720,height=576  ! x264enc !  queue ! mpegtsmux name=muxer alignment=7 ! filesink location=/tmp/gst.ts decoder. ! queue !  audioconvert ! audioresample ! audio/x-raw,channels=2,rate=48000  !  fdkaacenc ! queue ! muxer.
 """
 def string_sub(First,Second):
 	for i in First :
@@ -213,10 +215,15 @@ class Chain():
 				sp['pattern'].append('demux')
 				self.make_element_link('demux','typefind',True)
 			else:
-				if vlen >= 1 and vlen < 2 or alen >= 1 and alen < 2 or slen >= 1 and slen < 2:# no track
+				if vlen == 1  or alen == 1  or slen == 1 :# no track
 					if (vlen > 2 or alen > 2 or slen > 2) and (vlen == 0 or alen == 0 or slen == 0):# _01
 						sp['pattern'].append('demux_decode')
 						self.make_element_link('demux_decode',upstream_ptr,True)
+						sp['pattern'].append('typefind')
+						self.make_element_link('typefind',upstream_ptr)
+						sp['pattern'].append('demux')
+						self.make_element_link('demux','typefind',True)
+					elif vlen == 0 or alen == 0 or slen == 0:# _01
 						sp['pattern'].append('typefind')
 						self.make_element_link('typefind',upstream_ptr)
 						sp['pattern'].append('demux')
@@ -229,6 +236,7 @@ class Chain():
 					self.make_element_link('typefind',upstream_ptr)
 					sp['pattern'].append('demux')
 					self.make_element_link('demux','typefind',True)
+			print('0=',sp['pattern'])
 
 		for sp in pl:
 			upstream_ptr=''
@@ -525,7 +533,7 @@ class Chain():
 	"""	
 			
 example_lists=[
-        #({},{},{},[{'mux':'ts','access_out':'udp://:12345'}]),
+        ({},{'acodec':'none'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://192.168.61.22:22345'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'mp4','access_out':'http://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
@@ -537,7 +545,7 @@ example_lists=[
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'256'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
         #({'vcodec':'h264','venc':'x264','vb':'2400','bframes':'3','fps':'25','keyint':'25','bframes':'3'},{'acodec':'aac','channels':'2','aenc':'fdkaac','ab':'128','samplerate':'44100'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///tmp/gst.mp4'},{'mux':'mp4','access_out':'file:///tmp/gst1.mp4'}]),
-        ({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
+        #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'128'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file:///mtp'}]),
         #({'vcodec':'h264','venc':'open264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///mtp'},{'mux':'mp4','access_out':'file:///mtp1'}]),
       ]

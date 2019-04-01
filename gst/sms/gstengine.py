@@ -77,11 +77,12 @@ class EngineGST(engineer.Engineer):
 		return e
 
 	def insert_queue(self,e):
-		queue = Gst.ElementFactory.make('queue')
+		print("????????????????????????????????")
+		el=chain.Element_link('queue-'+e.element_name)
+		queue = Gst.ElementFactory.make('queue','queue-'+e.element_name)
 		queue.set_property('max-size-buffers',0) 
 		queue.set_property('max-size-time',0) 
 		queue.set_property('max-size-bytes',0)
-		el=chain.Element_link('queue'+e.element_name)
 		el.set_caps('queue')
 		el.set_mod_name('queue')
 		el.element_name= el.name
@@ -99,10 +100,10 @@ class EngineGST(engineer.Engineer):
 				if lib == '':
 					e.element_propertys['location']=self['url'][8:]
 		elif cat == 'typefind':
-			e.ele_obj.connect("have-type",EngineGST.__findedtype, self)
+			e.ele_obj.connect("have-type",EngineGST.findedtype, self)
 		elif cat == 'demux' :
 			if lib == '':
-				e.ele_obj.connect("pad-added",EngineGST.__pad_added, self)
+				e.ele_obj.connect("pad-added",EngineGST.pad_added, self)
 		elif cat == 'aencode':
 			l= e.name.split('_')#aencode_aac_fdkaac_3 
 			ll = len(l)
@@ -147,8 +148,14 @@ class EngineGST(engineer.Engineer):
 					e.element_propertys['key-int-max']= int(args['keyint'])## cbr or vbr or abr
 			#####
 			self.insert_queue(e)
+			el=chain.Element_link('videoscale_%s'%stream_num)
+			el.ele_obj= Gst.ElementFactory.make('videoscale','videoscale_%s'%stream_num)
+			el.set_caps('videoscale')
+			el.set_mod_name('videoscale')
+			el.element_name= el.name
+			e.last.append(el)
 			#####
-			p ='video/x-raw'
+			p ='video/x-raw,format=I420'
 			plb = len(p)
 			for a in args:
 				if a == 'width':
@@ -158,13 +165,14 @@ class EngineGST(engineer.Engineer):
 				elif a == 'fps':
 					p += (',framerate=%s/1'%args[a])
 			pla = len(p)
-			print(p)
-			if False:
-			#if plb != pla:
+			print('xxx-->',p)
+			#if False:
+			if plb != pla:
 				el=chain.Element_link('videocapsfilter_%s'%stream_num)
 				el.ele_obj= Gst.ElementFactory.make('capsfilter','videocapsfilter_%s'%stream_num)
 				vcaps = Gst.Caps.from_string(p)
 				el.ele_obj.set_property("caps", vcaps)
+				print('???????????????????????????')
 				#help(el.ele_obj)
 				el.set_caps('vcapsfilter')
 				el.set_mod_name('capsfilter')
@@ -192,7 +200,7 @@ class EngineGST(engineer.Engineer):
 					print(host,port)
 		elif cat == 'decode':
 			self.insert_queue(e)
-			e.ele_obj.connect("pad-added",EngineGST.__pad_added, self)
+			e.ele_obj.connect("pad-added",EngineGST.pad_added, self)
 		elif cat == 'vpreparse' or cat == 'apreparse' or cat == 'spreparse':
 			self.insert_queue(e)
 		elif cat == 'vconvert' or cat == 'aconvert' or cat == 'sconvert':
@@ -268,6 +276,7 @@ class EngineGST(engineer.Engineer):
 			e = el_pool[key]
 			linked=None;linking=None;
 			if e.mod_name == '' or e.caps_name == '':
+				print('This is dynamic link')
 				continue
 			elif e.name  == 'access_in':
 				continue
@@ -306,9 +315,10 @@ class EngineGST(engineer.Engineer):
 			if not ret:
 				print('linked ', linked.name,'==>',linking.name,' failure')
 			
-	def __pad_added(src, new_pad, gstobject):
-		pipeline  = gstobject['pipeline']
-		ep = gstobject.chainner.el_pool
+	@staticmethod
+	def pad_added(src, new_pad,obj):
+		pipeline  = obj['pipeline']
+		ep = obj.chainner.el_pool
 		new_pad_caps = Gst.Pad.get_current_caps(new_pad)
 		new_pad_struct = new_pad_caps.get_structure(0)
 		new_pad_type = new_pad_struct.get_name()
@@ -318,6 +328,10 @@ class EngineGST(engineer.Engineer):
 		e_name = src.get_name()
 		e=None
 		print("Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
+		if 'vpreparse' not in ep and 'video' in new_pad_type:
+			return
+		if 'apreparse' not in ep and 'audio' in new_pad_type:
+			return
 		if new_pad_type == 'video/x-h265':
 			caps_lib_cat = 'h265'+'--vpreparse'
 			e = ep['vpreparse']
@@ -345,7 +359,7 @@ class EngineGST(engineer.Engineer):
 			print(new_pad_type,' is not support')
 			exit()
 		if e_name == 'demux':
-			ret = self.__build_element__(caps_lib_cat,e)
+			ret = obj.__build_element__(caps_lib_cat,e)
 			if ret is None:
 				print("parse failed",)
 				exit()
@@ -354,12 +368,44 @@ class EngineGST(engineer.Engineer):
 				print(e.caps_name,' add error')
 		if not e:
 			return
-		gstobject.linked_link(ep[e_name],e)
+		print('dyn linking ...')
+		obj.linked_link(ep[e_name],e)
 		e.ele_obj.set_state(Gst.State.PLAYING)
+		#pipeline.set_state(Gst.State.PAUSED)
+		#pipeline.set_state(Gst.State.PLAYING)
 		
-	def __findedtype(typefinder,probability,caps,gstobject):
-		pipeline  = gstobject['pipeline']
-		ep = gstobject.el_pool
+		for key in ep:
+			print("After start link >>:", key)
+			e = ep[key]
+			linked=None;linking=None;
+			if e.mod_name == '' or e.caps_name == '':
+				print('This is dynamic link')
+				continue
+			elif e.name  == 'access_in' or e.name  == 'demux':
+				continue
+			elif e.up_name == '':
+				print('last element is null')
+				continue
+			elif key[0:4] == 'wrap':
+				list = e.up_name.split('-')
+				print(list)
+				for i in range(0,3):
+					if list[i] != '' and ep[list[i]].mod_name != '':
+						obj.linked_link(ep[list[i]],e)
+			elif ep[e.up_name].mod_name == '' or ep[e.up_name].caps_name == '':
+				print('can`t be link ', e.up_name,e.name)
+				continue
+			else:
+				linked=ep[e.up_name]
+				linking=e
+				obj.linked_link(linked,linking)
+		#pipeline.set_state(Gst.State.PAUSED)
+		#pipeline.set_state(Gst.State.PLAYING)
+
+	@staticmethod
+	def findedtype(typefinder,probability,caps,obj):
+		pipeline  = obj['pipeline']
+		ep = obj.chainner.el_pool
 		e=ep['demux']
 		caps_lib_cat =''
 		size = caps.get_size()
@@ -377,15 +423,17 @@ class EngineGST(engineer.Engineer):
 			else:
 				print('No support ',name)
 				exit()
-		ret = self.__build_element__(caps_lib_cat,e)
+		ret = obj.__build_element__(caps_lib_cat,e)
 		if ret is None:
 			print("typefind failed")
 			exit()
 		ret = pipeline.add(e.ele_obj)
 		if ret is None:
 			print('add demux error')
-		gstobject.linked_link(ep['typefind'].ele_obj,e.ele_obj)
+		obj.linked_link(ep['typefind'],e)
 		e.ele_obj.set_state(Gst.State.PLAYING)
+		#pipeline.set_state(Gst.State.PAUSED)
+		#pipeline.set_state(Gst.State.PLAYING)
 		
 		
 	def __bus_call(bus, message, loop):
@@ -419,9 +467,7 @@ class EngineGST(engineer.Engineer):
 		_thread.start_new_thread(EngineGST.__start,(self,None))
 		return True
 
-	@staticmethod
-	def __start(data,notuse):
-		self = data
+	def __start(self,notuse):
 		self['bus'].add_signal_watch()
 		self['bus'].connect("message", EngineGST.__bus_call, self['mainloop'])
 		self['pipeline'].set_state(Gst.State.PLAYING)
@@ -440,7 +486,7 @@ class EngineGST(engineer.Engineer):
 		return 0
 
 if __name__ == '__main__':
-	help(Gst.Caps)
+	#help(Gst.Caps)
 	gstengineer = EngineGST(chain.usage)
 	gstengineer.start()
 	import time
