@@ -101,6 +101,7 @@ class EngineGST(engineer.Engineer):
 					e.element_propertys['location']=self['url'][8:]
 		elif cat == 'typefind':
 			e.ele_obj.connect("have-type",EngineGST.findedtype, self)
+			self.insert_queue(e)
 		elif cat == 'demux' :
 			if lib == '':
 				e.ele_obj.connect("pad-added",EngineGST.pad_added, self)
@@ -220,6 +221,9 @@ class EngineGST(engineer.Engineer):
 			print('==>',e)
 			if e == 'access_in':
 				self.__build_element__(self.access+'--src',el_pool[e])
+				ret = pipeline.add(el_pool[e].ele_obj)
+				if ret:
+					print('add element',e)
 			elif e[:3] == 'tee':
 				self.__build_element__('tee--dup',el_pool[e])
 			elif e == 'typefind' :
@@ -260,46 +264,32 @@ class EngineGST(engineer.Engineer):
 
 			if not el_pool[e].ele_obj:
 				print('Obj of ',e,' is null!!!' )
-			else:
-				ret = pipeline.add(el_pool[e].ele_obj)
-				if ret:
-					print('add element',e)
+			#else:
+			#	print("ADDing 1^^^^",el_pool[e].element_name)
+			#	ret = pipeline.add(el_pool[e].ele_obj)
+			#	if ret:
+			#		print('add element',e)
 			el = el_pool[e]
 			print('***',el.name,' ',el.caps_name,' ',el.mod_name,' ' ,el.ele_obj,el.up_name)
 		
 		if self.is_dynamic:
 			print('This is dynamic links')
-#['access_in', 'tee_in', 'demux_decode', 'vconvert', 'tee_vcon', 'vencode_h264_x264_1', 'aconvert', 'tee_acon', 'aencode_aac_fdkaac_1', 'tee_ven_1', 'tee_aen_1', 'wrap-ts-tee_aen_1-tee_ven_1--1', 'tee_wrap-ts', 'access_out-udp-0_1-ts', '', '', 'access_out-udp-1_1-ts', 'wrap-mp4-tee_aen_1-tee_ven_1--1', 'tee_wrap-mp4', 'access_out-fil-2_1-mp4', '', '', 'access_out-fil-3_1-mp4']
-#['access_in', 'tee_in', 'demux_decode', 'typefind', 'demux', 'vpreparse', 'tee_vtrans', 'aconvert', 'tee_acon', 'aencode_aac_fdkaac_0', 'tee_aen_0', 'wrap-ts-tee_aen_0-tee_vtrans--0', 'tee_wrap-ts', 'access_out-udp-0_0-ts', '', '', 'access_out-udp-1_0-ts']
+		
 		for key in el_pool:
 			print("start link >>:", key)
 			e = el_pool[key]
 			linked=None;linking=None;
-			if e.mod_name == '' or e.caps_name == '':
-				print('This is dynamic link')
+			if e.name  == 'access_in':
 				continue
-			elif e.name  == 'access_in':
-				continue
-			elif e.up_name == '':
-				print('last element is null')
-				continue
-			elif key[0:4] == 'wrap':
-				list = e.up_name.split('-')
-				print(list)
-				for i in range(0,3):
-					if list[i] != '' and el_pool[list[i]].mod_name != '':
-						self.linked_link(el_pool[list[i]],e)
-			elif el_pool[e.up_name].mod_name == '' or el_pool[e.up_name].caps_name == '' or el_pool[e.up_name].is_add_padded:
-				print('can`t be link ', e.up_name,e.name)
-				continue
-			else:
+			elif e.name == 'typefind' or e.name == 'tee_in' or e.name == 'demux_decode':
 				linked=el_pool[e.up_name]
 				linking=e
 				self.linked_link(linked,linking)
-
+		
 	def linked_link(self,linked,linking):
 		for i in linking.last:
 			print('linkin>> ',linked.name,' ',i.name)
+			print("ADDing 2^^^^",i.element_name)
 			self['pipeline'].add(i.ele_obj)
 			if not i.caps_property :
 				ret=linked.ele_obj.link(i.ele_obj)
@@ -307,13 +297,19 @@ class EngineGST(engineer.Engineer):
 				ret=linked.ele_obj.link_filtered(i.ele_obj,i.caps_property)
 			if not ret:
 				print('linkin ', linked.name,'==>',i.name ,' failure')
+			i.ele_obj.set_state(Gst.State.PLAYING)
 			linked=i
 					
 		if linked.ele_obj is not None:
 			print('linking>>',linked.name,linking.name)
+			print("ADDing 2`^^^^",linking.element_name)
+			self['pipeline'].add(linking.ele_obj)
 			ret=linked.ele_obj.link(linking.ele_obj)
 			if not ret:
 				print('linked ', linked.name,'==>',linking.name,' failure')
+			linking.ele_obj.set_state(Gst.State.PLAYING)
+		else:
+			print("OBJ is None")
 			
 	@staticmethod
 	def pad_added(src, new_pad,obj):
@@ -329,9 +325,11 @@ class EngineGST(engineer.Engineer):
 		e=None
 		print("Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
 		if 'vpreparse' not in ep and 'video' in new_pad_type:
-			return
+			if 'vconvert' not in ep:
+				return
 		if 'apreparse' not in ep and 'audio' in new_pad_type:
-			return
+			if 'aconvert' not in ep:
+				return
 		if new_pad_type == 'video/x-h265':
 			caps_lib_cat = 'h265'+'--vpreparse'
 			e = ep['vpreparse']
@@ -363,16 +361,7 @@ class EngineGST(engineer.Engineer):
 			if ret is None:
 				print("parse failed",)
 				exit()
-			ret = pipeline.add(e.ele_obj)
-			if ret is None:
-				print(e.caps_name,' add error')
-		if not e:
-			return
-		print('dyn linking ...')
 		obj.linked_link(ep[e_name],e)
-		e.ele_obj.set_state(Gst.State.PLAYING)
-		#pipeline.set_state(Gst.State.PAUSED)
-		#pipeline.set_state(Gst.State.PLAYING)
 		
 		for key in ep:
 			print("After start link >>:", key)
@@ -381,7 +370,7 @@ class EngineGST(engineer.Engineer):
 			if e.mod_name == '' or e.caps_name == '':
 				print('This is dynamic link')
 				continue
-			elif e.name  == 'access_in' or e.name  == 'demux':
+			elif e.name  == 'access_in' or e.name  == 'typefind' or e.name == 'demux' or e.name == 'demux_decode':
 				continue
 			elif e.up_name == '':
 				print('last element is null')
@@ -395,12 +384,15 @@ class EngineGST(engineer.Engineer):
 			elif ep[e.up_name].mod_name == '' or ep[e.up_name].caps_name == '':
 				print('can`t be link ', e.up_name,e.name)
 				continue
+			elif 'preparse' in e.name:
+				continue
 			else:
 				linked=ep[e.up_name]
 				linking=e
 				obj.linked_link(linked,linking)
-		#pipeline.set_state(Gst.State.PAUSED)
-		#pipeline.set_state(Gst.State.PLAYING)
+		for i in ep:
+			e = ep[i]
+			print(e.name,'\t\t\t\t==>',e.mod_name,e.element_name,'--up-name:',e.up_name)
 
 	@staticmethod
 	def findedtype(typefinder,probability,caps,obj):
@@ -427,11 +419,12 @@ class EngineGST(engineer.Engineer):
 		if ret is None:
 			print("typefind failed")
 			exit()
-		ret = pipeline.add(e.ele_obj)
-		if ret is None:
-			print('add demux error')
+		#print("ADDing 4^^^^",e.element_name)
+		#ret = pipeline.add(e.ele_obj)
+		#if ret is None:
+		#	print('add demux error')
 		obj.linked_link(ep['typefind'],e)
-		e.ele_obj.set_state(Gst.State.PLAYING)
+		#e.ele_obj.set_state(Gst.State.PLAYING)
 		#pipeline.set_state(Gst.State.PAUSED)
 		#pipeline.set_state(Gst.State.PLAYING)
 		

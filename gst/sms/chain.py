@@ -22,7 +22,7 @@ class Element_link():
 		self.name=name # eg. access_in
 		self.caps_name=''
 		self.mod_name=''
-		self.ele_name=''
+		self.element_name=''
 		self.ele_obj=None
 		self.ele_propertys={}
 		self.last=[]#
@@ -446,7 +446,7 @@ class Chain():
 						suf = l[len(l)-1]
 						pattern[i]=l[0]+'-'+l[1]+'-'+naorg+'-'+nvorg+'-'+nsorg+'-'+suf
 						print('----')
-						self.make_element_link(pattern[i],naorg+'-'+nvorg+'-'+nsorg)
+						#self.make_element_link(pattern[i],naorg+'-'+nvorg+'-'+nsorg)
 						keys={}
 						keys[l[0]+'-'+l[1]+'-'+naorg+'-'+nvorg+'-'+nsorg]=[]
 						# TODO
@@ -454,6 +454,8 @@ class Chain():
 			#print('\n',sp['args_list'])			
 			print('=======',sp['pattern'],'\n')			
 
+			for	e in self.el_pool:
+				print('NNNNNNNNN',self.el_pool[e].name,self.el_pool[e].up_name)			
 			#merge output
 			#sp['tee_wrap_num'] =  
 			#if len(token) != len(keys) :#and len(sp['args_list'][3]) != 1:
@@ -502,7 +504,6 @@ class Chain():
 			#fix trans count			
 		#self.build_element_link()
 		
-		i = 0
 		for	e in self.el_pool:
 			print('MMMMMMMMM',self.el_pool[e].name,self.el_pool[e].up_name)			
 	"""
@@ -533,7 +534,7 @@ class Chain():
 	"""	
 			
 example_lists=[
-        ({},{'acodec':'none'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://192.168.61.22:22345'}]),
+        #({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'mp4','access_out':'http://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
@@ -545,7 +546,8 @@ example_lists=[
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'256'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
         #({'vcodec':'h264','venc':'x264','vb':'2400','bframes':'3','fps':'25','keyint':'25','bframes':'3'},{'acodec':'aac','channels':'2','aenc':'fdkaac','ab':'128','samplerate':'44100'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///tmp/gst.mp4'},{'mux':'mp4','access_out':'file:///tmp/gst1.mp4'}]),
-        #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
+        ({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst1.ts'},{'mux':'ts','access_out':'file:///tmp/gst2.ts'}]),
+        #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst3.ts'},{'mux':'ts','access_out':'file:///tmp/gst4.ts'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'128'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file:///mtp'}]),
         #({'vcodec':'h264','venc':'open264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///mtp'},{'mux':'mp4','access_out':'file:///mtp1'}]),
       ]
