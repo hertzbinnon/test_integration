@@ -123,7 +123,7 @@ class Chain():
 		#self.tee_aen= False
 		#self.tee_ven= False
 		#self.tee_sen= False
-		self.pattern_lists =[]#[{'id':id,'pattern':[],'args_list':'','tee_track_num':%d,'wrap_num':%d,'tee_wrap_num':%d},{}]
+		self.pattern_lists =[]#[{'id':id,'pattern':[],'args_list':'','tee_track_num':%d,'wrap_num':%d,'tee_wrap_num':%d,'transform':%d,'transcode':%d},{}]
 		self.element_link_lists =[]#[{'access_in':elobj},{}]
 		self.el_pool={}
 		if lists is not None and isinstance(lists,list):
@@ -141,23 +141,29 @@ class Chain():
 			print('Make elemnt_link error',name)
 
 
-	def __track_parse__(self,track,track_type):
+	def __track_parse__(self,track,track_type,sp):
 		if len(track) > 2:#transcode
 			if track_type == 'v':
 				self.vcodecs +=1
+				sp['transcode'] +=1
 			elif track_type == 'a':
 				self.acodecs +=1
+				sp['transcode'] +=1
 			elif track_type == 's':
 				self.scodecs +=1
+				sp['transcode'] +=1
 			self.is_encode = self.scodecs +self.acodecs +self.vcodecs
 		else:
 			if len(track) == 0:#transform
 				if track_type == 'v':
 					self.vtrans +=1
+					sp['transform'] +=1
 				elif track_type == 'a':
 					self.atrans +=1
+					sp['transform'] +=1
 				elif track_type == 's':
 					self.strans +=1
+					sp['transform'] +=1
 			elif len(track) == 1: # no track
 				pass
 			else:
@@ -174,9 +180,11 @@ class Chain():
 			stream_pattern['id'] = stream_id
 			stream_pattern['pattern'] = ['access_in']
 			stream_pattern['args_list'] = args
-			self.__track_parse__(args[0],'v')
-			self.__track_parse__(args[1],'a')
-			self.__track_parse__(args[2],'s')
+			stream_pattern['transcode'] = 0 
+			stream_pattern['transform'] = 0
+			self.__track_parse__(args[0],'v',stream_pattern)
+			self.__track_parse__(args[1],'a',stream_pattern)
+			self.__track_parse__(args[2],'s',stream_pattern)
 			if len(args[3]) < 1:
 				print('no access out find')
 			self.access_out_total += len(args[3])
@@ -199,8 +207,8 @@ class Chain():
 					self.make_element_link('tee_in','access_in')
 					upstream_ptr = 'tee_in'
 			
-		#for sp in self.pattern_lists:
-		#	print(sp)
+		for sp in self.pattern_lists:
+			print(sp)
 		# 000 111 001 100 010 011 101 110 _01
 		#if self.vcodecs != 0 or self.acodecs != 0 or self.scodecs != 0:
 		for sp in pl:
@@ -444,7 +452,8 @@ class Chain():
 								else:
 									nsorg = ep[p].up_name
 								del ep[p]
-							elif self.is_encode == 0 and self.streams == 1:
+							elif (self.is_encode == 0 and self.streams == 1) or \
+								sp['transform'] == self.is_trans:
 								pattern[pattern.index(p)]=''
 								if 'tee_atrans' in p:
 									nvorg = ep[p].up_name
@@ -553,7 +562,6 @@ class Chain():
 	"""	
 			
 example_lists=[
-        #({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst1a.ts'},{'mux':'ts','access_out':'file:///tmp/gst2a.ts'}]),
         #({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst3a.ts'},{'mux':'ts','access_out':'file:///tmp/gst4a.ts'}]),
         #({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://192.168.61.22:22345'},{'mux':'ts','access_out':'udp://192.168.61.22:22346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
@@ -567,7 +575,8 @@ example_lists=[
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'256'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
         #({'vcodec':'h264','venc':'x264','vb':'2400','bframes':'3','fps':'25','keyint':'25','bframes':'3'},{'acodec':'aac','channels':'2','aenc':'fdkaac','ab':'128','samplerate':'44100'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///tmp/gst.mp4'},{'mux':'mp4','access_out':'file:///tmp/gst1.mp4'}]),
         ({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst1.ts'},{'mux':'ts','access_out':'file:///tmp/gst2.ts'}]),
-        ({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst3.ts'},{'mux':'ts','access_out':'file:///tmp/gst4.ts'}]),
+        ({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst1a.ts'},{'mux':'ts','access_out':'file:///tmp/gst2a.ts'}]),
+        #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst3.ts'},{'mux':'ts','access_out':'file:///tmp/gst4.ts'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'128'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file:///mtp'}]),
         #({'vcodec':'h264','venc':'open264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///mtp'},{'mux':'mp4','access_out':'file:///mtp1'}]),
       ]
@@ -575,4 +584,4 @@ usage=[{'url':'udp://@192.168.61.26:12346','chanid':'1'},example_lists]
 
 if __name__ == '__main__':
 	chainner = Chain(example_lists); 
-	print(chainner.vcodecs,chainner.acodecs,chainner.scodecs,chainner.vtrans,chainner.atrans,chainner.strans)
+	print(chainner.vcodecs,chainner.acodecs,chainner.scodecs,chainner.vtrans,chainner.atrans,chainner.strans,chainner.is_encode,chainner.is_trans)

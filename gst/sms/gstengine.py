@@ -218,8 +218,7 @@ class EngineGST(engineer.Engineer):
 		elif cat == 'vpreparse' or cat == 'apreparse' or cat == 'spreparse':
 			self.insert_queue(e)
 		elif cat == 'vconvert' or cat == 'aconvert' or cat == 'sconvert':
-			#self.insert_queue(e)
-			pass
+			self.insert_queue(e)
 		elif cat == 'dup':
 			pass
 		else:
@@ -303,9 +302,10 @@ class EngineGST(engineer.Engineer):
 				linking.linked_done = True
 			else:
 				return
-		if linked.name[:4] == 'tee_':
+		if linked.name[:4] == 'tee_' and linked.name != 'tee_in':
 			print('BBBBBBBBB',linked.name)
 			e_queue = self.insert_queue(linked,None,None)
+			print('linkqueue>> ',linked.name,' ',e_queue.name)
 			print("ADDing 1^^^^",e_queue.element_name)
 			self['pipeline'].add(e_queue.ele_obj)
 			ret=linked.ele_obj.link(e_queue.ele_obj)
@@ -350,7 +350,7 @@ class EngineGST(engineer.Engineer):
 		e_name = src.get_name()
 		e=None
 
-		print("XXXXXXXXXXXX Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
+		print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
 		if 'vpreparse' not in ep and 'video' in new_pad_type:
 			if 'vconvert' not in ep:
 				return
@@ -390,15 +390,19 @@ class EngineGST(engineer.Engineer):
 				exit()
 		obj.linked_link(ep[e_name],e)
 		
+		#if e_name == 'demux':
+		#	return
 		print("After start link >>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:" )
 		for key in ep:
 			print(' ++++++++ ',key,' ++++++++ ')
 			e = ep[key]
+			if e_name == 'demux' and 'convert' in key:
+				return
 			linked=None;linking=None;
 			if e.mod_name == '' or e.caps_name == '':
 				print('This is dynamic link')
 				continue
-			elif e.name  == 'access_in' or e.name  == 'typefind' or e.name == 'demux' or e.name == 'demux_decode':
+			elif e.name  == 'access_in' or e.name  == 'typefind' or e.name == 'demux' or e.name == 'demux_decode' or e.name == 'tee_in':
 				continue
 			elif e.up_name == '':
 				print('last element is null')
@@ -419,10 +423,11 @@ class EngineGST(engineer.Engineer):
 				linked=ep[e.up_name]
 				linking=e
 				obj.linked_link(linked,linking)
-		for i in ep:
-			e = ep[i]
-			print(e.name,'\t\t\t\t==>',e.mod_name,e.element_name,'--up-name:',e.up_name)
+		#for i in ep:
+		#	e = ep[i]
+		#	print(e.name,'\t\t\t\t==>',e.mod_name,e.element_name,'--up-name:',e.up_name)
 		Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'pipeline')
+		print('Done')
 
 	@staticmethod
 	def findedtype(typefinder,probability,caps,obj):
@@ -509,7 +514,7 @@ class EngineGST(engineer.Engineer):
 		return 0
 
 if __name__ == '__main__':
-	help(Gst.debug_bin_to_dot_file_with_ts)
+	#help(Gst.debug_bin_to_dot_file_with_ts)
 	gstengineer = EngineGST(chain.usage)
 	gstengineer.start()
 	import time
