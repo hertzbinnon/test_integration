@@ -408,7 +408,7 @@ class EngineGST(engineer.Engineer):
 				print(list)
 				for i in range(0,3):
 					if list[i] != '' and ep[list[i]].mod_name != '':
-						if new_pad_type[0] == list[i][4]:
+						if new_pad_type[0] == list[i][4] or new_pad_type[0] == list[i][0]:
 							obj.linked_link(ep[list[i]],e)
 			elif ep[e.up_name].mod_name == '' or ep[e.up_name].caps_name == '':
 				print('can`t be link ', e.up_name,e.name)
