@@ -36,6 +36,7 @@ class Element_link():
 		self.nums_linkeddown=0
 		self.up_name =''# %s-%s-%s
 		self.is_add_padded=False
+		self.linked_done = False
 	def get_link_state(self):
 		return self.downstreams == self.nums_linkedown
 	def set_caps(self,caps):
@@ -111,6 +112,8 @@ class Chain():
 		self.strans= 0
 		self.access_out_total    = 0
 		self.tee_in = False
+		self.is_encode = 0 
+		self.is_trans = 0
 		#self.tee_acon= False
 		#self.tee_vcon= False
 		#self.tee_scon= False
@@ -134,6 +137,8 @@ class Chain():
 			e.up_name = up_name
 			e.is_add_padded = is_dyn
 			return e
+		else:
+			print('Make elemnt_link error',name)
 
 
 	def __track_parse__(self,track,track_type):
@@ -144,6 +149,7 @@ class Chain():
 				self.acodecs +=1
 			elif track_type == 's':
 				self.scodecs +=1
+			self.is_encode = self.scodecs +self.acodecs +self.vcodecs
 		else:
 			if len(track) == 0:#transform
 				if track_type == 'v':
@@ -156,6 +162,7 @@ class Chain():
 				pass
 			else:
 				print('config for'+ track_type +'is vaild')
+			self.is_trans= self.strans+self.atrans+self.vtrans
 	
 	def __config_pasing__(self,lists):
 		self.streams=len(lists)
@@ -184,9 +191,7 @@ class Chain():
 			print('Wrapper may be multiplexing')
 
 		pl = self.pattern_lists
-		if  self.vcodecs != 0 and self.vtrans != 0 or \
-			self.acodecs != 0 and self.atrans != 0 or \
-			self.scodecs != 0 and self.strans != 0 :
+		if  self.is_trans != 0 and self.is_encode != 0 :
 			self.tee_in = True
 			if self.tee_in :
 				for sp in pl:
@@ -264,6 +269,7 @@ class Chain():
 				self.make_element_link('vpreparse','demux')
 				upstream_ptr = 'vpreparse'
 				if self.vtrans > 1 or mlen>1:
+					print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 					sp['pattern'].append('tee_vtrans')
 					self.make_element_link('tee_vtrans',upstream_ptr)
 			else:
@@ -333,6 +339,7 @@ class Chain():
 			print('1=',sp['pattern'])
 			print('**',sp['args_list'],'\n')
 			
+			print('+++++++',ep)
 		# merge muxing and outputing
 		#mux_caps_vorg_aorg_sorg__id1_id2_...
 		for sp in pl:
@@ -412,16 +419,17 @@ class Chain():
 			vorg = ''
 			sorg = ''
 			print('-------',sp['pattern'])
+			print(')))))))',ep)
 			naorg = ''
 			nvorg = ''
 			nsorg = ''
 			if len(keys) == 1 and len(sp['args_list'][3]) != 1: # merge tee_track
 				for key in keys.items():
-					p = key[0].split('-')
-					aorg = p[2]
-					vorg = p[3]
-					sorg = p[4]
-					print(aorg,vorg,sorg)
+					t = key[0].split('-')
+					aorg = t[2]
+					vorg = t[3]
+					sorg = t[4]
+					print('old--',aorg,vorg,sorg)
 					tmp = copy.deepcopy(pattern)
 					for p in tmp:
 						if aorg == p or vorg == p or sorg == p:
@@ -436,6 +444,16 @@ class Chain():
 								else:
 									nsorg = ep[p].up_name
 								del ep[p]
+							elif self.is_encode == 0 and self.streams == 1:
+								pattern[pattern.index(p)]=''
+								if 'tee_atrans' in p:
+									nvorg = ep[p].up_name
+								elif 'tee_vtrans' in p:
+									naorg = ep[p].up_name
+								else:
+									nsorg = ep[p].up_name
+								del ep[p]
+								
 					print('de--',naorg,nvorg,nsorg)
 					#pattern[index]=new_wrap_name+'-'+naorg+'-'+nvorg+'-'+nsorg+'-'+suffix
 			if naorg != '' or nvorg != '' or nsorg != '':
@@ -453,9 +471,10 @@ class Chain():
 					
 			#print('\n',sp['args_list'])			
 			print('=======',sp['pattern'],'\n')			
+			print('=======>',ep)
 
-			for	e in self.el_pool:
-				print('NNNNNNNNN',self.el_pool[e].name,self.el_pool[e].up_name)			
+			#for	e in self.el_pool:
+			#	print('NNNNNNNNN',self.el_pool[e].name,self.el_pool[e].up_name)			
 			#merge output
 			#sp['tee_wrap_num'] =  
 			#if len(token) != len(keys) :#and len(sp['args_list'][3]) != 1:
@@ -534,8 +553,9 @@ class Chain():
 	"""	
 			
 example_lists=[
-        #({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
-        #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
+        ({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst1a.ts'},{'mux':'ts','access_out':'file:///tmp/gst2a.ts'}]),
+        #({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst3a.ts'},{'mux':'ts','access_out':'file:///tmp/gst4a.ts'}]),
+        ({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://192.168.61.22:22345'},{'mux':'ts','access_out':'udp://192.168.61.22:22346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
         #({},{},{},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'mp4','access_out':'http://:12346'},{'mux':'ts','access_out':'file://:12346'}]),
         #({},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb',},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'mp4','access_out':'udp://:12346'}]),
@@ -546,7 +566,7 @@ example_lists=[
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'256'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'file:///tmp/gst.ts'}]),
         #({'vcodec':'h264','venc':'x264','vb':'2400','bframes':'3','fps':'25','keyint':'25','bframes':'3'},{'acodec':'aac','channels':'2','aenc':'fdkaac','ab':'128','samplerate':'44100'},{'scodec':'dvb'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///tmp/gst.mp4'},{'mux':'mp4','access_out':'file:///tmp/gst1.mp4'}]),
-        ({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst1.ts'},{'mux':'ts','access_out':'file:///tmp/gst2.ts'}]),
+        #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst1.ts'},{'mux':'ts','access_out':'file:///tmp/gst2.ts'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'3400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'48000','ab':'128'},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst3.ts'},{'mux':'ts','access_out':'file:///tmp/gst4.ts'}]),
         #({'vcodec':'h264','venc':'x264','fps':'25','keyint':'25','height':'720','width':'576','vb':'1400','bframes':'3'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samplerate':'44100','ab':'128'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'file:///mtp'}]),
         #({'vcodec':'h264','venc':'open264','fps':'25','gop':'25'},{'acodec':'aac','aenc':'fdkaac','channels':'2','samples':'8'},{'scodec':'dvb','senc':'unkown','x':'1','y':'x'},[{'mux':'ts','access_out':'udp://:12345'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'ts','access_out':'udp://:12346'},{'mux':'mp4','access_out':'file:///mtp'},{'mux':'mp4','access_out':'file:///mtp1'}]),

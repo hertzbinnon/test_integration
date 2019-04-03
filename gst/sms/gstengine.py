@@ -4,7 +4,9 @@ from gi.repository import GObject, Gst
 import copy
 import engineer#.Engineer as Engineer
 import chain
-
+import os,sys
+import _thread
+count =0
 class EngineGST(engineer.Engineer):
 	#			caps-lib-cat
 	__ele_list={'udp--src':				{'name':'udpsrc','propertys':		{'uri':''}},
@@ -41,6 +43,8 @@ class EngineGST(engineer.Engineer):
 		self['arch']={}
 		self['arch']['gst'] = Gst
 		self['arch']['gobj'] = GObject 
+		os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
+		os.putenv('GST_DEBUG_DUMP_DIR_DIR', '/tmp')
 		GObject.threads_init()
 		Gst.init(None)
 		if usage[0]['url'][:3] == 'udp' and usage[0]['url'][6] != '@':
@@ -76,10 +80,16 @@ class EngineGST(engineer.Engineer):
 				e.ele_obj.set_property(pp,e.element_propertys[pp])
 		return e
 
-	def insert_queue(self,e):
-		print("????????????????????????????????")
+	def insert_queue(self,e,direct='last',name=''):
 		el=chain.Element_link('queue-'+e.element_name)
-		queue = Gst.ElementFactory.make('queue','queue-'+e.element_name)
+		if name == '':
+			queue = Gst.ElementFactory.make('queue','queue-'+e.element_name)
+		else:
+			global count;
+			print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",count)
+			count += 1;
+			queue = Gst.ElementFactory.make('queue')
+			
 		queue.set_property('max-size-buffers',0) 
 		queue.set_property('max-size-time',0) 
 		queue.set_property('max-size-bytes',0)
@@ -87,7 +97,12 @@ class EngineGST(engineer.Engineer):
 		el.set_mod_name('queue')
 		el.element_name= el.name
 		el.ele_obj = queue
-		e.last.append(el)
+		if direct =='last':
+			e.last.append(el)
+		elif direct == 'next':
+			e.next.append(el)
+		else:
+			return el
 	
 	def __config_element__(self,caps,lib,cat,e):
 		propertys = e.element_propertys
@@ -166,14 +181,12 @@ class EngineGST(engineer.Engineer):
 				elif a == 'fps':
 					p += (',framerate=%s/1'%args[a])
 			pla = len(p)
-			print('xxx-->',p)
 			#if False:
 			if plb != pla:
 				el=chain.Element_link('videocapsfilter_%s'%stream_num)
 				el.ele_obj= Gst.ElementFactory.make('capsfilter','videocapsfilter_%s'%stream_num)
 				vcaps = Gst.Caps.from_string(p)
 				el.ele_obj.set_property("caps", vcaps)
-				print('???????????????????????????')
 				#help(el.ele_obj)
 				el.set_caps('vcapsfilter')
 				el.set_mod_name('capsfilter')
@@ -218,7 +231,6 @@ class EngineGST(engineer.Engineer):
 		pipeline = self['pipeline']
             
 		for e in el_pool:
-			print('==>',e)
 			if e == 'access_in':
 				self.__build_element__(self.access+'--src',el_pool[e])
 				ret = pipeline.add(el_pool[e].ele_obj)
@@ -270,13 +282,12 @@ class EngineGST(engineer.Engineer):
 			#	if ret:
 			#		print('add element',e)
 			el = el_pool[e]
-			print('***',el.name,' ',el.caps_name,' ',el.mod_name,' ' ,el.ele_obj,el.up_name)
 		
 		if self.is_dynamic:
 			print('This is dynamic links')
 		
 		for key in el_pool:
-			print("start link >>:", key)
+			#print("start link >>:", key)
 			e = el_pool[key]
 			linked=None;linking=None;
 			if e.name  == 'access_in':
@@ -287,6 +298,22 @@ class EngineGST(engineer.Engineer):
 				self.linked_link(linked,linking)
 		
 	def linked_link(self,linked,linking):
+		if 'access_out' in linking.name:
+			if not linking.linked_done:
+				linking.linked_done = True
+			else:
+				return
+		if linked.name[:4] == 'tee_':
+			print('BBBBBBBBB',linked.name)
+			e_queue = self.insert_queue(linked,None,None)
+			print("ADDing 1^^^^",e_queue.element_name)
+			self['pipeline'].add(e_queue.ele_obj)
+			ret=linked.ele_obj.link(e_queue.ele_obj)
+			if not ret:
+				print('linkin ', linked.name,'==>',e_queue.name ,' failure')
+			e_queue.ele_obj.set_state(Gst.State.PLAYING)
+			linked = e_queue
+	
 		for i in linking.last:
 			print('linkin>> ',linked.name,' ',i.name)
 			print("ADDing 2^^^^",i.element_name)
@@ -302,7 +329,7 @@ class EngineGST(engineer.Engineer):
 					
 		if linked.ele_obj is not None:
 			print('linking>>',linked.name,linking.name)
-			print("ADDing 2`^^^^",linking.element_name)
+			print("ADDing 3^^^^",linking.element_name)
 			self['pipeline'].add(linking.ele_obj)
 			ret=linked.ele_obj.link(linking.ele_obj)
 			if not ret:
@@ -320,10 +347,10 @@ class EngineGST(engineer.Engineer):
 		new_pad_type = new_pad_struct.get_name()
 		new_pad_name = new_pad.get_name()
 		cas_lib_cat = ''
-
 		e_name = src.get_name()
 		e=None
-		print("Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
+
+		print("XXXXXXXXXXXX Received new pad '%s' type '%s' from '%s'" % (new_pad_name,new_pad_type,src.get_name()))
 		if 'vpreparse' not in ep and 'video' in new_pad_type:
 			if 'vconvert' not in ep:
 				return
@@ -363,8 +390,9 @@ class EngineGST(engineer.Engineer):
 				exit()
 		obj.linked_link(ep[e_name],e)
 		
+		print("After start link >>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:" )
 		for key in ep:
-			print("After start link >>:", key)
+			print(' ++++++++ ',key,' ++++++++ ')
 			e = ep[key]
 			linked=None;linking=None;
 			if e.mod_name == '' or e.caps_name == '':
@@ -380,7 +408,8 @@ class EngineGST(engineer.Engineer):
 				print(list)
 				for i in range(0,3):
 					if list[i] != '' and ep[list[i]].mod_name != '':
-						obj.linked_link(ep[list[i]],e)
+						if new_pad_type[0] == list[i][4]:
+							obj.linked_link(ep[list[i]],e)
 			elif ep[e.up_name].mod_name == '' or ep[e.up_name].caps_name == '':
 				print('can`t be link ', e.up_name,e.name)
 				continue
@@ -393,6 +422,7 @@ class EngineGST(engineer.Engineer):
 		for i in ep:
 			e = ep[i]
 			print(e.name,'\t\t\t\t==>',e.mod_name,e.element_name,'--up-name:',e.up_name)
+		Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'pipeline')
 
 	@staticmethod
 	def findedtype(typefinder,probability,caps,obj):
@@ -402,6 +432,7 @@ class EngineGST(engineer.Engineer):
 		caps_lib_cat =''
 		size = caps.get_size()
 		print('caps size :',size)
+		#Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'pipeline')
 		for i in range(size):
 			structure =  caps.get_structure(i)
 			name = structure.get_name()
@@ -429,20 +460,20 @@ class EngineGST(engineer.Engineer):
 		#pipeline.set_state(Gst.State.PLAYING)
 		
 		
-	def __bus_call(bus, message, loop):
-		import sys
+	def __bus_call(bus, message, data):
 		t = message.type
 		if t == Gst.MessageType.EOS:
 			sys.stdout.write("End-of-stream\n")
+			Gst.debug_bin_to_dot_file_with_ts(data[1], Gst.DebugGraphDetails.ALL, 'caps')
 			print("End of ")
-			loop.quit()
+			data[0].quit()
 			#pipeline.set_state(Gst.State.READY)
 			#pipeline.set_state(Gst.State.PLAYING)
 		elif t == Gst.MessageType.ERROR:
 			err, debug = message.parse_error()
 			sys.stderr.write("Error: %s: %s\n" % (err, debug))
 			print("Error ")
-			loop.quit()
+			data[0].quit()
 		elif t == Gst.MessageType.STATE_CHANGED:
 			#sys.stdout.write("stream\n")
 			pass
@@ -456,13 +487,12 @@ class EngineGST(engineer.Engineer):
 		return True
 
 	def start(self):
-		import _thread
 		_thread.start_new_thread(EngineGST.__start,(self,None))
 		return True
 
 	def __start(self,notuse):
 		self['bus'].add_signal_watch()
-		self['bus'].connect("message", EngineGST.__bus_call, self['mainloop'])
+		self['bus'].connect("message", EngineGST.__bus_call, (self['mainloop'],self['pipeline']))
 		self['pipeline'].set_state(Gst.State.PLAYING)
 		#GObject.timeout_add(5*1000, switch_file, loop)
 		try:
@@ -479,11 +509,9 @@ class EngineGST(engineer.Engineer):
 		return 0
 
 if __name__ == '__main__':
-	#help(Gst.Caps)
+	help(Gst.debug_bin_to_dot_file_with_ts)
 	gstengineer = EngineGST(chain.usage)
 	gstengineer.start()
 	import time
 	time.sleep(10000)
-
-
 
