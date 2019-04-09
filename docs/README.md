@@ -4,5 +4,7 @@ It include all of the archivements of theory,paper,protocol,
 also include source code,pacth,tools,buildings script.
 (vlc,ffm,gst)
 (wbc,ocv,kdi)
+(platform)
+#------------------
 (ngx,tdn,ats)
-(zmq,lvs,...)
+(zmq,lvs,knl)
