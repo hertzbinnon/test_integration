@@ -6,7 +6,7 @@ import engineer#.Engineer as Engineer
 import chain
 import os,sys
 import _thread
-count =0
+
 class EngineGST(engineer.Engineer):
 	#			caps-lib-cat
 	__ele_list={'udp--src':				{'name':'udpsrc','propertys':		{'uri':''}},
@@ -32,6 +32,7 @@ class EngineGST(engineer.Engineer):
 				'h264-openh264-vencode':		{'name':'openh264enc','propertys':{}},
 				'h265-x265-vencode':	{'name':'x265enc','propertys':{}},
 				'aac-fdkaac-aencode': 	{'name':'fdkaacenc','propertys':{}},
+				'mp4a-ffmpeg-aencode': 	{'name':'avenc_aac','propertys':{}},
 				'spu-unkown-sencode': 	{'name':'unkown','propertys':{}},
 				'ts--wrap': 			{'name':'mpegtsmux','propertys':{'alignment':'7'}},
 				'mp4--wrap': 			{'name':'qtmux','propertys':{}},
@@ -43,9 +44,26 @@ class EngineGST(engineer.Engineer):
 		self['arch']={}
 		self['arch']['gst'] = Gst
 		self['arch']['gobj'] = GObject 
-		os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
-		os.putenv('GST_DEBUG_DUMP_DIR_DIR', '/tmp')
+		#os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
+		#os.putenv('GST_DEBUG_DUMP_DIR_DIR', '/tmp')
+		logpath_str=''
+		log_root = ''
+		log_format =  '/itv-channel-' + usage[0]['chanid']
+		if 'logpath' in usage and usage['logpath']:
+			log_root = usage['logpath']+ log_format
+			logpath_str = log_root  + '/smsd.log'
+		else:
+			log_root = sys.argv[1]+'/log'+log_format
+			logpath_str = log_root+ '/smsd.log'
+		try:
+			os.mkdir(log_root)
+		except Exception as e:
+			print('Log direcory exist', e)
+		os.putenv('GST_DEBUG_FILE',logpath_str)
+
 		GObject.threads_init()
+		print('*****>>',os.getenv('LD_LIBRARY_PATH'))
+		#help(Gst.init)
 		Gst.init(None)
 		if usage[0]['url'][:3] == 'udp' and usage[0]['url'][6] != '@':
 			usage[0]['url'] = 'udp://@' + usage[0]['url'][6:]
@@ -106,6 +124,10 @@ class EngineGST(engineer.Engineer):
 			if caps == 'aac':
 				if lib== 'fdkaac':
 					e.element_propertys['bitrate']=args['ab']
+			elif caps == 'mp4a':
+				#if lib== 'avenc_aac':
+				#	e.element_propertys['bitrate']=args['ab']
+				pass
 			p ='audio/x-raw'
 			plb = len(p)
 			for a in args:
@@ -298,7 +320,7 @@ class EngineGST(engineer.Engineer):
 		if ret is None:
 			print("typefinder failed")
 		obj.str_launch+= (e.up_name+'. ! '+ e.mod_name + ' name=' +e.name)
-		#Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'pipeline')
+		#Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'gstpipeline')
 		
 		
 	@staticmethod
@@ -386,13 +408,13 @@ class EngineGST(engineer.Engineer):
 
 		obj.str_launch+= (' '+e.up_name+'. ! '+ e.mod_name+' name='+e.name + ' ! queue name='  + e.name+'-queue-'+eo.name+' ! '+eo.name+'.')
 		print("===<",obj.str_launch)
-		Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'pipeline')
+		#Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'pipeline')
 	
 	def __bus_call(bus, message, data):
 		t = message.type
 		if t == Gst.MessageType.EOS:
 			sys.stdout.write("End-of-stream\n")
-			Gst.debug_bin_to_dot_file_with_ts(data[1], Gst.DebugGraphDetails.ALL, 'caps')
+			#Gst.debug_bin_to_dot_file_with_ts(data[1], Gst.DebugGraphDetails.ALL, 'caps')
 			print("End of ")
 			data[0].quit()
 			#pipeline.set_state(Gst.State.READY)
@@ -411,7 +433,8 @@ class EngineGST(engineer.Engineer):
 		self['pipeline'].set_state(Gst.State.NULL)
 
 	def stop(self):
-		self['pipeline'].set_state(Gst.State.PAUSED)
+		#self['pipeline'].set_state(Gst.State.PAUSED)
+		self['pipeline'].set_state(Gst.State.READY)
 		return True
 
 	def start(self):
@@ -422,6 +445,7 @@ class EngineGST(engineer.Engineer):
 		self['bus'].add_signal_watch()
 		self['bus'].connect("message", EngineGST.__bus_call, (self['mainloop'],self['pipeline']))
 		self['pipeline'].set_state(Gst.State.PLAYING)
+		#Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'gstpipeline')
 		#GObject.timeout_add(5*1000, switch_file, loop)
 		try:
 			self['mainloop'].run()
@@ -432,11 +456,21 @@ class EngineGST(engineer.Engineer):
 	def set_event(self,state,func,args):
 		pass
 	def checking_status(self):
-		return 0
+		pipeline=self['pipeline']#.state_get_name()
+		state = pipeline.get_state(1000)[1]
+		class stateENU():
+			def __init__(self,value,state):
+				self.value = value
+				self.state = state
+		so = stateENU(2,state)
+		return so
 
 if __name__ == '__main__':
 	#help(Gst.debug_bin_to_dot_file_with_ts)
 	#help(gi.repository.Gst.Element)
+	#LIBS_PRIVATE='/home/smsd/modules:/home/hebin/.temp/cerbero/build/dist/linux_x86_64/lib:/home/hebin/.temp/cerbero/deps/installed/lib:/home/hebin/.temp/Gcc/installed/lib64'
+	#os.environ['LD_LIBRARY_PATH']=LIBS_PRIVATE
+	#os.pwtenv('LD_LIBRARY_PATH', LIBS_PRIVATE)
 	gstengineer = EngineGST(chain.usage)
 	gstengineer.start()
 	import time

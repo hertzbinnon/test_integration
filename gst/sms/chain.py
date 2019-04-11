@@ -535,32 +535,6 @@ class Chain():
 		
 		for	e in self.el_pool:
 			print('MMMMMMMMM',self.el_pool[e].name,self.el_pool[e].up_name)			
-	"""
-	def build_element_link(self):
-		pls = self.pattern_lists
-		ell= self.element_link_lists
-		el_p_pool=self.el_pool
-		for index in range(len(pls)):
-			sp = pls[index]
-			pattern = sp['pattern']
-			ell.append({})
-			#print(sp['id'])
-			#print(sp['pattern'])
-			#print(sp['args_list'])
-			for el_name in pattern: 
-				if el_name !='':
-					if el_name not in el_p_pool:
-						el = Element_link(el_name)
-						el_p_pool[el_name]=el
-						ell[index][el_name] = el
-					else:
-						ell[index][el_name] = el_p_pool[el_name]
-			#for	e in ell[index]:
-				#print(e,':',ell[index][e],' ',end='')
-		#for	e in el_p_pool:
-		#	print(e,':',el_p_pool[e])
-			
-	"""	
 			
 example_lists=[
         ({},{},{'scodec':'dvb'},[{'mux':'ts','access_out':'file:///tmp/gst0a.ts'}]),

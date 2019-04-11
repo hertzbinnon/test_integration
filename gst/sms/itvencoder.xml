@@ -1,0 +1,270 @@
+<?xml version="1.0"?>
+<request>
+<nodeid>SD-MasterNetwork</nodeid>
+<replyaddr>http://192.168.6.204:84/Services/Reply.ashx</replyaddr>
+<notifyaddr>http://192.168.6.204:84/Services/Monitor.ashx?pt=ec</notifyaddr>
+<requestid>45f2d45a-4911-4d1c-8951-0e3f59ebc086</requestid>
+<mode>encode</mode>
+<type>task</type>
+<action>encode</action>
+<channels>
+<channel>
+<guid>50000010-CC1D-4E25-A37A-4866AD9AEFBF</guid>
+<state>start</state>
+<timeout>15</timeout>
+<title>CCTV1.HD</title>
+<sources>
+<source>
+<sourceid>31f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://192.168.61.26:12346</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>200</priority>
+</source>
+<source>
+<sourceid>41f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://239.100.198.100:12345</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>1</priority>
+</source>
+<source>
+<sourceid>51f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://127.0.0.1:7000</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>50</priority>
+</source>
+<source>
+<sourceid>51f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://127.0.0.1:7000</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>101</priority>
+</source>
+</sources>
+<encoders>
+<encoder>
+<var name="taskid">55D71C5B-5061-47D6-9911-241D24DE36CB</var>
+<var name="bitrate">1500</var>
+<var name="deinterlace">1</var>
+<var name="bitratemode">1</var>
+<var name="video-quality">3</var>
+<var name="height">1080</var>
+<var name="width">1080</var>
+<var name="overlay">yes</var>
+<var name="sendby">eth0</var>
+<var name="output">file:///tmp/0.ts</var>
+<var name="vcodec">h264</var>
+<var name="acodec">aac</var>
+<var name="profile">main</var>
+<var name="level">4</var>
+<var name="bframes">5</var>
+<var name="width">720</var>
+<var name="height">576</var>
+<var name="gop">25</var>
+<var name="frame-num">25</var>
+<var name="maxrate">1500</var>
+<var name="bufsize">1500</var>
+<var name="logofile">file:///home/image001.png</var>
+<var name="logoxpos">20</var>
+<var name="logoypos">20</var>
+<var name="dynamic-Iframe">0</var>
+<var name="channels">2</var>
+<var name="frequency">48000</var>
+<var name="bitspersample">16</var>
+<var name="interlace">0</var>
+</encoder>
+<encoder>
+<var name="taskid">75D71C5B-5061-47D6-9911-241D24DE36CB</var>
+<var name="bitrate">2500</var>
+<var name="deinterlace">1</var>
+<var name="bitratemode">1</var>
+<var name="video-quality">3</var>
+<var name="height">1080</var>
+<var name="width">1080</var>
+<var name="overlay">yes</var>
+<var name="sendby">eth0</var>
+<var name="output">file:///tmp/1.ts</var>
+<var name="vcodec">h264</var>
+<var name="acodec">aac</var>
+<var name="profile">main</var>
+<var name="level">4</var>
+<var name="bframes">5</var>
+<var name="width">720</var>
+<var name="height">576</var>
+<var name="gop">25</var>
+<var name="frame-num">25</var>
+<var name="maxrate">1500</var>
+<var name="bufsize">1500</var>
+<var name="logofile">file:///home/image001.png</var>
+<var name="logoxpos">20</var>
+<var name="logoypos">20</var>
+<var name="dynamic-Iframe">0</var>
+<var name="channels">2</var>
+<var name="frequency">48000</var>
+<var name="bitspersample">16</var>
+<var name="interlace">0</var>
+</encoder>
+</encoders>
+ </channel>
+
+<channel>
+<guid>60000010-CC1D-4E25-A37A-4866AD9AEFBF</guid>
+<state>start</state>
+<timeout>15</timeout>
+<title>CCTV1.HD</title>
+<sources>
+<source>
+<sourceid>31f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://192.168.61.26:12345</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>200</priority>
+</source>
+<source>
+<sourceid>41f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://239.100.198.100:12345</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>1</priority>
+</source>
+<source>
+<sourceid>51f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://127.0.0.1:7000</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>50</priority>
+</source>
+<source>
+<sourceid>51f4822d-09a6-436d-b7f6-37d1de70fbd4</sourceid>
+<connector>eth</connector>
+<listenby>eth0</listenby>
+<uri>udp://127.0.0.1:7000</uri>
+<debuglevel>0</debuglevel>
+<timing>0</timing>
+<caching>2000</caching>
+<pid>-1</pid>
+<audioinfo>6541,tha;365,chs</audioinfo>
+<subtitleinfo>336,tha;863,chs</subtitleinfo>
+<volumeoffset>20</volumeoffset>
+<priority>101</priority>
+</source>
+</sources>
+<encoders>
+<encoder>
+<var name="taskid">55D71C5B-5061-47D6-9911-241D24DE36CB</var>
+<var name="bitrate">1500</var>
+<var name="deinterlace">1</var>
+<var name="bitratemode">1</var>
+<var name="video-quality">3</var>
+<var name="height">1080</var>
+<var name="width">1080</var>
+<var name="overlay">yes</var>
+<var name="sendby">eth0</var>
+<var name="output">udp://192.168.8.62:12348/</var>
+<var name="vcodec">h264</var>
+<var name="acodec">aac</var>
+<var name="profile">main</var>
+<var name="level">4</var>
+<var name="bframes">5</var>
+<var name="width">720</var>
+<var name="height">576</var>
+<var name="gop">25</var>
+<var name="frame-num">25</var>
+<var name="maxrate">1500</var>
+<var name="bufsize">1500</var>
+<var name="logofile">file:///home/image001.png</var>
+<var name="logoxpos">20</var>
+<var name="logoypos">20</var>
+<var name="dynamic-Iframe">0</var>
+<var name="channels">2</var>
+<var name="frequency">48000</var>
+<var name="bitspersample">16</var>
+<var name="interlace">0</var>
+</encoder>
+<encoder>
+<var name="taskid">75D71C5B-5061-47D6-9911-241D24DE36CB</var>
+<var name="bitrate">2500</var>
+<var name="deinterlace">1</var>
+<var name="bitratemode">1</var>
+<var name="video-quality">3</var>
+<var name="height">1080</var>
+<var name="width">1080</var>
+<var name="overlay">yes</var>
+<var name="sendby">eth0</var>
+<var name="output">udp://192.168.8.62:12349</var>
+<var name="vcodec">h264</var>
+<var name="acodec">aac</var>
+<var name="profile">main</var>
+<var name="level">4</var>
+<var name="bframes">5</var>
+<var name="width">720</var>
+<var name="height">576</var>
+<var name="gop">25</var>
+<var name="frame-num">25</var>
+<var name="maxrate">1500</var>
+<var name="bufsize">1500</var>
+<var name="logofile">file:///home/image001.png</var>
+<var name="logoxpos">20</var>
+<var name="logoypos">20</var>
+<var name="dynamic-Iframe">0</var>
+<var name="channels">2</var>
+<var name="frequency">48000</var>
+<var name="bitspersample">16</var>
+<var name="interlace">0</var>
+</encoder>
+</encoders>
+ </channel>
+
+</channels>
+</request>

@@ -1,0 +1,48 @@
+#!/bin/sh
+VERSION=`grep VERSION install.sh | head -1`
+VERSION=`echo $VERSION | cut -d \= -f2`
+DEPS_DIR=`pwd`/deps/sources
+PYTHON3_PATH=/home/hebin/.temp/Python3/install
+PYTHON3_CACHE=__pycache__
+SOURCE=source
+PACKAGENAME=smsd-$VERSION-setup
+ARCHIVEFILE=smsd.tar.gz
+MODULES_PATH=modules
+check_root()
+{
+    if [ "root" != "$USER" ]; then
+        echo "Permission denied! Please use root try again."
+        exit 0;
+    fi  
+}
+
+###
+#cp /home/hebin/.temp/cerbero/build/dist/linux_x86_64/libexec/gstreamer-1.0/gst-p* bin
+#cp /home/hebin/.temp/cerbero/build/dist/linux_x86_64/lib modules
+#cp /home/hebin/.temp/{Gcc,vlc} modules
+###
+
+python_compile()
+{
+	python3  -m py_compile $SOURCE/$1.*
+	#chmod +x $PYTHON3_CACHE/$1"c"
+	mv -v $SOURCE/$PYTHON3_CACHE/$1.* bin/$1.pyc
+}
+check_root;
+
+python_compile binding
+python_compile streamer
+python_compile wsgi
+python_compile engineer
+python_compile gstengine
+python_compile vlcengine
+python_compile chain
+python3 -O -m py_compile  $SOURCE/smsd.py
+mv -v $SOURCE/$PYTHON3_CACHE/smsd.* bin/smsd
+chown -R smsd.smsd bin/ $MODULES_PATH
+rm -vf $PACKAGENAME
+tar vzcf $ARCHIVEFILE bin $MODULES_PATH -C $DEPS_DIR eventlet -C $DEPS_DIR setproctitle -C $DEPS_DIR greenlet -C $DEPS_DIR setuptools -C $PYTHON3_PATH . 
+cat install.sh smsd.tar.gz > $PACKAGENAME 
+rm -v $ARCHIVEFILE 
+chmod a+x $PACKAGENAME 
+#rm -vrf $SOURCE/$PYTHON3_CACHE

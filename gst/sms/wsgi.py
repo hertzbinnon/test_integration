@@ -229,7 +229,8 @@ def parser_encode(xml,action):
 				elif access  == 'rtm':
 					item['mux'] = 'flv'
 				elif access  == 'fil':
-					item['mux'] = 'mp4'
+					#item['mux'] = 'mp4'
+					item['mux'] = 'ts'
 			souts.append(item)
 			del item
 		#print souts
@@ -240,7 +241,7 @@ def parser_encode(xml,action):
 			for sout in souts:
 				video_param = {}
 				audio_param = {}
-				subtt_param = {}
+				subtt_param = {'':''}
 				output_param=[]
 
 				print('start ==========================')
@@ -478,7 +479,7 @@ def build_notify_body(args_list):
 			continue
 		sub = ET.SubElement(root, item)
 		sub.text = args_list[item]
-	taskid = args_list['master'].items()[0][0]
+	taskid = list(args_list['master'])[0]
 	#tasks_tuple = args_list['master'][taskid]
 	#task = ET.SubElement(root, 'task')
 	#for t in tasks_tuple[0]
@@ -497,7 +498,7 @@ def build_request_body(args_list):
 			continue
 		sub = ET.SubElement(root, item)
 		sub.text = args_list[item]
-	taskid = args_list['master'].items()[0][0]
+	taskid = list(args_list['master'])[0]
 	tasks_tuple = args_list['master'][taskid]
 	task = ET.SubElement(root, 'task')
 	#for t in tasks_tuple[0]

@@ -1,14 +1,13 @@
-#!/usr/bin/python
 import signal, os
 import sys
 import xml.etree.ElementTree as ET
 import shlex
-import time,thread
+import time,_thread
 from multiprocessing import cpu_count
 from subprocess import *
 import logging  
 import logging.handlers
-import streaming
+import streamer
 import wsgi 
 import setproctitle
 import binding
@@ -35,11 +34,11 @@ else:
 	STD_OUT = stdout_null
 	DEBUG='0'
 try:
-	with open(STD_OUT, 'ab') as logfile:
+	with open(STD_OUT, 'w') as logfile:
 		os.dup2(logfile.fileno(), sys.stdout.fileno())
 		os.dup2(logfile.fileno(), sys.stderr.fileno())
-except:
-	print 'failed to open logfile'
+except Exception as e:
+	print('Failed to open file:',e)
 	exit()
 vlc_input__timeout = 3
 LOG_FILE = sys.argv[1]+'/log/smsd.log'
@@ -48,7 +47,7 @@ handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes = 1024*1024, b
 fmt = '%(asctime)s - %(name)s - %(message)s'
 formatter = logging.Formatter(fmt) 
 handler.setFormatter(formatter)
-l    exit()ogger = logging.getLogger('smsd')
+logger = logging.getLogger('smsd')
 logger.addHandler(handler) 
 logger.setLevel(logging.DEBUG)
 logger.debug("smsd start")
@@ -65,7 +64,7 @@ def system_rlimit(pid):
 	error = 0
 	pagesize=os.sysconf('SC_PAGE_SIZE')/1024 # 4K  
 	try:
-		rss=int(open('/proc/'+pid+'/statm','rb').readline().split()[1])*pagesize/1024
+		rss=int(open('/proc/'+pid+'/statm','r').readline().split()[1])*pagesize/1024
 		if rss > 4 * 1024:
 			logger.debug("Channel  %s is exiting" % task[0])
 			error = 1
@@ -77,8 +76,8 @@ def system_rlimit(pid):
 			logger.debug("run time = %d",runtime)
 			error = 2
 		"""
-	except IOError:
-		logger.debug("open file failed %s", i)
+	except IOError as e:
+		logger.debug("open file failed ", e)
 	return error
 
 def check_waitpid(pid):
@@ -87,9 +86,9 @@ def check_waitpid(pid):
 	try:
 		pid,status = os.waitpid(pid,os.WNOHANG)
 		#print "pid ",pid, "running",status
-	except: 
+	except Exception as e:
 		#status = status / 256
-		print pid, " has exit status" ,status
+		print(pid, " has exit status" ,status)
 		ret = 1
 	return ret
 		
@@ -116,8 +115,8 @@ def handler(signum, frame):
 						task_list[id][4] = status
 					#logger.debug("signal %d channel %s ",signum, id)
 						break
-			except Exception,e:
-				print e
+			except Exception as e:
+				print('Child Process',e)
 				#print "No child !!!!!!!!!!!"
 				break
 	elif signum == signal.SIGINT or signum == signal.SIGTERM or signum == signal.SIGABRT:
@@ -143,15 +142,15 @@ def event_Func(event,trans):
 		errno = 2002
 	elif event.type == binding.EventType.MediaPlayerEncounteredError_T:
 		errno = 2003
-	print "errno= ",errno
-	thread.start_new_thread(wsgi.server_async_notify,(transcation_list[trans],None,errno))
+	print("errno= ",errno)
+	_thread.start_new_thread(wsgi.server_async_notify,(transcation_list[trans],None,errno))
 
 def fork_engine(ids, streamer,trans=None):
 	task = {}
 	for id in ids:
 		pid = os.fork()
 		if pid > 0:
-			pidfile = open('/tmp/'+id+'.smsd', 'wb')
+			pidfile = open('/tmp/'+id+'.smsd', 'w')
 			pidfile.write(str(pid))
 			pidfile.closed
 			task[id] = ['srcid',pid,pidfile.name,trans,0,0,time.time()]
@@ -160,23 +159,24 @@ def fork_engine(ids, streamer,trans=None):
 		elif pid == 0:
 			#TODO delete wsgi
 			global socket
-			socket.close()
-			del socket
+			if socket is not None:
+				socket.close()
+				del socket
 			global engine_process
 			engine_process = 1
 			timing = streamer.get_timing(id)
 
 			subLOG_FILE = sys.argv[1]+'/log/itv-channel-'+id+'/smsd-error.log'
 			try:
-				with open(subLOG_FILE , 'ab') as sublogfile:
+				with open(subLOG_FILE , 'w') as sublogfile:
 					#sys.stdout.closed
 					#sys.stderr.closed
 					#sys.stdout = sublogfile
 					#sys.stderr = sublogfile
 					os.dup2(sublogfile.fileno(), sys.stdout.fileno())
 					os.dup2(sublogfile.fileno(), sys.stderr.fileno())
-			except:
-				print 'failed to open logfile'
+			except Exception as e:
+				print('subprocess failed to open ',e)
 			subhandler = logging.handlers.RotatingFileHandler(subLOG_FILE, maxBytes = 10*1024*1024, backupCount = 1000)    
 			subfmt = '%(asctime)s - %(name)s - %(message)s'
 			subformatter = logging.Formatter(subfmt) 
@@ -226,24 +226,27 @@ def fork_engine(ids, streamer,trans=None):
 		else:
 			task['empty'] = ['srcid',-1,'pidfile',trans,0,0,time.time()]
 			#logger.debug("Child process fork failed")	
-			print "Child process fork failed"
+			print("Child process fork failed")
 	return task
 		
 def event_handler(args_list):
-		"""args_list= {'title':'CCTV1','master':{'taskid':'id','taskid':'id'},'slave':{}}"""
+		#"""args_list= {'title':'CCTV1','master':{'taskid':'id','taskid':'id'},'slave':{}}"""
 		#print 'event handler:  \n',args_list
-		try:
+		#try:
 			global transcation_list 
 			global task_list
 			global DEBUG
 			error = 0
 			if 'transid' in args_list and args_list['transid'] in transcation_list or \
 				'requestid' in args_list and args_list['requestid'] in transcation_list:
-				print "transcation(requestid) id is exist"
+				print("transcation(requestid) id is exist")
 				error = 102
 			elif args_list['action'] == 'encode':	
-				if args_list['master'].items()[0][0] in task_list:
-					print "task id is exist"
+				#print("xxx",next(iter(args_list['master'])))#python2
+				id = list(args_list['master'])[0]
+				print(id)
+				if id in task_list:
+					print("task id is exist")
 					error = 102
 				else:
 					transcation_list[args_list['transid']] = args_list
@@ -268,8 +271,9 @@ def event_handler(args_list):
 			elif args_list['action'] == 'reset':	
 				error = 404
 				for trans in transcation_list: 
-					if transcation_list[trans]['master'].items()[0][0] == args_list['master'].items()[0][0]:
-						print 'reset'
+					tr_id = list(transcation_list[trans]['master'])[0]
+					tk_id =list(args_list['master'])[0]
+					if  tr_id == tk_id:
 						transcation_list[trans]['state'] = 'cancel'
 						transcation_list[args_list['transid']] = args_list
 						transcation_list[args_list['transid']]['switch'] = 'master' 
@@ -296,14 +300,15 @@ def event_handler(args_list):
 				error = 0
 				if args_list['type'] != 'source':
 					for trans in transcation_list: 
-						if transcation_list[trans]['master'].items()[0][0] == args_list['guid']:
+						id = list(transcation_list[trans]['master'])[0]
+						if id == args_list['guid']:
 							transcation_list[trans]['state'] = 'cancel'
 							error = 0
 							break
 				else:
 					for trans in transcation_list:
 						id = args_list['sourceid']
-						task_id = transcation_list[trans]['master'].items()[0][0]
+						task_id = list(transcation_list[trans]['master'])[0]
 						sourceid=transcation_list[trans]['master'][task_id][0]['srcid']
 						if sourceid == id:
 							transcation_list[trans]['state'] = 'cancel'
@@ -312,7 +317,8 @@ def event_handler(args_list):
 			elif args_list['action'] == 'status':######	
 				error = 404
 				for trans in transcation_list: 
-					if transcation_list[trans]['master'].items()[0][0] == args_list['guid']:
+					id = list(transcation_list[trans]['master'])[0]
+					if id == args_list['guid']:
 						args_list['state'] = transcation_list[trans]['state']
 						args_list['resultmsg'] = transcation_list[trans]['running']
 						args_list['srcid'] = transcation_list[trans]['source'].values()[0][0]['srcid'] 
@@ -322,7 +328,8 @@ def event_handler(args_list):
 			elif args_list['action'] == 'request':# setup	
 				error = 404
 				for trans in transcation_list: 
-					if transcation_list[trans]['master'].items()[0][0] == args_list['guid']:
+					id = list(transcation_list[trans]['master'])[0]
+					if id == args_list['guid']:
 						args_list['org_request'] = transcation_list[trans]['org_request']
 						error = 0
 				pass
@@ -333,13 +340,13 @@ def event_handler(args_list):
 				for trans in transcation_list:
 					if 'sourceid' in args_list and args_list['sourceid'] != None:
 						id = args_list['sourceid']
-						in_id = transcation_list[trans]['master'].items()[0][0]
+						in_id = list(transcation_list[trans]['master'])[0]
 						sourceid=transcation_list[trans]['master'][in_id][0]['srcid']
 						args_list['title'] = transcation_list[trans]['title']
 						if sourceid == id:
-							tasks.append((transcation_list[trans]['master'].items()[0][0], transcation_list[trans]['state']))
+							tasks.append((list(transcation_list[trans]['master'])[0], transcation_list[trans]['state']))
 					else:
-							tasks.append((transcation_list[trans]['master'].items()[0][0],transcation_list[trans]['state']))
+							tasks.append((list(transcation_list[trans]['master'])[0],transcation_list[trans]['state']))
 					if len(tasks) > 0 :
 						args_list['return'] = tasks
 					else:
@@ -351,46 +358,41 @@ def event_handler(args_list):
 			elif args_list['action'] == 'start':	
 				error = 2
 				for trans in transcation_list: 
-					if transcation_list[trans]['master'].items()[0][0] == args_list['taskid']:
+					id = list(transcation_list[trans]['master'])[0]
+					if id == args_list['taskid']:
 						transcation_list[trans]['state'] = 'start'
 						error = 0
 						break
 			elif args_list['action'] == 'stop':	
 				error = 2
 				for trans in transcation_list: 
-					if transcation_list[trans]['master'].items()[0][0] == args_list['taskid']:
+					id = list(transcation_list[trans]['master'])[0]
+					if id == args_list['taskid']:
 						transcation_list[trans]['state'] = 'stop'
 						error = 0
 						break
 			elif args_list['action'] == 'config':
-				print 'action config'
+				print('action config')
 				error = 2
 				if args_list['debug'] != DEBUG:
 					DEBUG_OUT = stdout_null
 					if args_list['debug'] != '0':
 						DEBUG_OUT = stdout_debug
 					try:
-						with open(DEBUG_OUT, 'ab') as logfile:
+						with open(DEBUG_OUT, 'a') as logfile:
 							os.dup2(logfile.fileno(), sys.stdout.fileno())
 							os.dup2(logfile.fileno(), sys.stderr.fileno())
 						DEBUG=args_list['debug'] 
 						error = 0
-					except Exception,e:
-						print 'failed to open logfile',e
+					except Exception as e:
+						print('failed to open logfile',e)
 			else:
 				pass
-		except Exception, e:
-			#logger.debug("Internal error:",e)
-			print "Internal error:",e
-			error = -1
-			#except:
-				#error = -1
-			#logger.debug("TASK List\n", task_list)
-			#logger.debug(task_list)
-			#logger.debug("TRANS List\n", [x for x in  transcation_list])
-			#logger.debug([x for x in  transcation_list])
-			#return error
-		return error
+		#except Exception as e:
+		#	print("Internal error:",e)
+		#	error = -1
+
+		#return error
 
 #trans_timeout=10 
 def main_loop(task_list,event_queue):
@@ -412,14 +414,14 @@ def main_loop(task_list,event_queue):
 			if pid == -1 or check_waitpid(pid) :
 				#print 'task' ,id, 'exit' 
 				logger.debug("******* Task is exit id = %s,exitcode = %d" , id, task_list[id][4])
-				print "******* Task is exit id = " , id, "exitcode",task_list[id][4]
+				print("******* Task is exit id = " , id, "exitcode",task_list[id][4])
 				trans = task_list[id][3]
-				thread.start_new_thread(wsgi.server_async_notify,(transcation_list[trans],task_list[id][4],2000))
+				_thread.start_new_thread(wsgi.server_async_notify,(transcation_list[trans],task_list[id][4],2000))
 				transcation_list[trans]['exception'] += 1#about 100 * 0.01
 				if  task_list[id][4] != 197 and time.time() - task_list[id][6] < 15:
 					task_list[id][5] += 1 
 				if transcation_list[trans]['switch'] !=  transcation_list[trans]['switch_next'] and transcation_list[trans]['can_switch'] == 'yes' and task_list[id][4] == 197 or task_list[id][5]==3:
-					print "switching from ", transcation_list[trans]['switch']," to ",transcation_list[trans]['switch_next']
+					print("switching from ", transcation_list[trans]['switch']," to ",transcation_list[trans]['switch_next'])
 					logger.debug("switching from %s to %s ", transcation_list[trans]['switch'],transcation_list[trans]['switch_next'])
 					# slave is a list of sources, to switch in turn
 					slave = {}	
@@ -435,11 +437,11 @@ def main_loop(task_list,event_queue):
 					t = transcation_list[trans]['switch_next']
 					transcation_list[trans]['switch_next'] = transcation_list[trans]['switch']
 					transcation_list[trans]['switch'] = t
-					thread.start_new_thread(wsgi.server_async_notify,(transcation_list[trans],slave,2004))
+					_thread.start_new_thread(wsgi.server_async_notify,(transcation_list[trans],slave,2004))
 					task_list[id][5]=0
 				#print task_list
 				#logger.debug(task_list[id])
-				id = transcation_list[trans]['source'].items()[0][0]
+				id = list(transcation_list[trans]['source'])[0]
 				task_ = fork_engine([id],streamer,trans)
 				task_list[id][0] = transcation_list[trans]['source'][id][0]['srcid']
 				task_list[id][1] = task_[id][1]
@@ -452,14 +454,14 @@ def main_loop(task_list,event_queue):
 					if transcation_list[trans]['server_sync'] == 'yes':
 						transcation_list[trans]['exception'] = 0 #about 100 * 0.01
 					default=None
-					thread.start_new_thread(wsgi.server_async_thread,(transcation_list[trans],default))
+					_thread.start_new_thread(wsgi.server_async_thread,(transcation_list[trans],default))
 				time.sleep(wsgi.EventTick) # prevent fast setup 
 
 		for trans in transcation_list: 
 			if transcation_list[trans]['state'] == 'stop':
 				if transcation_list[trans]['running'] == 'yes':
 					transcation_list[trans]['running'] = 'no'
-					id = transcation_list[trans]['master'].items()[0][0]
+					id = list(transcation_list[trans]['master'])[0]
 					pid = task_list[id][1]
 					del task_list[id]	
 					#del transcation_list[trans]
@@ -468,33 +470,27 @@ def main_loop(task_list,event_queue):
 		for trans in transcation_list: 
 			if transcation_list[trans]['state'] == 'cancel':
 				if transcation_list[trans]['running'] == 'yes':
-					print 'cancel',trans
-					id = transcation_list[trans]['master'].items()[0][0]
+					print('cancel',trans)
+					id = list(transcation_list[trans]['master'])[0]
 					pid = task_list[id][1]
 					del task_list[id]	
 					os.kill(pid, 9)
-					print "Delete task", id
+					print("Delete task", id)
 					logger.debug("Delete task %s",id)	
 				del transcation_list[trans]
-				print "Delete transcation", trans
+				print("Delete transcation", trans)
 				logger.debug("Delete transcation %s",trans)	
 				break
 
 		for trans in transcation_list: 
 			if transcation_list[trans]['state'] == 'start':
 				if transcation_list[trans]['running'] == 'no':
-					print 'start',trans
+					print('start',trans)
 					streamer.add_engines(transcation_list[trans]['master'])
-					id = transcation_list[trans]['master'].items()[0][0]
+					id = list(transcation_list[trans]['master'])[0]
 					task_list[id]=fork_engine([id],streamer,trans)[id]
 					task_list[id][0] = transcation_list[trans]['master'][id][0]['srcid']
 					transcation_list[trans]['running'] = 'yes'
-
-		"""
-		for trans in transcation_list: 
-			if transcation_list[trans]['exception'] >= 6000 and transcation_list[trans]['server_sync'] == 'no':#about 100 * 0.01
-				transcation_list[trans]['state'] == 'stop'
-		"""
 
 		for trans in transcation_list: 
 			if transcation_list[trans]['server_sync'] == 'no':
@@ -504,51 +500,45 @@ def main_loop(task_list,event_queue):
 					#logger.debug('stream exception: %d',transcation_list[trans]['exception'])
 					transcation_list[trans]['server_sync'] = 'wait'
 					default=None
-					thread.start_new_thread(wsgi.server_sync_thread,(transcation_list[trans],default))
+					_thread.start_new_thread(wsgi.server_sync_thread,(transcation_list[trans],default))
 					
 		event = wsgi.wsgi_get_event(event_queue)	
 		if event:
 			wsgi.transcation_process(event,event_handler)
 		else:
 			time.sleep(wsgi.EventTick) # prevent cpu 
-		#logger.debug("TASK List\n", task_list)
-		#logger.debug(task_list)
-		#logger.debug("TRANS List\n", [x for x in  transcation_list])
-		#logger.debug([x for x in  transcation_list])
-		#print "TRANS List", transcation_list
 
 
 
 if __name__ == '__main__':
-    print "xxx"
-	pidfile = open('/tmp/smsd.pid','wb')
+	pidfile = open('/tmp/smsd.pid','w')
 	pidfile.write(str(os.getpid()))
 	pidfile.closed
 	del pidfile
 	for pf in os.listdir('/tmp'):
 		if pf[-5:] == '.smsd':
-			print "Streaming server was not exit normally "
+			print("Streaming server is exited unnormally ")
 			with open('/tmp/'+pf) as f:
 				try:
 					pid = f.read()
 					os.kill(int(pid),signal.SIGTERM)
 					os.remove('/tmp/'+pf)
-				except:
-					print "process not exist"
+				except Exception as e:
+					print('process not exist',e)
 					pass
 	config_file = '/etc/itvencoder/itvencoder.xml'
 	try:
 		with open(config_file,"r") as f:
 			pass
-	except:
-			print 'Local config is not exist'
-			config_file=None
-	streamer = streaming.StreamingMedia(None)
+	except Exception as e:
+		print('Local config is not exist',e)
+		config_file=None
+	streamer = streamer.StreamingMedia(None)
 	args_lists=wsgi.parser_config(config_file)
 	for args_list in args_lists:
-		print "************************************************"
 		event_handler(args_list)
-    exit()
+	print('start')
+	#exit()
 	#ids = ['4','3']
 	#task_list = fork_engine(ids,streamer)
 	http_port = int(sys.argv[2])
