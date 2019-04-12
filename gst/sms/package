@@ -26,7 +26,7 @@ python_compile()
 {
 	python3  -m py_compile $SOURCE/$1.*
 	#chmod +x $PYTHON3_CACHE/$1"c"
-	mv -v $SOURCE/$PYTHON3_CACHE/$1.* bin/$1.pyc
+	mv -fv $SOURCE/$PYTHON3_CACHE/$1.* bin/$1.pyc
 }
 check_root;
 
@@ -39,6 +39,7 @@ python_compile vlcengine
 python_compile chain
 python3 -O -m py_compile  $SOURCE/smsd.py
 mv -v $SOURCE/$PYTHON3_CACHE/smsd.* bin/smsd
+rm -f bin/*cpython*
 chown -R smsd.smsd bin/ $MODULES_PATH
 rm -vf $PACKAGENAME
 tar vzcf $ARCHIVEFILE bin $MODULES_PATH -C $DEPS_DIR eventlet -C $DEPS_DIR setproctitle -C $DEPS_DIR greenlet -C $DEPS_DIR setuptools -C $PYTHON3_PATH . 

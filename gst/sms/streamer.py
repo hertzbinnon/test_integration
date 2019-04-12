@@ -1,12 +1,22 @@
 import copy
 import gstengine as Gst
+import vlcengine as Vlc
 
 class StreamingMedia(): 
 	""" 
 		Focus on statistic data, status, control about a stream object
 	"""
-	__archclass__ = {'GST':Gst.EngineGST}
+	__archclass__ = {'GST':Gst.EngineGST,'VLC':Vlc.EngineVLC}
 	def __init__(self,usage_config=None,arch ='GST'):
+		try:
+			import usage
+			if usage.rootdir == '' or usage.rootdir is None:
+				self.rootdir = '.'
+			else:
+				self.rootdir = usage.rootdir
+		except Excetion as e:
+			print("Program don't be installed successful")
+			exit()
 		if not usage_config:
 			self.usage_params = {}
 		else:
@@ -16,6 +26,7 @@ class StreamingMedia():
 		self.engine = {}
 		
 		for u in self.usage_params:
+			self.usage_params[u][0]['rootdir']=self.rootdir
 			self.engine[u] = StreamingMedia.__archclass__[arch](self.usage_params[u])
 			#print('***\n',u,'--->',self.engine[u]['args'])
 
@@ -38,7 +49,10 @@ class StreamingMedia():
 
 		self.usage_params.update(usage_params)
 		for u in usage_params:
+			self.usage_params[u][0]['rootdir']=self.rootdir
+			print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1",self.rootdir,arch)
 			self.engine[u] = StreamingMedia.__archclass__[arch](self.usage_params[u])
+			print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2")
 			#print('+++\n',u,'-->',self.engine[u]['args'])
 
 		return True
@@ -83,6 +97,16 @@ class StreamingMedia():
 	def get_caching(self,id):
 		return self.usage_params[id][0]['caching']
 
+	@staticmethod
+	def get_encoders_arch(usage):
+		encoders = usage[0]['encoders']
+		arch='VLC'
+		if encoders == 'smsv':	
+			arch = 'VLC'
+		elif encoders == 'smsg':
+			arch = 'GST'
+		return arch
+	
 	@staticmethod
 	def usage_param(xml_filename):
 			"""
@@ -205,6 +229,7 @@ def event_Func(event,trans):
 		errno = 2003
 	print("yyyyyyyyy")
 
+
 if  __name__ == '__main__':
 	import os,sys
 	import binding
@@ -212,17 +237,19 @@ if  __name__ == '__main__':
 	argv = sys.argv
 	if len(argv) < 2:
 		exit()
-	os.environ['VLC_PLUGIN_PATH']='/home/smsd/modules'
-	os.environ['LD_LIBRARY_PATH']='/home/smsd/modules:/home/hebin/.temp/cerbero/build/dist/linux_x86_64/lib:/home/hebin/.temp/cerbero/deps/installed/lib:/home/hebin/.temp/Gcc/installed/lib64'
+	id = argv[1]
+	#os.environ['LD_LIBRARY_PATH']='/home/smsd/modules:/home/hebin/.temp/cerbero/build/dist/linux_x86_64/lib:/home/hebin/.temp/cerbero/deps/installed/lib:/home/hebin/.temp/Gcc/installed/lib64' # no effect
 	#print os.environ['LD_LIBRARY_PATH']
 	streamer = StreamingMedia()
 	config_file = '/etc/itvencoder/itvencoder.xml'
 	#print("=====>")
 	args_lists=wsgi.parser_config(config_file)
-	print("=====>",args_lists[0]['master'])
-	streamer.add_engines(args_lists[0]['master'],'GST')
+	encoders = args_lists[0]['master'][id][0]['encoders']
+	print("=====>",encoders)
+	arch = streamer.get_encoders_arch(args_lists[0]['master'][id])
+		
+	streamer.add_engines(args_lists[0]['master'],arch)
 	print([i for i in streamer.engine])
-	id = argv[1]
 	streamer.start(id)
 	#streamer.set_event(id,2001,event_Func,None)
 	import time

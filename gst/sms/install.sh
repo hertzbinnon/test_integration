@@ -81,11 +81,11 @@ build_bash(){
 	echo "srctree=\"$INSTALL_PATH\""
 	echo
 	echo "export PATH=\${srctree}/bin:\$PATH"
-	echo "export LD_LIBRARY_PATH=/usr/lib64:\${srctree}/modules:\$LD_LIBRARY_PATH"
+	echo "export LD_LIBRARY_PATH=\${srctree}/modules:\$LD_LIBRARY_PATH"
 	echo "export GI_TYPELIB_PATH=\${srctree}/modules/girepository-1.0"
 	echo "export GST_PLUGIN_SCANNER=\${srctree}/bin/gst-plugin-scanner"
-	echo "export GST_PLUGIN_PATH=\${srctree}/modules"
-	echo "export VLC_PLUGIN_PATH=\${srctree}/modules"
+	#echo "export GST_PLUGIN_PATH=\${srctree}/modules"
+	#echo "export VLC_PLUGIN_PATH=\${srctree}/modules"
 	echo
 
 	echo 
@@ -180,6 +180,7 @@ esac"
 
 }
 
+echo "rootdir='$INSTALL_PATH'" > $INSTALL_PATH/bin/usage.py
 build_bash > $INSTALL_PATH/bin/bash.sh
 device_conf > $INSTALL_PATH/bin/iproxy.conf
 build_runtine $INSTALL_PATH/bin/smsd> $INSTALL_PATH/bin/iproxy

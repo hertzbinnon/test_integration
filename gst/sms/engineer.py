@@ -10,16 +10,9 @@ class Engineer():
 		self.usage = usage
 		self.data = {}
 		if archclass == 'VLC':
-			import binding 
 			self.name = 'VLC'
-			#self['arch'] = binding
 		elif archclass == 'GST':
 			self.name = 'GST'
-			#self['arch']={}
-			#self['arch']['gst'] = Gst
-			#self['arch']['gobj'] = GObject 
-			#GObject.threads_init()
-			#Gst.init(None)
 		elif archclass == 'FFM':
 			self.name = 'FFM'
 		else :

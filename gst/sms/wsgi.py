@@ -180,6 +180,9 @@ def parser_encode(xml,action):
 			root = xml
 			args_list['org_request']= 'Warnning!!!,this is local config'
 		taskid=root.find('guid').text
+		souts_token = root.findall('encoders')[0]
+		encoders=souts_token.attrib.get('name')
+		print('encoders',encoders)
 		print("-----------source description---------------")
 		sources_token = root.findall('sources')[0]
 		source_token = [src for src in sources_token.findall('source')]
@@ -199,6 +202,7 @@ def parser_encode(xml,action):
 					'subtitleinfo':source.find('subtitleinfo').text,
 					'volumeoffset':source.find('volumeoffset').text,
 					'priority':source.find('priority').text,
+					'encoders':encoders,
 					})
 		
 		for src in sources:
@@ -213,7 +217,6 @@ def parser_encode(xml,action):
 					src['atrack'] = '-1'
 		#print sources
 		print("-----------sout description---------------")
-		souts_token = root.findall('encoders')[0]
 		sout_token = [src for src in souts_token.findall('encoder')]
 		souts = []
 		for sout in sout_token:
@@ -377,6 +380,8 @@ def parser_encode(xml,action):
 	#except:
 		#print "Error as parsing xml "
 		#error = 1
+		for i in args_list:
+			print(i,'-->',args_list[i],'\n')
 		return (error,args_list)
 
 """

@@ -71,7 +71,7 @@
 <priority>101</priority>
 </source>
 </sources>
-<encoders>
+<encoders name='smsv'>
 <encoder>
 <var name="taskid">55D71C5B-5061-47D6-9911-241D24DE36CB</var>
 <var name="bitrate">1500</var>

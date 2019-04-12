@@ -44,27 +44,51 @@ class EngineGST(engineer.Engineer):
 		self['arch']={}
 		self['arch']['gst'] = Gst
 		self['arch']['gobj'] = GObject 
-		#os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
-		#os.putenv('GST_DEBUG_DUMP_DIR_DIR', '/tmp')
+		self['id']=usage[0]['chanid']
+		self['rootdir']=usage[0]['rootdir']
+		os.environ['GST_PLUGIN_PATH']=self['rootdir']+'/modules'
+
 		logpath_str=''
 		log_root = ''
-		log_format =  '/itv-channel-' + usage[0]['chanid']
+		log_format =  '/itv-channel-' + self['id']
+
 		if 'logpath' in usage and usage['logpath']:
 			log_root = usage['logpath']+ log_format
 			logpath_str = log_root  + '/smsd.log'
 		else:
-			log_root = sys.argv[1]+'/log'+log_format
+			log_root = self['rootdir']+'/log'+log_format
 			logpath_str = log_root+ '/smsd.log'
+		
+		print("Yxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 		try:
-			os.mkdir(log_root)
+			os.makedirs(log_root)
+			print('cccccctv................................',log_root)
 		except Exception as e:
-			print('Log direcory exist', e)
-		os.putenv('GST_DEBUG_FILE',logpath_str)
+			print('Log direcory already exist', e)
+
+		os.putenv('GST_DEBUG_FILE',logpath_str)# effect
+		#os.putenv('GI_TYPELIB_PATH',self['rootdir']+'modules/girepository-1.0') 
+		#os.putenv('GST_PLUGIN_SCANNER',self['rootdir']+'bin/gst-plugin-scanner')
+
+		log_level = '0'
+		if 'debuglevel' in usage[0] and usage[0]['debuglevel'] != None:
+			log_level = usage[0]['debuglevel']
+		else:
+			usage[0]['debuglevel'] = log_level
+
+		if log_level == '0':
+			os.environ['GST_DEBUG']='1'# effect
+		elif log_level == '1':
+			os.environ['GST_DEBUG']='2'# effect
+		elif log_level == '2':
+			os.environ['GST_DEBUG']='3'# effect
+			os.putenv('GST_DEBUG_DUMP_DIR', '/tmp')
+			os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
 
 		GObject.threads_init()
-		print('*****>>',os.getenv('LD_LIBRARY_PATH'))
 		#help(Gst.init)
 		Gst.init(None)
+
 		if usage[0]['url'][:3] == 'udp' and usage[0]['url'][6] != '@':
 			usage[0]['url'] = 'udp://@' + usage[0]['url'][6:]
 		self['mainloop'] = self['arch']['gobj'].MainLoop()
@@ -93,7 +117,10 @@ class EngineGST(engineer.Engineer):
 		e.element_name = e.name
 		e.element_propertys=EngineGST.__ele_list[caps_lib_cat]['propertys']
 		self.__config_element__(caps,lib,cat,e)
-		e.to_string = e.mod_name +' name=' + e.element_name+' '
+		if e.to_string != '':
+			e.to_string = e.to_string + ' ! ' + e.mod_name +' name=' + e.element_name+' '
+		else:
+			e.to_string = e.mod_name +' name=' + e.element_name+' '
 		for pp in e.element_propertys:
 			e.to_string += (pp+'='+e.element_propertys[pp]+' ')
 		print('string::',e.to_string)
@@ -136,7 +163,11 @@ class EngineGST(engineer.Engineer):
 				elif a == 'samplerate':
 					p += (',rate='+args[a])
 			pla = len(p)
-			print(p)
+			if pla == plb:
+				return None
+			print('OOOOOOOOOOOOOx',e.to_string)
+			e.to_string = 'audioresample name=asampler-'+str(stream_num)+ ' ! '+p+' ' 
+			print('OOOOOOOOOOOOOO',e.to_string)
 		elif cat == 'vencode':
 			l= e.name.split('_')#vencode_h264_x264_3 
 			ll = len(l)
@@ -159,6 +190,11 @@ class EngineGST(engineer.Engineer):
 				elif a == 'fps':
 					p += (',framerate=%s/1'%args[a])
 			pla = len(p)
+			if pla == plb:
+				return
+			print('NNNNNNNNNNNNNx',e.to_string)
+			e.to_string = 'videoscale name=vscaler-'+str(stream_num)+ ' ! '+p+' ' 
+			print('NNNNNNNNNNNNNN',e.to_string)
 		elif cat == 'access_out':
 			l= e.name.split('-')#access_out-udp-0_2-ts
 			ll = len(l)
@@ -445,7 +481,7 @@ class EngineGST(engineer.Engineer):
 		self['bus'].add_signal_watch()
 		self['bus'].connect("message", EngineGST.__bus_call, (self['mainloop'],self['pipeline']))
 		self['pipeline'].set_state(Gst.State.PLAYING)
-		#Gst.debug_bin_to_dot_file_with_ts(pipeline, Gst.DebugGraphDetails.ALL, 'gstpipeline')
+		Gst.debug_bin_to_dot_file_with_ts(self['pipeline'], Gst.DebugGraphDetails.ALL, self['id'])
 		#GObject.timeout_add(5*1000, switch_file, loop)
 		try:
 			self['mainloop'].run()

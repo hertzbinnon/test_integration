@@ -432,7 +432,9 @@ def main_loop(task_list,event_queue):
 					else:
 						slave = transcation_list[trans]['master']
 					#print "Test: ",slave
-					streamer.add_engines(slave)
+					id = list(slave)[0]
+					arch = streamer.get_encoders_arch(slave[id])
+					streamer.add_engines(slave,arch)
 					transcation_list[trans]['source'] = slave  
 					t = transcation_list[trans]['switch_next']
 					transcation_list[trans]['switch_next'] = transcation_list[trans]['switch']
@@ -486,8 +488,9 @@ def main_loop(task_list,event_queue):
 			if transcation_list[trans]['state'] == 'start':
 				if transcation_list[trans]['running'] == 'no':
 					print('start',trans)
-					streamer.add_engines(transcation_list[trans]['master'])
 					id = list(transcation_list[trans]['master'])[0]
+					arch = streamer.get_encoders_arch(transcation_list[trans]['master'][id])
+					streamer.add_engines(transcation_list[trans]['master'],arch)
 					task_list[id]=fork_engine([id],streamer,trans)[id]
 					task_list[id][0] = transcation_list[trans]['master'][id][0]['srcid']
 					transcation_list[trans]['running'] = 'yes'
@@ -537,7 +540,7 @@ if __name__ == '__main__':
 	args_lists=wsgi.parser_config(config_file)
 	for args_list in args_lists:
 		event_handler(args_list)
-	print('start')
+	#print('start')
 	#exit()
 	#ids = ['4','3']
 	#task_list = fork_engine(ids,streamer)
