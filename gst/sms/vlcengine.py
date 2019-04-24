@@ -207,17 +207,17 @@ class EngineVLC(engineer.Engineer):
 				if video['logo-file'] !='':
 					filter=',sfilter=logo{file=%s,x=%s,y=%s},' % (video['logo-file'],video['x'],video['y'])
 				if video['deinterlace'] == '1':
-					format+= 'vcodec=%s,fps=%s,deinterlace=1,deinterlace-module=deinterlace{mode=blend},width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s},'
+					format+= 'vcodec=%s,fps=%s,deinterlace=1,deinterlace-module=deinterlace{mode=blend},width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s,%s},'
 				elif video['interlace'] == '1':
 					video['width']='0'
 					video['height']='0'
-					format+= 'vcodec=%s,fps=%s,width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s,interlaced,weightp=0},no-deinterlace,'
+					format+= 'vcodec=%s,fps=%s,width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s,interlaced,weightp=0,%s},no-deinterlace,'
 				elif video['interlace'] == '2':
 					video['width']='0'
 					video['height']='0'
-					format+= 'vcodec=%s,fps=%s,width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s,fake-interlaced},no-deinterlace,'
+					format+= 'vcodec=%s,fps=%s,width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s,fake-interlaced,%s},no-deinterlace,'
 				else:
-					format+= 'vcodec=%s,fps=%s,width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s},no-deinterlace,'
+					format+= 'vcodec=%s,fps=%s,width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s,%s},no-deinterlace,'
 				#format+= 'vcodec=%s,fps=%s,deinterlace=1,deinterlace-module=deinterlace{mode=blend},width=%s,height=%s,threads=%s,vb=%s,venc=%s{vbv-maxrate=%s,vbv-bufsize=%s,keyint=%s,min-keyint=25,qpmax=%s,scenecut=%s,bframes=%s,profile=high,level=4.1,ref=3,bpyramid=strict},'
 				from multiprocessing import cpu_count
 				threads = cpu_count()
@@ -240,10 +240,13 @@ class EngineVLC(engineer.Engineer):
 				#video['threads'] = str(threads)
 				if video['threads'] == '0':
 					video['threads']=str(threads/2+threads/4+threads/8)
+				preset = ''
+				if video['venc'] == 'x265':
+					preset=''#'preset=ultrafast,tune=zerolatency'
 				format = format % (video['vcodec'],video['fps'],video['width'],video['height'],\
 											video['threads'],video['vb'],video['venc'],video['vbv-maxrate'],\
 											video['vbv-bufsize'],video['keyint'],qpmax,video['scenecut'],	\
-											video['bframes'])
+											video['bframes'],preset)
 				format += 'acodec=%s,ab=128,channels=%s,samplerate=%s,aenc=%s'
 				format = format % ( audio['acodec'],audio['channels'],audio['samplerate'],audio['aenc'])
 				format += filter

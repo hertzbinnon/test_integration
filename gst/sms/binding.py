@@ -67,7 +67,8 @@ def find_lib():
             dll = ctypes.CDLL(p)
         except OSError:  # may fail
             dll = ctypes.CDLL('libvlc.so.5')"""
-        dll = ctypes.CDLL('/home/smsd/modules/libvlc.so.5')
+        import usage	
+        dll = ctypes.CDLL(usage.rootdir+'/./modules/libvlc.so.5')
 	#print dll, '---------------'
     elif sys.platform.startswith('win'):
         p = find_library('libvlc.dll')

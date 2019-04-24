@@ -9,14 +9,14 @@ import _thread
 
 class EngineGST(engineer.Engineer):
 	#			caps-lib-cat
-	__ele_list={'udp--src':				{'name':'udpsrc','propertys':		{'uri':''}},
+	__ele_list={'udp--src':				{'name':'udpsrc','propertys':		{'uri':'','buffer-size':'120000000'}},
 				'file--src':			{'name':'filesrc','propertys':		{'location':''}},
 				'typefinder--typefinder':	{'name':'typefind','propertys':		{}},
 				'tee--dup':				{'name':'tee','propertys':			{}},
 				'--demux':				{'name':'unkown','propertys':		{}},
 				'ts--demux':			{'name':'tsdemux','propertys':		{}},
 				'mp4--demux':			{'name':'qtdemux','propertys':		{}},
-				'demux_decode--decode':	{'name':'decodebin','propertys':	{}},
+				'demux_decode--decode':	{'name':'decodebin','propertys':	{'max-size-bypes':'100000000'}},
 				'mpeg--vpreparse':		{'name':'mpegvideoparse','propertys':{}},
 				'h264--vpreparse':		{'name':'h264parse','propertys':	{}},
 				'h265--vpreparse':		{'name':'h265parse','propertys':	{}},
@@ -113,7 +113,7 @@ class EngineGST(engineer.Engineer):
 			e.mod_name = EngineGST.__ele_list[caps_lib_cat]['name']
 		except Exception as ex:
 			print('No libs found',ex)
-			return None
+			return exit()
 		e.element_name = e.name
 		e.element_propertys=EngineGST.__ele_list[caps_lib_cat]['propertys']
 		self.__config_element__(caps,lib,cat,e)
@@ -173,6 +173,7 @@ class EngineGST(engineer.Engineer):
 			ll = len(l)
 			stream_num = int(l[ll-1])
 			args= self.chainner.pattern_lists[stream_num]['args_list'][0]
+			self.config_vencoder(args)
 			if caps == 'h264':
 				if lib== 'x264':
 					e.element_propertys['bitrate']=args['vb']
@@ -180,6 +181,20 @@ class EngineGST(engineer.Engineer):
 					e.element_propertys['vbv-buf-capacity']=str(int(1000/float(args['fps']))) ## cbr or vbr or abr
 					e.element_propertys['byte-stream']= 'True' ## cbr or vbr or abr
 					e.element_propertys['key-int-max']= args['keyint']## cbr or vbr or abr
+			elif caps == 'h265':
+				if lib == 'x265':
+					e.element_propertys['log-level']= '2'
+					e.element_propertys['speed-preset']= '0'
+					e.element_propertys['tune']= '0'
+					e.element_propertys['option-string']= \
+						'bitrate='+args['vb'] +\
+						':bframes='+args['bframes'] +\
+						':vbv-bufsize='+args['vbv-bufsize'] +\
+						':vbv-maxrate='+args['vbv-maxrate'] +\
+						':qpmax='+args['qpmax'] +\
+						':scenecut='+args['scenecut'] +\
+						':keyint='+args['keyint'] +':min-keyint=25' +':ctu=16'\
+						':info=true' 
 			p ='video/x-raw,format=I420'
 			plb = len(p)
 			for a in args:
@@ -463,6 +478,8 @@ class EngineGST(engineer.Engineer):
 		elif t == Gst.MessageType.STATE_CHANGED:
 			#sys.stdout.write("stream\n")
 			pass
+		else:
+			print('Message:',t)
 		return True
 
 	def shutdown(self):
@@ -500,6 +517,31 @@ class EngineGST(engineer.Engineer):
 				self.state = state
 		so = stateENU(2,state)
 		return so
+	def config_vencoder(self,args):
+		print('------....',args)
+		if args['bitratemode'] == '1':
+			args['bframes'] = '1'
+		if args['qpmax'] == '4':
+			args['qpmax']= '36'
+		elif args['qpmax']== '3': 
+			args['qpmax']= '41'
+		elif args['qpmax']== '2': 
+			args['qpmax'] = '46'
+		elif args['qpmax']== '1': 
+			args['qpmax'] = '51'
+		elif args['qpmax']== 'cbr-ex': 
+			args['qpmax'] = '37'
+			args['vb']=str( int(int(args['vb']) / 0.90)  )
+			args['vbv-maxrate']=args['vb']
+			args['vbv-bufsize']=str(int(args['vb'])/int(args['fps']))
+		else:
+			args['qpmax']='32'
+		from multiprocessing import cpu_count
+		threads = cpu_count()
+		print('------....',args)
+		if args['threads'] == '0':
+			args['threads']=str(threads/2+threads/4+threads/8)
+
 
 if __name__ == '__main__':
 	#help(Gst.debug_bin_to_dot_file_with_ts)

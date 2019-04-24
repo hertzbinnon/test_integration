@@ -214,6 +214,7 @@ mv -f $INSTALL_PATH/bin/smsd_config.xml /etc/smsd_config.xml
 mv $INSTALL_PATH/bin/daemon /etc/itvdaemon
 chown smsd.smsd -R $INSTALL_PATH/*
 cd $INSTALL_PATH
+source $INSTALL_PATH/bin/bash.sh
 cd setuptools && python3 setup.py install
 cd ../greenlet && python3 setup.py install
 cd ../eventlet && python3 setup.py install

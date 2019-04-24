@@ -266,7 +266,12 @@ def parser_encode(xml,action):
 						audio_param['ab'] = '128'
 				elif 'vcodec' in sout and 'acodec' not in sout:
 					video_param['vcodec'] = sout['vcodec']
-					video_param['venc']='x264'
+					if 'venc' in sout and sout['venc'] != '':
+						video_param['venc']=sout['venc']
+					elif video_param['vcodec']=='h264':
+						video_param['venc']='x264'
+					elif video_param['vcodec']=='h265':
+						video_param['venc']='x265'
 					video_param['height'] = sout['height']
 					video_param['width'] = sout['width']
 					video_param['fps'] = sout['frame-num']
@@ -289,7 +294,12 @@ def parser_encode(xml,action):
 
 				else:
 					video_param['vcodec'] = sout['vcodec']
-					video_param['venc']='x264'
+					if 'venc' in sout and sout['venc'] != '':
+						video_param['venc']=sout['venc']
+					elif video_param['vcodec']=='h264':
+						video_param['venc']='x264'
+					elif video_param['vcodec']=='h265':
+						video_param['venc']='x265'
 					video_param['height'] = sout['height']
 					video_param['width'] = sout['width']
 					video_param['fps'] = sout['frame-num']
