@@ -11,7 +11,7 @@ from queue import Queue
 import io
 import threading
 #import httplib 
-import http.client
+import http.client as httplib
 
 cpu = '0000'
 total = '0000'
@@ -25,6 +25,7 @@ version = '1.1.1'
 
 xml_header='<?xml version="1.0" encoding="UTF-8"?>'
 response_body_common='\r\n<response>\r\n<status>%d</status>\r\n<message>ok</message>\r\n</response>\r\n'
+xml_status='<?xml version="1.0"?>\r\n<request>\r\n  <Protocol>iTV</Protocol>\r\n  <mode>encode</mode>\r\n  <type>task</type>\r\n  <action>status</action>\r\n  <guid>50000010-d1a8-4ac2-9af4-93f450ec8e3f</guid>\r\n  <state>start</state>\r\n  <timeout>15</timeout>\r\n  <sources />\r\n  <encoders />\r\n  <taskid>50000010-d1a8-4ac2-9af4-93f450ec8e3f</taskid>\r\n</request>'
 
 def transcation_heartbeat(args_list):
 	error = 0
@@ -94,7 +95,7 @@ def transcation_process(cmd, event_handler=None):
 	
 	if event_handler :
 		error = event_handler(cmd[0])
-
+	
 	cmd[0]['request'] = error
 	#print 'TRANSCATION Complete\n'
 	#print 'enqueue x'
@@ -384,8 +385,8 @@ def parser_encode(xml,action):
 		print('========master==================')
 		#print args_list['master'] 
 		print('========slave=================')
-		#for i in args_list['slave']:
-		#	print i
+		for i in args_list['slave']:
+			print(i)
 		print('==========================')
 	#except:
 		#print "Error as parsing xml "
@@ -613,13 +614,16 @@ def application(env, start_response):
 	if method == 'POST':
 		content = input.read(int(env.get('CONTENT_LENGTH','0')))
 		#print content
-		context = parser(content)
+		context = parser(content.decode())
 		if context[2] == 0 :
 			env['queue'].put(context)
 			#print 'enqueue'
 			context[1].acquire()
 			#print 'dequeue'
+			#print(context)
 			body = build_body(context)
+			if isinstance(body,bytes):
+				body=body.decode()
 		else:
 			body='<response><status>101</status><message>XmlError()</message></response>'
 
@@ -689,6 +693,8 @@ def server_sync_thread(trans,default):
 				trans['resultmsg'] = 'successful'
 
 			response_body = build_request_body(trans)
+			if isinstance(response_body,bytes):
+				response_body= response_body.decode()
 			body = xml_header+ response_body +'\r\n'
 			#print "Result:",body
 			httpClient.request("POST", url_string, body, headers)
@@ -764,6 +770,8 @@ def server_async_notify(trans,args,errno):
 
 		
 		response_body = build_notify_body(trans)
+		if isinstance(response_body,bytes):
+			response_body= response_body.decode()
 		body = xml_header+ response_body +'\r\n'
 		#print "Notify:", body
 		httpClient.request("POST", url_string, body, headers)
@@ -800,6 +808,8 @@ def server_async_thread(trans,default):
 		trans['resultcode'] = '-1'
 		
 		response_body = build_notify_body(trans)
+		if isinstance(response_body,bytes):
+			response_body= response_body.decode()
 		body = xml_header+ response_body +'\r\n'
 		#print "Response:", body
 		httpClient.request("POST", url_string, body, headers)

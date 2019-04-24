@@ -209,6 +209,8 @@ class EngineGST(engineer.Engineer):
 				return
 			print('NNNNNNNNNNNNNx',e.to_string)
 			e.to_string = 'videoscale name=vscaler-'+str(stream_num)+ ' ! '+p+' ' 
+			if 'deinterlace' in args and args['deinterlace']=='1':
+				e.to_string += '! deinterlace name=deinterlace-'+str(stream_num)+ ' mode=1 method=5' + ' ! queue '
 			print('NNNNNNNNNNNNNN',e.to_string)
 		elif cat == 'access_out':
 			l= e.name.split('-')#access_out-udp-0_2-ts
@@ -274,13 +276,13 @@ class EngineGST(engineer.Engineer):
 				if up_name == 'tee_in':
 					self.str_launch += (' tee_in. ! queue name=tee-queue-demux_decode max-size-buffers=0 max-size-time=0 max-size-bytes=0 ! ' + eo.to_string)
 				else:
-					self.str_launch += (' ! ' + eo.to_string)
+					self.str_launch += (' ! queue ! ' + eo.to_string)
 			elif e == 'vconvert' :
 				eo=self.__build_element__('vconvert--vconvert',el_pool[e])
-				self.str_launch += up_name+'. ! ' + eo.to_string
+				self.str_launch += up_name+'. ! queue ! ' + eo.to_string  
 			elif e == 'aconvert' :
 				eo=self.__build_element__('aconvert--aconvert',el_pool[e])
-				self.str_launch += up_name+'. ! ' + eo.to_string
+				self.str_launch += up_name+'. ! queue ! ' + eo.to_string
 			elif e == 'sconvert' :
 				eo=self.__build_element__('sconvert--sconvert',el_pool[e])
 				self.str_launch += up_name+'. ! ' + eo.to_string
@@ -533,7 +535,8 @@ class EngineGST(engineer.Engineer):
 			args['qpmax'] = '37'
 			args['vb']=str( int(int(args['vb']) / 0.90)  )
 			args['vbv-maxrate']=args['vb']
-			args['vbv-bufsize']=str(int(args['vb'])/int(args['fps']))
+			args['vbv-bufsize']=str(int(int(args['vb'])/int(args['fps'])))
+			args['bframes'] = '0'
 		else:
 			args['qpmax']='32'
 		from multiprocessing import cpu_count

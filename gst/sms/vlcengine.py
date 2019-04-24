@@ -234,7 +234,8 @@ class EngineVLC(engineer.Engineer):
 					qpmax = '37'
 					video['vb']=str( int(int(video['vb']) / 0.90)  )
 					video['vbv-maxrate']=video['vb']
-					video['vbv-bufsize']=str(int(video['vb'])/int(video['fps']))+',tune=zerolatency'
+					video['vbv-bufsize']=str(int(int(video['vb'])/int(video['fps'])))
+					video['bframes']= '0'
 				else:
 					qpmax = '32'
 				#video['threads'] = str(threads)

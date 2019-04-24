@@ -21,7 +21,12 @@ check_root()
 #cp /home/hebin/.temp/cerbero/build/dist/linux_x86_64/lib modules
 #cp /home/hebin/.temp/{Gcc,vlc} modules
 ###
-
+if id -u smsd >/dev/null 2>&1; then
+        echo "Warning: user exists"
+else
+	adduser smsd 
+        echo "user smsd does not exist"
+fi
 python_compile()
 {
 	python3  -m py_compile $SOURCE/$1.*
@@ -29,7 +34,7 @@ python_compile()
 	mv -fv $SOURCE/$PYTHON3_CACHE/$1.* bin/$1.pyc
 }
 check_root;
-
+rm -f $SOURCE/$PYTHON3_CACHE/*.pyc
 python_compile binding
 python_compile streamer
 python_compile wsgi

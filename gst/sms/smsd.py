@@ -230,9 +230,9 @@ def fork_engine(ids, streamer,trans=None):
 	return task
 		
 def event_handler(args_list):
-		#"""args_list= {'title':'CCTV1','master':{'taskid':'id','taskid':'id'},'slave':{}}"""
+		"""args_list= {'title':'CCTV1','master':{'taskid':'id','taskid':'id'},'slave':{}}"""
 		#print 'event handler:  \n',args_list
-		#try:
+		try:
 			global transcation_list 
 			global task_list
 			global DEBUG
@@ -267,7 +267,7 @@ def event_handler(args_list):
 						transcation_list[args_list['transid']]['slave_index'] = [0,0]# (slave_index,slave_length)
 					transcation_list[args_list['transid']]['source'] = transcation_list[args_list['transid']]['master']
 					#transcation_list[args_list['transid']]['srcid']=transcation_list[args_list['transid']]['master'][id][0]['srcid']
-					
+					print('----',transcation_list[args_list['transid']]['can_switch'])
 			elif args_list['action'] == 'reset':	
 				error = 404
 				for trans in transcation_list: 
@@ -321,7 +321,8 @@ def event_handler(args_list):
 					if id == args_list['guid']:
 						args_list['state'] = transcation_list[trans]['state']
 						args_list['resultmsg'] = transcation_list[trans]['running']
-						args_list['srcid'] = transcation_list[trans]['source'].values()[0][0]['srcid'] 
+						#print('+++',transcation_list[trans]['source'])
+						args_list['srcid'] = transcation_list[trans]['source'][id][0]['srcid'] 
 						error = 0
 						break
 				pass
@@ -388,11 +389,11 @@ def event_handler(args_list):
 						print('failed to open logfile',e)
 			else:
 				pass
-		#except Exception as e:
-		#	print("Internal error:",e)
-		#	error = -1
+		except Exception as e:
+			print("Internal error:",e)
+			error = -1
 
-		#return error
+		return error
 
 #trans_timeout=10 
 def main_loop(task_list,event_queue):
@@ -420,13 +421,16 @@ def main_loop(task_list,event_queue):
 				transcation_list[trans]['exception'] += 1#about 100 * 0.01
 				if  task_list[id][4] != 197 and time.time() - task_list[id][6] < 15:
 					task_list[id][5] += 1 
-				if transcation_list[trans]['switch'] !=  transcation_list[trans]['switch_next'] and transcation_list[trans]['can_switch'] == 'yes' and task_list[id][4] == 197 or task_list[id][5]==3:
-					print("switching from ", transcation_list[trans]['switch']," to ",transcation_list[trans]['switch_next'])
+				print('?????>',transcation_list[trans]['can_switch'])
+				if transcation_list[trans]['switch'] !=  transcation_list[trans]['switch_next'] and transcation_list[trans]['can_switch'] == 'yes' and ( task_list[id][4] == 197 or task_list[id][5]==3 ):
+					print("switching from ", transcation_list[trans]['switch']," to ",transcation_list[trans]['switch_next'],'\*****>',transcation_list[trans]['can_switch'])
 					logger.debug("switching from %s to %s ", transcation_list[trans]['switch'],transcation_list[trans]['switch_next'])
 					# slave is a list of sources, to switch in turn
 					slave = {}	
 					if transcation_list[trans]['switch_next'] == 'slave':
 						slave_index = transcation_list[trans]['slave_index'] 
+						print(slave_index )
+						print(transcation_list[trans]['slave'])
 						slave = transcation_list[trans]['slave'][ slave_index[0] ]
 						slave_index[0] = (slave_index[0] + 1) % slave_index[1]
 					else:
@@ -532,14 +536,13 @@ if __name__ == '__main__':
 	config_file = '/etc/itvencoder/itvencoder.xml'
 	try:
 		with open(config_file,"r") as f:
+			args_lists=wsgi.parser_config(config_file)
+			for args_list in args_lists:
+				event_handler(args_list)
 			pass
 	except Exception as e:
 		print('Local config is not exist',e)
-		config_file=None
 	streamer = streamer.StreamingMedia(None)
-	args_lists=wsgi.parser_config(config_file)
-	for args_list in args_lists:
-		event_handler(args_list)
 	#print('start')
 	#exit()
 	#ids = ['4','3']

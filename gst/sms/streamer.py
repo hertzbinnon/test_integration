@@ -50,6 +50,8 @@ class StreamingMedia():
 		self.usage_params.update(usage_params)
 		for u in usage_params:
 			self.usage_params[u][0]['rootdir']=self.rootdir
+			if self.usage_params[u][1][0][0]['vcodec']=='h264':
+				arch = 'VLC'
 			print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1",self.rootdir,arch)
 			self.engine[u] = StreamingMedia.__archclass__[arch](self.usage_params[u])
 			print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2")
@@ -100,7 +102,7 @@ class StreamingMedia():
 	@staticmethod
 	def get_encoders_arch(usage):
 		encoders = usage[0]['encoders']
-		arch='VLC'
+		arch='GST'
 		if encoders == 'smsv':	
 			arch = 'VLC'
 		elif encoders == 'smsg':

@@ -179,7 +179,7 @@ case \"\$1\" in
 esac"
 
 }
-
+yum install elfutils-libs -y
 echo "rootdir='$INSTALL_PATH'" > $INSTALL_PATH/bin/usage.py
 build_bash > $INSTALL_PATH/bin/bash.sh
 device_conf > $INSTALL_PATH/bin/iproxy.conf
@@ -198,7 +198,7 @@ mv  $INSTALL_PATH/bin/iproxy /usr/bin/smsd
 rm -f /etc/init.d/smsd
 #rm -f /etc/iDvr.conf
 rm -f /etc/smsd.conf
-rm -f /etc/itvencoder/itvencoder.xml
+#rm -f /etc/itvencoder/itvencoder.xml
 rm -f /etc/itvencoder/smsd_config.xml
 rm -f /etc/cron.d/iproxy
 rm -f /etc/itvdaemon
@@ -222,6 +222,8 @@ cd ../setproctitle && python3 setup.py install
 cd .. && rm -rf setuptools greenlet eventlet setproctitle 
 echo "Install done "
 echo 64 > /proc/sys/net/ipv4/ip_default_ttl
+rm -f /tmp/smsd.pid
+rm -f /tmp/*.smsd
 echo "...."
 exit 0;
 __ARCHIVE_BELOW__

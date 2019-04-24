@@ -1,1 +1,1 @@
-rootdir=''
+rootdir='.'
