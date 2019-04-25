@@ -9,7 +9,7 @@ import _thread
 
 class EngineGST(engineer.Engineer):
 	#			caps-lib-cat
-	__ele_list={'udp--src':				{'name':'udpsrc','propertys':		{'uri':'','buffer-size':'120000000'}},
+	__ele_list={'udp--src':				{'name':'udpsrc','propertys':		{'uri':'','buffer-size':'120000000','timeout':'3000000000'}},
 				'file--src':			{'name':'filesrc','propertys':		{'location':''}},
 				'typefinder--typefinder':	{'name':'typefind','propertys':		{}},
 				'tee--dup':				{'name':'tee','propertys':			{}},
@@ -25,11 +25,11 @@ class EngineGST(engineer.Engineer):
 				'ac3--apreparse': 		{'name':'ac3parse','propertys':		{}},
 				'dvd--spreparse': 		{'name':'dvdsubparse','propertys':	{}},
 				'dvb--spreparse': 		{'name':'subparse','propertys':		{}},
-				'vconvert--vconvert': 			{'name':'autovideoconvert','propertys':{}},
-				'aconvert--aconvert': 			{'name':'audioconvert','propertys':{}},
-				'sconvert--sconvert': 			{'name':'','propertys':				{}},
+				'vconvert--vconvert': 	{'name':'autovideoconvert','propertys':{}},
+				'aconvert--aconvert': 	{'name':'audioconvert','propertys':{}},
+				'sconvert--sconvert': 	{'name':'','propertys':				{}},
 				'h264-x264-vencode':	{'name':'x264enc','propertys':		{}},
-				'h264-openh264-vencode':		{'name':'openh264enc','propertys':{}},
+				'h264-openh264-vencode':{'name':'openh264enc','propertys':{}},
 				'h265-x265-vencode':	{'name':'x265enc','propertys':{}},
 				'aac-fdkaac-aencode': 	{'name':'fdkaacenc','propertys':{}},
 				'mp4a-ffmpeg-aencode': 	{'name':'avenc_aac','propertys':{}},
@@ -37,7 +37,7 @@ class EngineGST(engineer.Engineer):
 				'ts--wrap': 			{'name':'mpegtsmux','propertys':{'alignment':'7'}},
 				'mp4--wrap': 			{'name':'qtmux','propertys':{}},
 				'udp--access_out': 		{'name':'udpsink','propertys':{'host':'','port':'0','multicast-iface':''}},
-				'fil--access_out': 	{'name':'filesink','propertys':{'location':''}},
+				'fil--access_out': 	    {'name':'filesink','propertys':{'location':''}},
 				}
 	def __init__(self,usage):
 		engineer.Engineer.__init__(self,'GST', usage)
@@ -480,6 +480,17 @@ class EngineGST(engineer.Engineer):
 		elif t == Gst.MessageType.STATE_CHANGED:
 			#sys.stdout.write("stream\n")
 			pass
+		elif t == Gst.MessageType.ELEMENT:
+			strct = message.get_structure()
+			print('Message:',t,strct.get_name())
+			if strct.has_name("GstUDPSrcTimeout"):
+				if( strct.has_field('timeout') ):
+					value = strct.get_value('timeout')
+					print('No packets is recieved ',value)
+					exit(197)
+				else:
+					print('UDP source timeout detects ')
+			pass
 		else:
 			print('Message:',t)
 		return True
@@ -547,6 +558,7 @@ class EngineGST(engineer.Engineer):
 
 
 if __name__ == '__main__':
+	#help(Gst.MessageType)
 	#help(Gst.debug_bin_to_dot_file_with_ts)
 	#help(gi.repository.Gst.Element)
 	#LIBS_PRIVATE='/home/smsd/modules:/home/hebin/.temp/cerbero/build/dist/linux_x86_64/lib:/home/hebin/.temp/cerbero/deps/installed/lib:/home/hebin/.temp/Gcc/installed/lib64'

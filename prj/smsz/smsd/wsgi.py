@@ -216,6 +216,17 @@ def parser_encode(xml,action):
 					src['atrack'] = str(atrack)
 				except:
 					src['atrack'] = '-1'
+			if src['subtitleinfo'] == '':
+				src['strack'] = '-1'
+			else:
+				strack_pattern = src['subtitleinfo'].split(';')[0]
+				strack = strack_pattern.split(',')[0]
+				src['soverlay'] = strack_pattern.split(',')[1]
+				try:
+					src['strack'] = int(strack)
+					src['strack'] = str(strack)
+				except:
+					src['strack'] = '-1'
 		#print sources
 		print("-----------sout description---------------")
 		sout_token = [src for src in souts_token.findall('encoder')]

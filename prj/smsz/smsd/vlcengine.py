@@ -96,17 +96,19 @@ class EngineVLC(engineer.Engineer):
 		args += ' ' 		 + usage[0]['url']	
 		if usage[0]['iface'] != '':
 			args += ' --miface ' + usage[0]['iface']
-		if usage[0]['prgid']!= '-1' and usage[0]['atrack'] == '-1':
-			args += ' --no-sout-all  --program '+ usage[0]['prgid']
+		if usage[0]['prgid']!= '-1':#and usage[0]['atrack'] == '-1':
+			#args += ' --no-sout-all  --program '+ usage[0]['prgid']
+			args += ' --program '+ usage[0]['prgid']
 		
-		args += ' ' +  self.__pipelineUsage(usage[1],(usage[0]['prgid'],usage[0]['atrack']))
+		args += ' ' +  self.__pipelineUsage(usage[1],(usage[0]['prgid'],usage[0]['atrack'],usage[0]['strack'],usage[0]['soverlay']))
 		return args
 
-	def __subpipelineUsage(self,subusage,sformat):
+	def __subpipelineUsage(self,subusage,sformat,soverlay):
 			format = ''
 			subformat = ''
 			ts_mux='ts'
 			filter=''
+			overlay=''
 			video = subusage[0]
 			audio = subusage[1]
 			subtitle=subusage[2]
@@ -201,6 +203,8 @@ class EngineVLC(engineer.Engineer):
 					pass
 			else:
 				#print 'debuging 3'
+				if soverlay == 'overlay':
+					overlay = 'soverlay'
 				if video['bitratemode'] == '1':
 					ts_mux='ts{shaping=1000,bmax=0,bmin=%s}' % str( int( int(video['vb']) * 0.30 * 1000) ) 
 					video['bframes'] = '1'
@@ -251,6 +255,7 @@ class EngineVLC(engineer.Engineer):
 				format += 'acodec=%s,ab=128,channels=%s,samplerate=%s,aenc=%s'
 				format = format % ( audio['acodec'],audio['channels'],audio['samplerate'],audio['aenc'])
 				format += filter
+				format += overlay 
 				format = 'transcode{' + format + '}'
 				if l > 1:
 					#print 'debuging 4'
@@ -299,11 +304,20 @@ class EngineVLC(engineer.Engineer):
 		"""usage:[({video}, {audio}, [out]), (), ()], select:(prgid,audiotrack)"""
 		prgid = select[0]
 		atrack = select[1]
+		strack = select[2]
+		soverlay = select[3]
 		sformat = ''
-		if prgid != '-1' and atrack == '-1':
-			sformat = 'select=\'program=%s\',' % prgid
-		elif prgid != '-1' and atrack != '-1':
-			sformat = 'select=\'program=%s,es=%s\',' % (prgid,atrack)
+		sf=''
+		af=''
+		vf=''
+		if prgid != '-1' :
+			sformat = 'select=\'program='+prgid+',%s,%s\''
+			if atrack != '-1':
+				af = 'es='+atrack
+			if strack != '-1':
+				sf = 'es='+strack
+			sformat = sformat % (af,sf)
+		
 		if not isinstance(usage, list):
 			print("pipeline args must be list")
 		#print '---',usage
@@ -312,12 +326,12 @@ class EngineVLC(engineer.Engineer):
 			format=''
 			for out in usage:
 				#format+='dst=\''+self.__subpipelineUsage(out)+'\',select=\'program=%s,es=%s\',,'
-				format+='dst=\''+self.__subpipelineUsage(out,sformat)+'\',,' + sformat
+				format+='dst=\''+self.__subpipelineUsage(out,sformat,soverlay)+'\',,' + sformat
 			format = 'duplicate{'+ format +'}'
 			#print format 
 		else : # raw output [({}, {}, [{out},{out}]), (), ()]
 			print('debuging 0')
-			format = self.__subpipelineUsage(usage[0],sformat)
+			format = self.__subpipelineUsage(usage[0],sformat,soverlay)
 			if sformat != '':
 				format= 'duplicate{dst=\'' + format + '\','+ sformat + '}'
 			#print format 
