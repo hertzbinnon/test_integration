@@ -50,7 +50,7 @@ class StreamingMedia():
 		self.usage_params.update(usage_params)
 		for u in usage_params:
 			self.usage_params[u][0]['rootdir']=self.rootdir
-			if self.usage_params[u][1][0][0]['vcodec']=='h264':
+			if 'vcodec' in self.usage_params[u][1][0][0] and self.usage_params[u][1][0][0]['vcodec']=='h264':
 				arch = 'VLC'
 			print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1",self.rootdir,arch)
 			self.engine[u] = StreamingMedia.__archclass__[arch](self.usage_params[u])

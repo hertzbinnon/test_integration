@@ -233,22 +233,44 @@ def parser_encode(xml,action):
 		souts = []
 		for sout in sout_token:
 			item = {}
+			item['access_out']=[]
+			item_name=''
+			item_value=''
+			ao_bind=0
+			ao_index=-1
 			for var in sout.getiterator('var'):
-				item[var.attrib.get('name').strip()]=var.text.strip()
-			if 'mux' not in item:
-				access = item['output'][:3]
-				if  access == 'udp':
-					item['mux'] = 'ts'
-				elif access  == 'htt':
-					item['mux'] = 'ts'
-				elif access  == 'rtm':
-					item['mux'] = 'flv'
-				elif access  == 'fil':
-					#item['mux'] = 'mp4'
-					item['mux'] = 'ts'
+				item_name = var.attrib.get('name').strip()
+				item_value = var.text.strip()
+				if item_name in ['sendby','output']:
+					if item_name == 'output':
+						item_name = 'access_out'
+					if item_name == 'sendby':
+						item_name = 'access_iface'
+					if ao_bind  == 0:
+						item['access_out'].append({})
+						ao_index += 1
+					if ao_bind  < 2:	
+						item['access_out'][ao_index][item_name]=item_value
+						ao_bind +=1
+						if ao_bind >= 2:
+							ao_bind =0
+				else:
+					item[item_name]=item_value
+			for ao in item['access_out']:
+				if 'mux' not in ao:
+					access = ao['access_out'][:3]
+					if  access == 'udp':
+						ao['mux'] = 'ts'
+					elif access  == 'htt':
+						ao['mux'] = 'ts'
+					elif access  == 'rtm':
+						ao['mux'] = 'flv'
+					elif access  == 'fil':
+						#item['mux'] = 'mp4'
+						ao['mux'] = 'ts'
 			souts.append(item)
 			del item
-		#print souts
+		print(souts)
 		print("-----------formatting for stream engine---------------")
 		for src in sources:
 			stream={}
@@ -260,7 +282,8 @@ def parser_encode(xml,action):
 				output_param=[]
 
 				print('start ==========================')
-				output_param.append({'access_iface':sout['sendby'],'mux':sout['mux'],'access_out':sout['output']})
+				#output_param.append({'access_iface':sout['sendby'],'mux':sout['mux'],'access_out':sout['output']})
+				output_param = sout['access_out']
 				if 'vcodec' not in sout and 'acodec' not in sout:
 					pass
 					#stream[taskid][1].append((video_param,audio_param,output_param))
@@ -396,14 +419,14 @@ def parser_encode(xml,action):
 		print('========master==================')
 		#print args_list['master'] 
 		print('========slave=================')
-		for i in args_list['slave']:
-			print(i)
+		#for i in args_list['slave']:
+		#	print(i)
 		print('==========================')
 	#except:
 		#print "Error as parsing xml "
 		#error = 1
-		for i in args_list:
-			print(i,'-->',args_list[i],'\n')
+		#for i in args_list:
+		#	print(i,'-->',args_list[i],'\n')
 		return (error,args_list)
 
 """

@@ -113,7 +113,8 @@ class EngineGST(engineer.Engineer):
 			e.mod_name = EngineGST.__ele_list[caps_lib_cat]['name']
 		except Exception as ex:
 			print('No libs found',ex)
-			return exit()
+			#exit()
+			return e
 		e.element_name = e.name
 		e.element_propertys=EngineGST.__ele_list[caps_lib_cat]['propertys']
 		self.__config_element__(caps,lib,cat,e)
@@ -417,7 +418,8 @@ class EngineGST(engineer.Engineer):
 			e = ep['apreparse']
 		else:
 			print(new_pad_type,' is not support')
-			exit()
+			#exit()
+			return
 		ret = obj.__build_element__(caps_lib_cat,e)
 		if ret is None:
 			print("parse failed",)

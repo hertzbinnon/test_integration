@@ -114,22 +114,23 @@ class EngineVLC(engineer.Engineer):
 			subtitle=subusage[2]
 			output=subusage[3]
 			l = len(output)	
+
 			if len(video) <= 2 and  len(audio) <= 2: #
 				if l > 1:
-					#print 'debuging 1'
+					print('debuging 1')
 					for out in output:
 						#format+= 'dst=\'std{access=%s,mux=%s,dst=%s\',select=\'program=%s,es=%s\',,'
 						#format = format % (out['access'],'ts',out['dst'],'-1','-1')
 						access_out  = out['access_out'][:4]
 						if  access_out[:3] == 'udp':
-							format+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
-										('udp{miface-addr=%s}' % out['access_iface'],'ts',out['access_out'][6:]) + sformat
+							format+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
+										('udp{miface-addr=%s}' % out['access_iface'],'ts',out['access_out'][6:])  
 						elif access_out == 'http':
-							format+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
-										('http' ,'ts',out['access_out'][7:]) + sformat
+							format+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
+										('http' ,'ts',out['access_out'][7:])  
 						elif access_out == 'file':
-							format+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
-										('file' ,'ts',out['access_out'][7:]) + sformat
+							format+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
+										('file' ,'ts',out['access_out'][7:]) 
 						else:
 							print('Access out not support')
 							exit()
@@ -137,7 +138,7 @@ class EngineVLC(engineer.Engineer):
 					format= 'duplicate{' + format + '}'
 					#print format 
 				else:
-					#print 'debuging 2'
+					print('debuging 2')
 					access_out  = output[0]['access_out'][:4]
 					if access_out[:3] == 'udp':
 						format += 'std{access=%s,mux=%s,dst=%s}' % \
@@ -152,11 +153,12 @@ class EngineVLC(engineer.Engineer):
 						print('Access out not support')
 						exit()
 						
-					if sformat != '':
-						format= 'duplicate{dst=\'' + format + '\','+ sformat + '}'
+					#if sformat != '':
+					#	format= 'duplicate{dst=\'' + format + '\','+ sformat + '}'
 					#print format 
 			elif len(video) <= 2 or len(audio) < 2: #
 				if len(video) <= 2 :
+					print('debuging 9')
 					format = 'acodec=%s,ab=128,channels=%s,samplerate=%s,aenc=%s'
 					format = format % ( audio['acodec'],audio['channels'],audio['samplerate'],audio['aenc'])
 					format = 'transcode{' + format + '}'
@@ -165,14 +167,15 @@ class EngineVLC(engineer.Engineer):
 							#subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s\',select=\'program=%s,es=%s\',,'
 							#subformat = subformat % (out['access'],'ts',out['dst'],'-1','-1')
 							access_out  = out['access_out'][:4]
-							if access_out[:3] != 'udp':
-								subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
+							print(out,access_out)
+							if access_out[:3] == 'udp':
+								subformat+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
 										('udp{miface-addr=%s}' % out['access_iface'],ts_mux,out['access_out'][6:])
 							elif access_out == 'http':
-								subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
+								subformat+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
 										('http' ,ts_mux, out['access_out'][7:])
 							elif access_out == 'file':
-								subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
+								subformat+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
 										('file' ,ts_mux, out['access_out'][7:])
 							else:
 								print('Access out not support')
@@ -180,10 +183,10 @@ class EngineVLC(engineer.Engineer):
 
 						subformat= 'duplicate{' + subformat + '}'
 						format += ':'+subformat
-						if sformat != '':
-							format= 'duplicate{dst=\'' + format + '\','+ sformat + '}'
+						#if sformat != '':
+						#	format= 'duplicate{dst=\'' + format + '\','+ sformat + '}'
 					else:
-							#print 'debuging 5'
+						print('debuging 5')
 						access_out  = output[0]['access_out'][:4]
 						if access_out[:3] == 'udp':
 							subformat += 'std{access=%s,mux=%s,dst=%s}' % \
@@ -200,9 +203,11 @@ class EngineVLC(engineer.Engineer):
 						format += ':'+subformat 
 				else:
 					# TO DO: audio is none
+					print('Only video transcoding not support')
+					exit()
 					pass
 			else:
-				#print 'debuging 3'
+				print('debuging 3')
 				if soverlay == 'overlay':
 					overlay = 'soverlay'
 				if video['bitratemode'] == '1':
@@ -258,30 +263,30 @@ class EngineVLC(engineer.Engineer):
 				format += overlay 
 				format = 'transcode{' + format + '}'
 				if l > 1:
-					#print 'debuging 4'
+					print('debuging 4')
 					for out in output:
 						#subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s\',select=\'program=%s,es=%s\',,'
 						#subformat = subformat % (out['access'],'ts',out['dst'],'-1','-1')
 						access_out  = out['access_out'][:4]
 						if access_out[:3] == 'udp':
-							subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
+							subformat+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
 									('udp{miface-addr=%s}' % out['access_iface'],ts_mux,out['access_out'][6:])
 						elif access_out == 'http':
-							subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
+							subformat+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
 									('http' ,ts_mux, out['access_out'][7:])
 						elif access_out == 'file':
-							subformat+= 'dst=\'std{access=%s,mux=%s,dst=%s}\',,' % \
+							subformat+= 'dst=std{access=%s,mux=%s,dst=%s},,' % \
 									('file' ,ts_mux, out['access_out'][7:])
 						else:
 							print('Access out not support')
 							exit()
 					subformat= 'duplicate{' + subformat + '}'
 					format += ':'+subformat
-					if sformat != '':
-						format= 'duplicate{dst=\'' + format + '\','+ sformat + '}'
+					#if sformat != '':
+					#	format= 'duplicate{dst=\'' + format + '\','+ sformat + '}'
 					#print format 
 				else:		
-					#print 'debuging 5'
+					print('debuging 5')
 					access_out  = output[0]['access_out'][:4]
 					if access_out[:3] == 'udp':
 						subformat += 'std{access=%s,mux=%s,dst=%s}' % \
@@ -311,7 +316,7 @@ class EngineVLC(engineer.Engineer):
 		af=''
 		vf=''
 		if prgid != '-1' :
-			sformat = 'select=\'program='+prgid+',%s,%s\''
+			sformat = 'select={program='+prgid+',%s,%s},'
 			if atrack != '-1':
 				af = 'es='+atrack
 			if strack != '-1':
@@ -322,13 +327,13 @@ class EngineVLC(engineer.Engineer):
 			print("pipeline args must be list")
 		#print '---',usage
 		if len(usage) > 1:
-			#print 'debuging -1'
+			print('debuging -1')
 			format=''
 			for out in usage:
 				#format+='dst=\''+self.__subpipelineUsage(out)+'\',select=\'program=%s,es=%s\',,'
 				format+='dst=\''+self.__subpipelineUsage(out,sformat,soverlay)+'\',,' + sformat
 			format = 'duplicate{'+ format +'}'
-			#print format 
+			#print(format) 
 		else : # raw output [({}, {}, [{out},{out}]), (), ()]
 			print('debuging 0')
 			format = self.__subpipelineUsage(usage[0],sformat,soverlay)
