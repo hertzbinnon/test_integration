@@ -1,0 +1,57 @@
+# x265
+
+#X265_GITURL := https://github.com/videolan/x265
+X265_VERSION := 3.0
+X265_SNAPURL := https://bitbucket.org/multicoreware/x265/get/$(X265_VERSION).tar.bz2
+
+ifdef BUILD_ENCODERS
+ifdef GPL
+PKGS += x265
+endif
+endif
+
+ifeq ($(call need_pkg,"x265 >= 0.6"),)
+PKGS_FOUND += x265
+endif
+
+CMAKE_spec = cmake ../../../source -DCMAKE_TOOLCHAIN_FILE=$(abspath toolchain.cmake) \
+		-DCMAKE_INSTALL_PREFIX=$(PREFIX)
+
+$(TARBALLS)/x265-git.tar.xz:
+	$(call download_git,$(X265_GITURL))
+
+$(TARBALLS)/x265-$(X265_VERSION).tar.bz2:
+	$(call download,$(X265_SNAPURL))
+
+.sum-x265: x265-$(X265_VERSION).tar.bz2
+
+x265: x265-$(X265_VERSION).tar.bz2 .sum-x265
+	rm -Rf $@-$(X265_VERSION)
+	mkdir -p $@-$(X265_VERSION)
+	tar xvjfo "$<" --strip-components=1 -C $@-$(X265_VERSION)
+	$(APPLY) $(SRC)/x265/x265-ldl-linking.patch
+	#$(APPLY) $(SRC)/x265/x265-no-pdb-install.patch
+	$(call pkg_static,"source/x265.pc.in")
+ifndef HAVE_WIN32
+	$(APPLY) $(SRC)/x265/x265-pkg-libs.patch
+endif
+	$(MOVE)
+
+.x265: x265 toolchain.cmake
+	$(REQUIRE_GPL)
+	#cd $</source && $(HOSTVARS_PIC) $(CMAKE) -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_PROCESSOR=$(ARCH) -DENABLE_CLI=OFF
+	cd $</build/linux && mkdir -p 8bit 10bit 12bit
+	export PATH=/home/hebin/.temp/transcode/transcode/3rd/installed/bin:$(PATH)
+	cd $</build/linux/12bit && $(HOSTVARS_PIC) $(CMAKE_spec) -DENABLE_ASSEMBLY=ON -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DCMAKE_SYSTEM_PROCESSOR=$(ARCH) && make -j8
+	#-DNUMA_ROOT_DIR=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl -DNUMA_INCLUDE_DIR=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl/include -DNUMA_LIBRARY=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl/lib  && make -j8
+	cd $</build/linux/10bit && $(HOSTVARS_PIC) $(CMAKE_spec) -DENABLE_ASSEMBLY=ON -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DCMAKE_SYSTEM_PROCESSOR=$(ARCH) && make -j8
+	#-DNUMA_ROOT_DIR=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl -DNUMA_INCLUDE_DIR=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl/include -DNUMA_LIBRARY=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl/lib && make -j8
+	cd $</build/linux/8bit && ln -sf ../10bit/libx265.a libx265_main10.a && ln -sf ../12bit/libx265.a libx265_main12.a && $(HOSTVARS_PIC) $(CMAKE_spec) -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_SYSTEM_PROCESSOR=$(ARCH) -DENABLE_SHARED=OFF -DENABLE_CLI=ON -DENABLE_ASSEMBLY=ON && make -j8
+
+#-DNUMA_ROOT_DIR=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl -DNUMA_INCLUDE_DIR=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl/include -DNUMA_LIBRARY=/home/hebin/.temp/sms/vlc-2.0.0/release-python3/deps/installed/numactl/lib && make -j8
+	cd $</build/linux/8bit && mv libx265.a libx265_main.a
+	cd $</build/linux/8bit && ../../../../../src/x265/multilib.sh
+	cd $</build/linux/8bit && make install
+	#cd $< && $(MAKE) -C source install
+	sed -e s/'[^ ]*clang_rt[^ ]*'//g -i.orig "$(PREFIX)/lib/pkgconfig/x265.pc"
+	touch $@
