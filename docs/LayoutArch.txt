@@ -109,3 +109,8 @@ Project
 					https://subhra74.github.io/xdm/#downloads
 	+yolo
 					https://pjreddie.com/darknet/yolo/
+	+x264			
+					https://github.com/mirror/x264
+
+	+x264svc		
+					http://code.google.com/p/x264svc 
