@@ -83,3 +83,6 @@ export QT_QPA_FONTDIR=/home/vlc/vlc-windows/contrib/x86_64-w64-mingw32/lib/fonts
 aclocal --print-ac-dir
 aclocal --verbose
 export ACLOCAL_PATH=/usr/share/aclocal
+
+# android sdk 
+E:\ProgramFiles\Android\sdk\tools\bin>sdkmanager.bat --licenses
