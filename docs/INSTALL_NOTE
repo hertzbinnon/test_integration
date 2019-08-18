@@ -86,3 +86,6 @@ export ACLOCAL_PATH=/usr/share/aclocal
 
 # android sdk 
 E:\ProgramFiles\Android\sdk\tools\bin>sdkmanager.bat --licenses
+
+#rust installer
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
