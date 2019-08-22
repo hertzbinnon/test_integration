@@ -114,3 +114,4 @@ Project
 
 	+x264svc		
 					http://code.google.com/p/x264svc 
+	+openGL			git clone --recurse-submodules https://github.com/ssloy/hellOGL.git
