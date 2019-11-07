@@ -1,1 +1,2 @@
 https://blog.csdn.net/qq_42840244/article/details/84589999  // VS2017 联机帮助
+https://docs.microsoft.com/zh-cn/cpp/get-started/tutorial-console-cpp?view=vs-2019  //vs 学习文档

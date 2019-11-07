@@ -89,3 +89,9 @@ E:\ProgramFiles\Android\sdk\tools\bin>sdkmanager.bat --licenses
 
 #rust installer
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+
+# build gstreamer on windows
+cerbero.git/README.md 
+https://gitlab.freedesktop.org/gstreamer/cerbero/#installing-minimum-requirements-on-windows
+http://blog.nirbheek.in/
