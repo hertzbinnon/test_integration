@@ -25,7 +25,7 @@ Project
 		-examples
 						ats/etc/*.config
 						tests.hertz
-	+gst
+	+gst******
 		+pygobject
 			-url		https://git.gnome.org/browse/pygobject
 		+gst-python
@@ -76,7 +76,8 @@ Project
 			-url			https://github.com/coturn/coturn.git
 		+rtpengine
 			-url			https://github.com/sipwise/rtpengine.git
-		+libwebrtc
+		+libwebrtc*****
+							https://webrtc.org.cn/mirror/
 							local storage
 	+kms
 		-url				https://github.com/Kurento
@@ -84,7 +85,7 @@ Project
 		-applications		https://github.com/Kurento/kurento-java.git
 		-examples			https://github.com/Kurento/kurento-tutorial-java.git
 							
-	+ai
+	+ai*****
 		objectDetect
 			-url 			https://github.com/jimfcarroll	
 		voiceDectect
@@ -114,4 +115,9 @@ Project
 
 	+x264svc		
 					http://code.google.com/p/x264svc 
-	+openGL			git clone --recurse-submodules https://github.com/ssloy/hellOGL.git
+	+openGL*****	
+					git clone --recurse-submodules https://github.com/ssloy/hellOGL.git
+	 
+    +vlc
+					https://code.videolan.org/videolan
+					https://code.videolan.org/videolan/docker-images

@@ -1,0 +1,25 @@
+ALVR-2.3.1: 这是原生vlar 可以和StreamVR 1.8.20 兼容
+
+ixreality\build: 通过cmake 生成的可编译的intel msdk mfx的编码器。
+
+alvr_server: 是nolo的项目。包括intel rtsp 编码双目转单目的方式。
+
+#这是一篇关于VR game生态的普及性文章
+https://www.gamingonlinux.com/articles/first-steps-with-openvr-and-the-vive-on-linux.7229/page=2
+
+
+#ALVR-server 移植到 linux上需要：
+OpenGL/DirectX  render是什么东西
+QT/C#
+vaapi/msdk/nvenc/vce
+gstreamer-rtsp gstreamer-mfx/nvenc
+
+https://github.com/polygraphene/ALVRClient
+https://github.com/ValveSoftware/openvr
+https://github.com/OpenHMD/OpenHMD
+https://github.com/polygraphene/ALVR
+
+NN 可以
+IN   不可以
+NI   可以
+II     不可以

@@ -3,10 +3,12 @@ native:
  ./cerbero-uninstalled wipe
  ./cerbero-uninstalled bootstrap
  ./cerbero-uninstalled package gstreamer-1.0
+
 android:
  ./cerbero-uninstalled -c config/cross-android-armv7.cbc wipe
  ./cerbero-uninstalled -c config/cross-android-armv7.cbc bootstrap
  ./cerbero-uninstalled -c config/cross-android-armv7.cbc package gstreamer-1.0
+
 android-app-build:
 	ndk-build
 	ant debug
@@ -48,13 +50,16 @@ cat /proc/asound/cards
 ./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink    
 ./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink		   # multiopen device 
 
-vlc-windows build:
-	apt-get install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 mingw-w64-tools
-
+vlc-windows build on docker :
+	#apt-get install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 mingw-w64-tools
+	https://code.videolan.org/videolan/docker-images
+	docker pull registry.videolan.org:5000/vlc-debian-win64
+    #docker run -it --name vlc-win64 -p 8080:80 -v /d:/hertz/GitHub/vlc:/data registry.videolan.org:5000/vlc-debian-win64 /bin/bash #on msys shell failed by msys/bash!!!s
+	#Drive sharing failed for an unknown reason 
+	Open docker Dashboard "Setting->Shared Drivers "
+	docker run -it --name vlc-win64 -p 8080:80 -v //d/hertz/GitHub/vlc:/data registry.videolan.org:5000/vlc-debian-win64 /bin/bash  on windows cmd
 ats:
 	#push content to cache
-
-
 
 X11 loop login error:
 	Don`t modified revolution,otherwise x11 configure fils for Nvidia is lost 
@@ -89,9 +94,48 @@ E:\ProgramFiles\Android\sdk\tools\bin>sdkmanager.bat --licenses
 
 #rust installer
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#
+./autogen.sh && ./configure && make && sudo make install
+变成了:
+meson build && ninja -C build && sudo ninja -C build install
 
-
+#### Windows development Env #####
 # build gstreamer on windows
+msys条件下出了问题先确定CRLF vs LF problems. configure.ac is LF-only (try dos2unix or something).
+./cerbero-uninstalled -t bootstrap -j1 #拒绝并发
+./cerbero-uninstalled -t -v visualstudio  package gstreamer-1.0 -j1
 cerbero.git/README.md 
 https://gitlab.freedesktop.org/gstreamer/cerbero/#installing-minimum-requirements-on-windows
 http://blog.nirbheek.in/
+
+#MSys/minGW not found cygpath
+export PATH=$PATH:/D/Program\ Files/Git/usr/bin  # Windows Git install cygwin-tools which include cygpath
+python27 windows Error ---> 在Python27/lib/subprocess.py #修改为：__init__ shell=True
+
+vaapi and msdk
+	https://01.org/zh/linuxmedia/quickstart/gstreamer-vaapi-msdk-command-line-examples?langredirect=1
+          intel low-power
+	https://bugzilla.gnome.org/show_bug.cgi?id=789472
+	https://blogs.igalia.com/vjaquez/tag/debian/
+
+gstreamer cerbero for windows
+
+#build gstreamer with cerbero on windows
+https://jaist.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe //minGW/Msys一起下载
+https://cardinalpeak.com/blog/build-gstreamer-on-windows-an-advanced-tutorial/   这篇写的比较清楚。
+http://blog.nirbheek.in/
+https://gitlab.freedesktop.org/gstreamer/cerbero/#enabling-visual-studio-support   // cerbero 的使用方法都在里面VS msdk
+
+http://mingw-w64.org/doku.php
+https://blog.csdn.net/hacode/article/details/19161933
+http://www.mamicode.com/info-detail-1269639.html
+
+#QtCreator vs VisualStudio
+
+#steamvr 安装问题
+https://twentynext.com/how-to-fix-htc-vive-vrserver-exe-error-301-and-error-302/
+
+# http://www.aes.org/publications/standards/search.cfm?docID=99  # Audio Engineering Society 
+
+#webrtc on VS 2017 须安装最新的Debugging Tools for Windows 通过WDK
+https://download.microsoft.com/download/1/4/0/140EBDB7-F631-4191-9DC0-31C8ECB8A11F/wdk/wdksetup.exe
