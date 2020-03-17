@@ -39,6 +39,14 @@ logcat:
 	adb shell pm list packages [-f]
 	adb uninstall <package-name>
 	adb pull <package-name> <location>
+	#https://blog.csdn.net/aLLLiyyy/article/details/86555228  #adb server and client version dis
+Gradle build:
+	gradle-wrapper.properties  distributionUrl=file:///F:/android-studio/gradle/gradle-4.3-all.zip
+	gradlew tasks --offline
+	gradlew clean
+	https://stackoverflow.com/questions/47629999/errorssl-peer-shut-down-incorrectly-in-android-studio-3-0-1 # Error:SSL peer shut down incorrectly (403) 证书问题server 证书
+	adb install -t app-debug.apk #INSTALL_FAILED_TEST_ONLY
+	adb install -r 
 
 aplay -l
 aplay -L
@@ -50,6 +58,7 @@ cat /proc/asound/cards
 ./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink    
 ./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink		   # multiopen device 
 
+#https://gitlab.com/garfvl/denv 
 vlc-windows build on docker :
 	#apt-get install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 mingw-w64-tools
 	https://code.videolan.org/videolan/docker-images
@@ -139,3 +148,26 @@ https://twentynext.com/how-to-fix-htc-vive-vrserver-exe-error-301-and-error-302/
 
 #webrtc on VS 2017 须安装最新的Debugging Tools for Windows 通过WDK
 https://download.microsoft.com/download/1/4/0/140EBDB7-F631-4191-9DC0-31C8ECB8A11F/wdk/wdksetup.exe
+
+#git 
+git submodule update --init --recursive
+
+#java https://blog.csdn.net/u010126792/article/details/82854222 # apk
+java -jar  AXMLPrinter2.jar AndroidManifest.xml
+
+#windows查看网卡型号
+https://blog.csdn.net/weixin_44038359/article/details/89603709 
+#windows下查看端口监听情况
+https://blog.csdn.net/weixin_41282397/article/details/85705848
+
+#openvr
+cmake ..  -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=D:/hertz/mytools/Qt/Qt5.13.1/5.13.1/msvc2017_64/lib/cmake
+
+#Nvidia
+https://developer.nvidia.com/cuda-toolkit-archive
+dpkg --get-selections
+https://linuxconfig.org/install-the-latest-nvidia-linux-driver
+sudo ubuntu-drivers autoinstall
+sudo ubuntu-drivers devices
+
+https://developer.nvidia.com/embedded/linux-tegra   #L4T
