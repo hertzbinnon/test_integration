@@ -1,0 +1,57 @@
+一、网络ADB调试：
+1. Android设备除了用有线usb进行ADB调试外，还可以在同一局域网通过网络ADB连接，一般指令为 adb connect 192.168.2.36（此为当前Android设备网络IP），
+   默认监听端口为5555，因此指令实际效果为 adb connect 192.168.2.36:5555，但是有的设备默认端口号并非5555，重新设置网络监听端口的方法如下：
+方法1：通过usb线连接电脑跟安卓设备，输入adb命令：adb tcpip 5555 ；该条命令是设置网络adb监听的端口，5555是默认，也可设置为其它的。(重启失效)
+方法2：使用文件管理器按照以下路径打开文件：/system/build.prop，在该文件的最后添加以下内容：service.adb.tcp.port=5555 (重启依然有效，可以有线或无线操作)
+2、在设置好端口后就可输入命令连接：adb connect 192.168.2.36:5555，后面的:5555可以不用输入，例如我设置的:6666端口，则通过如下指令连接：
+3、断开连接的命令：adb disconnect 192.168.2.36:6666 (如果默认端口是:5555也不需要加)，另外可以直接用 adb disconnect 断开所有网络连接的设备：
+4、通过 adb devices ,可以看到当前设备的连接状态：
+5、通过 adb -s "设备号" shell 操作对应已连接的设备，例如：
+　　　　adb -s 192.168.2.23:5555 shell "service call bluetooth_manager 8"　　#关闭蓝牙
+　　　　adb -s 192.168.2.23:5555 shell "service call bluetooth_manager 6"　　#打开蓝牙
+
+三、有线ADB端口被占用解决方法（如：127.0.0.1:5037）：
+ 
+方法1：杀掉占用5037端口的进程：
+
+（1）首先打开cmd命令行窗口，查看占用端口的进程PID：
+
+C:\Users\lxl>netstat -aon|findstr 5037
+  TCP    127.0.0.1:5037         0.0.0.0:0              LISTENING       18260
+  TCP    127.0.0.1:5037         127.0.0.1:58544        ESTABLISHED     18260
+  TCP    127.0.0.1:58544        127.0.0.1:5037         ESTABLISHED     6852
+
+（2）通过PID查看所属进程（以下是正常情况，异常的就不是adb，而是被其他进程占用）：
+
+C:\Users\lxl>tasklist /fi "PID eq 18260"
+
+映像名称                       PID 会话名              会话#       内存使用
+========================= ======== ================ =========== ============
+adb.exe                      18260 Console                    2      3,824 K
+
+（3）杀死占用端口的进程：
+
+C:\Users\lxl>taskkill /pid 18260 /f
+成功: 已终止 PID 为 18260 的进程。
+
+方法2：通过系统变量更改ADB默认端口：
+（1）在系统变量中配置一个新的变量名：ANDROID_ADB_SERVER_PORT，变量值：18618（自定义，最大值为65535），如下图所示：
+（2）　重启一下adb服务（adb kill-server & adb start-server），新开一个cmd窗口后可看到已更新为自定义端口：
+
+四：Android adb shell启动应用程序的方法（https://www.cnblogs.com/dengqing9393/p/7210479.html）
+$ adb shell
+$ am start -n ｛包(package)名｝/｛包名｝.{活动(activity)名称}
+程序的入口类可以从每个应用的AndroidManifest.xml的文件中得到，以计算器（calculator）为例，它的
+package="com.android.calculator2" …>…
+由此计算器（calculator）的启动方法为：
+# am start -n com.android.calculator2/com.android.calculator2.Calculator
+
+五 包的管理
+1.查看所有安装的包
+$ adb shell  pm list packages
+2.查看包安装位置
+$ adb shell pm list packages -f
+3.将apk拉到pc中
+adb pull /data/app/com.tencent.tbs-1/base.apk ~/Downloads
+
+

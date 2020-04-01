@@ -1,0 +1,17 @@
+1.拉取远程仓库指定分支代码
+git pull <远程库名> <远程分支名>:<本地分支名>
+#将master分支代码拉取到本地分支
+eg: git pull origin master
+2.合并代码
+(1)开发分支（dev）上的代码达到上线的标准后，要合并到 master 分支
+    git checkout dev
+    git pull
+    git checkout master
+    git merge dev
+    git push -u origin master
+(2)当master代码改动了，需要更新开发分支（dev）上的代码
+    git checkout master 
+    git pull 
+    git checkout dev
+    git merge master 
+    git push -u origin dev

@@ -1,0 +1,36 @@
+vaapi and msdk
+	https://01.org/zh/linuxmedia/quickstart/gstreamer-vaapi-msdk-command-line-examples?langredirect=1
+          intel low-power
+	https://bugzilla.gnome.org/show_bug.cgi?id=789472
+	https://blogs.igalia.com/vjaquez/tag/debian/
+
+gstreamer cerbero for windows
+#build gstreamer with cerbero on windows
+https://jaist.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe //minGW/Msys一起下载
+https://cardinalpeak.com/blog/build-gstreamer-on-windows-an-advanced-tutorial/   这篇写的比较清楚。
+http://blog.nirbheek.in/
+https://gitlab.freedesktop.org/gstreamer/cerbero/#enabling-visual-studio-support   // cerbero 的使用方法都在里面VS msdk
+
+http://mingw-w64.org/doku.php
+https://blog.csdn.net/hacode/article/details/19161933
+http://www.mamicode.com/info-detail-1269639.html
+
+
+#QtCreator vs VisualStudio
+
+#steamvr 安装问题
+https://twentynext.com/how-to-fix-htc-vive-vrserver-exe-error-301-and-error-302/
+#gst vr
+https://www.collabora.com/news-and-blog/blog/2016/07/04/introducing-gstreamer-vr-plug-ins-and-sphvr/
+https://github.com/lubosz/gst-plugins-vr
+
+#nginx rtmp flv hevc
+https://zhuanlan.zhihu.com/p/94440269
+https://github.com/im-pingo/CDN-Union_H265
+https://github.com/im-pingo/nginx-rtmp-module # hevc for nginx-rtmp
+https://blog.csdn.net/renhui1112/article/details/88840283 # 大牛软导  
+https://github.com/daniulive/SmarterStreaming # 大牛软导源码
+
+#Android 
+https://blog.csdn.net/guo1988kui/article/details/78765824 #如何使用android studio发布release 版本
+https://www.jianshu.com/p/0d6e79bd0681 #多版本打包之productFlavors 用法
