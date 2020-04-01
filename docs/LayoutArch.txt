@@ -121,3 +121,34 @@ Project
     +vlc
 					https://code.videolan.org/videolan
 					https://code.videolan.org/videolan/docker-images
+TechTree for app
+
+	Qt+windows 
+   /         \
+VLC		      opengl(es)
+   \         /
+	 android
+
+         Nat
+       /
+webrtc - Delay
+       \
+         JB FEC BWE AEC AGC
+
+             opencv
+           /
+Gstreamer  - yolov3
+   	       \
+             kaldi
+ 
+#embedded app
+1. android
+2. vlc
+3. opengl
+4. webrtc
+5. opencv
+6. gstreamer
+7. kaldi
+8. yolov3
+=======
+

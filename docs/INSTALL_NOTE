@@ -1,8 +1,12 @@
 gstreamer:
 native:
  ./cerbero-uninstalled wipe
+ ./cerbero-uninstalled fetch-bootstrap
  ./cerbero-uninstalled bootstrap
+ ./cerbero-uninstalled fetch
  ./cerbero-uninstalled package gstreamer-1.0
+or
+ ./cerbero-uninstalled -v nvcodec package gstreamer-1.0
 
 android:
  ./cerbero-uninstalled -c config/cross-android-armv7.cbc wipe
@@ -25,6 +29,8 @@ build.gradle if jcenter not be resolved
 aom codecs in rules.mk: 
 	cd /home/codecs/aom.git && git archive --format=tar.gz  $(AOM_HASH) > aom-$(AOM_VERSION).tar.gz        
         cp /home/codecs/aom.git/aom-$(AOM_VERSION).tar.gz $@
+#cd vlc/extra/tools && make clean
+#cd vlc && git am --message-id ../libvlc/patches/vlc3/*.patch
 ./compile.sh -a armeabi-v7a
 
 INSTALL android(adb command):
