@@ -177,3 +177,6 @@ sudo ubuntu-drivers autoinstall
 sudo ubuntu-drivers devices
 
 https://developer.nvidia.com/embedded/linux-tegra   #L4T
+
+#ubuntu 无法apt update 
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 78BD65473CB3BD13
