@@ -54,4 +54,7 @@ $ adb shell pm list packages -f
 3.将apk拉到pc中
 adb pull /data/app/com.tencent.tbs-1/base.apk ~/Downloads
 
-
+六系统信息查询
+1.查询cpu架构
+https://blog.csdn.net/zheng_weichao/article/details/89633835
+adb shell getprop|grep arm
