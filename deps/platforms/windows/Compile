@@ -4,3 +4,4 @@ C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build
 ...
 # vs与mingw是两个独立的编译器（cl和gcc） 通过不同的头文件和库（.lib,.a,.dll）来构建程序
 # msys是一个兼容windows的unix环境，在执行msys的bash.exe之前 先导入vcvars*.bat脚本来
+d:\hertz\mytools\MinGW\msys\1.0\bin\bash.exe
