@@ -26,3 +26,16 @@ kurento
 ├── libs3
 ├── openwebrtc-gst-plugins
 └── usrsctp
+
+# Question
+1.sfu config
+https://stackoverflow.com/questions/36564536/how-to-disable-video-encoding-in-kurento-media-server  #sfu config
+kurento/modules/kurento/SdpEndpoint.conf.json  
+"videoCodecs" : [
+//    {
+//      "name" : "VP8/90000"
+//    },
+    {
+      "name" : "H264/90000"
+    }
+]

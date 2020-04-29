@@ -1,2 +1,4 @@
 1.文件属于哪个安装包
 yum provides <filename>
+#例如
+yum provides */lspci

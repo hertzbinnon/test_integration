@@ -1,4 +1,4 @@
-ffmpeg -v debug  -re  -i udp://127.0.0.1:12346 -c copy  -f mpegts udp://192.168.8.62:12346
+﻿ffmpeg -v debug  -re  -i udp://127.0.0.1:12346 -c copy  -f mpegts udp://192.168.8.62:12346
 ffmpeg -ss 00:00:00  -t 00:01:07 -i music_1.mp3 -c copy  music_2.mp3
 ffmpeg -ss 00:00:00   -i music_1.mp3 -c copy  -t 00:01:07 music_2.mp3
 ffmpeg -f concat -safe 0 -i list.txt -c copy bs-mms-player.mp3
@@ -25,6 +25,7 @@ ffmpeg -i /home/hebin/Game.Of.Thrones.S01.E09.2011.1080p.mkv -map 0:0 -map 0:1 -
 
 ffmpeg -hwaccel_device 0 -c:v h264_cuvid -i 4k5.mp4 -c:v rawvideo -pix_fmt yuv420p 4k5.yuv
 ffmpeg -hwaccel_device 0 -hwaccel cuvid -c:v h264_cuvid -i input -vf scale_npp=-1:720 -c:v h264_nvenc -preset slow output.mkv
+ffmpeg -re -hwaccel_device 0 -hwaccel cuvid -c:v h264_cuvid -i rtmp://114.116.250.228/live/4k -preset fast -qmin 20 -c:v h264_nvenc -vf scale_npp=1920:1080 -b:v 15000k -g 30 -c:a aac -strict -2 -ar 48000 -b:a 200K -f flv rtmp://114.116.250.228/live/cch_2k
 
 ffmpeg -s 3840x2160 -r 24 -pix_fmt yuv420p -i out.yuv  ads_png/image-%3d.png
 ffmpeg -s 3840x2160 -r 24 -i 4k5.yuv -vf "movie=ads_png/image-261.png[a];[a]colorkey=0x00FFFFFF:0.6:1.0[b];[in][b]overlay[c]" -c:v rawvideo -pix_fmt yuv420p  -f null -
@@ -45,4 +46,6 @@ ffmpeg -i video.mpg -ignore_loop 0 -i loop.gif -filter_complex  "[0:v][1:v]overl
 ffmpeg  -i  input  -vf  drawtext=fontfile=arial.ttf:text=welcome output
 #实现周期显示输入的文字水印
 ffmpeg -i input.mp4 -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf:text='testtest':x=w-100:y=100:enable=lt(mod(t\,3)\,1):fontsize=24:fontcolor=yellow@0.5:shadowy=2" output.mp4
+
+
 
