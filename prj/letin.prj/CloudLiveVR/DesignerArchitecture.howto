@@ -1,0 +1,33 @@
+#提高复杂性
+#提高技术难度
+#增加阅读难度
+设计参考:
+	kms/gstreamer/ffmpeg/vlc/webrtc.cn
+Server:
+
+c/rust/python
+
+Font end                               Nginx Rtmp H265 
+								            |
+Back end							     tornado 
+											|
+App                           gst-sfu/mcu/gst-Director/gst-Transcoder
+
+Client:
+
+c/c++
+										   Qt
+											|
+										   VLC
+										    |
+										  Opengl
+
+协议json:
+	command  --> pull push decode encode playback(for local use imagesink and for remote push the stream to nginx-rtmp or rtsp or webrtc),register,deregister,call.
+	method   --> start stop
+	operator --> 
+	args     --> codec protocol container
+	sessionid
+	taskid
+
+
