@@ -7,6 +7,7 @@ prj: record builded-source directory. eg. ~/home/xxxxx.tar.gz ...
 log: remember bid event
 cagesize: recoding content on web page to test_integration/...
 
-1. where the source code be storage on home host machine directory.
-2. NOTE 
-3. link
+1. ScrapBook
+2. BaiduDisk
+3. Here
+4. Log

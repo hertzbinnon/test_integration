@@ -1,33 +1,50 @@
-#提高复杂性
-#提高技术难度
-#增加阅读难度
-设计参考:
-	kms/gstreamer/ffmpeg/vlc/webrtc.cn
-Server:
+#Platform
+##Server
+CPU:Intel Scalable Video Technology(Intel? Xeon? Scalable Processors)
+GPU:Nvidia Tesla V100/T4
+RAM: > 64G
+OS: ubuntu 18.04
 
-c/rust/python
+##Client:
+CPU: Intel i7/i9 with Intel? UHD Graphics
+GPU: Nvdia 1080Ti
+OS:  windows 64
 
-Font end                               Nginx Rtmp H265 
-								            |
-Back end							     tornado 
-											|
-App                           gst-sfu/mcu/gst-Director/gst-Transcoder
+#Main Framework
+##Server 
+main:     Gstreamer
+Language: Rust/C Python
+deps:  nginx-rtmp ffmpeg NvCodec MSDK
+   
+##Client 
+main:     VLC
+Language：Qt/C++ 
+deps:  nginx-rtmp ffmpeg NvCodec MSDK
 
-Client:
+#Target of the task
+    
+	1.Transcoding
+    2.Switching
+    3.Cliping
+    4.Effecting
+            all on Cloud
+#P2P extention
+    Webrtc/Kurento
 
-c/c++
-										   Qt
-											|
-										   VLC
-										    |
-										  Opengl
+#Tech Architecture [refer to page 23 in odg]
+------ base --------
+1. To reform VLC QT GUI to adapt Soft Director 
+2. To probe GST for Effecting and dymilic pipe line
+3. To make a new Streaming Media Service protocol  encoded by JSON
+4. To use RUST and C to build server.
+5. To use OpenGL to implement Effect.
 
-协议json:
-	command  --> pull push decode encode playback(for local use imagesink and for remote push the stream to nginx-rtmp or rtsp or webrtc),register,deregister,call.
-	method   --> start stop
-	operator --> 
-	args     --> codec protocol container
-	sessionid
-	taskid
+------ main --------
+6. webrtc p2p
+7. kerento mcu or sfu
 
+------ high --------
+8. Editing/Cliping on live by GES/pitivi
 
+------ supper ------
+9. make movie

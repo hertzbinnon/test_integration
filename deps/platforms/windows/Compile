@@ -9,3 +9,7 @@ d:\hertz\mytools\MinGW\msys\1.0\bin\bash.exe
 #error: could not lock config file C://.gitconfig: Permission denied
 #msys
 export HOME=/C/Users/hertz
+
+#windows build nginx and cerbero
+#Note /c/Strawberry/perl/bin  使用 2.22.1
+# 不要使用mingw自带的/bin和cerbero自带的cerbero\build\mingw\perl\bin 在编译openssl时会失败

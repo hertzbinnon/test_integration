@@ -1,5 +1,7 @@
-intel:
+Intel:
 源码：https://github.com/OpenVisualCloud/SVT-HEVC
 白皮书（包括hevc的一些性能数据）: https://01.org/sites/default/files/documentation/svt_azure_wp.pdf
 基于tile的FOV参考方案: https://github.com/OpenVisualCloud/Immersive-Video-Sample
 webRTC的部分在github的WebRTC-Sample目录下
+
+Nvidia:
