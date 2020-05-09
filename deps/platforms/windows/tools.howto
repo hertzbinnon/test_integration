@@ -1,6 +1,10 @@
 # bat 进入root执行
 cmd.exe 所在目录C:\Windows\System32\ 右键点击"管理用户执行"
-runas /user:hert\admin <cmdline>
+runas /user:hertz\admin <cmdline>
+#标准用户https://blog.csdn.net/WPwalter/article/details/89838982
+runas /trustlevel:0x20000 .\Walterlv.Demo.exe
+#特权用户
+runas /trustlevel:0x40000 .\Walterlv.Demo.exe
 
 #硬盘扫描
 sfc /scannow
