@@ -199,12 +199,8 @@ webrtc源码只提供客户端功能，没有流媒体服务器功能。真正�
 		由于谷歌源码服务器不能访问，上述方法无法正常使用。
 		使用阿里云香港地址。先把源码下到云主机上，然后再下载到本地机器上。
 
-4.国内镜像（未解决，这个方法已经淘汰）：
-		https://source.codeaurora.org/quic/lc
-		这个镜像无法采用官方方法来构建源码。因为这个镜像有一个自己的分支chromium.org/master
-		另外这个镜像没有更改gclient等命令行工具中CHROMIUM_SRC_URL的地址，如'https://chromium.googlesource.com/chromium/src.git'。
-		
-		git pull -v --no-rebase --progress origin chromium.org/master
+4.国内镜像与使用方法
+		https://webrtc.org.cn/mirror/
 
 5.开发使用方法
 		libwebrtc 编译后生成的都是静态库，这些库位于out/Default/out目录下。为了方便的使用它们，头文件与库的路径务必逐一列出在编译的-L和-I上。

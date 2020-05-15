@@ -1,3 +1,13 @@
+|
+| gstreamer conductor ---> vlc conductor ----> webrtc p2p libwebrtc ---> webrtc p2p client vlc --> kurento server [-->sip  kamailio] 
+|
+| opengl --> shaders --> GPU --> 2D/3D 
+|
+| 
+|
+| blender --> unity3d --> pitivi 
+| 
+
 #Platform
 ##Server
 CPU:Intel Scalable Video Technology(Intel? Xeon? Scalable Processors)
@@ -48,3 +58,10 @@ deps:  nginx-rtmp ffmpeg NvCodec MSDK
 
 ------ supper ------
 9. make movie
+
+##
+case 1
+1.Use compositor to implement pad switching 
+
+fade_in/fade_out/crossfade 渐变入/渐变出/交叉渐变
+2.Use selector to implement pad swithcing  
