@@ -1,0 +1,15 @@
+192.168.1.206
+root
+Letinvr@123
+代码路径
+/usr/local/wlj/ffmpeg/FFmpeg-n3.3.9
+编译命令
+./compile_ffmpeg.sh
+
+nginx源码
+nginx-release-1.15.12
+./compile.sh
+
+HttpAgent
+源码    /usr/local/wlj/HttpServer
+make release

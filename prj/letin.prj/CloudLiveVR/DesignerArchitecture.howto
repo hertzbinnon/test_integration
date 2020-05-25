@@ -1,11 +1,9 @@
 |
 | gstreamer conductor ---> vlc conductor ----> webrtc p2p libwebrtc ---> webrtc p2p client vlc --> kurento server [-->sip  kamailio] 
 |
-| opengl --> shaders --> GPU --> 2D/3D 
+| opengl --> shaders --> GPU --> 2D/3D  
 |
-| 
-|
-| blender --> unity3d --> pitivi 
+| blender (create model) --> unity3d (build game) --> openvr --> alvr --> pitivi( video clip) 
 | 
 
 #Platform
