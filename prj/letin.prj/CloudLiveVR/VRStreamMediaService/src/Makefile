@@ -10,7 +10,7 @@ GIO_LDFLAGS = $(shell pkg-config --libs gio-2.0)
 GSOUP_CFLAGS=$(shell pkg-config  --cflags libsoup-2.4)
 GSOUP_LDFLAGS=$(shell pkg-config  --libs libsoup-2.4)
 
-all: VRsmsz
+all: VRsmsz addstream
 
 clean:
 	rm -f VRsmsz *.o
@@ -24,3 +24,7 @@ main.o : main.c httpd.h
 
 VRsmsz  : httpd.o main.o
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+
+addstream : examples/addstream.c
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+

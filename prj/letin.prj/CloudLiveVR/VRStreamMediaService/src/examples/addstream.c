@@ -145,10 +145,10 @@ perform_step (gpointer pstep)
   switch (step) {
     case 0:
       /* live stream locks on to running_time, pipeline configures latency. */
-      g_print ("creating bin1\n");
+      g_print ("creating bin1 video live\n");
       bin1 =
           create_stream
-          ("( v4l2src ! videoconvert ! timeoverlay ! queue ! xvimagesink name=v4llive )");
+          ("( videotestsrc is-live=1 ! videoconvert ! timeoverlay ! queue ! xvimagesink name=v4llive )");
       pause_play_stream (bin1, 0);
       g_timeout_add_seconds (1, (GSourceFunc) perform_step,
           GINT_TO_POINTER (1));
@@ -156,22 +156,22 @@ perform_step (gpointer pstep)
     case 1:
       /* live stream locks on to running_time, pipeline reconfigures latency
        * together with the previously added bin so that they run synchronized. */
-      g_print ("creating bin2\n");
-      bin2 = create_stream ("( alsasrc ! queue ! alsasink name=alsalive )");
+      g_print ("creating bin2 audio live\n");
+      bin2 = create_stream ("( audiotestsrc is-live=1 ! queue ! alsasink name=alsalive )");
       pause_play_stream (bin2, 0);
       g_timeout_add_seconds (1, (GSourceFunc) perform_step,
           GINT_TO_POINTER (2));
       break;
     case 2:
       /* non-live stream, need base_time to align with current running live sources. */
-      g_print ("creating bin3\n");
+      g_print ("creating bin3 audio vod\n");
       bin3 = create_stream ("( audiotestsrc ! alsasink name=atnonlive )");
       pause_play_stream (bin3, 0);
       g_timeout_add_seconds (1, (GSourceFunc) perform_step,
           GINT_TO_POINTER (3));
       break;
     case 3:
-      g_print ("creating bin4\n");
+      g_print ("creating bin4 video vod\n");
       bin4 =
           create_stream
           ("( videotestsrc ! timeoverlay ! videoconvert ! ximagesink name=vtnonlive )");
@@ -181,7 +181,7 @@ perform_step (gpointer pstep)
       break;
     case 4:
       /* live stream locks on to running_time */
-      g_print ("creating bin5\n");
+      g_print ("creating bin5 video live\n");
       bin5 =
           create_stream
           ("( videotestsrc is-live=1 ! timeoverlay ! videoconvert ! ximagesink name=vtlive )");
@@ -204,8 +204,12 @@ perform_step (gpointer pstep)
           GINT_TO_POINTER (6));
       break;
     case 6:
-      g_print ("quitting\n");
-      g_main_loop_quit (loop);
+      g_print ("remove bin5\n");
+      gst_element_set_state (bin5, GST_STATE_NULL);
+      gst_bin_remove(GST_BIN(pipeline),bin5);
+      g_timeout_add_seconds (5, (GSourceFunc) perform_step,
+          GINT_TO_POINTER (4));
+      //g_main_loop_quit (loop);
       break;
     default:
       break;
