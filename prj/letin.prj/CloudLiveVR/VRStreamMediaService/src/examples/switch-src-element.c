@@ -188,6 +188,7 @@ perform_step (gpointer pstep)
         g_print("newpad is add\n");
         gst_bin_add (GST_BIN (pipeline), src2);
         gst_element_link_many(src2, conv,NULL);
+        gst_element_link_many(src2, sink,NULL);
         //pause_play_stream (pipeline, 0);
   	//gst_element_sync_state_with_parent(src2);
         gst_element_set_state (pipeline, GST_STATE_PLAYING);
@@ -209,7 +210,8 @@ perform_step (gpointer pstep)
 
         g_print("newpad is add\n");
         gst_bin_add (GST_BIN (pipeline), src1);
-        gst_element_link_many(src1, conv,NULL);
+        //gst_element_link_many(src1, conv,NULL);
+        gst_element_link_many(src1, sink,NULL);
         //pause_play_stream (pipeline, 0);
   	//gst_element_sync_state_with_parent(src2);
         gst_element_set_state (pipeline, GST_STATE_PLAYING);
@@ -307,10 +309,12 @@ main (int argc, char *argv[])
   //queue1 = gst_element_factory_make ("queue", NULL);
   //blockpad = gst_element_get_static_pad (queue1, "src");
   blockpad = gst_element_get_static_pad (src1, "src");
-  conv = gst_element_factory_make ("videoconvert", NULL);
+  //conv = gst_element_factory_make ("videoconvert", NULL);
   sink = gst_element_factory_make ("ximagesink", NULL);
-  gst_bin_add_many (GST_BIN (pipeline), src1, conv, sink, NULL);
-  gst_element_link_many (src1, conv, sink, NULL);
+  //gst_bin_add_many (GST_BIN (pipeline), src1, conv, sink, NULL);
+  gst_bin_add_many (GST_BIN (pipeline), src1, sink, NULL);
+  //gst_element_link_many (src1, conv, sink, NULL);
+  gst_element_link_many (src1, sink, NULL);
 
   /* setup message handling */
   bus = gst_pipeline_get_bus (GST_PIPELINE (pipeline));

@@ -13,7 +13,7 @@ GSOUP_LDFLAGS=$(shell pkg-config  --libs libsoup-2.4)
 all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element
 
 clean:
-	rm -f VRsmsz *.o
+	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element
 
 
 httpd.o : httpd.c httpd.h
