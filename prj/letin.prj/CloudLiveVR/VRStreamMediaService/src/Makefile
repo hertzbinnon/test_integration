@@ -10,7 +10,7 @@ GIO_LDFLAGS = $(shell pkg-config --libs gio-2.0)
 GSOUP_CFLAGS=$(shell pkg-config  --cflags libsoup-2.4)
 GSOUP_LDFLAGS=$(shell pkg-config  --libs libsoup-2.4)
 
-all: VRsmsz addstream test-effect-switch doc-effect-switch
+all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element
 
 clean:
 	rm -f VRsmsz *.o
@@ -32,4 +32,7 @@ test-effect-switch: examples/test-effect-switch.c
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
 doc-effect-switch: examples/doc-effect-switch.c
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+
+switch-src-element: examples/switch-src-element.c
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)

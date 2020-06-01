@@ -1,24 +1,3 @@
-/* GStreamer dynamic effect change test app
- * Copyright (C) 2012 Tim-Philipp Müller <tim centricular net>
-
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * Based on python script by Thiago Sousa Santos
- */
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -49,7 +28,7 @@ event_probe_cb (GstPad * pad, GstPadProbeInfo * info, gpointer user_data)
 
   gst_pad_remove_probe (pad, GST_PAD_PROBE_INFO_ID (info));
 
-  /* push current event back into the queue */
+  /* push current effect back into the queue */
   g_queue_push_tail (&effects, gst_object_ref (cur_effect));
   /* take next effect from the queue */
   next = g_queue_pop_head (&effects);
