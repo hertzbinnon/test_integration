@@ -187,8 +187,8 @@ perform_step (gpointer pstep)
 
         g_print("newpad is add\n");
         gst_bin_add (GST_BIN (pipeline), src2);
-        gst_element_link_many(src2, conv,NULL);
-        gst_element_link_many(src2, sink,NULL);
+        gst_element_link_many(src2, comp,NULL);
+        //gst_element_link_many(src2, sink,NULL);
         //pause_play_stream (pipeline, 0);
   	//gst_element_sync_state_with_parent(src2);
         gst_element_set_state (pipeline, GST_STATE_PLAYING);
@@ -211,7 +211,7 @@ perform_step (gpointer pstep)
         g_print("newpad is add\n");
         gst_bin_add (GST_BIN (pipeline), src1);
         //gst_element_link_many(src1, conv,NULL);
-        gst_element_link_many(src1, sink,NULL);
+        gst_element_link_many(src1, comp,NULL);
         //pause_play_stream (pipeline, 0);
   	//gst_element_sync_state_with_parent(src2);
         gst_element_set_state (pipeline, GST_STATE_PLAYING);
@@ -301,6 +301,8 @@ main (int argc, char *argv[])
   loop = g_main_loop_new (NULL, TRUE);
 
   pipeline = gst_pipeline_new ("pipeline");
+  comp = gst_element_factory_make ("compositor", NULL);
+
   src2 = gst_element_factory_make ("videotestsrc", NULL);
   g_object_set (src2, "is-live", TRUE, NULL);
   g_object_set (src2, "pattern", 18, NULL);
@@ -308,13 +310,13 @@ main (int argc, char *argv[])
   g_object_set (src1, "is-live", TRUE, NULL);
   //queue1 = gst_element_factory_make ("queue", NULL);
   //blockpad = gst_element_get_static_pad (queue1, "src");
-  blockpad = gst_element_get_static_pad (src1, "src");
-  //conv = gst_element_factory_make ("videoconvert", NULL);
+  //blockpad = gst_element_get_static_pad (src1, "src");
+  conv = gst_element_factory_make ("videoconvert", NULL);
   sink = gst_element_factory_make ("ximagesink", NULL);
   //gst_bin_add_many (GST_BIN (pipeline), src1, conv, sink, NULL);
-  gst_bin_add_many (GST_BIN (pipeline), src1, sink, NULL);
+  gst_bin_add_many (GST_BIN (pipeline), src1, comp, conv, sink, NULL);
   //gst_element_link_many (src1, conv, sink, NULL);
-  gst_element_link_many (src1, sink, NULL);
+  gst_element_link_many (src1, comp, conv, sink, NULL);
 
   /* setup message handling */
   bus = gst_pipeline_get_bus (GST_PIPELINE (pipeline));

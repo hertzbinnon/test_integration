@@ -1,3 +1,29 @@
+/*
+ * GStreamer
+ * Copyright (C) 2017 Thibault Saunier <thibault.saunier@osg-samsung.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Simple crossfade example using the compositor element.
+ *
+ * Takes two video files and crossfades them for 10 seconds and returns.
+ */
+
 #include <stdlib.h>
 #include <gst/gst.h>
 #include <gst/controller/gstdirectcontrolbinding.h>
@@ -39,13 +65,35 @@ _pad_added_cb (GstElement * decodebin, GstPad * pad, VideoInfo * info)
   gst_timed_value_control_source_set (GST_TIMED_VALUE_CONTROL_SOURCE
       (control_source), 0, is_last ? 0.0 : 1.0);
   gst_timed_value_control_source_set (GST_TIMED_VALUE_CONTROL_SOURCE
-      (control_source), 100 * GST_SECOND, is_last ? 1.0 : 0.0);
+      (control_source), 10 * GST_SECOND, is_last ? 1.0 : 0.0);
   g_object_set (sinkpad, "zorder", info->z_order, NULL);
 
   gst_pad_link (pad, sinkpad);
 
   g_free (info);
 }
+
+static void enable_factory (const gchar *name, gboolean enable) {
+    GstRegistry *registry = NULL;
+    GstElementFactory *factory = NULL;
+
+    registry = gst_registry_get();
+    if (!registry) return;
+
+    factory = gst_element_factory_find (name);
+    if (!factory) return;
+
+    if (enable) {
+        gst_plugin_feature_set_rank (GST_PLUGIN_FEATURE (factory), GST_RANK_PRIMARY + 1);
+    }
+    else {
+        gst_plugin_feature_set_rank (GST_PLUGIN_FEATURE (factory), GST_RANK_NONE);
+    }
+
+    gst_registry_add_feature (registry, GST_PLUGIN_FEATURE (factory));
+    return;
+}
+
 
 int
 main (int argc, char *argv[])
@@ -61,6 +109,7 @@ main (int argc, char *argv[])
   }
 
   gst_init (&argc, &argv);
+  enable_factory("nvh264dec",TRUE);
   pipeline = gst_element_factory_make ("pipeline", NULL);
   compositor = gst_element_factory_make ("compositor", NULL);
   sink =
@@ -92,7 +141,7 @@ main (int argc, char *argv[])
   gst_element_set_state (pipeline, GST_STATE_PLAYING);
 
   message =
-      gst_bus_timed_pop_filtered (bus, 1100 * GST_SECOND,
+      gst_bus_timed_pop_filtered (bus, 110 * GST_SECOND,
       GST_MESSAGE_EOS | GST_MESSAGE_ERROR);
   GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS (GST_BIN (pipeline),
       GST_DEBUG_GRAPH_SHOW_ALL, "go");

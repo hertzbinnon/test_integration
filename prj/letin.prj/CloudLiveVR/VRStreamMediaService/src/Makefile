@@ -10,7 +10,10 @@ GIO_LDFLAGS = $(shell pkg-config --libs gio-2.0)
 GSOUP_CFLAGS=$(shell pkg-config  --cflags libsoup-2.4)
 GSOUP_LDFLAGS=$(shell pkg-config  --libs libsoup-2.4)
 
-all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element
+GST_CONTROLLER_CFLAGS = $(shell pkg-config --cflags gstreamer-controller-1.0)
+GST_CONTROLLER_LDFLAGS = $(shell pkg-config --libs gstreamer-controller-1.0)
+
+all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic
 
 clean:
 	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element
@@ -36,3 +39,9 @@ doc-effect-switch: examples/doc-effect-switch.c
 
 switch-src-element: examples/switch-src-element.c
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+
+crossfade: examples/crossfade.c
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
+
+comp-switch-dynamic: examples/comp-switch-dynamic.c
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
