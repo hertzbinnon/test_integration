@@ -22,7 +22,7 @@ static void enable_factory (const gchar *name, gboolean enable) {
     return;
 }
 
-static void create_stream (const gchar * descr, describer_t* des, gint type)
+static GstElement* create_stream (const gchar * descr)
 {
   GstElement *bin;
   GError *error = NULL;
@@ -31,19 +31,19 @@ static void create_stream (const gchar * descr, describer_t* des, gint type)
   if (error) {
     g_print ("pipeline could not be constructed: %s\n", error->message);
     g_error_free (error);
-    return ;
+    return NULL;
   }
 
   /* add the bin to the pipeline now, this will set the current base_time of the
    * pipeline on the new bin. */
   gst_bin_add (GST_BIN_CAST (vrsmsz->pipeline), bin);
-
-  des->bin = bin;
-  des->type = type;
-  memcpy(des->descr, descr, strlen(descr)+1);
-  des->streamid = vrsmsz->stream_ids;
+  return bin;
 }
 
+static void
+_pad_added_cb (GstElement * decodebin, GstPad * pad)
+{
+}
 void vrsmsz_stop(){
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_NULL);
 }
@@ -65,13 +65,19 @@ void vrsmsz_deinit(){
 
 }
 
-void vrsmsz_add_stream(){
+void vrsmsz_add_stream(gchar* uri){
    //create_stream();
-   vrsmsz->stream_ids++;
+   vrstream_t vs = vrsmsz->streams[vrsmsz->stream_nbs];
+   if(!vs.uridecodebin) 
+     vs.uridecodebin = gst_element_factory_make("uridecodebin", NULL);
+   g_object_set (vs.uridecodebin, "uri", uri, "expose-all-streams", TRUE, NULL);
+   g_signal_connect (vs.uridecodebin, "pad-added", (GCallback) _pad_added_cb, NULL);
+   gst_bin_add(GST_BIN_CAST(vrsmsz->pipeline), vs.uridecodebin);
+   vrsmsz->stream_nbs++;
 }
 
 void vrsmsz_remove_stream(){
-   vrsmsz->stream_ids--;
+   vrsmsz->stream_nbs--;
 }
 
 void vrsmsz_add_track(){
@@ -102,84 +108,63 @@ void vrsmsz_add_clip(){
 
 }
 
+void vrsmsz_publish(){
+
+}
+
 static void vrsmsz_null_channel(){
-  describer_t *bin = vrsmsz->bins[0];
-  create_stream("( videotestsrc is-live=1 ! videoconvert !  compositor name=Compositer ! timeoverlay ! clockoverlay ! queue ! x264enc ! flvmux name=muxer ! rtmpsink location=rtmp://192.168.0.134/live/chan10 audiotestsrc ! audioconvert ! queue ! voaacenc ! muxer. )", bin, 0);
+  /*create_stream("(audiotestsrc ! audioconvert ! queue ! voaacenc ! muxer.  videotestsrc is-live=1 ! videoconvert !  compositor name=Compositer !  clockoverlay ! queue ! x264enc ! flvmux name=muxer ! tee name=teer ! rtmpsink location=rtmp://192.168.0.134/live/chan10 )");*/
   
-  //vrsmsz->comp->bin= gst_element_get_by_name(bin->bin);
+  //vrsmsz->comp = gst_bin_get_by_name("Compositer");
 }
 
 void vrsmsz_init(int argc, char **argv){
 
+  gst_init (&argc, &argv);
   vrsmsz =  g_malloc0 ( sizeof(vrsmsz_t) );
   if( !vrsmsz ){
     g_error("vrsmsz init failed\n");
   }
   
+  sprintf(vrsmsz->director_stream_preview_url,"rtmp://%s:%s/live/preview",argv[1],argv[2]);
+  vrsmsz->mode = atoi(argv[3]);
+  //vrsmsz->videoconverter = gst_element_factory_make ("videoconvert", NULL);
+  vrsmsz->comp = gst_element_factory_make ("compositor", NULL);
+  vrsmsz->tee  = gst_element_factory_make ("tee", NULL);
+  if(vrsmsz->mode == 0)// 8k
+    vrsmsz->video_encoder = gst_element_factory_make("nvh265enc", NULL); 
+  else if(vrsmsz->mode == 1)// 4k
+    vrsmsz->video_encoder = gst_element_factory_make("nvh264enc", NULL); 
+  else if(vrsmsz->mode == 2)// 2k
+    vrsmsz->video_encoder = gst_element_factory_make("x264enc",   NULL); 
+  vrsmsz->audio_encoder = gst_element_factory_make("voaacenc",   NULL); 
+  vrsmsz->muxer = gst_element_factory_make("flvmux",   NULL);
+  vrsmsz->outer = gst_element_factory_make("rtmpsink",   NULL);
+
   enable_factory("nvh265dec",TRUE);
   enable_factory("nvh264dec",TRUE);
   
-  for(int i=0; i<MAX_CHANNEL; i++){
-
-    vrsmsz->video_src[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->video_src[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->audio_src[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->audio_src[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->video_filter[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->video_filter[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->audio_filter[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->audio_filter[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->video_encoder[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->video_encoder[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->audio_encoder[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->video_encoder[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->video_out[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->video_encoder[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->audio_out[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->video_encoder[i])
-      g_error("vrsmsz init failed\n");
-
-    vrsmsz->bins[i] = g_malloc0 ( sizeof(describer_t) );
-    if(!vrsmsz->bins[i])
-      g_error("vrsmsz init failed\n");
+  for( int i=0; i<MAX_CHANNEL; i++){ 
+    vrsmsz->streams[i].video_id = i;
+    vrsmsz->streams[i].audio_id = i;
+    vrsmsz->streams[i].uridecodebin = gst_element_factory_make("uridecodebin", NULL);
+    vrsmsz->streams[i].muxer = gst_element_factory_make("flvmux", NULL);
+    vrsmsz->streams[i].outer = gst_element_factory_make("rtmpsink", NULL);
+    sprintf(vrsmsz->streams[i].pre_sink_url,"rtmp://%s:%s/live/%d", argv[1], argv[2], i);
+    g_print("%s\n",vrsmsz->streams[0].pre_sink_url);
   }
+  g_print("%s\n",vrsmsz->director_stream_preview_url);
+  gst_bin_add_many(vrsmsz->comp,vrsmsz->video_encoder,vrsmsz->audio_encoder,vrsmsz->muxer,vrsmsz->tee,vrsmsz->outer);
 
   vrsmsz->v_director= 0;
   vrsmsz->a_director= 0;
-  vrsmsz->director_path = g_malloc0 ( sizeof(describer_t) );
-  if(!vrsmsz->director_path)
-    g_error("vrsmsz init failed\n");
+  vrsmsz->stream_nbs = 0;
 
-  vrsmsz->comp = g_malloc0 ( sizeof(describer_t) );
-  if(!vrsmsz->comp)
-    g_error("vrsmsz init failed\n");
-
-  vrsmsz->mixer = g_malloc0 ( sizeof(describer_t) );
-  if(!vrsmsz->mixer)
-    g_error("vrsmsz init failed\n");
-
-  gst_init (&argc, &argv);
   vrsmsz->loop = g_main_loop_new (NULL, TRUE);
   vrsmsz->pipeline = gst_pipeline_new ("pipeline");
   if(!vrsmsz->loop || !vrsmsz->pipeline )
     g_error("vrsmsz init failed\n");
-
   vrsmsz->theclock = gst_element_get_clock (vrsmsz->pipeline);
   vrsmsz->bus = gst_pipeline_get_bus (GST_PIPELINE (vrsmsz->pipeline));
-  vrsmsz->stream_ids = 1;
-  vrsmsz_null_channel();
+  //vrsmsz_null_channel();
 }

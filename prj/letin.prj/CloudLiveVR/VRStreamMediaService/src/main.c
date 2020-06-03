@@ -8,6 +8,10 @@
 
 int main (int argc, char *argv[])
 {
+  if(argc != 4){
+    g_error("USage: %s <ip> <port> <mode>",argv[0]);
+    return -1;
+  }
   vrsmsz_init(argc,argv);
   //create_http_server(8888,NULL,NULL,(GSourceFunc)perform_step);
   vrsmsz_start();// playing
