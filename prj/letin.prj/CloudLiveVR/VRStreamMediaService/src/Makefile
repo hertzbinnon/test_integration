@@ -22,10 +22,13 @@ clean:
 httpd.o : httpd.c httpd.h
 	$(CC) -c  httpd.c $(CFLAGS) $(GST_CFLAGS) $(GSOUP_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-main.o : main.c httpd.h
+main.o : main.c httpd.h 
 	$(CC) -c  main.c $(CFLAGS) $(GST_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-VRsmsz  : httpd.o main.o
+vrsmsz.o : vrsmsz.c vrsmsz.h
+	$(CC) -c  vrsmsz.c $(CFLAGS) $(GST_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+
+VRsmsz  : httpd.o main.o vrsmsz.o
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
 addstream : examples/addstream.c
