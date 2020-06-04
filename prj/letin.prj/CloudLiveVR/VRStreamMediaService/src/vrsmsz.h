@@ -14,8 +14,10 @@ typedef struct{
   gchar pre_sink_url[URL_LEN];
   guint dis; // 4k or 8K
   GstElement * uridecodebin; // 
+  GstElement * vdec_tee;
   GstElement * video_encoder;
   GstElement * audio_encoder;
+  GstElement * aenc_tee;
   GstElement * muxer; // 
   GstElement * outer; // 
 } vrstream_t;
@@ -25,15 +27,18 @@ typedef struct{
   //GstElement * videoconverter;
   GstElement * video_filter; // 
   GstElement * audio_filter; // 
-  GstElement * video_encoder;
-  GstElement * audio_encoder;
-  GstElement * muxer;
-  GstElement * comp;
+  GstElement * pre_video_encoder;
+  GstElement * pub_video_encoder;
+  //GstElement * audio_encoder;
+  GstElement * mixer; // audio mix
+  GstElement * comp;  // video mix
   gchar comp_sink0_pad_name[16];
   gchar comp_sink1_pad_name[16];
-  GstElement * mixer;
-  GstElement * tee;
-  GstElement * outer; // 
+  GstElement * pre_muxer;
+  GstElement * pub_muxer;
+  //GstElement * tee;
+  GstElement * pre_outer; // 
+  GstElement * pub_outer; // 
   guint v_director;
   guint a_director;
 
