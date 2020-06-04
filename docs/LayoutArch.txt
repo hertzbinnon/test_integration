@@ -90,6 +90,9 @@ Project
 			-url 			https://github.com/jimfcarroll	
 		voiceDectect
 			-url			https://github.com/alumae/kaldi-gstreamer-server.git
+		framework
+		    -url            https://developer.ridgerun.com/wiki/index.php?title=R2Inference
+			-url            https://developer.ridgerun.com/wiki/index.php?title=GstInference
 
 	+webbench
 			-url 			https://github.com/yi5971/webbench-1.5.git commit:: 5235bef5a206d24f2aa6d82d85c2571e548a6e75
