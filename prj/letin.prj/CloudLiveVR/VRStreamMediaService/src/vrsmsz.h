@@ -3,25 +3,65 @@
 #define MAX_VIDEO_TRACK  16
 #define MAX_AUDIO_TRACK  16
 #define DESCRIBE_LEN 2048
-
-
-typedef struct{
-  gchar descr[DESCRIBE_LEN];
-  GstElement *bin;
-  GstPad *src_pad;
-  GstPad *sink_pad;
-  gint type; // video or audio
-  gint id;   // global id 
-  gchar channel_desc[DESCRIBE_LEN]; // info about source
-  gvoid data[1024];
-} describer_t;
+#define URL_LEN 2048
 
 typedef struct{
-  describer_t *video_src[MAX_CHANNEL];
-  describer_t *audio_src[MAX_CHANNEL];
-  describer_t *filter;
-  describer_t *comp;
-  guint cur_video_index;
-  guint cur_audio_index;
-  describer_t *encoder;
+  //GstElement * video_dec; // 0 for null channel with videotestsrc
+  //GstElement * audio_dec; // 0 for null channel with audiotestsrc
+  guint video_id;
+  guint audio_id;
+  gchar src_url[URL_LEN];
+  gchar pre_sink_url[URL_LEN];
+  guint dis; // 4k or 8K
+  GstElement * uridecodebin; // 
+  GstElement * muxer; // 
+  GstElement * outer; // 
+} vrstream_t;
+
+typedef struct{
+  vrstream_t streams[MAX_CHANNEL]; // 0 is for null stream;
+  //GstElement * videoconverter;
+  GstElement * video_filter; // 
+  GstElement * audio_filter; // 
+  GstElement * video_encoder;
+  GstElement * audio_encoder;
+  GstElement * muxer;
+  GstElement * comp;
+  gchar comp_sink_pad_name;
+  GstElement * mixer;
+  GstElement * tee;
+  GstElement * outer; // 
+  guint v_director;
+  guint a_director;
+
+  gchar director_stream_preview_url[URL_LEN];
+  gchar director_stream_publish_url[URL_LEN];
+  guint mode;
+
+  guint stream_nbs; // how much streams
+  GstElement* pipeline;
+  GMainLoop *loop;
+  GstClock *theclock;
+  GstBus *bus;
+
 } vrsmsz_t;
+
+extern vrsmsz_t* vrsmsz;
+void vrsmsz_init(int argc, char **argv);
+void vrsmsz_start();
+void vrsmsz_play();
+void vrsmsz_stop();
+void vrsmsz_quit();
+void vrsmsz_deinit();
+
+void vrsmsz_add_stream();
+void vrsmsz_remove_stream();
+void vrsmsz_add_track();
+void vrsmsz_switch_stream();
+void vrsmsz_switch_track();
+void vrsmsz_switch_stream_crossfade();
+void vrsmsz_add_text();
+void vrsmsz_add_pic();
+void vrsmsz_add_clip();
+
+
