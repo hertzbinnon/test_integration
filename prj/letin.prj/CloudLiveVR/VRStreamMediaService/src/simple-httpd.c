@@ -177,35 +177,63 @@ do_put (SoupServer *server, SoupMessage *msg, const char *path)
 	soup_message_set_status (msg, created ? SOUP_STATUS_CREATED : SOUP_STATUS_OK);
 }
 
+struct cache_status{
+	gchar is_who[32];
+	GPid  pid;
+};
+struct cache_status cs={"0.0.0.0",-1};
 static void
 do_post (SoupServer *server, SoupMessage *msg, const char *path)
 {
 	gboolean created = FALSE;
-	//gchar* p=msg->request_body->data,q=NULL;
-	//int len=0;
+	gchar* p=msg->request_body->data,*q=NULL;
+	int len=0;
 	gchar addr[32]={0};
 
-	//p=strstr(p,"addr=");
-	//q = p = p+strlen("addr=");
-	//q = strstr(q,"&");
-	//len = q - p;
-	//memcpy(addr,p,len);
-	//g_print("==> path %s\n==> addr = %s",path,addr);
+	p=strstr(p,"addr=");
+	q = p = p+strlen("addr=");
+	q = strstr(q,"&");
+	len = q - p;
+	memcpy(addr,p,len);
+	g_print("==> path %s\n==> addr = %s",path,addr);
 
-	if(!strcmp(path,"/start")){
+	if(!strcmp(path,"/on_publish")){
 		if(strcmp(addr,"127.0.0.1")){ //this is real publish
+			if(!strcmp(cs.is_who,"0.0.0.0")){g_print("this is first time");} //
+			else{ 
+				g_print("==> kill temp(pid=%d) stream",cs.pid);
+				kill(cs.pid,SIGKILL);
+				cs.pid = -1 ;
+				usleep(500000);
+			}
 		}else{
 				g_print("==> this temp stream");
 		}
 
-	}else if (!strcmp(path,"/stop")){
-		if(1){ //this is temp publish
+		memcpy(cs.is_who,addr,len);
+	}else if (!strcmp(path,"/on_publish_done")){
+		if(!strcmp(addr,"127.0.0.1") && cs.pid != -1){ //this is temp publish
+			//kill(cs.pid,SIGKILL);
+				g_print("==> this temp stream exit");
 		}else{
+			GError* err=NULL;
+			gchar command_line[]={"rtmp_encoder -v quiet -re -stream_loop -1 -i /home/hebin/st_4K100M.mp4 -c:v copy -acodec copy -f flv rtmp://127.0.0.1:1935/hls/test"};
+			gboolean retval;
+			gchar **argvs = NULL;
+
+			//g_return_val_if_fail (command_line != NULL, FALSE);
+			if (!g_shell_parse_argv (command_line,NULL, &argvs,&err))
+				g_print("==> this temp stream exit");
+			retval = g_spawn_async (NULL,argvs,NULL,G_SPAWN_SEARCH_PATH,NULL,NULL,&cs.pid,&err);
+			if(!retval){ 
+				g_print("==> %s %s",err->message,g_strerror(errno));
+			}
+			g_strfreev (argvs);
+			g_print("===> child %d \n", cs.pid);
 		}
 	}
 	soup_message_set_status (msg, created ? SOUP_STATUS_CREATED : SOUP_STATUS_OK);
 }
-
 
 static void
 server_callback (SoupServer *server, SoupMessage *msg,
@@ -215,7 +243,6 @@ server_callback (SoupServer *server, SoupMessage *msg,
 	char *file_path;
 	SoupMessageHeadersIter iter;
 	const char *name, *value;
-	GAsyncQueue *queue = data;
 
 	g_print ("%s %s HTTP/1.%d\n", msg->method, path,
 		 soup_message_get_http_version (msg));
@@ -237,12 +264,7 @@ server_callback (SoupServer *server, SoupMessage *msg,
 		soup_message_set_status (msg, SOUP_STATUS_NOT_IMPLEMENTED);
 
 	g_free (file_path);
-        //g_idle_add ((GSourceFunc) func, GINT_TO_POINTER (0));
-	gchar* command;
-	command = g_strdup(msg->request_body->data);
-	g_print ("  -> %s\n\n", command);
-	g_async_queue_push(queue, (gpointer)command);
-	g_print ("response  -> %d %s\n\n", msg->status_code, msg->reason_phrase);
+	g_print ("  -> %d %s\n\n", msg->status_code, msg->reason_phrase);
 }
 
 static void
@@ -252,19 +274,48 @@ quit (int sig)
 	exit (0);
 }
 
-static GMainLoop *loop;
-static void* httpd_thread(void* data){
-	g_main_loop_run (loop);
-	return NULL;
-}
+static int port;
+static const char *tls_cert_file, *tls_key_file;
+
+static GOptionEntry entries[] = {
+	{ "cert-file", 'c', 0,
+	  G_OPTION_ARG_STRING, &tls_cert_file,
+	  "Use FILE as the TLS certificate file", "FILE" },
+	{ "key-file", 'k', 0,
+	  G_OPTION_ARG_STRING, &tls_key_file,
+	  "Use FILE as the TLS private key file", "FILE" },
+	{ "port", 'p', 0,
+	  G_OPTION_ARG_INT, &port,
+	  "Port to listen on", NULL },
+	{ NULL }
+};
+
 int
-create_http_server(int port , char* tls_cert_file, char* tls_key_file, gpointer data)
+main (int argc, char **argv)
 {
+	GOptionContext *opts;
+	GMainLoop *loop;
 	SoupServer *server;
 	GSList *uris, *u;
 	char *str;
 	GTlsCertificate *cert;
 	GError *error = NULL;
+
+	opts = g_option_context_new (NULL);
+	g_option_context_add_main_entries (opts, entries, NULL);
+	if (!g_option_context_parse (opts, &argc, &argv, &error)) {
+		g_printerr ("Could not parse arguments: %s\n",
+			    error->message);
+		g_printerr ("%s",
+			    g_option_context_get_help (opts, TRUE, NULL));
+		exit (1);
+	}
+	if (argc != 1) {
+		g_printerr ("%s",
+			    g_option_context_get_help (opts, TRUE, NULL));
+		exit (1);
+	}
+	g_option_context_free (opts);
 
 	signal (SIGINT, quit);
 
@@ -285,13 +336,9 @@ create_http_server(int port , char* tls_cert_file, char* tls_key_file, gpointer 
 					  NULL);
 		soup_server_listen_all (server, port, 0, &error);
 	}
-	if (error) {
-		g_printerr ("Unable to create server: %s\n", error->message);
-		exit (1);
-	}
 
 	soup_server_add_handler (server, NULL,
-				 server_callback, data, NULL);
+				 server_callback, NULL, NULL);
 
 	uris = soup_server_get_uris (server);
 	for (u = uris; u; u = u->next) {
@@ -303,9 +350,9 @@ create_http_server(int port , char* tls_cert_file, char* tls_key_file, gpointer 
 	g_slist_free (uris);
 
 	g_print ("\nWaiting for requests...\n");
+
 	loop = g_main_loop_new (NULL, TRUE);
-	pthread_t thread;
-	pthread_create (&thread, NULL, httpd_thread, NULL);
+	g_main_loop_run (loop);
 
 	return 0;
 }

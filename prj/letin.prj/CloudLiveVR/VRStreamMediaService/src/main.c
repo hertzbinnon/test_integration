@@ -13,7 +13,6 @@ int main (int argc, char *argv[])
     return -1;
   }
   vrsmsz_init(argc,argv);
-  //create_http_server(8888,NULL,NULL,(GSourceFunc)perform_step);
   vrsmsz_start();// playing
   vrsmsz_play();// loop
   vrsmsz_stop();// null

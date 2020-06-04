@@ -91,7 +91,7 @@ Project
 		voiceDectect
 			-url			https://github.com/alumae/kaldi-gstreamer-server.git
 		framework
-		    -url            https://developer.ridgerun.com/wiki/index.php?title=R2Inference
+		        -url            https://developer.ridgerun.com/wiki/index.php?title=R2Inference
 			-url            https://developer.ridgerun.com/wiki/index.php?title=GstInference
 
 	+webbench

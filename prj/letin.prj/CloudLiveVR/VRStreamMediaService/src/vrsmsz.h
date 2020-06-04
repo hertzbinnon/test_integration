@@ -14,6 +14,8 @@ typedef struct{
   gchar pre_sink_url[URL_LEN];
   guint dis; // 4k or 8K
   GstElement * uridecodebin; // 
+  GstElement * video_encoder;
+  GstElement * audio_encoder;
   GstElement * muxer; // 
   GstElement * outer; // 
 } vrstream_t;
@@ -27,7 +29,8 @@ typedef struct{
   GstElement * audio_encoder;
   GstElement * muxer;
   GstElement * comp;
-  gchar comp_sink_pad_name;
+  gchar comp_sink0_pad_name[16];
+  gchar comp_sink1_pad_name[16];
   GstElement * mixer;
   GstElement * tee;
   GstElement * outer; // 
@@ -43,7 +46,8 @@ typedef struct{
   GMainLoop *loop;
   GstClock *theclock;
   GstBus *bus;
-
+  
+  GAsyncQueue * queue;
 } vrsmsz_t;
 
 extern vrsmsz_t* vrsmsz;
@@ -54,7 +58,7 @@ void vrsmsz_stop();
 void vrsmsz_quit();
 void vrsmsz_deinit();
 
-void vrsmsz_add_stream();
+gboolean vrsmsz_add_stream();
 void vrsmsz_remove_stream();
 void vrsmsz_add_track();
 void vrsmsz_switch_stream();
