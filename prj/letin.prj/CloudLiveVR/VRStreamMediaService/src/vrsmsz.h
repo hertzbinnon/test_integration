@@ -15,9 +15,14 @@ typedef struct{
   guint dis; // 4k or 8K
   GstElement * uridecodebin; // 
   GstElement * vdec_tee;
+  GstElement * vdec_tee_queue;
+  GstElement * video_scale;
+  GstElement * video_capsfilter;
   GstElement * video_encoder;
+  GstElement * audio_convert;
   GstElement * audio_encoder;
   GstElement * aenc_tee;
+  GstElement * aenc_tee_queue;
   GstElement * muxer; // 
   GstElement * outer; // 
 } vrstream_t;
@@ -25,20 +30,32 @@ typedef struct{
 typedef struct{
   vrstream_t streams[MAX_CHANNEL]; // 0 is for null stream;
   //GstElement * videoconverter;
-  GstElement * video_filter; // 
+  GstElement * queue_video_filter; // 
+  GstElement * videoconvert; // 
+  GstElement * video_chain; // 
+  GstElement * tee_filter; // 
+
   GstElement * audio_filter; // 
+  GstElement * pre_queue_vdec_tee;
+  GstElement * pre_capfilter_vdec_tee;
   GstElement * pre_video_encoder;
+  GstElement * pre_muxer;
+  GstElement * pre_queue_aenc_tee;
+  GstElement * pre_outer; // 
+
+  GstElement * pub_queue_vdec_tee;
+  GstElement * pub_capfilter_vdec_tee;
   GstElement * pub_video_encoder;
+  GstElement * pub_muxer;
+  GstElement * pub_queue_aenc_tee;
+  GstElement * pub_outer; // 
   //GstElement * audio_encoder;
   GstElement * mixer; // audio mix
   GstElement * comp;  // video mix
+
   gchar comp_sink0_pad_name[16];
   gchar comp_sink1_pad_name[16];
-  GstElement * pre_muxer;
-  GstElement * pub_muxer;
   //GstElement * tee;
-  GstElement * pre_outer; // 
-  GstElement * pub_outer; // 
   guint v_director;
   guint a_director;
 
