@@ -35,19 +35,20 @@ typedef struct{
   GstElement * video_chain; // 
   GstElement * tee_filter; // 
 
-  GstElement * audio_filter; // 
-  GstElement * pre_queue_vdec_tee;
-  GstElement * pre_capfilter_vdec_tee;
+  //GstElement * audio_filter; // 
+  GstElement * pre_vdec_tee_queue;
+  GstElement * pre_video_scale;
+  GstElement * pre_capsfilter;
   GstElement * pre_video_encoder;
+  GstElement * pre_aenc_tee_queue;
   GstElement * pre_muxer;
-  GstElement * pre_queue_aenc_tee;
   GstElement * pre_outer; // 
 
-  GstElement * pub_queue_vdec_tee;
-  GstElement * pub_capfilter_vdec_tee;
+  GstElement * pub_vdec_tee_queue;
+  //GstElement * pub_capfilter;
   GstElement * pub_video_encoder;
+  GstElement * pub_aenc_tee_queue;
   GstElement * pub_muxer;
-  GstElement * pub_queue_aenc_tee;
   GstElement * pub_outer; // 
   //GstElement * audio_encoder;
   GstElement * mixer; // audio mix
@@ -80,10 +81,10 @@ void vrsmsz_stop();
 void vrsmsz_quit();
 void vrsmsz_deinit();
 
-gboolean vrsmsz_add_stream();
-void vrsmsz_remove_stream();
+gboolean vrsmsz_add_stream(gpointer data);
+gboolean vrsmsz_remove_stream(gpointer data);
+gboolean vrsmsz_switch_stream(gpointer data);
 void vrsmsz_add_track();
-void vrsmsz_switch_stream();
 void vrsmsz_switch_track();
 void vrsmsz_switch_stream_crossfade();
 void vrsmsz_add_text();
