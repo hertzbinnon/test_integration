@@ -1,1 +1,1 @@
-int create_http_server(int,char*,char*,GSourceFunc);
+int create_http_server(int,char*,char*,gpointer);
