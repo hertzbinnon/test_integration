@@ -1,309 +1,238 @@
-/* 
-*/
+#include <nanohttp/nanohttp-server.h>
+#include <nanohttp/nanohttp-logging.h>
 
-#include <errno.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-
-#include <libsoup/soup.h>
 #include <glib/gstdio.h>
-
-static int
-compare_strings (gconstpointer a, gconstpointer b)
+#include <errno.h>
+/*
+	Please ignore this file. This is just for me to test 
+	some features and new functions. In the future this
+	file will also be good start to learn nanohttp
+*/
+/*
+static 
+void _print_binary_ascii(int n)
 {
-	const char **sa = (const char **)a;
-	const char **sb = (const char **)b;
+  int i,c=0;
+  char ascii[36];
 
-	return strcmp (*sa, *sb);
+  for (i=0;i<32;i++) {
+    ascii[34-i-c] = (n & (1<<i))?'1':'0';
+    if ((i+1)%8 == 0) {
+        c++;
+        ascii[i+c] = ' ';
+    }
+  }
+
+  ascii[35]='\0';
+
+  log_verbose2("%s", ascii);
 }
 
-static GString *
-get_directory_listing (const char *path)
+
+static 
+void _print_binary_ascii2(unsigned char n)
 {
-	GPtrArray *entries;
-	GString *listing;
-	char *escaped;
-	GDir *dir;
-	const gchar *d_name;
-	int i;
+  int i,c=0;
+  char ascii[9];
 
-	entries = g_ptr_array_new ();
-	dir = g_dir_open (path, 0, NULL);
-	if (dir) {
-		while ((d_name = g_dir_read_name (dir))) {
-			if (!strcmp (d_name, ".") ||
-			    (!strcmp (d_name, "..") &&
-			     !strcmp (path, "./")))
-				continue;
-			escaped = g_markup_escape_text (d_name, -1);
-			g_ptr_array_add (entries, escaped);
-		}
-		g_dir_close (dir);
-	}
+  for (i=0;i<8;i++) {
+    ascii[7-i] = (n & (1<<i))?'1':'0';
+  }
 
-	g_ptr_array_sort (entries, (GCompareFunc)compare_strings);
+  ascii[8]='\0';
 
-	listing = g_string_new ("<html>\r\n");
-	escaped = g_markup_escape_text (strchr (path, '/'), -1);
-	g_string_append_printf (listing, "<head><title>Index of %s</title></head>\r\n", escaped);
-	g_string_append_printf (listing, "<body><h1>Index of %s</h1>\r\n<p>\r\n", escaped);
-	g_free (escaped);
-	for (i = 0; i < entries->len; i++) {
-		g_string_append_printf (listing, "<a href=\"%s\">%s</a><br>\r\n",
-					(char *)entries->pdata[i], 
-					(char *)entries->pdata[i]);
-		g_free (entries->pdata[i]);
-	}
-	g_string_append (listing, "</body>\r\n</html>\r\n");
-
-	g_ptr_array_free (entries, TRUE);
-	return listing;
+  log_verbose2("%s", ascii);
 }
 
-static void
-do_get (SoupServer *server, SoupMessage *msg, const char *path)
-{
-	char *slash;
-	GStatBuf st;
 
-	if (g_stat (path, &st) == -1) {
-		if (errno == EPERM)
-			soup_message_set_status (msg, SOUP_STATUS_FORBIDDEN);
-		else if (errno == ENOENT)
-			soup_message_set_status (msg, SOUP_STATUS_NOT_FOUND);
-		else
-			soup_message_set_status (msg, SOUP_STATUS_INTERNAL_SERVER_ERROR);
+void echomime_service(httpd_conn_t *conn, hrequest_t *req)
+{
+  part_t    *part;
+  int status;
+  char   *content_type , *transfer_encoding, 
+         *content_id,  *root_content_type;
+
+	if (!req->attachments || !req->content_type) 
+	{
+		httpd_send_header(conn, 200, "OK");
+		http_output_stream_write_string(conn->out, "<html><body><h1>");
+		http_output_stream_write_string(conn->out, 
+		  "You do not posted a MIME message!<hr></h1></body></html>");
 		return;
 	}
-
-	if (g_file_test (path, G_FILE_TEST_IS_DIR)) {
-		GString *listing;
-		char *index_path;
-
-		slash = strrchr (path, '/');
-		if (!slash || slash[1]) {
-			char *redir_uri;
-
-			redir_uri = g_strdup_printf ("%s/", soup_message_get_uri (msg)->path);
-			soup_message_set_redirect (msg, SOUP_STATUS_MOVED_PERMANENTLY,
-						   redir_uri);
-			g_free (redir_uri);
-			return;
-		}
-
-		index_path = g_strdup_printf ("%s/index.html", path);
-		if (g_stat (path, &st) != -1) {
-			do_get (server, msg, index_path);
-			g_free (index_path);
-			return;
-		}
-		g_free (index_path);
-
-		listing = get_directory_listing (path);
-		soup_message_set_response (msg, "text/html",
-					   SOUP_MEMORY_TAKE,
-					   listing->str, listing->len);
-		soup_message_set_status (msg, SOUP_STATUS_OK);
-		g_string_free (listing, FALSE);
-		return;
-	}
-
-	if (msg->method == SOUP_METHOD_GET) {
-		GMappedFile *mapping;
-		SoupBuffer *buffer;
-
-		mapping = g_mapped_file_new (path, FALSE, NULL);
-		if (!mapping) {
-			soup_message_set_status (msg, SOUP_STATUS_INTERNAL_SERVER_ERROR);
-			return;
-		}
-
-		buffer = soup_buffer_new_with_owner (g_mapped_file_get_contents (mapping),
-						     g_mapped_file_get_length (mapping),
-						     mapping, (GDestroyNotify)g_mapped_file_unref);
-		soup_message_body_append_buffer (msg->response_body, buffer);
-		soup_buffer_free (buffer);
-	} else /* msg->method == SOUP_METHOD_HEAD */ {
-		char *length;
-
-		/* We could just use the same code for both GET and
-		 * HEAD (soup-message-server-io.c will fix things up).
-		 * But we'll optimize and avoid the extra I/O.
-		 */
-		length = g_strdup_printf ("%lu", (gulong)st.st_size);
-		soup_message_headers_append (msg->response_headers,
-					     "Content-Length", length);
-		g_free (length);
-	}
-
-	soup_message_set_status (msg, SOUP_STATUS_OK);
-}
-
-static void
-do_put (SoupServer *server, SoupMessage *msg, const char *path)
-{
-	GStatBuf st;
-	FILE *f;
-	gboolean created = TRUE;
-
-	if (g_stat (path, &st) != -1) {
-		const char *match = soup_message_headers_get_one (msg->request_headers, "If-None-Match");
-		if (match && !strcmp (match, "*")) {
-			soup_message_set_status (msg, SOUP_STATUS_CONFLICT);
-			return;
-		}
-
-		if (!g_file_test (path, G_FILE_TEST_IS_REGULAR)) {
-			soup_message_set_status (msg, SOUP_STATUS_FORBIDDEN);
-			return;
-		}
-
-		created = FALSE;
-	}
-
-	f = fopen (path, "w");
-	if (!f) {
-		soup_message_set_status (msg, SOUP_STATUS_INTERNAL_SERVER_ERROR);
-		return;
-	}
-
-	fwrite (msg->request_body->data, 1, msg->request_body->length, f);
-	fclose (f);
-
-	soup_message_set_status (msg, created ? SOUP_STATUS_CREATED : SOUP_STATUS_OK);
-}
-
-static void
-do_post (SoupServer *server, SoupMessage *msg, const char *path)
-{
-	gboolean created = FALSE;
-	//gchar* p=msg->request_body->data,q=NULL;
-	//int len=0;
-	gchar addr[32]={0};
-
-	//p=strstr(p,"addr=");
-	//q = p = p+strlen("addr=");
-	//q = strstr(q,"&");
-	//len = q - p;
-	//memcpy(addr,p,len);
-	//g_print("==> path %s\n==> addr = %s",path,addr);
-
-	if(!strcmp(path,"/start")){
-		if(strcmp(addr,"127.0.0.1")){ //this is real publish
-		}else{
-				g_print("==> this temp stream");
-		}
-
-	}else if (!strcmp(path,"/stop")){
-		if(1){ //this is temp publish
-		}else{
-		}
-	}
-	soup_message_set_status (msg, created ? SOUP_STATUS_CREATED : SOUP_STATUS_OK);
-}
-
-
-static void
-server_callback (SoupServer *server, SoupMessage *msg,
-		 const char *path, GHashTable *query,
-		 SoupClientContext *context, gpointer data)
-{
-	char *file_path;
-	SoupMessageHeadersIter iter;
-	const char *name, *value;
-	GAsyncQueue *queue = data;
-
-	g_print ("%s %s HTTP/1.%d\n", msg->method, path,
-		 soup_message_get_http_version (msg));
-	soup_message_headers_iter_init (&iter, msg->request_headers);
-	while (soup_message_headers_iter_next (&iter, &name, &value))
-		g_print ("%s: %s\n", name, value);
-	if (msg->request_body->length)
-		g_print ("%s\n", msg->request_body->data);
-
-	file_path = g_strdup_printf (".%s", path);
-
-	if (msg->method == SOUP_METHOD_GET || msg->method == SOUP_METHOD_HEAD)
-		do_get (server, msg, file_path);
-	else if (msg->method == SOUP_METHOD_PUT)
-		do_put (server, msg, file_path);
-	else if (msg->method == SOUP_METHOD_POST)
-		do_post (server, msg, path);
 	else
-		soup_message_set_status (msg, SOUP_STATUS_NOT_IMPLEMENTED);
+	{
 
-	g_free (file_path);
-        //g_idle_add ((GSourceFunc) func, GINT_TO_POINTER (0));
-	gchar* command;
-	command = g_strdup(msg->request_body->data);
-	g_print ("  -> %s\n\n", command);
-	g_async_queue_push(queue, (gpointer)command);
-	g_print ("response  -> %d %s\n\n", msg->status_code, msg->reason_phrase);
+	  root_content_type = hpairnode_get(req->content_type->params, "type");
+
+	  status = 
+	     httpd_mime_send_header(conn, req->attachments->root_part->id, "",
+	      root_content_type, 200, "OK");
+
+	  if (status != H_OK)
+	   return;
+
+	  part = req->attachments->parts;
+	  while (part)
+	  {
+	     content_id = hpairnode_get(part->header, HEADER_CONTENT_ID);
+	     content_type = hpairnode_get(part->header, HEADER_CONTENT_TYPE);
+	     transfer_encoding = hpairnode_get(part->header, HEADER_TRANSFER_ENCODING);
+	     status = httpd_mime_send_file(conn, content_id, 
+	           content_type, transfer_encoding, part->filename);
+	     if (status != H_OK)
+	       return;
+	     part = part->next;
+	  }	  
+
+	  httpd_mime_end(conn);
+	}
+		
 }
-
-static void
-quit (int sig)
+*/
+static GAsyncQueue *queue = NULL;
+/*
+SERVICE: http://host:port/postserver
+*/
+void post_service(httpd_conn_t *conn, hrequest_t *req)
 {
-	/* Exit cleanly on ^C in case we're valgrinding. */
-	exit (0);
-}
+	unsigned char *postdata;
+	long received, total=0;
+	//unsigned int tmp;
+	char buffer[15];
+	hpair_t *pair;
 
-static GMainLoop *loop;
-static void* httpd_thread(void* data){
-	g_main_loop_run (loop);
-	return NULL;
-}
-int
-create_http_server(int port , char* tls_cert_file, char* tls_key_file, gpointer data)
-{
-	SoupServer *server;
-	GSList *uris, *u;
-	char *str;
-	GTlsCertificate *cert;
-	GError *error = NULL;
+	if (req->method == HTTP_REQUEST_POST) {
+		char *content_length_str;
+                long content_length = 0;
+                unsigned char *postdata = NULL;
+                content_length_str =
+                   hpairnode_get_ignore_case(req->header, HEADER_CONTENT_LENGTH);
 
-	signal (SIGINT, quit);
+         if (content_length_str != NULL)
+               content_length = atol(content_length_str);
+         if (content_length == 0){
+       		printf("content is null");
+       		if (!(postdata = (char *) malloc(1))){
+          		log_error2("malloc failed (%s)", strerror(errno));
+        	}
+        	postdata[0] = '\0';
+    	}else{
+      		if (!(postdata = (unsigned char *) malloc(content_length + 1))){
+        	   log_error2("malloc failed (%)", strerror(errno));
+        	}
+      		if (http_input_stream_read(req->in, postdata, (int) content_length) > 0){
+        	   postdata[content_length] = '\0';
+      		}
+    	}
+        printf("post data --> %s\n",postdata);
 
-	if (tls_cert_file && tls_key_file) {
-		cert = g_tls_certificate_new_from_files (tls_cert_file, tls_key_file, &error);
-		if (error) {
-			g_printerr ("Unable to create server: %s\n", error->message);
-			exit (1);
+		httpd_send_header(conn, 200, "OK");
+		http_output_stream_write_string(conn->out, "<html><body>\n");
+		http_output_stream_write_string(conn->out, "<h3>You Posted:</h3><hr>\n");
+		while (http_input_stream_is_ready(req->in))
+		{
+			received = http_input_stream_read(req->in, buffer, 10);
+			http_output_stream_write(conn->out, buffer, received);
+			total += received;
 		}
-		server = soup_server_new (SOUP_SERVER_SERVER_HEADER, "simple-httpd ",
-					  SOUP_SERVER_TLS_CERTIFICATE, cert,
-					  NULL);
-		g_object_unref (cert);
+		http_output_stream_write_string(conn->out, "<h3>Received size</h3><hr>\n");
+		sprintf(buffer, "%d", total);
+		http_output_stream_write_string(conn->out, buffer);
 
-		soup_server_listen_all (server, port, SOUP_SERVER_LISTEN_HTTPS, &error);
+	        //gchar* command;
+	        //command = g_strdup(postdata);
+	        g_print ("command  -> %s\n\n", postdata);
+	        g_async_queue_push(queue, (gpointer)postdata);
+
+		//_print_binary_ascii2(postdata[0]);
+		//_print_binary_ascii2(postdata[1]);
+		//_print_binary_ascii2(postdata[2]);
+		//_print_binary_ascii2(postdata[3]);
+	/*	free(postdata);*/
+
 	} else {
-		server = soup_server_new (SOUP_SERVER_SERVER_HEADER, "simple-httpd ",
-					  NULL);
-		soup_server_listen_all (server, port, 0, &error);
-	}
-	if (error) {
-		g_printerr ("Unable to create server: %s\n", error->message);
-		exit (1);
+
+		httpd_send_header(conn, 200, "OK");
+		http_output_stream_write_string(conn->out, "<html><body>");
+		http_output_stream_write_string(conn->out, "<form action=\"/postserver\" method=\"POST\">");
+		http_output_stream_write_string(conn->out, "Enter Postdata: <input name=\"field\" type=\"text\">");
+		http_output_stream_write_string(conn->out, "<input type=\"submit\">");
+		
 	}
 
-	soup_server_add_handler (server, NULL,
-				 server_callback, data, NULL);
+	http_output_stream_write_string(conn->out, "<hr><p><small>Content-Type:");
+	if (req->content_type)
+	{
+  	http_output_stream_write_string(conn->out, req->content_type->type);
+		http_output_stream_write_string(conn->out, "<br>");
+		pair = req->content_type->params;
+		while (pair)
+		{
+  		http_output_stream_write_string(conn->out, pair->key);
+  		http_output_stream_write_string(conn->out, "=");
+  		http_output_stream_write_string(conn->out, pair->value);
+  		http_output_stream_write_string(conn->out, "<br>");
+		  pair = pair->next;
+		}
+  }
+  else
+  {
+		http_output_stream_write_string(conn->out, "Not available");
+  }
 
-	uris = soup_server_get_uris (server);
-	for (u = uris; u; u = u->next) {
-		str = soup_uri_to_string (u->data, FALSE);
-		g_print ("Listening on %s\n", str);
-		g_free (str);
-		soup_uri_free (u->data);
+	http_output_stream_write_string(conn->out, "</body></html>");
+
+	
+}
+// -NHTTPport 8888
+
+int httpd_thread(void* data)
+{
+        queue = data;
+
+	if (!httpd_register("/postserver", post_service)) {
+		fprintf(stderr, "Can not register service");
+		return 1;
 	}
-	g_slist_free (uris);
 
-	g_print ("\nWaiting for requests...\n");
-	loop = g_main_loop_new (NULL, TRUE);
+	//if (!httpd_register("/axis/services/urn:EchoAttachmentsService", echomime_service)) {
+	//	fprintf(stderr, "Can not register service");
+	//	return 1;
+	//}
+
+	if (httpd_run()) {
+		fprintf(stderr, "can not run httpd");
+		return 1;
+	}
+
+	httpd_destroy();
+
+#ifdef MEM_DEBUG
+  _mem_report();
+#endif
+
+	return 0;
+}
+
+
+int create_http_server(int port , char* tls_cert_file, char* tls_key_file, gpointer data){
+	int argc = 2;
+	char* argv[2];
+	char p[10];
+
+	sprintf(p,"%d",port);
+	argv[0] = g_strdup("-NHTTPport");
+	argv[1] = g_strdup(p);
+	//hlog_set_level(HLOG_VERBOSE);
+	if (httpd_init(argc, argv)) {
+		fprintf(stderr, "can not init httpd");
+		return 1;
+	}
+	g_free(argv[0]);
+	g_free(argv[1]);
 	pthread_t thread;
-	pthread_create (&thread, NULL, httpd_thread, NULL);
-
+	pthread_create (&thread, NULL, httpd_thread, data);
 	return 0;
 }

@@ -96,7 +96,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    }
    gchar* uri = data;
    g_print("start pull stream uri= %s\n",uri);
-   vrstream_t* vs = &(vrsmsz->streams[vrsmsz->stream_nbs]);
+   vrstream_t* vs = vrsmsz->streams+vrsmsz->stream_nbs;
    vs->video_id = vrsmsz->stream_nbs;
    vs->audio_id = vrsmsz->stream_nbs;
    sprintf(vs->src_url,"%s",uri);
@@ -109,6 +109,7 @@ gboolean vrsmsz_add_stream(gpointer data){
      g_object_set (vs->uridecodebin, "uri", uri, "expose-all-streams", TRUE, NULL);
      g_signal_connect (vs->uridecodebin, "pad-added", (GCallback) _pad_added_cb, vs);
    }
+   printf("debug 1\n");
    if(!vs->vdec_tee){
      sprintf(name,"vs%d-vdec_tee",vs->video_id);
     vs->vdec_tee = gst_element_factory_make("tee",name);
@@ -225,7 +226,15 @@ gboolean vrsmsz_add_stream(gpointer data){
 gboolean vrsmsz_remove_stream(gpointer data){
    gint streamid = atoi((gchar*)data);
 
+   if(!vrsmsz->stream_nbs) {
+      g_print("no streams found\n");
+      return FALSE;
+   }
+   g_print("remove stream = %s\n",vrsmsz->streams[streamid].src_url);
+   //vrsmsz_paused();
    vrstream_t* vs = vrsmsz->streams+streamid;
+   /*
+    * deadlock ????
    gst_element_set_state(vs->uridecodebin,GST_STATE_NULL);
    gst_element_set_state(vs->vdec_tee,GST_STATE_NULL);
    gst_element_set_state(vs->vdec_tee_queue, GST_STATE_NULL);
@@ -237,7 +246,10 @@ gboolean vrsmsz_remove_stream(gpointer data){
    gst_element_set_state(vs->aenc_tee,GST_STATE_NULL);
    gst_element_set_state(vs->aenc_tee_queue,GST_STATE_NULL);
    gst_element_set_state(vs->muxer,GST_STATE_NULL);
-   gst_element_set_state(vs->outer,GST_STATE_NULL);
+   *
+   */
+   g_print("close rtmp\n");
+   gst_element_set_state(vs->outer,GST_STATE_NULL); // sink will not deadlock
    gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->uridecodebin,vs->vdec_tee,vs->vdec_tee_queue,vs->video_scale,vs->video_capsfilter, vs->video_encoder,vs->audio_convert,vs->audio_encoder,vs->aenc_tee,vs->aenc_tee_queue,vs->muxer,vs->outer,NULL);
    vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
    vrsmsz->stream_nbs--;
@@ -246,6 +258,8 @@ gboolean vrsmsz_remove_stream(gpointer data){
    memset(vs->src_url,0,sizeof(vs->src_url));
    vs->dis = -1;
    g_print("remove stream = %s\n",vrsmsz->streams[streamid].src_url);
+   g_free(data);
+   vrsmsz_start();
    return FALSE;
 }
 
@@ -580,6 +594,10 @@ void vrsmsz_start(){
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
 }
 
+void vrsmsz_paused(){
+  gst_element_set_state (vrsmsz->pipeline, GST_STATE_PAUSED);
+}
+
 void vrsmsz_deinit(){
 
 }
@@ -635,11 +653,14 @@ static void vrsmsz_run_command(gchar* command){
 }
 
 static gboolean get_command(){
-   gpointer ret;
-   ret = g_async_queue_try_pop(vrsmsz->queue);
-   if(!ret) return TRUE;
-   vrsmsz_run_command(ret);
-   g_free(ret);
+   gpointer command;
+#if 0
+   ret = g_strdup("pull rtmp://192.168.0.134/live/ch1");
+#else
+   command = g_async_queue_try_pop(vrsmsz->queue);
+#endif
+   if(!command) return TRUE;
+   vrsmsz_run_command(command);
    return TRUE;
 }
 
@@ -649,16 +670,18 @@ void vrsmsz_init(int argc, char **argv){
   if( !vrsmsz ){
     g_error("vrsmsz init failed\n");
   }
+#if 1
   vrsmsz->queue = g_async_queue_new ();
   create_http_server(8888,NULL,NULL,vrsmsz->queue);
   //g_idle_add(get_command,NULL);
-  g_timeout_add(10, get_command,NULL);
+#endif
   
   gst_init (&argc, &argv);
   vrsmsz->loop = g_main_loop_new (NULL, TRUE);
   vrsmsz->pipeline = gst_pipeline_new ("pipeline");
   if(!vrsmsz->loop || !vrsmsz->pipeline )
     g_error("vrsmsz init failed\n");
+  //return ;
 
   sprintf(vrsmsz->director_stream_preview_url,"rtmp://%s:%s/live/preview",argv[1],argv[2]);
   memset(vrsmsz->director_stream_publish_url,0,URL_LEN);
@@ -733,5 +756,6 @@ void vrsmsz_init(int argc, char **argv){
 
   vrsmsz->theclock = gst_element_get_clock (vrsmsz->pipeline);
   vrsmsz->bus = gst_pipeline_get_bus (GST_PIPELINE (vrsmsz->pipeline));
+  g_timeout_add(10, get_command,NULL);
   //vrsmsz_null_channel();
 }
