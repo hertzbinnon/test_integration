@@ -91,14 +91,24 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
 */
 gboolean vrsmsz_add_stream(gpointer data){
    if(vrsmsz->stream_nbs > 16) {
-     g_print("what is run\n");
+     g_print("sorry streams is full\n");
      return FALSE;
    }
+   /**********************dispatch stream id ***********************/
    gchar* uri = data;
    g_print("start pull stream uri= %s\n",uri);
-   vrstream_t* vs = vrsmsz->streams+vrsmsz->stream_nbs;
-   vs->video_id = vrsmsz->stream_nbs;
-   vs->audio_id = vrsmsz->stream_nbs;
+   vrstream_t* vs = NULL;
+   for(int i=0; i<MAX_CHANNEL; i++){
+       if(vrsmsz->streams_id[i] == -1){
+          vrsmsz->streams_id[i] = i;
+          vs = vrsmsz->streams + vrsmsz->streams_id[i];
+          vs->stream_id = vrsmsz->streams_id[i];
+	  break;
+	}
+   }
+   if(!vs) return FALSE;
+   vs->video_id = vs->stream_id;
+   vs->audio_id = vs->stream_id;
    sprintf(vs->src_url,"%s",uri);
    vs->dis = 1998;
    gchar name[1024];
@@ -109,7 +119,7 @@ gboolean vrsmsz_add_stream(gpointer data){
      g_object_set (vs->uridecodebin, "uri", uri, "expose-all-streams", TRUE, NULL);
      g_signal_connect (vs->uridecodebin, "pad-added", (GCallback) _pad_added_cb, vs);
    }
-   printf("debug 1\n");
+
    if(!vs->vdec_tee){
      sprintf(name,"vs%d-vdec_tee",vs->video_id);
     vs->vdec_tee = gst_element_factory_make("tee",name);
@@ -218,21 +228,46 @@ gboolean vrsmsz_add_stream(gpointer data){
    (vrsmsz->stream_nbs)++;
    vrsmsz_start();
    g_free(uri);
+   /**** put stream_id to queue ***/
+   g_print("Stream_id is %d", vs->stream_id);
+   //g_print("++++++++++++++ old base time %lu\n\n",gst_element_get_base_time (vs->uridecodebin));
+   GstClockTime now ,base_time,running_time;
+   now = gst_clock_get_time (vrsmsz->theclock);
+   base_time = gst_element_get_base_time (vs->uridecodebin);
+   running_time = now - base_time;
+   g_print("++++++++++++++ running_time  %"GST_TIME_FORMAT", base_time = %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(running_time / GST_MSECOND) ,GST_TIME_ARGS(base_time / GST_MSECOND));
+
+#if 1
+    now = gst_clock_get_time (vrsmsz->theclock);
+    base_time = now - running_time;
+
+    gst_element_set_base_time (vs->uridecodebin, base_time);
+   g_print("++++++++++++++ running_time  %"GST_TIME_FORMAT", base_time = %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(running_time / GST_MSECOND),GST_TIME_ARGS(base_time / GST_MSECOND));
+#endif
 
    //g_print("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
    return FALSE;
 }
+
 /*******************************************************************************/
 gboolean vrsmsz_remove_stream(gpointer data){
    gint streamid = atoi((gchar*)data);
+   vrstream_t* vs = NULL;
 
    if(!vrsmsz->stream_nbs) {
       g_print("no streams found\n");
       return FALSE;
    }
    g_print("remove stream = %s\n",vrsmsz->streams[streamid].src_url);
-   //vrsmsz_paused();
-   vrstream_t* vs = vrsmsz->streams+streamid;
+   for(int i=0; i<MAX_CHANNEL; i++){
+       if(vrsmsz->streams_id[i] == streamid){
+          vs = vrsmsz->streams + vrsmsz->streams_id[i];
+          vs->stream_id = -1;
+          vrsmsz->streams_id[i] = -1;
+	  break;
+	}
+   }
+   if(!vs) return FALSE;
    /*
     * deadlock ????
    gst_element_set_state(vs->uridecodebin,GST_STATE_NULL);
@@ -276,6 +311,16 @@ gboolean vrsmsz_switch_stream(gpointer data){
   }
   if(streamid == vrsmsz->v_director){
     g_print("switch in same stream\n");
+    return FALSE;
+  }
+  int i ;
+  for(i=0; i<MAX_CHANNEL; i++){
+    if(streamid == vrsmsz->streams_id[i]){
+       break;
+    }
+  }
+  if(i == MAX_CHANNEL){
+    g_print("streamid is error");
     return FALSE;
   }
   if(!vrsmsz->director_stream_publish_url[0]){
@@ -351,9 +396,6 @@ gboolean vrsmsz_switch_stream(gpointer data){
     }
     g_object_set (vrsmsz->pre_outer, "location", vrsmsz->director_stream_preview_url, NULL);
   }
-
-  
-
 
   if(!vrsmsz->pub_vdec_tee_queue){
      sprintf(name,"%s-pub_vdec_tee_queue","vrsmsz");
@@ -648,6 +690,8 @@ static void vrsmsz_run_command(gchar* command){
     g_idle_add(vrsmsz_remove_stream,arg2);
   }else if(!memcmp(argv[0],"switch",6)){
     g_idle_add(vrsmsz_switch_stream,arg2);
+  }else if(!memcmp(argv[0],"quit",4)){
+	  exit(atoi(argv[1]));
   }
   g_free(command);
 }
@@ -704,9 +748,6 @@ void vrsmsz_init(int argc, char **argv){
   vrsmsz->pub_outer= NULL;
   vrsmsz->mixer= NULL;
   vrsmsz->comp= NULL;
-  for(int i=0; i<MAX_CHANNEL; i++){
-    memset(vrsmsz->streams+i, 0, sizeof(vrsmsz->streams[i]));
-  }
 #if 0
   vrsmsz->videoconverter = gst_element_factory_make ("videoconvert", NULL);
   vrsmsz->comp = gst_element_factory_make ("compositor", NULL);
@@ -725,6 +766,8 @@ void vrsmsz_init(int argc, char **argv){
   enable_factory("nvh264dec",TRUE);
   
   for( int i=0; i<MAX_CHANNEL; i++){ 
+    memset(vrsmsz->streams + i, 0, sizeof(vrsmsz->streams[i]));
+    vrsmsz->streams_id[i] = -1;
 #if 0
     vrsmsz->streams[i].video_id = i;
     vrsmsz->streams[i].audio_id = i;
@@ -754,8 +797,11 @@ void vrsmsz_init(int argc, char **argv){
   memset(vrsmsz->comp_sink0_pad_name,0,16);
   memset(vrsmsz->comp_sink1_pad_name,0,16);
 
-  vrsmsz->theclock = gst_element_get_clock (vrsmsz->pipeline);
   vrsmsz->bus = gst_pipeline_get_bus (GST_PIPELINE (vrsmsz->pipeline));
+
+  vrsmsz_start();// playing
+  vrsmsz->theclock = gst_element_get_clock (vrsmsz->pipeline);
+  if(!vrsmsz->theclock) g_print("the clock false\n");
   g_timeout_add(10, get_command,NULL);
   //vrsmsz_null_channel();
 }

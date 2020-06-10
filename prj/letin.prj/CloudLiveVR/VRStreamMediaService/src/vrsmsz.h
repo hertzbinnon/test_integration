@@ -11,6 +11,7 @@ typedef struct{
   //GstElement * audio_dec; // 0 for null channel with audiotestsrc
   guint video_id;
   guint audio_id;
+  guint stream_id;
   gchar src_url[URL_LEN];
   gchar pre_sink_url[URL_LEN];
   guint dis; // 4k or 8K
@@ -34,6 +35,7 @@ typedef struct{
 
 typedef struct{
   vrstream_t streams[MAX_CHANNEL]; // 0 is for null stream;
+  guint streams_id[MAX_CHANNEL];
   //GstElement * videoconverter;
   GstElement * queue_video_filter; // 
   GstElement * videoconvert; // 
