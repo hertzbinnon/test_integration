@@ -1,6 +1,56 @@
 #include <stdio.h>
 #include "vrsmsz.h"
 
+static gboolean
+message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
+{
+  switch (GST_MESSAGE_TYPE (message)) {
+    case GST_MESSAGE_ERROR:{
+      GError *err = NULL;
+      gchar *name, *debug = NULL;
+
+      name = gst_object_get_path_string (message->src);
+      gst_message_parse_error (message, &err, &debug);
+
+      g_printerr ("ERROR: from element %s: %s\n", name, err->message);
+      if (debug != NULL)
+        g_printerr ("Additional debug info:\n%s\n", debug);
+
+      g_error_free (err);
+      g_free (debug);
+      g_free (name);
+
+      //g_main_loop_quit (loop);
+      break;
+    }
+    case GST_MESSAGE_WARNING:{
+      GError *err = NULL;
+      gchar *name, *debug = NULL;
+
+      name = gst_object_get_path_string (message->src);
+      gst_message_parse_warning (message, &err, &debug);
+
+      g_printerr ("ERROR: from element %s: %s\n", name, err->message);
+      if (debug != NULL)
+        g_printerr ("Additional debug info:\n%s\n", debug);
+
+      g_error_free (err);
+      g_free (debug);
+      g_free (name);
+      break;
+    }
+    case GST_MESSAGE_EOS:
+      g_print ("Got EOS\n");
+      //g_main_loop_quit (loop);
+      break;
+    default:
+      g_print("what is %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
+      break;
+  }
+
+  return TRUE;
+}
+
 vrsmsz_t* vrsmsz;
 static void enable_factory (const gchar *name, gboolean enable) {
     GstRegistry *registry = NULL;
@@ -229,20 +279,20 @@ gboolean vrsmsz_add_stream(gpointer data){
    vrsmsz_start();
    g_free(uri);
    /**** put stream_id to queue ***/
-   g_print("Stream_id is %d", vs->stream_id);
+   g_print("Stream_id is %d\n", vs->stream_id);
    //g_print("++++++++++++++ old base time %lu\n\n",gst_element_get_base_time (vs->uridecodebin));
-   GstClockTime now ,base_time,running_time;
-   now = gst_clock_get_time (vrsmsz->theclock);
-   base_time = gst_element_get_base_time (vs->uridecodebin);
-   running_time = now - base_time;
-   g_print("++++++++++++++ running_time  %"GST_TIME_FORMAT", base_time = %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(running_time / GST_MSECOND) ,GST_TIME_ARGS(base_time / GST_MSECOND));
+   //base_time = gst_element_get_base_time (vs->uridecodebin);
+   //running_time = now - base_time;
+   //g_print("++++++++++++++ running_time  %"GST_TIME_FORMAT", base_time = %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(running_time / GST_MSECOND) ,GST_TIME_ARGS(base_time / GST_MSECOND));
 
 #if 1
-    now = gst_clock_get_time (vrsmsz->theclock);
-    base_time = now - running_time;
+   GstClockTime now ;//,base_time,running_time;
+   now = gst_clock_get_time (vrsmsz->theclock);
+    //now = gst_clock_get_time (vrsmsz->theclock);
+    //base_time = now - running_time;
 
-    gst_element_set_base_time (vs->uridecodebin, base_time);
-   g_print("++++++++++++++ running_time  %"GST_TIME_FORMAT", base_time = %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(running_time / GST_MSECOND),GST_TIME_ARGS(base_time / GST_MSECOND));
+    gst_element_set_base_time (vs->uridecodebin, now);
+   g_print("\n++++++++++++++ base time %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(now / GST_MSECOND));
 #endif
 
    //g_print("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
@@ -691,7 +741,10 @@ static void vrsmsz_run_command(gchar* command){
   }else if(!memcmp(argv[0],"switch",6)){
     g_idle_add(vrsmsz_switch_stream,arg2);
   }else if(!memcmp(argv[0],"quit",4)){
-	  exit(atoi(argv[1]));
+    exit(atoi(argv[1]));
+  }else if(!memcmp(argv[0],"recover",7)){
+    gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
+    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
   }
   g_free(command);
 }
@@ -798,6 +851,8 @@ void vrsmsz_init(int argc, char **argv){
   memset(vrsmsz->comp_sink1_pad_name,0,16);
 
   vrsmsz->bus = gst_pipeline_get_bus (GST_PIPELINE (vrsmsz->pipeline));
+  gst_bus_add_signal_watch (vrsmsz->bus);
+  g_signal_connect (G_OBJECT (vrsmsz->bus), "message", G_CALLBACK (message_cb), NULL);
 
   vrsmsz_start();// playing
   vrsmsz->theclock = gst_element_get_clock (vrsmsz->pipeline);
