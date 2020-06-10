@@ -743,7 +743,8 @@ static void vrsmsz_run_command(gchar* command){
   }else if(!memcmp(argv[0],"quit",4)){
     exit(atoi(argv[1]));
   }else if(!memcmp(argv[0],"recover",7)){
-    gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
+    //gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
+    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PAUSED);
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
   }
   g_free(command);
