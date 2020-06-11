@@ -336,7 +336,10 @@ gboolean vrsmsz_remove_stream(gpointer data){
    */
    g_print("close rtmp\n");
    gst_element_set_state(vs->outer,GST_STATE_NULL); // sink will not deadlock
+   gst_element_set_state(vs->uridecodebin,GST_STATE_NULL); // src will deadlock
+   g_print("close rtmp\n");
    gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->uridecodebin,vs->vdec_tee,vs->vdec_tee_queue,vs->video_scale,vs->video_capsfilter, vs->video_encoder,vs->audio_convert,vs->audio_encoder,vs->aenc_tee,vs->aenc_tee_queue,vs->muxer,vs->outer,NULL);
+   g_print("close vs\n");
    vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
    vrsmsz->stream_nbs--;
    vs->video_id = -1;
@@ -349,12 +352,6 @@ gboolean vrsmsz_remove_stream(gpointer data){
    return FALSE;
 }
 
-/*****************************************************************************************************/
-/*****************************************************************************************************/
-/*****************************************************************************************************/
-/*****************************************************************************************************/
-/*****************************************************************************************************/
-/*****************************************************************************************************/
 /*****************************************************************************************************/
 gboolean vrsmsz_switch_stream(gpointer data){
   gint streamid = atoi((gchar*)data);
@@ -532,32 +529,39 @@ gboolean vrsmsz_switch_stream(gpointer data){
     } else {
        g_print ("unLink succeeded %d.\n",vr->video_id);
     }
-    //gst_object_unref(vr->pre_aenc_tee_srcpad);
-    //vr->pre_aenc_tee_srcpad = NULL;
+    gst_element_release_request_pad(vr->aenc_tee,vr->pre_aenc_tee_srcpad);
+    gst_object_unref(vr->pre_aenc_tee_srcpad);
+    vr->pre_aenc_tee_srcpad = NULL;
+
     ret = gst_pad_unlink (vr->pre_vdec_tee_srcpad,vrsmsz->pre_vdec_tee_queue_sinkpad);
     if (GST_PAD_LINK_FAILED (ret)) {
        g_print ("unLink failed.\n");
     } else {
        g_print ("unLink succeeded %d.\n",vr->video_id);
     }
-    //gst_object_unref(vr->pre_vdec_tee_srcpad);
-    //vr->pre_vdec_tee_srcpad= NULL;
+    gst_element_release_request_pad(vr->vdec_tee,vr->pre_vdec_tee_srcpad);
+    gst_object_unref(vr->pre_vdec_tee_srcpad);
+    vr->pre_vdec_tee_srcpad= NULL;
+
     ret = gst_pad_unlink (vr->pub_vdec_tee_srcpad, vrsmsz->pub_vdec_tee_queue_sinkpad);
     if (GST_PAD_LINK_FAILED (ret)) {
        g_print ("unLink failed.\n");
     } else {
        g_print ("unLink succeeded %d.\n",vr->video_id);
     }
-    //gst_object_unref(vr->pub_vdec_tee_srcpad);
-    //vr->pub_vdec_tee_srcpad= NULL;
+    gst_element_release_request_pad(vr->vdec_tee,vr->pub_vdec_tee_srcpad);
+    gst_object_unref(vr->pub_vdec_tee_srcpad);
+    vr->pub_vdec_tee_srcpad= NULL;
+
     ret = gst_pad_unlink (vr->pub_aenc_tee_srcpad, vrsmsz->pub_aenc_tee_queue_sinkpad);
     if (GST_PAD_LINK_FAILED (ret)) {
        g_print ("unLink failed.\n");
     } else {
        g_print ("unLink succeeded %d.\n",vr->video_id);
     }
-    //gst_object_unref(vr->pub_aenc_tee_srcpad);
-    //vr->pub_aenc_tee_srcpad= NULL;
+    gst_element_release_request_pad(vr->aenc_tee,vr->pub_aenc_tee_srcpad);
+    gst_object_unref(vr->pub_aenc_tee_srcpad);
+    vr->pub_aenc_tee_srcpad= NULL;
 
     if(!vs->pre_aenc_tee_srcpad){
       vs->pre_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
