@@ -44,7 +44,7 @@ message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
       //g_main_loop_quit (loop);
       break;
     default:
-      g_print("what is %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
+      //g_print("==> %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
       break;
   }
 
@@ -349,6 +349,12 @@ gboolean vrsmsz_remove_stream(gpointer data){
 }
 
 /*****************************************************************************************************/
+/*****************************************************************************************************/
+/*****************************************************************************************************/
+/*****************************************************************************************************/
+/*****************************************************************************************************/
+/*****************************************************************************************************/
+/*****************************************************************************************************/
 gboolean vrsmsz_switch_stream(gpointer data){
   gint streamid = atoi((gchar*)data);
   GstPadLinkReturn ret;
@@ -514,6 +520,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
 */
 
 /****************************************************************************************/
+  //gst_element_set_state (vrsmsz->pipeline, GST_STATE_PAUSED);
   if(vrsmsz->canSwitch){// 
     vrstream_t* vr = vrsmsz->streams + vrsmsz->v_director;
     ret = gst_pad_unlink(vr->pre_aenc_tee_srcpad, vrsmsz->pre_aenc_tee_queue_sinkpad);
