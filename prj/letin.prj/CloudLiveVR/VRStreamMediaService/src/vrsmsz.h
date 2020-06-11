@@ -20,6 +20,10 @@ typedef struct{
   GstElement * vdec_tee_queue;
   GstPad* pre_vdec_tee_srcpad;
   GstPad* pub_vdec_tee_srcpad;
+  GstPad* vdec_tee_filter_srcpad;
+  GstPad* vdec_filter_tee_queue_sinkpad;
+  GstElement* vdec_filter_tee_queue;
+  GstElement* vdec_filter_tee_convert;
   GstElement * video_scale;
   GstElement * video_capsfilter;
   GstElement * video_encoder;
@@ -37,13 +41,15 @@ typedef struct{
   vrstream_t streams[MAX_CHANNEL]; // 0 is for null stream;
   guint streams_id[MAX_CHANNEL];
   //GstElement * videoconverter;
-  GstElement * queue_video_filter; // 
+  GstPad* video_filter_queue_sinkpad; // 
+  GstElement * video_filter_queue; // 
   GstElement * videoconvert; // 
-  GstElement * video_chain; // 
-  GstElement * tee_filter; // 
+  GstElement * video_filter_chain; // 
+  GstElement * video_filter_tee; // 
 
   //GstElement * audio_filter; // 
-  GstElement * pre_vdec_tee_queue;
+  GstPad* pre_video_filter_tee_srcpad;
+  GstElement * pre_vdec_tee_queue; // points
   GstPad *     pre_vdec_tee_queue_sinkpad;
   GstElement * pre_video_scale;
   GstElement * pre_capsfilter;
@@ -53,7 +59,8 @@ typedef struct{
   GstElement * pre_muxer;
   GstElement * pre_outer; // 
 
-  GstElement * pub_vdec_tee_queue;
+  GstPad* pub_video_filter_tee_srcpad;
+  GstElement * pub_vdec_tee_queue; // points
   GstPad *     pub_vdec_tee_queue_sinkpad;
   //GstElement * pub_capfilter;
   GstElement * pub_video_encoder;
@@ -63,7 +70,7 @@ typedef struct{
   GstElement * pub_outer; // 
   //GstElement * audio_encoder;
   GstElement * mixer; // audio mix
-  GstElement * comp;  // video mix
+  //GstElement * comp;  // video mix
 
   gchar comp_sink0_pad_name[16];
   gchar comp_sink1_pad_name[16];
