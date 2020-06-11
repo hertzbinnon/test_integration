@@ -211,6 +211,7 @@ gboolean vrsmsz_add_stream(gpointer data){
       g_print("error make\n");
       return FALSE;
     }
+    g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
    }
    if(!vs->audio_convert){
      sprintf(name,"vs%d-audio_convert",vs->audio_id);
@@ -426,6 +427,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
       g_print("error make\n");
       return FALSE;
     }
+    g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
   }
   if(!vrsmsz->pre_aenc_tee_queue){
      sprintf(name,"%s-pre_aenc_tee_queue","vrsmsz");
@@ -469,6 +471,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
       g_print("error make\n");
       return FALSE;
     }
+    g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
   }
   if(!vrsmsz->pub_aenc_tee_queue){
      sprintf(name,"%s-pub_aenc_tee_queue","vrsmsz");
