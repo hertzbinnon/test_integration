@@ -90,6 +90,8 @@ typedef struct{
   
   GAsyncQueue * queue;
   gboolean canSwitch;
+  
+  vrstream_t *remove_vs;
 } vrsmsz_t;
 
 extern vrsmsz_t* vrsmsz;

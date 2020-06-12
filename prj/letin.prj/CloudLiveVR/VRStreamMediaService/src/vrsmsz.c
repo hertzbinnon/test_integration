@@ -1,6 +1,36 @@
 #include <stdio.h>
 #include "vrsmsz.h"
 
+static gboolean  vrsmsz_remove(){
+   vrstream_t* vs = vrsmsz->remove_vs;
+   gst_element_set_state(vs->uridecodebin,GST_STATE_NULL);
+   gst_element_set_state(vs->vdec_tee,GST_STATE_NULL);
+   gst_element_set_state(vs->vdec_tee_queue, GST_STATE_NULL);
+   gst_element_set_state(vs->video_scale,GST_STATE_NULL);
+   gst_element_set_state(vs->video_capsfilter,GST_STATE_NULL);
+   gst_element_set_state(vs->video_encoder,GST_STATE_NULL);
+   gst_element_set_state(vs->audio_convert,GST_STATE_NULL);
+   gst_element_set_state(vs->audio_encoder,GST_STATE_NULL);
+   gst_element_set_state(vs->aenc_tee,GST_STATE_NULL);
+   gst_element_set_state(vs->aenc_tee_queue,GST_STATE_NULL);
+   gst_element_set_state(vs->muxer,GST_STATE_NULL);
+   gst_element_set_state(vs->outer,GST_STATE_NULL); // sink will not deadlock
+
+   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->uridecodebin,vs->vdec_tee,vs->vdec_tee_queue,vs->video_scale,vs->video_capsfilter, vs->video_encoder,vs->audio_convert,vs->audio_encoder,vs->aenc_tee,vs->aenc_tee_queue,vs->muxer,vs->outer,NULL);
+   vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
+   vrsmsz->stream_nbs--;
+   vs->video_id = -1;
+   vs->audio_id = -1;
+   memset(vs->src_url,0,sizeof(vs->src_url));
+   vs->dis = -1;
+   g_print("remove bin successful!!!\n");
+   /**** recover ***/
+    gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
+    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+    
+   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+   return FALSE;
+}
 static gboolean
 message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
 {
@@ -40,7 +70,8 @@ message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
       break;
     }
     case GST_MESSAGE_EOS:
-      g_print ("Got EOS\n");
+      g_print ("======> Got EOS\n");
+      vrsmsz_remove();
       //g_main_loop_quit (loop);
       break;
     default:
@@ -166,8 +197,9 @@ gboolean vrsmsz_add_stream(gpointer data){
    if(!vs->uridecodebin){
      sprintf(name,"vs%d-uridecodebin",vs->video_id);
      vs->uridecodebin = gst_element_factory_make("uridecodebin", name);
-     g_object_set (vs->uridecodebin, "uri", uri, "expose-all-streams", TRUE, NULL);
+     g_object_set (vs->uridecodebin,"uri", uri, "expose-all-streams", TRUE, NULL);
      g_signal_connect (vs->uridecodebin, "pad-added", (GCallback) _pad_added_cb, vs);
+
    }
 
    if(!vs->vdec_tee){
@@ -297,6 +329,7 @@ gboolean vrsmsz_add_stream(gpointer data){
 #endif
 
    //g_print("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
+   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
    return FALSE;
 }
 
@@ -305,11 +338,10 @@ gboolean vrsmsz_remove_stream(gpointer data){
    gint streamid = atoi((gchar*)data);
    vrstream_t* vs = NULL;
 
+   g_free(data);
    if(!vrsmsz->stream_nbs) {
-      g_print("no streams found\n");
       return FALSE;
    }
-   g_print("remove stream = %s\n",vrsmsz->streams[streamid].src_url);
    for(int i=0; i<MAX_CHANNEL; i++){
        if(vrsmsz->streams_id[i] == streamid){
           vs = vrsmsz->streams + vrsmsz->streams_id[i];
@@ -318,45 +350,33 @@ gboolean vrsmsz_remove_stream(gpointer data){
 	  break;
 	}
    }
-   if(!vs) return FALSE;
-   /*
-    * deadlock ????
-   gst_element_set_state(vs->uridecodebin,GST_STATE_NULL);
-   gst_element_set_state(vs->vdec_tee,GST_STATE_NULL);
-   gst_element_set_state(vs->vdec_tee_queue, GST_STATE_NULL);
-   gst_element_set_state(vs->video_scale,GST_STATE_NULL);
-   gst_element_set_state(vs->video_capsfilter,GST_STATE_NULL);
-   gst_element_set_state(vs->video_encoder,GST_STATE_NULL);
-   gst_element_set_state(vs->audio_convert,GST_STATE_NULL);
-   gst_element_set_state(vs->audio_encoder,GST_STATE_NULL);
-   gst_element_set_state(vs->aenc_tee,GST_STATE_NULL);
-   gst_element_set_state(vs->aenc_tee_queue,GST_STATE_NULL);
-   gst_element_set_state(vs->muxer,GST_STATE_NULL);
-   *
-   */
-   g_print("close rtmp\n");
-   gst_element_set_state(vs->outer,GST_STATE_NULL); // sink will not deadlock
-   gst_element_set_state(vs->uridecodebin,GST_STATE_NULL); // src will deadlock
-   g_print("close rtmp\n");
-   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->uridecodebin,vs->vdec_tee,vs->vdec_tee_queue,vs->video_scale,vs->video_capsfilter, vs->video_encoder,vs->audio_convert,vs->audio_encoder,vs->aenc_tee,vs->aenc_tee_queue,vs->muxer,vs->outer,NULL);
-   g_print("close vs\n");
-   vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
-   vrsmsz->stream_nbs--;
-   vs->video_id = -1;
-   vs->audio_id = -1;
-   memset(vs->src_url,0,sizeof(vs->src_url));
-   vs->dis = -1;
-   g_print("remove stream = %s\n",vrsmsz->streams[streamid].src_url);
-   g_free(data);
-   vrsmsz_start();
+   if(!vs){ 
+      g_print("streams found\n");
+      return FALSE;
+   }
+   g_print("remove stream = %s\n",vs->src_url);
+   GstEvent*  event = gst_event_new_eos();
+   vrsmsz->remove_vs = vs;
+   //GstElement* source = NULL;
+   //g_object_get(vs->uridecodebin,"source",&source,NULL);
+   //if(!gst_element_send_event(source, event)){
+   //if(!gst_element_send_event(vs->uridecodebin, event)){
+   if(!gst_element_send_event(vrsmsz->pipeline, event)){
+     g_print("send events failed\n");
+   }
+   //  g_print("send events\n");
+   //vrsmsz_remove();
    return FALSE;
 }
+
+
 
 /*****************************************************************************************************/
 /*****************************************************************************************************/
 gboolean vrsmsz_switch_stream(gpointer data){
 #if 1// effect switch
-  gboolean is_fade = TRUE;
+  //gboolean is_fade = TRUE;
+  gboolean is_fade = FALSE;
 #endif
   gint streamid = atoi((gchar*)data);
   GstPadLinkReturn ret;
@@ -808,7 +828,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
   vrsmsz->v_director = streamid;
   vrsmsz->a_director = streamid;
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
-  gst_debug_bin_to_dot_file (vrsmsz->pipeline, GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+  gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
   return FALSE;
 }
 
@@ -887,7 +907,7 @@ static void vrsmsz_run_command(gchar* command){
   }else if(!memcmp(argv[0],"recover",7)){
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
-    gst_debug_bin_to_dot_file (vrsmsz->pipeline, GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+    gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
   }
   g_free(command);
 }
