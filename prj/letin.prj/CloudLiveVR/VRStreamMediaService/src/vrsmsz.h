@@ -11,7 +11,9 @@ typedef struct{
   GstElement * vdec_tee;
   GstElement * vdec_tee_queue;
   GstPad* pre_vdec_tee_srcpad;
+  GstPad* pre_vdec_tee_ghost_srcpad;
   GstPad* pub_vdec_tee_srcpad;
+  GstPad* pub_vdec_tee_ghost_srcpad;
   GstPad* vdec_tee_filter_srcpad;
   GstPad* vdec_filter_tee_queue_sinkpad;
   GstElement* vdec_filter_tee_queue;
@@ -23,15 +25,17 @@ typedef struct{
   GstElement * audio_encoder;
   GstElement * aenc_tee;
   GstPad* pre_aenc_tee_srcpad;
+  GstPad* pre_aenc_tee_ghost_srcpad;
   GstPad* pub_aenc_tee_srcpad;
+  GstPad* pub_aenc_tee_ghost_srcpad;
   GstElement * aenc_tee_queue;
   GstElement * muxer; // 
   GstElement * outer; // 
+  GstElement  *bin;
 } vrstream_t;
 
 
 typedef struct {
-  GstElement  *bin;
   gint    tracks;
   gint   stream_id;
   gint   video_id;
@@ -56,21 +60,25 @@ typedef struct{
   GstPad* pre_video_filter_tee_srcpad;
   GstElement * pre_vdec_tee_queue; // points
   GstPad *     pre_vdec_tee_queue_sinkpad;
+  GstPad *     pre_vdec_tee_queue_ghost_sinkpad;
   GstElement * pre_video_scale;
   GstElement * pre_capsfilter;
   GstElement * pre_video_encoder;
   GstElement * pre_aenc_tee_queue;
   GstPad *     pre_aenc_tee_queue_sinkpad;
+  GstPad *     pre_aenc_tee_queue_ghost_sinkpad;
   GstElement * pre_muxer;
   GstElement * pre_outer; // 
 
   GstPad* pub_video_filter_tee_srcpad;
   GstElement * pub_vdec_tee_queue; // points
   GstPad *     pub_vdec_tee_queue_sinkpad;
+  GstPad *     pub_vdec_tee_queue_ghost_sinkpad;
   //GstElement * pub_capfilter;
   GstElement * pub_video_encoder;
   GstElement * pub_aenc_tee_queue;
   GstPad *     pub_aenc_tee_queue_sinkpad;
+  GstPad *     pub_aenc_tee_queue_ghost_sinkpad;
   GstElement * pub_muxer;
   GstElement * pub_outer; // 
   //GstElement * audio_encoder;
@@ -85,9 +93,9 @@ typedef struct{
   GstElement  *swt_bin;
   GstElement  *eff_bin;
 
-  gint   stream_id;
-  gint   video_id;
-  gint   audio_id;
+  gint    stream_id;
+  gint    video_id;
+  gint    audio_id;
   gchar   preview_url[URL_LEN];
   gchar   publish_url[URL_LEN];
 
@@ -103,13 +111,13 @@ typedef struct{
   guint mode; // 8K or 4K or 2K
 
   vrchan_t streams[MAX_CHANNEL*100];  
-  gint stream_nbs;  
+  gint  stream_nbs;  
   guint streams_id[MAX_CHANNEL*100];
 
   drchan_t director;
 
   GAsyncQueue * queue;
-  gboolean canSwitch;
+  gboolean isSwitched;
   
   vrchan_t *remove_chan;
 } vrsmsz_t;

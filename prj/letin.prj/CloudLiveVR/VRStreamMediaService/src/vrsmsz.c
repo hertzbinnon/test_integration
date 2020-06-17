@@ -5,9 +5,9 @@ static gboolean  vrsmsz_remove()
 {
    vrchan_t* vc = vrsmsz->remove_chan;
    vrstream_t* vs = &vc->vs;
-   gst_element_set_state(vc->bin,GST_STATE_NULL); // sink will not deadlock
+   gst_element_set_state(vs->bin,GST_STATE_NULL); // sink will not deadlock
 
-   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vc->bin,NULL);
+   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->bin,NULL);
 
    vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
    vrsmsz->stream_nbs--;
@@ -163,7 +163,7 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
   switch (r) {
     case GST_STATE_CHANGE_NO_PREROLL:
       /* live source, timestamps are running_time of the pipeline clock. */
-	    g_print("this is live stream");
+	    g_print("this is live stream\n");
       break;
     case GST_STATE_CHANGE_SUCCESS:
       /* success, no async state changes, same as async, timestamps start
@@ -171,14 +171,14 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
     case GST_STATE_CHANGE_ASYNC:
       /* no live source, bin will preroll. We have to punch it in because in
        * this situation timestamps start from 0.  */
-	    g_print("this is not live stream");
+	    g_print("this is not live stream\n");
       break;
     case GST_STATE_CHANGE_FAILURE:
       /* fall through to return */
     default:
       return;
   }
-  ret = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+  r = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
 
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
 }
@@ -216,8 +216,8 @@ gboolean vrsmsz_add_stream(gpointer data){
    g_print("Stream_id is %d\n", vc->stream_id);
    sprintf(name,"chan-%d-bin",vc->stream_id);
 
-   vc->bin = gst_bin_new(name);
    vs = &vc->vs;
+   vs->bin = gst_bin_new(name);
 
    if(!vs->uridecodebin){
      sprintf(name,"vs%d-uridecodebin",vc->video_id);
@@ -321,8 +321,8 @@ gboolean vrsmsz_add_stream(gpointer data){
      g_object_set (vs->outer, "location", vc->preview_url, NULL);
    }
 
-   gst_bin_add_many(GST_BIN(vc->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->audio_convert, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
-   gst_bin_add(GST_BIN(vrsmsz->pipeline),vc->bin);
+   gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->audio_convert, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
+   gst_bin_add(GST_BIN(vrsmsz->pipeline),vs->bin);
 
    if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->muxer,vs->outer,NULL)){
       g_print("push link failed\n");
@@ -347,7 +347,7 @@ gboolean vrsmsz_add_stream(gpointer data){
 #endif
 
    //g_print("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
-  gst_element_set_state (vc->bin, GST_STATE_PLAYING);
+  gst_element_set_state (vs->bin, GST_STATE_PLAYING);
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
    return FALSE;
 }
@@ -392,8 +392,8 @@ gboolean vrsmsz_remove_stream(gpointer data){
    //vrsmsz_remove();
 #endif
 
-   gst_element_set_state(vc->bin,GST_STATE_NULL); // sink will not deadlock
    vs = &vc->vs;
+   gst_element_set_state(vs->bin,GST_STATE_NULL); // sink will not deadlock
    //gst_object_unref(vs->uridecodebin);
    //gst_object_unref(vs->vdec_tee);
    //gst_object_unref(vs->vdec_tee_queue);
@@ -406,7 +406,7 @@ gboolean vrsmsz_remove_stream(gpointer data){
    //gst_object_unref(vs->aenc_tee_queue);
    //gst_object_unref(vs->muxer);
    //gst_object_unref(vs->outer);
-   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vc->bin,NULL);
+   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->bin,NULL);
    vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
    vrsmsz->stream_nbs--;
    vc->tracks = 0;
@@ -479,13 +479,75 @@ gboolean director_publish_create(gpointer uri){
     g_object_set (vrsmsz->director.ds.pub_outer, "location", vrsmsz->director.publish_url, NULL);
   }
 
+  GstCaps *caps = gst_caps_from_string("audio/mpeg");
   gst_bin_add_many(GST_BIN(vrsmsz->director.pub_bin), vrsmsz->director.ds.pub_vdec_tee_queue,vrsmsz->director.ds.pub_video_encoder,vrsmsz->director.ds.pub_aenc_tee_queue,vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL);
 
-      return FALSE;
+  if(!gst_element_link_many(vrsmsz->director.ds.pub_vdec_tee_queue, vrsmsz->director.ds.pub_video_encoder, vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL)){
+    g_print("link director pub video failed");
+    return FALSE;
+  }
+
+  if(!gst_element_link_filtered(vrsmsz->director.ds.pub_aenc_tee_queue, vrsmsz->director.ds.pub_muxer, caps)){
+    g_print("link director pub audio failed");
+    return FALSE;
+  }
+ 
+  return FALSE;
 }
 
 /*****************************************************************************************************/
-gboolean director_preview_create(){
+/*****************************************************************************************************/
+void director_preview_link_vs(vrstream_t* vs){
+  GstPadLinkReturn ret;
+  // audio 
+  if(!vs->pre_aenc_tee_srcpad){
+      vs->pre_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
+      if(!vs->pre_aenc_tee_srcpad)
+	g_print ("pre aenc failed. \n");
+  }
+  if(!vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad){
+      vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pre_aenc_tee_queue, "sink");
+      if(!vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad)
+	g_print ("pre aenc tee queue failed. \n");
+  }
+  vs->pre_aenc_tee_ghost_srcpad = gst_ghost_pad_new ("pre-aenc-tee-srcpad", vs->pre_aenc_tee_srcpad);
+  if(!vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad){
+    vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad = gst_ghost_pad_new ("pre-aenc-tee-queue-sinkpad", vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad);
+    gst_element_add_pad (vrsmsz->director.pre_bin,vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad);
+  }
+  gst_element_add_pad (vs->bin, vs->pre_aenc_tee_ghost_srcpad);
+  ret = gst_pad_link (vs->pre_aenc_tee_ghost_srcpad,vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+     g_print ("pre Link failed.\n");
+  } else {
+     g_print ("pre Link succeeded .\n");
+  }
+  // video
+  if(!vs->pre_vdec_tee_srcpad)
+    vs->pre_vdec_tee_srcpad = gst_element_get_request_pad (vs->vdec_tee, "src_%u");
+  if(!vrsmsz->director.ds.pre_vdec_tee_queue_sinkpad)
+    vrsmsz->director.ds.pre_vdec_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pre_vdec_tee_queue, "sink");
+
+  if(!vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad){
+    vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad = gst_ghost_pad_new ("pre-vdec-tee-queue-sinkpad", vrsmsz->director.ds.pre_vdec_tee_queue_sinkpad);
+    gst_element_add_pad (vrsmsz->director.pre_bin,vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad );
+  }
+
+  vs->pre_vdec_tee_ghost_srcpad = gst_ghost_pad_new ("pre-vdec-tee-srcpad", vs->pre_vdec_tee_srcpad );
+  gst_element_add_pad (vs->bin, vs->pre_vdec_tee_ghost_srcpad);
+  ret = gst_pad_link(vs->pre_vdec_tee_ghost_srcpad, vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+    g_print ("pre Link failed.\n");
+  } else {
+    g_print ("pre Link succeeded .\n");
+  }
+
+  gst_element_set_state (vrsmsz->director.pre_bin, GST_STATE_PLAYING); // this must be used
+  vrsmsz_play();
+  gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+}
+/*****************************************************************************************************/
+gboolean director_preview_create(vrstream_t* vs){
   gchar name[1024];
   g_print("%s \n",vrsmsz->director.preview_url);
 
@@ -522,7 +584,7 @@ gboolean director_preview_create(){
       g_print("error make\n");
       return FALSE;
     }
-    g_object_set (vrsmsz->director.ds.pub_video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
+    g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
   }
   if(!vrsmsz->director.ds.pre_aenc_tee_queue){
      sprintf(name,"%s-pre_aenc_tee_queue","vrsmsz");
@@ -549,12 +611,26 @@ gboolean director_preview_create(){
     }
     g_object_set (vrsmsz->director.ds.pre_outer, "location", vrsmsz->director.preview_url, NULL);
   }
+   vrsmsz->director.pre_bin = gst_bin_new("pre_bin");
   gst_bin_add_many(GST_BIN(vrsmsz->director.pre_bin), vrsmsz->director.ds.pre_vdec_tee_queue, vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, vrsmsz->director.ds.pre_aenc_tee_queue, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL);
-      return FALSE;
+  gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pre_bin);
+
+  if(!gst_element_link_many(vrsmsz->director.ds.pre_vdec_tee_queue, vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL)){
+     g_print("link director pre viedo failed");
+     return FALSE;
+  }
+  GstCaps *caps = gst_caps_from_string("audio/mpeg");
+  if(!gst_element_link_filtered(vrsmsz->director.ds.pre_aenc_tee_queue, vrsmsz->director.ds.pre_muxer, caps)){
+     g_print("link director pre audio failed");
+     return FALSE;
+  }
+
+  return FALSE;
 }
 
-gboolean director_switch_effect_create(){
+gboolean director_switch_effect_create(vrstream_t* vs){
   gchar name[1024];
+  GstPadLinkReturn ret;
   if(!vrsmsz->director.ds.video_filter_queue){
       sprintf(name,"%s-video_filter_queue","vrsmsz");
       vrsmsz->director.ds.video_filter_queue = gst_element_factory_make("queue", name);
@@ -588,7 +664,42 @@ gboolean director_switch_effect_create(){
       }
     }
     gst_bin_add_many(GST_BIN(vrsmsz->director.swt_bin),vrsmsz->director.ds.video_filter_queue,vrsmsz->director.ds.videoconvert,vrsmsz->director.ds.video_filter_chain,vrsmsz->director.ds.video_filter_tee,NULL);
-      return FALSE;
+
+    if(!gst_element_link_many(vrsmsz->director.ds.pre_vdec_tee_queue, vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL)){
+     g_print("link director pre viedo failed");
+     return FALSE;
+    }
+    
+    GstCaps *caps = gst_caps_from_string("audio/mpeg");
+    if(!gst_element_link_filtered(vrsmsz->director.ds.pre_aenc_tee_queue, vrsmsz->director.ds.pre_muxer, caps)){
+     g_print("link director pre audio failed");
+     return FALSE;
+    }
+    
+    if(!vs->pre_aenc_tee_srcpad){
+      vs->pre_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
+    }
+    if(!vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad)
+      vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pre_aenc_tee_queue, "sink");
+    ret = gst_pad_link (vs->pre_aenc_tee_srcpad, vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad);
+    if (GST_PAD_LINK_FAILED (ret)) {
+       g_print ("Link failed.\n");
+    } else {
+       g_print ("Link succeeded .\n");
+    }
+
+    if(!vs->pre_vdec_tee_srcpad)
+      vs->pre_vdec_tee_srcpad = gst_element_get_request_pad (vs->vdec_tee, "src_%u");
+    if(!vrsmsz->director.ds.pre_vdec_tee_queue_sinkpad)
+      vrsmsz->director.ds.pre_vdec_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pre_vdec_tee_queue, "sink");
+    ret = gst_pad_link (vs->pre_vdec_tee_srcpad,vrsmsz->director.ds.pre_vdec_tee_queue_sinkpad);
+    if (GST_PAD_LINK_FAILED (ret)) {
+      g_print ("Link failed.\n");
+    } else {
+      g_print ("Link succeeded .\n");
+    }
+
+    return FALSE;
     /*
     if(!vrsmsz->){
       sprintf(name,"%s-","vrsmsz");
@@ -596,23 +707,106 @@ gboolean director_switch_effect_create(){
       if(!vrsmsz->){
         g_print("error make\n");
         return FALSE;
-    }
+      }
     }
     */
 }
 
+gboolean vrsmsz_switch_preview_stream(vrstream_t* vr,vrstream_t* vs){
+  GstPadLinkReturn ret;
+  ret = gst_pad_unlink(vr->pre_aenc_tee_ghost_srcpad, vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+     g_print ("unLink failed.\n");
+  } else {
+     g_print ("unLink succeeded .\n");
+  }
+  gst_element_release_request_pad(vr->aenc_tee,vr->pre_aenc_tee_srcpad);
+  gst_element_release_request_pad(vr->bin,vr->pre_aenc_tee_ghost_srcpad);
+  gst_object_unref(vr->pre_aenc_tee_srcpad);
+  //gst_object_unref(vr->pre_aenc_tee_ghost_srcpad);
+  vr->pre_aenc_tee_srcpad = NULL;
+  vr->pre_aenc_tee_ghost_srcpad = NULL;
+
+  ret = gst_pad_unlink (vr->pre_vdec_tee_ghost_srcpad,vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+    g_print ("unLink failed.\n");
+  } else {
+    g_print ("unLink succeeded .\n");
+  }
+  gst_element_release_request_pad(vr->vdec_tee,vr->pre_vdec_tee_srcpad);
+  gst_element_release_request_pad(vr->bin,vr->pre_vdec_tee_ghost_srcpad);
+  gst_object_unref(vr->pre_vdec_tee_srcpad);
+  //gst_object_unref(vr->pre_vdec_tee_ghost_srcpad);
+  vr->pre_vdec_tee_srcpad= NULL;
+  vr->pre_vdec_tee_ghost_srcpad= NULL;
+
+  director_preview_link_vs(vs);
+
+/*
+  ret = gst_pad_unlink (vr->pub_vdec_tee_ghost_srcpad, vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+         g_print ("unLink failed.\n");
+      } else {
+         g_print ("unLink succeeded .\n");
+      }
+      gst_element_release_request_pad(vr->vdec_tee,vr->pub_vdec_tee_srcpad);
+      gst_element_release_request_pad(vr->vdec_tee,vr->pub_vdec_tee_ghost_srcpad);
+      gst_object_unref(vr->pub_vdec_tee_srcpad);
+      //gst_object_unref(vr->pub_vdec_tee_ghost_srcpad);
+      vr->pub_vdec_tee_srcpad= NULL;
+      vr->pub_vdec_tee_ghost_srcpad= NULL;
+
+  ret = gst_pad_unlink (vr->pub_aenc_tee_ghost_srcpad, vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+         g_print ("unLink failed.\n");
+      } else {
+         g_print ("unLink succeeded .\n");
+      }
+      gst_element_release_request_pad(vr->aenc_tee,vr->pub_aenc_tee_srcpad);
+      gst_element_release_request_pad(vr->aenc_tee,vr->pub_aenc_tee_ghost_srcpad);
+      gst_object_unref(vr->pub_aenc_tee_srcpad);
+      //gst_object_unref(vr->pub_aenc_tee_ghost_srcpad);
+      vr->pub_aenc_tee_srcpad= NULL;
+      vr->pub_aenc_tee_ghost_srcpad= NULL;
+
+
+      if(!vs->pub_vdec_tee_srcpad)
+        vs->pub_vdec_tee_srcpad = gst_element_get_request_pad (vs->vdec_tee, "src_%u");
+      if(!vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad)
+        vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pub_vdec_tee_queue, "sink");
+      ret = gst_pad_link (vs->pub_vdec_tee_srcpad, vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad);
+      if (GST_PAD_LINK_FAILED (ret)) {
+        g_print ("Link failed.\n");
+      } else {
+        g_print ("Link succeeded .\n");
+      }
+
+      if(!vs->pub_aenc_tee_srcpad)
+        vs->pub_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
+      if(!vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad)
+        vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pub_aenc_tee_queue, "sink");
+      ret = gst_pad_link (vs->pub_aenc_tee_srcpad, vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad);
+      if (GST_PAD_LINK_FAILED (ret)) {
+         g_print ("Link failed.\n");
+       } else {
+         g_print ("Link succeeded .\n");
+      }
+*/
+     return FALSE;   
+}
 /*****************************************************************************************************/
-#if 0
+/*****************************************************************************************************/
+/*****************************************************************************************************/
 gboolean vrsmsz_switch_stream(gpointer data){
-#if 1// effect switch
+#if 0// effect switch
   //gboolean is_fade = TRUE;
   gboolean is_fade = FALSE;
 #endif
   gint streamid = atoi((gchar*)data);
-  GstPadLinkReturn ret;
+  //GstPadLinkReturn ret;
   vrchan_t* vc = vrsmsz->streams+streamid;
-  gchar name[1024];
-  g_print("switch %d \n",streamid);
+  //gchar name[1024];
+  g_print("Switch %d \n",streamid);
 
   if(vrsmsz->stream_nbs == 0){
     g_print("no stream \n");
@@ -622,7 +816,8 @@ gboolean vrsmsz_switch_stream(gpointer data){
     g_print("switch in same stream\n");
     return FALSE;
   }
-  for(int i=0; i<MAX_CHANNEL; i++){
+  int i;
+  for(i=0; i<MAX_CHANNEL; i++){
     if(streamid == vrsmsz->streams_id[i]){
        break;
     }
@@ -633,18 +828,30 @@ gboolean vrsmsz_switch_stream(gpointer data){
   }
  
   g_free(data);
-  director_preview_create();
+  if(!vrsmsz->isSwitched){// 
+    g_print("first switch %d\n",vc->stream_id);
+    director_preview_create(&(vc->vs));
+    director_preview_link_vs(&(vc->vs));
+    vrsmsz->isSwitched = TRUE;
+    vrsmsz->director.stream_id = vc->stream_id;
+    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+    return FALSE;
+  }
+  
+  vrstream_t* vr = &(vrsmsz->streams[vrsmsz->director.stream_id].vs);
+  vrsmsz_switch_preview_stream(vr, &vc->vs);
+  gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+  return FALSE;
+#if 0
   director_publish_create();
   director_switch_effect_create();
 
-  if(vrsmsz->canSwitch && is_fade){
-      if(!gst_element_link_many(vrsmsz->video_filter_queue, vrsmsz->videoconvert, vrsmsz->video_filter_chain, vrsmsz->video_filter_tee, NULL)){
-       g_print("link director pre viedo failed");
-       return FALSE;
+  if(vrsmsz->isSwitched && is_fade){
+      if(!gst_element_link_many(vrsmsz->director.video_filter_queue, vrsmsz->director.videoconvert, vrsmsz->director.video_filter_chain, vrsmsz->director.video_filter_tee, NULL)){
+        g_print("link director pre viedo failed");
+        return FALSE;
       }
-
   }
-
 /*
 *
 *
@@ -654,7 +861,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
 
 /****************************************************************************************/
   //gst_element_set_state (vrsmsz->pipeline, GST_STATE_PAUSED);
-  if(vrsmsz->canSwitch){// 
+  if(vrsmsz->isSwitched){// 
     vrstream_t* vr = vrsmsz->streams + vrsmsz->v_director;
     if(is_fade){
 
@@ -897,15 +1104,15 @@ gboolean vrsmsz_switch_stream(gpointer data){
     }
 
 
-   vrsmsz->canSwitch = TRUE;
+   vrsmsz->isSwitched = TRUE;
   }
   vrsmsz->v_director = streamid;
   vrsmsz->a_director = streamid;
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
   return FALSE;
-}
 #endif
+}
 
 void vrsmsz_stop(){
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_NULL);
@@ -920,7 +1127,45 @@ void vrsmsz_quit(){
 }
 
 void vrsmsz_play(){
-  gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+  GstStateChangeReturn r;
+  r = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PAUSED);
+  switch (r) {
+    case GST_STATE_CHANGE_NO_PREROLL:
+      /* live source, timestamps are running_time of the pipeline clock. */
+	    g_print("this is live stream\n");
+      break;
+    case GST_STATE_CHANGE_SUCCESS:
+      /* success, no async state changes, same as async, timestamps start
+       * from 0 */
+    case GST_STATE_CHANGE_ASYNC:
+      /* no live source, bin will preroll. We have to punch it in because in
+       * this situation timestamps start from 0.  */
+	    g_print("this is not live stream\n");
+      break;
+    case GST_STATE_CHANGE_FAILURE:
+      /* fall through to return */
+    default:
+	    g_print("this status change is failed\n");
+  }
+  r = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+  switch (r) {
+    case GST_STATE_CHANGE_NO_PREROLL:
+      /* live source, timestamps are running_time of the pipeline clock. */
+	    g_print("this is live stream\n");
+      break;
+    case GST_STATE_CHANGE_SUCCESS:
+      /* success, no async state changes, same as async, timestamps start
+       * from 0 */
+    case GST_STATE_CHANGE_ASYNC:
+      /* no live source, bin will preroll. We have to punch it in because in
+       * this situation timestamps start from 0.  */
+	    g_print("this is not live stream\n");
+      break;
+    case GST_STATE_CHANGE_FAILURE:
+      /* fall through to return */
+    default:
+	    g_print("this status change is failed\n");
+  }
 }
 
 void vrsmsz_paused(){
@@ -968,15 +1213,15 @@ static void vrsmsz_null_channel(){
 static void vrsmsz_run_command(gchar* command){
   gchar argv[2][1024];
   sscanf(command,"%s %s",argv[0],argv[1]);
-  g_print("command--> %s %s\n",argv[0],argv[1]);
+  //g_print("command--> %s %s\n",argv[0],argv[1]);
   gchar* arg2 = g_strdup(argv[1]);
 
   if(!memcmp(argv[0],"pull",4)){
-    g_idle_add(vrsmsz_add_stream,arg2);
+    g_idle_add(vrsmsz_add_stream, arg2);
   }else if(!memcmp(argv[0],"remove",6)){
-    g_idle_add(vrsmsz_remove_stream,arg2);
+    g_idle_add(vrsmsz_remove_stream, arg2);
   }else if(!memcmp(argv[0],"switch",6)){
-    //g_idle_add(vrsmsz_switch_stream,arg2);
+    g_idle_add(vrsmsz_switch_stream, arg2);
   }else if(!memcmp(argv[0],"quit",4)){
     exit(atoi(argv[1]));
   }else if(!memcmp(argv[0],"recover",7)){
@@ -1070,7 +1315,7 @@ void vrsmsz_init(int argc, char **argv){
   vrsmsz->mode = atoi(argv[3]);
 
   vrsmsz->stream_nbs = 0;
-  vrsmsz->canSwitch = FALSE;
+  vrsmsz->isSwitched= FALSE;
   for( int i=0; i<MAX_CHANNEL; i++){ 
     memset(vrsmsz->streams + i, 0, sizeof(vrsmsz->streams[i]));
     vrsmsz->streams_id[i] = -1;
