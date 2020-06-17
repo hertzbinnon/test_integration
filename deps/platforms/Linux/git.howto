@@ -155,3 +155,9 @@ git clean 参数
 也可以使用：1
 
 git checkout . && git clean -xdf
+
+####### git tag refs https://git-scm.com/book/en/v2/Git-Basics-Tagging
+git tag -a v1.4 -m "my version 1.4"
+git show v1.4
+# Lightweight Tags
+git tag v1.4-lw

@@ -7,14 +7,6 @@
 #define URL_LEN 2048
 
 typedef struct{
-  //GstElement * video_dec; // 0 for null channel with videotestsrc
-  //GstElement * audio_dec; // 0 for null channel with audiotestsrc
-  guint video_id;
-  guint audio_id;
-  guint stream_id;
-  gchar src_url[URL_LEN];
-  gchar pre_sink_url[URL_LEN];
-  guint dis; // 4k or 8K
   GstElement * uridecodebin; // 
   GstElement * vdec_tee;
   GstElement * vdec_tee_queue;
@@ -37,9 +29,22 @@ typedef struct{
   GstElement * outer; // 
 } vrstream_t;
 
+
+typedef struct {
+  GstElement  *bin;
+  gint    tracks;
+  gint   stream_id;
+  gint   video_id;
+  gint   audio_id;
+  gint   subs_id;
+  gchar   in_url[URL_LEN];
+  gchar   output_url[URL_LEN];
+  gchar   preview_url[URL_LEN];
+  guint   resolution; // 4k or 8K
+  vrstream_t vs;
+}vrchan_t;
+
 typedef struct{
-  vrstream_t streams[MAX_CHANNEL]; // 0 is for null stream;
-  guint streams_id[MAX_CHANNEL];
   //GstElement * videoconverter;
   GstPad* video_filter_queue_sinkpad; // 
   GstElement * video_filter_queue; // 
@@ -72,34 +77,51 @@ typedef struct{
   GstElement * mixer; // audio mix
   //GstElement * comp;  // video mix
 
-  gchar comp_sink0_pad_name[16];
-  gchar comp_sink1_pad_name[16];
-  //GstElement * tee;
-  guint v_director;
-  guint a_director;
+} drstream_t;
 
-  gchar director_stream_preview_url[URL_LEN];
-  gchar director_stream_publish_url[URL_LEN];
-  guint mode;
+typedef struct{
+  GstElement  *pre_bin;
+  GstElement  *pub_bin;
+  GstElement  *swt_bin;
+  GstElement  *eff_bin;
 
-  gint stream_nbs; // how much streams
+  gint   stream_id;
+  gint   video_id;
+  gint   audio_id;
+  gchar   preview_url[URL_LEN];
+  gchar   publish_url[URL_LEN];
+
+  drstream_t ds;
+} drchan_t;
+
+typedef struct{
   GstElement* pipeline;
   GMainLoop *loop;
   GstClock *theclock;
   GstBus *bus;
-  
+
+  guint mode; // 8K or 4K or 2K
+
+  vrchan_t streams[MAX_CHANNEL*100];  
+  gint stream_nbs;  
+  guint streams_id[MAX_CHANNEL*100];
+
+  drchan_t director;
+
   GAsyncQueue * queue;
   gboolean canSwitch;
   
-  vrstream_t *remove_vs;
+  vrchan_t *remove_chan;
 } vrsmsz_t;
 
 extern vrsmsz_t* vrsmsz;
+
 void vrsmsz_init(int argc, char **argv);
-void vrsmsz_start();
 void vrsmsz_play();
 void vrsmsz_stop();
 void vrsmsz_quit();
+gboolean vrsmsz_clean();
+gboolean vrsmsz_recover();
 void vrsmsz_deinit();
 
 gboolean vrsmsz_add_stream(gpointer data);

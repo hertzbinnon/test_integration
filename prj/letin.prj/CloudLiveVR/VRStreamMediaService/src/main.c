@@ -13,7 +13,7 @@ int main (int argc, char *argv[])
     return -1;
   }
   vrsmsz_init(argc,argv);
-  vrsmsz_play();// loop
+  vrsmsz_start();// loop
   vrsmsz_stop();// null
   vrsmsz_deinit();
   return 0;

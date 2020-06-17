@@ -1,36 +1,29 @@
 #include <stdio.h>
 #include "vrsmsz.h"
 
-static gboolean  vrsmsz_remove(){
-   vrstream_t* vs = vrsmsz->remove_vs;
-   gst_element_set_state(vs->uridecodebin,GST_STATE_NULL);
-   gst_element_set_state(vs->vdec_tee,GST_STATE_NULL);
-   gst_element_set_state(vs->vdec_tee_queue, GST_STATE_NULL);
-   gst_element_set_state(vs->video_scale,GST_STATE_NULL);
-   gst_element_set_state(vs->video_capsfilter,GST_STATE_NULL);
-   gst_element_set_state(vs->video_encoder,GST_STATE_NULL);
-   gst_element_set_state(vs->audio_convert,GST_STATE_NULL);
-   gst_element_set_state(vs->audio_encoder,GST_STATE_NULL);
-   gst_element_set_state(vs->aenc_tee,GST_STATE_NULL);
-   gst_element_set_state(vs->aenc_tee_queue,GST_STATE_NULL);
-   gst_element_set_state(vs->muxer,GST_STATE_NULL);
-   gst_element_set_state(vs->outer,GST_STATE_NULL); // sink will not deadlock
+static gboolean  vrsmsz_remove()
+{
+   vrchan_t* vc = vrsmsz->remove_chan;
+   vrstream_t* vs = &vc->vs;
+   gst_element_set_state(vc->bin,GST_STATE_NULL); // sink will not deadlock
 
-   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->uridecodebin,vs->vdec_tee,vs->vdec_tee_queue,vs->video_scale,vs->video_capsfilter, vs->video_encoder,vs->audio_convert,vs->audio_encoder,vs->aenc_tee,vs->aenc_tee_queue,vs->muxer,vs->outer,NULL);
+   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vc->bin,NULL);
+
    vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
    vrsmsz->stream_nbs--;
-   vs->video_id = -1;
-   vs->audio_id = -1;
-   memset(vs->src_url,0,sizeof(vs->src_url));
-   vs->dis = -1;
+   vc->video_id = -1;
+   vc->audio_id = -1;
+   memset(vc->in_url,0,sizeof(vc->in_url));
+   vc->resolution = -1;
    g_print("remove bin successful!!!\n");
    /**** recover ***/
-    gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
-    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+   gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
+   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
     
    gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
    return FALSE;
 }
+
 static gboolean
 message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
 {
@@ -130,10 +123,11 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
   GstCaps *new_pad_caps = NULL;
   GstStructure *new_pad_struct = NULL;
   const gchar *new_pad_type = NULL;
-  vrstream_t* vs = data;
+  vrchan_t* vc = data;
+  vrstream_t* vs = &(vc->vs);
 
    //g_printf("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
-  g_print ("url= %s Received new pad '%s' from '%s':\n",vs->pre_sink_url,GST_PAD_NAME(new_pad), GST_ELEMENT_NAME(decodebin));
+  g_print ("url= %s Received new pad '%s' from '%s':\n",vc->preview_url,GST_PAD_NAME(new_pad), GST_ELEMENT_NAME(decodebin));
  
   /* If our converter is already linked, we have nothing to do here */
   /*if (gst_pad_is_linked (sink_pad)) {
@@ -164,6 +158,29 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
   }else{
     g_print ("It has type '%s' which is not supported. \n", new_pad_type);
   }
+  GstStateChangeReturn r;
+  r = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PAUSED);
+  switch (r) {
+    case GST_STATE_CHANGE_NO_PREROLL:
+      /* live source, timestamps are running_time of the pipeline clock. */
+	    g_print("this is live stream");
+      break;
+    case GST_STATE_CHANGE_SUCCESS:
+      /* success, no async state changes, same as async, timestamps start
+       * from 0 */
+    case GST_STATE_CHANGE_ASYNC:
+      /* no live source, bin will preroll. We have to punch it in because in
+       * this situation timestamps start from 0.  */
+	    g_print("this is not live stream");
+      break;
+    case GST_STATE_CHANGE_FAILURE:
+      /* fall through to return */
+    default:
+      return;
+  }
+  ret = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+
+  gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
 }
 /*
  *
@@ -171,39 +188,47 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
  *
 */
 gboolean vrsmsz_add_stream(gpointer data){
+   gchar name[1024];
+   gchar* uri = data;
+   vrstream_t* vs = NULL;
+   vrchan_t* vc=NULL;
+
    if(vrsmsz->stream_nbs > 16) {
      g_print("sorry streams is full\n");
      return FALSE;
    }
    /**********************dispatch stream id ***********************/
-   gchar* uri = data;
    g_print("start pull stream uri= %s\n",uri);
-   vrstream_t* vs = NULL;
    for(int i=0; i<MAX_CHANNEL; i++){
        if(vrsmsz->streams_id[i] == -1){
           vrsmsz->streams_id[i] = i;
-          vs = vrsmsz->streams + vrsmsz->streams_id[i];
-          vs->stream_id = vrsmsz->streams_id[i];
+          vc = vrsmsz->streams + vrsmsz->streams_id[i];
+          vc->stream_id = vrsmsz->streams_id[i];
 	  break;
 	}
    }
-   if(!vs) return FALSE;
-   vs->video_id = vs->stream_id;
-   vs->audio_id = vs->stream_id;
-   sprintf(vs->src_url,"%s",uri);
-   vs->dis = 1998;
-   gchar name[1024];
+   if(!vc) return FALSE;
+   vc->video_id = vc->stream_id;
+   vc->audio_id = vc->stream_id;
+   sprintf(vc->in_url, "%s", uri);
+   vc->resolution = 2;
+
+   g_print("Stream_id is %d\n", vc->stream_id);
+   sprintf(name,"chan-%d-bin",vc->stream_id);
+
+   vc->bin = gst_bin_new(name);
+   vs = &vc->vs;
 
    if(!vs->uridecodebin){
-     sprintf(name,"vs%d-uridecodebin",vs->video_id);
+     sprintf(name,"vs%d-uridecodebin",vc->video_id);
      vs->uridecodebin = gst_element_factory_make("uridecodebin", name);
      g_object_set (vs->uridecodebin,"uri", uri, "expose-all-streams", TRUE, NULL);
-     g_signal_connect (vs->uridecodebin, "pad-added", (GCallback) _pad_added_cb, vs);
+     g_signal_connect (vs->uridecodebin, "pad-added", (GCallback) _pad_added_cb, vc);
 
    }
 
    if(!vs->vdec_tee){
-     sprintf(name,"vs%d-vdec_tee",vs->video_id);
+     sprintf(name,"vs%d-vdec_tee",vc->video_id);
     vs->vdec_tee = gst_element_factory_make("tee",name);
     if(!vs->vdec_tee){
       g_print("error make\n");
@@ -211,7 +236,7 @@ gboolean vrsmsz_add_stream(gpointer data){
     }
    }
    if(!vs->vdec_tee_queue){
-     sprintf(name,"vs%d-vdec_tee_queue",vs->video_id);
+     sprintf(name,"vs%d-vdec_tee_queue",vc->video_id);
     vs->vdec_tee_queue = gst_element_factory_make("queue",name);
     if(!vs->vdec_tee_queue){
       g_print("error make\n");
@@ -219,7 +244,7 @@ gboolean vrsmsz_add_stream(gpointer data){
     }
    }
    if(!vs->video_scale){
-     sprintf(name,"vs%d-video_scale",vs->video_id);
+     sprintf(name,"vs%d-video_scale",vc->video_id);
     vs->video_scale = gst_element_factory_make("videoscale",name);
     if(!vs->video_scale){
       g_print("error make\n");
@@ -227,7 +252,7 @@ gboolean vrsmsz_add_stream(gpointer data){
     }
    }
    if(!vs->video_capsfilter){
-     sprintf(name,"vs%d-video_capsfilter",vs->video_id);
+     sprintf(name,"vs%d-video_capsfilter",vc->video_id);
      vs->video_capsfilter = gst_element_factory_make("capsfilter", name);
     if(!vs->video_capsfilter){
       g_print("error make\n");
@@ -237,7 +262,7 @@ gboolean vrsmsz_add_stream(gpointer data){
       "video/x-raw, width=320, height=240");
    }
    if(!vs->video_encoder){
-     sprintf(name,"vs%d-video_encoder",vs->video_id);
+     sprintf(name,"vs%d-video_encoder",vc->video_id);
      vs->video_encoder = gst_element_factory_make("x264enc", name);
     if(!vs->video_encoder){
       g_print("error make\n");
@@ -246,7 +271,7 @@ gboolean vrsmsz_add_stream(gpointer data){
     g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
    }
    if(!vs->audio_convert){
-     sprintf(name,"vs%d-audio_convert",vs->audio_id);
+     sprintf(name,"vs%d-audio_convert",vc->audio_id);
      vs->audio_convert = gst_element_factory_make("audioconvert", name);
     if(!vs->audio_convert){
       g_print("error make\n");
@@ -254,7 +279,7 @@ gboolean vrsmsz_add_stream(gpointer data){
     }
    }
    if(!vs->audio_encoder){
-     sprintf(name,"vs%d-audio_encoder",vs->audio_id);
+     sprintf(name,"vs%d-audio_encoder",vc->audio_id);
      vs->audio_encoder = gst_element_factory_make("voaacenc", name);
     if(!vs->audio_encoder){
       g_print("error make\n");
@@ -262,41 +287,42 @@ gboolean vrsmsz_add_stream(gpointer data){
     }
    }
    if(!vs->aenc_tee){
-     sprintf(name,"vs%d-aenc_tee",vs->audio_id);
+     sprintf(name,"vs%d-aenc_tee",vc->audio_id);
      vs->aenc_tee = gst_element_factory_make("tee", name);
-    if(!vs->aenc_tee){
-      g_print("error make\n");
+     if(!vs->aenc_tee){
+       g_print("error make\n");
       return FALSE;
-    }
+     }
    }
    if(!vs->aenc_tee_queue){
-     sprintf(name,"vs%d-aenc_tee_queue",vs->audio_id);
+     sprintf(name,"vs%d-aenc_tee_queue",vc->audio_id);
      vs->aenc_tee_queue = gst_element_factory_make("queue", name);
-    if(!vs->aenc_tee_queue){
-      g_print("error make\n");
-      return FALSE;
-    }
+     if(!vs->aenc_tee_queue){
+       g_print("error make\n");
+       return FALSE;
+     }
    }
    if(!vs->muxer){
-     sprintf(name,"vs%d-muxer",vs->video_id);
+     sprintf(name,"vs%d-muxer",vc->video_id);
      vs->muxer = gst_element_factory_make("flvmux", name);
-    if(!vs->muxer){
-      g_print("error make\n");
-      return FALSE;
-    }
+     if(!vs->muxer){
+       g_print("error make\n");
+       return FALSE;
+     }
    }
    if(!vs->outer){
-     sprintf(name,"vs%d-outer",vs->video_id);
+     sprintf(name,"vs%d-outer",vc->video_id);
      vs->outer= gst_element_factory_make("rtmpsink", name);
-    if(!vs->outer){
-      g_print("error make\n");
-      return FALSE;
-    }
-     g_print("out put uri = %s\n",vs->pre_sink_url);
-     g_object_set (vs->outer, "location", vs->pre_sink_url, NULL);
+     if(!vs->outer){
+       g_print("error make\n");
+       return FALSE;
+     }
+     g_print("preview put uri = %s\n",vc->preview_url);
+     g_object_set (vs->outer, "location", vc->preview_url, NULL);
    }
 
-   gst_bin_add_many(GST_BIN_CAST(vrsmsz->pipeline), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->audio_convert, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
+   gst_bin_add_many(GST_BIN(vc->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->audio_convert, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
+   gst_bin_add(GST_BIN(vrsmsz->pipeline),vc->bin);
 
    if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->muxer,vs->outer,NULL)){
       g_print("push link failed\n");
@@ -309,33 +335,27 @@ gboolean vrsmsz_add_stream(gpointer data){
    }
 
    (vrsmsz->stream_nbs)++;
-   vrsmsz_start();
+   vrsmsz_play();
    g_free(uri);
-   /**** put stream_id to queue ***/
-   g_print("Stream_id is %d\n", vs->stream_id);
-   //g_print("++++++++++++++ old base time %lu\n\n",gst_element_get_base_time (vs->uridecodebin));
-   //base_time = gst_element_get_base_time (vs->uridecodebin);
-   //running_time = now - base_time;
-   //g_print("++++++++++++++ running_time  %"GST_TIME_FORMAT", base_time = %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(running_time / GST_MSECOND) ,GST_TIME_ARGS(base_time / GST_MSECOND));
 
 #if 1
-   GstClockTime now ;//,base_time,running_time;
+   GstClockTime now ;
    now = gst_clock_get_time (vrsmsz->theclock);
-    //now = gst_clock_get_time (vrsmsz->theclock);
-    //base_time = now - running_time;
 
-    gst_element_set_base_time (vs->uridecodebin, now);
+   gst_element_set_base_time (vs->uridecodebin, now);
    g_print("\n++++++++++++++ base time %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(now / GST_MSECOND));
 #endif
 
    //g_print("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
-   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+  gst_element_set_state (vc->bin, GST_STATE_PLAYING);
+  gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
    return FALSE;
 }
 
 /*******************************************************************************/
 gboolean vrsmsz_remove_stream(gpointer data){
    gint streamid = atoi((gchar*)data);
+   vrchan_t* vc = NULL;
    vrstream_t* vs = NULL;
 
    g_free(data);
@@ -344,215 +364,231 @@ gboolean vrsmsz_remove_stream(gpointer data){
    }
    for(int i=0; i<MAX_CHANNEL; i++){
        if(vrsmsz->streams_id[i] == streamid){
-          vs = vrsmsz->streams + vrsmsz->streams_id[i];
-          vs->stream_id = -1;
+          vc = vrsmsz->streams + vrsmsz->streams_id[i];
+          vc->stream_id = -1;
           vrsmsz->streams_id[i] = -1;
 	  break;
 	}
    }
-   if(!vs){ 
-      g_print("streams found\n");
+   if(!vc){ 
+      //g_print("streams found\n");
       return FALSE;
    }
-   g_print("remove stream = %s\n",vs->src_url);
-   GstEvent*  event = gst_event_new_eos();
-   vrsmsz->remove_vs = vs;
+   if(streamid == vrsmsz->director.stream_id){
+     g_print("remove preview and pub");
+   }
+   g_print("remove stream = %s\n",vc->in_url);
+#if 0
+   //GstEvent*  event = gst_event_new_eos();
+   //vrsmsz->remove_chan = vc;
    //GstElement* source = NULL;
    //g_object_get(vs->uridecodebin,"source",&source,NULL);
    //if(!gst_element_send_event(source, event)){
    //if(!gst_element_send_event(vs->uridecodebin, event)){
-   if(!gst_element_send_event(vrsmsz->pipeline, event)){
-     g_print("send events failed\n");
-   }
-   //  g_print("send events\n");
+   //if(!gst_element_send_event(vrsmsz->pipeline, event)){
+   //  g_print("send events failed\n");
+   //}
+     g_print("send events\n");
    //vrsmsz_remove();
+#endif
+
+   gst_element_set_state(vc->bin,GST_STATE_NULL); // sink will not deadlock
+   vs = &vc->vs;
+   //gst_object_unref(vs->uridecodebin);
+   //gst_object_unref(vs->vdec_tee);
+   //gst_object_unref(vs->vdec_tee_queue);
+   //gst_object_unref(vs->video_scale);
+   //gst_object_unref(vs->video_capsfilter);
+   //gst_object_unref(vs->video_encoder);
+   //gst_object_unref(vs->audio_convert);
+   //gst_object_unref(vs->audio_encoder);
+   //gst_object_unref(vs->aenc_tee);
+   //gst_object_unref(vs->aenc_tee_queue);
+   //gst_object_unref(vs->muxer);
+   //gst_object_unref(vs->outer);
+   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vc->bin,NULL);
+   vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
+   vrsmsz->stream_nbs--;
+   vc->tracks = 0;
+   vc->video_id = -1;
+   vc->audio_id = -1;
+   memset(vc->in_url,0,sizeof(vc->in_url));
+   //memset(vc->preview_url,0,sizeof(vc->preview_url));
+   vc->resolution = -1;
+   g_print("remove bin successful!!!\n");
+
+   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+
    return FALSE;
 }
 
 
-
 /*****************************************************************************************************/
-/*****************************************************************************************************/
-gboolean vrsmsz_switch_stream(gpointer data){
-#if 1// effect switch
-  //gboolean is_fade = TRUE;
-  gboolean is_fade = FALSE;
-#endif
-  gint streamid = atoi((gchar*)data);
-  GstPadLinkReturn ret;
-  vrstream_t* vs = vrsmsz->streams+streamid;
-  g_print("switch %d \n",streamid);
-
-  if(vrsmsz->stream_nbs == 0){
-    g_print("no stream \n");
-    return FALSE;
-  }
-  if(streamid == vrsmsz->v_director){
-    g_print("switch in same stream\n");
-    return FALSE;
-  }
-  int i ;
-  for(i=0; i<MAX_CHANNEL; i++){
-    if(streamid == vrsmsz->streams_id[i]){
-       break;
-    }
-  }
-  if(i == MAX_CHANNEL){
-    g_print("streamid is error");
-    return FALSE;
-  }
-  if(!vrsmsz->director_stream_publish_url[0]){
-    g_print("publish url = NULL\n");
-    //return FALSE;
+gboolean director_publish_create(gpointer uri){
+  gchar name[1024];
+  if(!vrsmsz->director.publish_url[0]){
+    //g_print("publish url = NULL\n");
     gchar pub_url[1024]={"rtmp://192.168.0.134/live/pub"};
     g_print("use default url %s\n",pub_url);
-    memcpy(vrsmsz->director_stream_publish_url,pub_url,strlen(pub_url)+1);
+    memcpy(vrsmsz->director.publish_url,pub_url,strlen(pub_url)+1);
   }else{
     g_print("\n");
   }
 
-  g_free(data);
-  g_print("%s %s\n",vrsmsz->director_stream_publish_url,vrsmsz->director_stream_preview_url);
+  if(!vrsmsz->director.ds.pub_vdec_tee_queue){
+     sprintf(name,"%s-pub_vdec_tee_queue","vrsmsz");
+    vrsmsz->director.ds.pub_vdec_tee_queue= gst_element_factory_make("queue", name);
+    if(!vrsmsz->director.ds.pub_vdec_tee_queue){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
 
+  if(!vrsmsz->director.ds.pub_video_encoder){
+     sprintf(name,"%s-pub_video_encoder","vrsmsz");
+    vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
+    if(!vrsmsz->director.ds.pub_video_encoder){
+      g_print("error make\n");
+      return FALSE;
+    }
+    g_object_set (vrsmsz->director.ds.pub_video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
+  }
+  if(!vrsmsz->director.ds.pub_aenc_tee_queue){
+     sprintf(name,"%s-pub_aenc_tee_queue","vrsmsz");
+    vrsmsz->director.ds.pub_aenc_tee_queue= gst_element_factory_make("queue", name);
+    if(!vrsmsz->director.ds.pub_aenc_tee_queue){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
+  if(!vrsmsz->director.ds.pub_muxer){
+     sprintf(name,"%s-pub_muxer","vrsmsz");
+    vrsmsz->director.ds.pub_muxer= gst_element_factory_make("flvmux", name);
+    if(!vrsmsz->director.ds.pub_muxer){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
+  if(!vrsmsz->director.ds.pub_outer){
+     sprintf(name,"%s-pub_outer","vrsmsz");
+    vrsmsz->director.ds.pub_outer= gst_element_factory_make("rtmpsink", name);
+    if(!vrsmsz->director.ds.pub_outer){
+      g_print("error make\n");
+      return FALSE;
+    }
+    g_object_set (vrsmsz->director.ds.pub_outer, "location", vrsmsz->director.publish_url, NULL);
+  }
+
+  gst_bin_add_many(GST_BIN(vrsmsz->director.pub_bin), vrsmsz->director.ds.pub_vdec_tee_queue,vrsmsz->director.ds.pub_video_encoder,vrsmsz->director.ds.pub_aenc_tee_queue,vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL);
+
+      return FALSE;
+}
+
+/*****************************************************************************************************/
+gboolean director_preview_create(){
   gchar name[1024];
-  if(!vrsmsz->pre_vdec_tee_queue){
+  g_print("%s \n",vrsmsz->director.preview_url);
+
+  if(!vrsmsz->director.ds.pre_vdec_tee_queue){
      sprintf(name,"%s-pre_vdec_tee_queue","vrsmsz");
-     vrsmsz->pre_vdec_tee_queue= gst_element_factory_make("queue", name);
-    if(!vrsmsz->pre_vdec_tee_queue){
-      g_print("error make\n");
-      return FALSE;
-    }
+     vrsmsz->director.ds.pre_vdec_tee_queue= gst_element_factory_make("queue", name);
+     if(!vrsmsz->director.ds.pre_vdec_tee_queue){
+       g_print("error make\n");
+       return FALSE;
+     }
   }
-  if(!vrsmsz->pre_video_scale){
+  if(!vrsmsz->director.ds.pre_video_scale){
      sprintf(name,"%s-pre_video_scale","vrsmsz");
-    vrsmsz->pre_video_scale= gst_element_factory_make("videoscale", name);
-    if(!vrsmsz->pre_video_scale){
+    vrsmsz->director.ds.pre_video_scale= gst_element_factory_make("videoscale", name);
+    if(!vrsmsz->director.ds.pre_video_scale){
       g_print("error make\n");
       return FALSE;
     }
   }
-  if(!vrsmsz->pre_capsfilter){
+  if(!vrsmsz->director.ds.pre_capsfilter){
      sprintf(name,"%s-pre_capsfilter","vrsmsz");
-    vrsmsz->pre_capsfilter= gst_element_factory_make("capsfilter", name);
-    if(!vrsmsz->pre_capsfilter){
+    vrsmsz->director.ds.pre_capsfilter= gst_element_factory_make("capsfilter", name);
+    if(!vrsmsz->director.ds.pre_capsfilter){
       g_print("error make\n");
       return FALSE;
     }
-     gst_util_set_object_arg (G_OBJECT (vrsmsz->pre_capsfilter), "caps",
+     gst_util_set_object_arg (G_OBJECT (vrsmsz->director.ds.pre_capsfilter), "caps",
       "video/x-raw, width=320, height=240");
   }
-  if(!vrsmsz->pre_video_encoder){
+  if(!vrsmsz->director.ds.pre_video_encoder){
      sprintf(name,"%s-pre_video_encoder","vrsmsz");
-    vrsmsz->pre_video_encoder= gst_element_factory_make("x264enc", name);
-    if(!vrsmsz->pre_video_encoder){
+    vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("x264enc", name);
+    if(!vrsmsz->director.ds.pre_video_encoder){
       g_print("error make\n");
       return FALSE;
     }
-    g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
+    g_object_set (vrsmsz->director.ds.pub_video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
   }
-  if(!vrsmsz->pre_aenc_tee_queue){
+  if(!vrsmsz->director.ds.pre_aenc_tee_queue){
      sprintf(name,"%s-pre_aenc_tee_queue","vrsmsz");
-    vrsmsz->pre_aenc_tee_queue= gst_element_factory_make("queue", name);
-    if(!vrsmsz->pre_aenc_tee_queue){
+    vrsmsz->director.ds.pre_aenc_tee_queue= gst_element_factory_make("queue", name);
+    if(!vrsmsz->director.ds.pre_aenc_tee_queue){
       g_print("error make\n");
       return FALSE;
     }
   }
-  if(!vrsmsz->pre_muxer){
+  if(!vrsmsz->director.ds.pre_muxer){
      sprintf(name,"%s-pre_muxer","vrsmsz");
-    vrsmsz->pre_muxer= gst_element_factory_make("flvmux", name);
-    if(!vrsmsz->pre_muxer){
+    vrsmsz->director.ds.pre_muxer= gst_element_factory_make("flvmux", name);
+    if(!vrsmsz->director.ds.pre_muxer){
       g_print("error make\n");
       return FALSE;
     }
   }
-  if(!vrsmsz->pre_outer){
+  if(!vrsmsz->director.ds.pre_outer){
      sprintf(name,"%s-pre_outer","vrsmsz");
-    vrsmsz->pre_outer= gst_element_factory_make("rtmpsink", name);
-    if(!vrsmsz->pre_outer){
+    vrsmsz->director.ds.pre_outer= gst_element_factory_make("rtmpsink", name);
+    if(!vrsmsz->director.ds.pre_outer){
       g_print("error make\n");
       return FALSE;
     }
-    g_object_set (vrsmsz->pre_outer, "location", vrsmsz->director_stream_preview_url, NULL);
+    g_object_set (vrsmsz->director.ds.pre_outer, "location", vrsmsz->director.preview_url, NULL);
   }
+  gst_bin_add_many(GST_BIN(vrsmsz->director.pre_bin), vrsmsz->director.ds.pre_vdec_tee_queue, vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, vrsmsz->director.ds.pre_aenc_tee_queue, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL);
+      return FALSE;
+}
 
-  if(!vrsmsz->pub_vdec_tee_queue){
-     sprintf(name,"%s-pub_vdec_tee_queue","vrsmsz");
-    vrsmsz->pub_vdec_tee_queue= gst_element_factory_make("queue", name);
-    if(!vrsmsz->pub_vdec_tee_queue){
-      g_print("error make\n");
-      return FALSE;
-    }
-  }
-
-  if(!vrsmsz->pub_video_encoder){
-     sprintf(name,"%s-pub_video_encoder","vrsmsz");
-    vrsmsz->pub_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
-    if(!vrsmsz->pub_video_encoder){
-      g_print("error make\n");
-      return FALSE;
-    }
-    g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
-  }
-  if(!vrsmsz->pub_aenc_tee_queue){
-     sprintf(name,"%s-pub_aenc_tee_queue","vrsmsz");
-    vrsmsz->pub_aenc_tee_queue= gst_element_factory_make("queue", name);
-    if(!vrsmsz->pub_aenc_tee_queue){
-      g_print("error make\n");
-      return FALSE;
-    }
-  }
-  if(!vrsmsz->pub_muxer){
-     sprintf(name,"%s-pub_muxer","vrsmsz");
-    vrsmsz->pub_muxer= gst_element_factory_make("flvmux", name);
-    if(!vrsmsz->pub_muxer){
-      g_print("error make\n");
-      return FALSE;
-    }
-  }
-  if(!vrsmsz->pub_outer){
-     sprintf(name,"%s-pub_outer","vrsmsz");
-    vrsmsz->pub_outer= gst_element_factory_make("rtmpsink", name);
-    if(!vrsmsz->pub_outer){
-      g_print("error make\n");
-      return FALSE;
-    }
-    g_object_set (vrsmsz->pub_outer, "location", vrsmsz->director_stream_publish_url, NULL);
-  }
-  
-  if(vrsmsz->canSwitch && is_fade){
-    if(!vrsmsz->video_filter_queue){
+gboolean director_switch_effect_create(){
+  gchar name[1024];
+  if(!vrsmsz->director.ds.video_filter_queue){
       sprintf(name,"%s-video_filter_queue","vrsmsz");
-      vrsmsz->video_filter_queue = gst_element_factory_make("queue", name);
-      if(!vrsmsz->video_filter_queue){
+      vrsmsz->director.ds.video_filter_queue = gst_element_factory_make("queue", name);
+      if(!vrsmsz->director.ds.video_filter_queue){
         g_print("error make\n");
         return FALSE;
       }
     }
-    if(!vrsmsz->videoconvert){
+    if(!vrsmsz->director.ds.videoconvert){
       sprintf(name,"%s-videoconvert","vrsmsz");
-      vrsmsz->videoconvert= gst_element_factory_make("videoconvert", name);
-      if(!vrsmsz->videoconvert){
+      vrsmsz->director.ds.videoconvert= gst_element_factory_make("videoconvert", name);
+      if(!vrsmsz->director.ds.videoconvert){
         g_print("error make\n");
         return FALSE;
       }
     }
-    if(!vrsmsz->video_filter_chain){
+    if(!vrsmsz->director.ds.video_filter_chain){
       sprintf(name,"%s-video_filter_chain","vrsmsz");
-      vrsmsz->video_filter_chain= gst_element_factory_make("compositor", name);
-      if(!vrsmsz->video_filter_chain){
+      vrsmsz->director.ds.video_filter_chain= gst_element_factory_make("compositor", name);
+      if(!vrsmsz->director.ds.video_filter_chain){
         g_print("error make\n");
         return FALSE;
       }
     }
-    if(!vrsmsz->video_filter_tee){
+    if(!vrsmsz->director.ds.video_filter_tee){
       sprintf(name,"%s-video_filter_tee","vrsmsz");
-      vrsmsz->video_filter_tee= gst_element_factory_make("tee", name);
-      if(!vrsmsz->video_filter_tee){
+      vrsmsz->director.ds.video_filter_tee= gst_element_factory_make("tee", name);
+      if(!vrsmsz->director.ds.video_filter_tee){
         g_print("error make\n");
         return FALSE;
       }
     }
+    gst_bin_add_many(GST_BIN(vrsmsz->director.swt_bin),vrsmsz->director.ds.video_filter_queue,vrsmsz->director.ds.videoconvert,vrsmsz->director.ds.video_filter_chain,vrsmsz->director.ds.video_filter_tee,NULL);
+      return FALSE;
     /*
     if(!vrsmsz->){
       sprintf(name,"%s-","vrsmsz");
@@ -563,6 +599,50 @@ gboolean vrsmsz_switch_stream(gpointer data){
     }
     }
     */
+}
+
+/*****************************************************************************************************/
+#if 0
+gboolean vrsmsz_switch_stream(gpointer data){
+#if 1// effect switch
+  //gboolean is_fade = TRUE;
+  gboolean is_fade = FALSE;
+#endif
+  gint streamid = atoi((gchar*)data);
+  GstPadLinkReturn ret;
+  vrchan_t* vc = vrsmsz->streams+streamid;
+  gchar name[1024];
+  g_print("switch %d \n",streamid);
+
+  if(vrsmsz->stream_nbs == 0){
+    g_print("no stream \n");
+    return FALSE;
+  }
+  if(streamid == vrsmsz->director.stream_id){
+    g_print("switch in same stream\n");
+    return FALSE;
+  }
+  for(int i=0; i<MAX_CHANNEL; i++){
+    if(streamid == vrsmsz->streams_id[i]){
+       break;
+    }
+  }
+  if(i == MAX_CHANNEL){
+    g_print("streamid is error");
+    return FALSE;
+  }
+ 
+  g_free(data);
+  director_preview_create();
+  director_publish_create();
+  director_switch_effect_create();
+
+  if(vrsmsz->canSwitch && is_fade){
+      if(!gst_element_link_many(vrsmsz->video_filter_queue, vrsmsz->videoconvert, vrsmsz->video_filter_chain, vrsmsz->video_filter_tee, NULL)){
+       g_print("link director pre viedo failed");
+       return FALSE;
+      }
+
   }
 
 /*
@@ -577,12 +657,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
   if(vrsmsz->canSwitch){// 
     vrstream_t* vr = vrsmsz->streams + vrsmsz->v_director;
     if(is_fade){
-      gst_bin_add_many(GST_BIN_CAST(vrsmsz->pipeline),vrsmsz->video_filter_queue,vrsmsz->videoconvert,vrsmsz->video_filter_chain,vrsmsz->video_filter_tee,NULL);
-      if(!gst_element_link_many(vrsmsz->video_filter_queue, vrsmsz->videoconvert, vrsmsz->video_filter_chain, vrsmsz->video_filter_tee, NULL)){
-       g_print("link director pre viedo failed");
-       return FALSE;
-      }
-////
+
       ret = gst_pad_unlink (vr->pre_vdec_tee_srcpad,vrsmsz->pre_vdec_tee_queue_sinkpad);
       if (GST_PAD_LINK_FAILED (ret)) {
          g_print ("unLink failed.\n");
@@ -613,7 +688,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
       } else {
          g_print ("Link succeeded .\n");
       }
-////
+
       if(!vrsmsz->pre_video_filter_tee_srcpad)
         vrsmsz->pre_video_filter_tee_srcpad = gst_element_get_request_pad (vrsmsz->video_filter_tee, "src_%u");
       ret = gst_pad_link (vrsmsz->pre_video_filter_tee_srcpad ,vrsmsz->pre_vdec_tee_queue_sinkpad);
@@ -758,7 +833,6 @@ gboolean vrsmsz_switch_stream(gpointer data){
       }
     }
   }else{
-     gst_bin_add_many(GST_BIN_CAST(vrsmsz->pipeline), vrsmsz->pre_vdec_tee_queue, vrsmsz->pre_video_scale, vrsmsz->pre_capsfilter, vrsmsz->pre_video_encoder, vrsmsz->pre_aenc_tee_queue, vrsmsz->pre_muxer, vrsmsz->pre_outer,vrsmsz->pub_vdec_tee_queue,vrsmsz->pub_video_encoder,vrsmsz->pub_aenc_tee_queue,vrsmsz->pub_muxer,vrsmsz->pub_outer, NULL);
     if(!gst_element_link_many(vrsmsz->pre_vdec_tee_queue, vrsmsz->pre_video_scale, vrsmsz->pre_capsfilter, vrsmsz->pre_video_encoder, vrsmsz->pre_muxer, vrsmsz->pre_outer, NULL)){
      g_print("link director pre viedo failed");
      return FALSE;
@@ -831,12 +905,13 @@ gboolean vrsmsz_switch_stream(gpointer data){
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
   return FALSE;
 }
+#endif
 
 void vrsmsz_stop(){
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_NULL);
 }
 
-void vrsmsz_play(){
+void vrsmsz_start(){
   g_main_loop_run (vrsmsz->loop);
 }
 
@@ -844,7 +919,7 @@ void vrsmsz_quit(){
   g_main_loop_quit (vrsmsz->loop);
 }
 
-void vrsmsz_start(){
+void vrsmsz_play(){
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
 }
 
@@ -901,7 +976,7 @@ static void vrsmsz_run_command(gchar* command){
   }else if(!memcmp(argv[0],"remove",6)){
     g_idle_add(vrsmsz_remove_stream,arg2);
   }else if(!memcmp(argv[0],"switch",6)){
-    g_idle_add(vrsmsz_switch_stream,arg2);
+    //g_idle_add(vrsmsz_switch_stream,arg2);
   }else if(!memcmp(argv[0],"quit",4)){
     exit(atoi(argv[1]));
   }else if(!memcmp(argv[0],"recover",7)){
@@ -914,14 +989,61 @@ static void vrsmsz_run_command(gchar* command){
 
 static gboolean get_command(){
    gpointer command;
-#if 0
-   ret = g_strdup("pull rtmp://192.168.0.134/live/ch1");
-#else
    command = g_async_queue_try_pop(vrsmsz->queue);
-#endif
    if(!command) return TRUE;
    vrsmsz_run_command(command);
    return TRUE;
+}
+
+void chan_stream_init(vrstream_t* vs){
+  vs->uridecodebin = NULL;  
+  vs->vdec_tee= NULL;
+  vs->vdec_tee_queue= NULL;
+  vs->pre_vdec_tee_srcpad= NULL;
+  vs->pub_vdec_tee_srcpad= NULL;
+  vs->vdec_tee_filter_srcpad= NULL;
+  vs->vdec_filter_tee_queue_sinkpad= NULL;
+  vs->vdec_filter_tee_queue= NULL;
+  vs->vdec_filter_tee_convert= NULL;
+  vs->video_scale= NULL;
+  vs->video_capsfilter= NULL;
+  vs->video_encoder= NULL;
+  vs->audio_convert= NULL;
+  vs->audio_encoder= NULL;
+  vs->aenc_tee= NULL;
+  vs->pre_aenc_tee_srcpad= NULL;
+  vs->pub_aenc_tee_srcpad= NULL;
+  vs->aenc_tee_queue= NULL;
+  vs->muxer= NULL;  
+  vs->outer= NULL;  
+}
+
+void director_stream_init(drstream_t* ds){
+  ds->video_filter_queue_sinkpad= NULL;
+  ds->video_filter_queue= NULL;
+  ds->videoconvert= NULL;
+  ds->video_filter_chain= NULL;
+  ds->video_filter_tee= NULL;
+  ds->pre_video_filter_tee_srcpad= NULL;
+  ds->pub_video_filter_tee_srcpad= NULL;
+  ds->pre_vdec_tee_queue = NULL;
+  ds->pre_vdec_tee_queue_sinkpad = NULL;
+  ds->pre_video_scale = NULL;
+  ds->pre_capsfilter = NULL;
+  ds->pre_video_encoder = NULL;
+  ds->pre_aenc_tee_queue = NULL;
+  ds->pre_aenc_tee_queue_sinkpad= NULL;
+  ds->pre_muxer= NULL;
+  ds->pre_outer= NULL;
+  ds->pub_vdec_tee_queue= NULL;
+  ds->pub_vdec_tee_queue_sinkpad= NULL;
+  ds->pub_video_encoder= NULL;
+  ds->pub_aenc_tee_queue= NULL;
+  ds->pub_aenc_tee_queue_sinkpad= NULL;
+  ds->pub_muxer= NULL;
+  ds->pub_outer= NULL;
+  ds->mixer= NULL;
+  //vrsmsz->comp= NULL;
 }
 
 void vrsmsz_init(int argc, char **argv){
@@ -930,101 +1052,53 @@ void vrsmsz_init(int argc, char **argv){
   if( !vrsmsz ){
     g_error("vrsmsz init failed\n");
   }
-#if 1
+
   vrsmsz->queue = g_async_queue_new ();
   create_http_server(8888,NULL,NULL,vrsmsz->queue);
-  //g_idle_add(get_command,NULL);
-#endif
   
   gst_init (&argc, &argv);
+  enable_factory("nvh265dec",TRUE); // may be use uridecodebin force 
+  enable_factory("nvh264dec",TRUE);
   vrsmsz->loop = g_main_loop_new (NULL, TRUE);
-  vrsmsz->pipeline = gst_pipeline_new ("pipeline");
+  vrsmsz->pipeline = gst_pipeline_new ("vrsmsz-pipeline");
   if(!vrsmsz->loop || !vrsmsz->pipeline )
     g_error("vrsmsz init failed\n");
-  //return ;
-
-  sprintf(vrsmsz->director_stream_preview_url,"rtmp://%s:%s/live/preview",argv[1],argv[2]);
-  memset(vrsmsz->director_stream_publish_url,0,URL_LEN);
-  vrsmsz->mode = atoi(argv[3]);
-  vrsmsz->video_filter_queue_sinkpad= NULL;
-  vrsmsz->video_filter_queue= NULL;
-  vrsmsz->videoconvert= NULL;
-  vrsmsz->video_filter_chain= NULL;
-  vrsmsz->video_filter_tee= NULL;
-  vrsmsz->pre_video_filter_tee_srcpad= NULL;
-  vrsmsz->pub_video_filter_tee_srcpad= NULL;
-  vrsmsz->pre_vdec_tee_queue = NULL;
-  vrsmsz->pre_vdec_tee_queue_sinkpad = NULL;
-  vrsmsz->pre_video_scale = NULL;
-  vrsmsz->pre_capsfilter = NULL;
-  vrsmsz->pre_video_encoder = NULL;
-  vrsmsz->pre_aenc_tee_queue = NULL;
-  vrsmsz->pre_aenc_tee_queue_sinkpad= NULL;
-  vrsmsz->pre_muxer= NULL;
-  vrsmsz->pre_outer= NULL;
-  vrsmsz->pub_vdec_tee_queue= NULL;
-  vrsmsz->pub_vdec_tee_queue_sinkpad= NULL;
-  vrsmsz->pub_video_encoder= NULL;
-  vrsmsz->pub_aenc_tee_queue= NULL;
-  vrsmsz->pub_aenc_tee_queue_sinkpad= NULL;
-  vrsmsz->pub_muxer= NULL;
-  vrsmsz->pub_outer= NULL;
-  vrsmsz->mixer= NULL;
-  //vrsmsz->comp= NULL;
-#if 0
-  vrsmsz->videoconverter = gst_element_factory_make ("videoconvert", NULL);
-  vrsmsz->comp = gst_element_factory_make ("compositor", NULL);
-  vrsmsz->tee  = gst_element_factory_make ("tee", NULL);
-  if(vrsmsz->mode == 0)// 8k
-    vrsmsz->video_encoder = gst_element_factory_make("nvh265enc", NULL); 
-  else if(vrsmsz->mode == 1)// 4k
-    vrsmsz->video_encoder = gst_element_factory_make("nvh264enc", NULL); 
-  else if(vrsmsz->mode == 2)// 2k
-    vrsmsz->video_encoder = gst_element_factory_make("x264enc",   NULL); 
-  vrsmsz->audio_encoder = gst_element_factory_make("voaacenc",   NULL); 
-  vrsmsz->muxer = gst_element_factory_make("flvmux",   NULL);
-  vrsmsz->outer = gst_element_factory_make("rtmpsink",   NULL);
-#endif
-  enable_factory("nvh265dec",TRUE);
-  enable_factory("nvh264dec",TRUE);
-  
-  for( int i=0; i<MAX_CHANNEL; i++){ 
-    memset(vrsmsz->streams + i, 0, sizeof(vrsmsz->streams[i]));
-    vrsmsz->streams_id[i] = -1;
-#if 0
-    vrsmsz->streams[i].video_id = i;
-    vrsmsz->streams[i].audio_id = i;
-    vrsmsz->streams[i].uridecodebin = gst_element_factory_make("uridecodebin", NULL);
-    vrsmsz->streams[i].muxer = gst_element_factory_make("flvmux", NULL);
-    vrsmsz->streams[i].outer = gst_element_factory_make("rtmpsink", NULL);
-#endif
-    sprintf(vrsmsz->streams[i].pre_sink_url,"rtmp://%s:%s/live/%d", argv[1], argv[2], i);
-    g_print("%s \n",vrsmsz->streams[i].pre_sink_url);
-    //g_object_set(vrsmsz->streams[i].outer, "location", vrsmsz->streams[0].pre_sink_url,NULL);
-  }
-  g_print("%s\n",vrsmsz->director_stream_preview_url);
-#if 0
-  gst_bin_add_many(GST_BIN (vrsmsz->pipeline),vrsmsz->comp,vrsmsz->video_encoder,vrsmsz->audio_encoder,vrsmsz->muxer,vrsmsz->tee, NULL);
-  g_print("example: %s","gst-launch-1.0 -e  -v  videotestsrc is-live=1 ! videoconvert ! timeoverlay ! queue ! compositor ! x264enc ! flvmux name=muxer ! rtmpsink location=rtmp://192.168.0.134/live/chan10 audiotestsrc ! audioconvert ! queue ! voaacenc ! muxer.\n\n gst-launch-1.0 -e  -v  videotestsrc is-live=1 ! videoconvert ! timeoverlay ! queue ! compositor ! x264enc ! flvmux name=muxer ! tee name=tee ! queue ! rtmpsink location=rtmp://192.168.0.134/live/chan10 audiotestsrc ! audioconvert ! queue ! voaacenc ! muxer. tee. ! queue ! rtmpsink location=rtmp://192.168.0.134/live/chan11\n\n");
-  if(!gst_element_link_many(vrsmsz->comp,vrsmsz->video_encoder,vrsmsz->muxer,vrsmsz->tee, NULL)){
-    g_error("link video failed\n");
-  }
-  if(!gst_element_link_many(vrsmsz->audio_encoder,vrsmsz->muxer,NULL)){
-    g_error("link audio failed\n");
-  }
-#endif
-  vrsmsz->v_director= -1;
-  vrsmsz->a_director= -1;
-  vrsmsz->stream_nbs = 0;
-  vrsmsz->canSwitch = FALSE;
-  memset(vrsmsz->comp_sink0_pad_name,0,16);
-  memset(vrsmsz->comp_sink1_pad_name,0,16);
-
   vrsmsz->bus = gst_pipeline_get_bus (GST_PIPELINE (vrsmsz->pipeline));
   gst_bus_add_signal_watch (vrsmsz->bus);
   g_signal_connect (G_OBJECT (vrsmsz->bus), "message", G_CALLBACK (message_cb), NULL);
+  
+  vrsmsz->mode = atoi(argv[3]);
 
-  vrsmsz_start();// playing
+  vrsmsz->stream_nbs = 0;
+  vrsmsz->canSwitch = FALSE;
+  for( int i=0; i<MAX_CHANNEL; i++){ 
+    memset(vrsmsz->streams + i, 0, sizeof(vrsmsz->streams[i]));
+    vrsmsz->streams_id[i] = -1;
+    sprintf(vrsmsz->streams[i].preview_url,"rtmp://%s:%s/live/%d", argv[1], argv[2], i);
+    g_print("%s \n",vrsmsz->streams[i].preview_url);
+    vrsmsz->streams[i].tracks = 0;
+    vrsmsz->streams[i].video_id = -1;
+    vrsmsz->streams[i].audio_id = -1;
+    vrsmsz->streams[i].stream_id = -1;
+    vrsmsz->streams[i].subs_id = -1;
+    vrsmsz->streams[i].resolution = 0;
+
+    chan_stream_init(&vrsmsz->streams[i].vs);
+  }
+
+  sprintf(vrsmsz->director.preview_url,"rtmp://%s:%s/live/preview",argv[1],argv[2]);
+  memset(vrsmsz->director.publish_url,0,URL_LEN);
+  vrsmsz->director.pre_bin = NULL;
+  vrsmsz->director.pub_bin = NULL;
+  vrsmsz->director.swt_bin = NULL;
+  vrsmsz->director.eff_bin = NULL;
+  vrsmsz->director.stream_id = -1;
+  vrsmsz->director.video_id = -1;
+  vrsmsz->director.audio_id = -1;
+
+  director_stream_init(&vrsmsz->director.ds);
+
+  vrsmsz_play(); 
   vrsmsz->theclock = gst_element_get_clock (vrsmsz->pipeline);
   if(!vrsmsz->theclock) g_print("the clock false\n");
   g_timeout_add(10, get_command,NULL);
