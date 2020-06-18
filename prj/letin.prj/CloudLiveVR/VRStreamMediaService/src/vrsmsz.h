@@ -37,10 +37,10 @@ typedef struct{
 
 typedef struct {
   gint    tracks;
-  gint   stream_id;
-  gint   video_id;
-  gint   audio_id;
-  gint   subs_id;
+  gint    stream_id;
+  gint    video_id;
+  gint    audio_id;
+  gint    subs_id;
   gchar   in_url[URL_LEN];
   gchar   output_url[URL_LEN];
   gchar   preview_url[URL_LEN];

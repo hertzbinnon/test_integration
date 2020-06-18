@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "vrsmsz.h"
-
+/*
 static gboolean  vrsmsz_remove()
 {
    vrchan_t* vc = vrsmsz->remove_chan;
@@ -16,12 +16,54 @@ static gboolean  vrsmsz_remove()
    memset(vc->in_url,0,sizeof(vc->in_url));
    vc->resolution = -1;
    g_print("remove bin successful!!!\n");
-   /**** recover ***/
+   // recover 
    gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
     
    gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
    return FALSE;
+}
+*/
+void vrsmsz_set_play(GstElement* bin){
+  GstStateChangeReturn r;
+  r = gst_element_set_state (bin, GST_STATE_PAUSED);
+  switch (r) {
+    case GST_STATE_CHANGE_NO_PREROLL:
+      /* live source, timestamps are running_time of the pipeline clock. */
+	    g_print("this bin is live stream\n");
+      break;
+    case GST_STATE_CHANGE_SUCCESS:
+      /* success, no async state changes, same as async, timestamps start
+       * from 0 */
+    case GST_STATE_CHANGE_ASYNC:
+      /* no live source, bin will preroll. We have to punch it in because in
+       * this situation timestamps start from 0.  */
+	    g_print("this bin is not live stream\n");
+      break;
+    case GST_STATE_CHANGE_FAILURE:
+      /* fall through to return */
+    default:
+	    g_print("this bin status change is failed\n");
+  }
+  r = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+  switch (r) {
+    case GST_STATE_CHANGE_NO_PREROLL:
+      /* live source, timestamps are running_time of the pipeline clock. */
+	    g_print("this bin is live stream\n");
+      break;
+    case GST_STATE_CHANGE_SUCCESS:
+      /* success, no async state changes, same as async, timestamps start
+       * from 0 */
+    case GST_STATE_CHANGE_ASYNC:
+      /* no live source, bin will preroll. We have to punch it in because in
+       * this situation timestamps start from 0.  */
+	    g_print("this bin is not live stream\n");
+      break;
+    case GST_STATE_CHANGE_FAILURE:
+      /* fall through to return */
+    default:
+	    g_print("this bin status change is failed\n");
+  }
 }
 
 static gboolean
@@ -64,11 +106,11 @@ message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
     }
     case GST_MESSAGE_EOS:
       g_print ("======> Got EOS\n");
-      vrsmsz_remove();
+      //vrsmsz_remove();
       //g_main_loop_quit (loop);
       break;
     default:
-      //g_print("==> %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
+      g_print("==> %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
       break;
   }
 
@@ -343,6 +385,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    now = gst_clock_get_time (vrsmsz->theclock);
 
    gst_element_set_base_time (vs->uridecodebin, now);
+   //gst_element_set_base_time (vs->bin, now);
    g_print("\n++++++++++++++ base time %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(now / GST_MSECOND));
 #endif
 
@@ -365,13 +408,16 @@ gboolean vrsmsz_remove_stream(gpointer data){
    for(int i=0; i<MAX_CHANNEL; i++){
        if(vrsmsz->streams_id[i] == streamid){
           vc = vrsmsz->streams + vrsmsz->streams_id[i];
-          vc->stream_id = -1;
-          vrsmsz->streams_id[i] = -1;
 	  break;
 	}
    }
    if(!vc){ 
-      //g_print("streams found\n");
+      g_print("streams not found\n");
+      return FALSE;
+   }
+   g_print("streamd_id %d director_id %d\n", vc->stream_id,vrsmsz->director.stream_id);
+   if(vc->stream_id == vrsmsz->director.stream_id && vrsmsz->stream_nbs != 1){
+      g_print("this stream is live playing, cant be removed\n");
       return FALSE;
    }
    if(streamid == vrsmsz->director.stream_id){
@@ -415,6 +461,8 @@ gboolean vrsmsz_remove_stream(gpointer data){
    memset(vc->in_url,0,sizeof(vc->in_url));
    //memset(vc->preview_url,0,sizeof(vc->preview_url));
    vc->resolution = -1;
+   vrsmsz->streams_id[vc->stream_id] = -1;
+   vc->stream_id = -1;
    g_print("remove bin successful!!!\n");
 
    gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
@@ -510,15 +558,18 @@ void director_preview_link_vs(vrstream_t* vs){
       if(!vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad)
 	g_print ("pre aenc tee queue failed. \n");
   }
-  vs->pre_aenc_tee_ghost_srcpad = gst_ghost_pad_new ("pre-aenc-tee-srcpad", vs->pre_aenc_tee_srcpad);
+  if(!vs->pre_aenc_tee_ghost_srcpad){
+     vs->pre_aenc_tee_ghost_srcpad = gst_ghost_pad_new ("pre-aenc-tee-srcpad", vs->pre_aenc_tee_srcpad);
+     gst_element_add_pad (vs->bin, vs->pre_aenc_tee_ghost_srcpad);
+  }
+
   if(!vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad){
     vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad = gst_ghost_pad_new ("pre-aenc-tee-queue-sinkpad", vrsmsz->director.ds.pre_aenc_tee_queue_sinkpad);
     gst_element_add_pad (vrsmsz->director.pre_bin,vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad);
   }
-  gst_element_add_pad (vs->bin, vs->pre_aenc_tee_ghost_srcpad);
   ret = gst_pad_link (vs->pre_aenc_tee_ghost_srcpad,vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
-     g_print ("pre Link failed.\n");
+     g_print ("pre aenc tee Link failed.\n");
   } else {
      g_print ("pre Link succeeded .\n");
   }
@@ -537,12 +588,12 @@ void director_preview_link_vs(vrstream_t* vs){
   gst_element_add_pad (vs->bin, vs->pre_vdec_tee_ghost_srcpad);
   ret = gst_pad_link(vs->pre_vdec_tee_ghost_srcpad, vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
-    g_print ("pre Link failed.\n");
+    g_print ("pre vdec tee Link failed.\n");
   } else {
     g_print ("pre Link succeeded .\n");
   }
 
-  gst_element_set_state (vrsmsz->director.pre_bin, GST_STATE_PLAYING); // this must be used
+  vrsmsz_set_play(vrsmsz->director.pre_bin); // this must be used
   vrsmsz_play();
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
 }
@@ -712,11 +763,11 @@ gboolean director_switch_effect_create(vrstream_t* vs){
     */
 }
 
-gboolean vrsmsz_switch_preview_stream(vrstream_t* vr,vrstream_t* vs){
+gboolean director_preview_unlink_vs(vrstream_t* vr){
   GstPadLinkReturn ret;
   ret = gst_pad_unlink(vr->pre_aenc_tee_ghost_srcpad, vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
-     g_print ("unLink failed.\n");
+     g_print ("unLink aenc tee ghost failed.\n");
   } else {
      g_print ("unLink succeeded .\n");
   }
@@ -729,7 +780,7 @@ gboolean vrsmsz_switch_preview_stream(vrstream_t* vr,vrstream_t* vs){
 
   ret = gst_pad_unlink (vr->pre_vdec_tee_ghost_srcpad,vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
-    g_print ("unLink failed.\n");
+    g_print ("unLink vdec tee failed.\n");
   } else {
     g_print ("unLink succeeded .\n");
   }
@@ -740,7 +791,6 @@ gboolean vrsmsz_switch_preview_stream(vrstream_t* vr,vrstream_t* vs){
   vr->pre_vdec_tee_srcpad= NULL;
   vr->pre_vdec_tee_ghost_srcpad= NULL;
 
-  director_preview_link_vs(vs);
 
 /*
   ret = gst_pad_unlink (vr->pub_vdec_tee_ghost_srcpad, vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad);
@@ -804,7 +854,6 @@ gboolean vrsmsz_switch_stream(gpointer data){
 #endif
   gint streamid = atoi((gchar*)data);
   //GstPadLinkReturn ret;
-  vrchan_t* vc = vrsmsz->streams+streamid;
   //gchar name[1024];
   g_print("Switch %d \n",streamid);
 
@@ -827,11 +876,14 @@ gboolean vrsmsz_switch_stream(gpointer data){
     return FALSE;
   }
  
+  vrchan_t* vc = vrsmsz->streams+streamid;
   g_free(data);
   if(!vrsmsz->isSwitched){// 
     g_print("first switch %d\n",vc->stream_id);
     director_preview_create(&(vc->vs));
+  g_print("create preview \n");
     director_preview_link_vs(&(vc->vs));
+  g_print("link vs to preview \n");
     vrsmsz->isSwitched = TRUE;
     vrsmsz->director.stream_id = vc->stream_id;
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
@@ -839,7 +891,11 @@ gboolean vrsmsz_switch_stream(gpointer data){
   }
   
   vrstream_t* vr = &(vrsmsz->streams[vrsmsz->director.stream_id].vs);
-  vrsmsz_switch_preview_stream(vr, &vc->vs);
+  g_print("unlink vs to preview \n");
+  director_preview_unlink_vs(vr);
+  g_print("link new vs to preview \n");
+  director_preview_link_vs(&vc->vs);
+  vrsmsz->director.stream_id = vc->stream_id;
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
   return FALSE;
 #if 0
