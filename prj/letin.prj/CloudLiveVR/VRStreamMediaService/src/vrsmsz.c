@@ -110,7 +110,7 @@ message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
       //g_main_loop_quit (loop);
       break;
     default:
-      g_print("==> %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
+      //g_print("==> %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
       break;
   }
 
@@ -224,6 +224,7 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
 
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
 }
+
 /*
  *
  * uridecodebin uri=rtmp://192.168.0.134/live/ch1 name=src ! tee name=t1 ! queue ! videoscale ! video/x-raw, width=320, height=240 ! x264enc ! flvmux name=muxer ! rtmpsink location=rtmp://192.168.0.134/live/0 src. ! audioconvert ! voaacenc ! tee ! queue ! muxer.
@@ -472,16 +473,12 @@ gboolean vrsmsz_remove_stream(gpointer data){
 
 
 /*****************************************************************************************************/
-gboolean director_publish_create(gpointer uri){
+gboolean director_publish_create(gchar* url){
   gchar name[1024];
   if(!vrsmsz->director.publish_url[0]){
-    //g_print("publish url = NULL\n");
-    gchar pub_url[1024]={"rtmp://192.168.0.134/live/pub"};
-    g_print("use default url %s\n",pub_url);
-    memcpy(vrsmsz->director.publish_url,pub_url,strlen(pub_url)+1);
-  }else{
-    g_print("\n");
+    g_print("publish url = NULL\n");
   }
+  memcpy(vrsmsz->director.publish_url, url, strlen(url)+1);
 
   if(!vrsmsz->director.ds.pub_vdec_tee_queue){
      sprintf(name,"%s-pub_vdec_tee_queue","vrsmsz");
@@ -527,14 +524,16 @@ gboolean director_publish_create(gpointer uri){
     g_object_set (vrsmsz->director.ds.pub_outer, "location", vrsmsz->director.publish_url, NULL);
   }
 
-  GstCaps *caps = gst_caps_from_string("audio/mpeg");
+  vrsmsz->director.pub_bin = gst_bin_new("pub_bin");
   gst_bin_add_many(GST_BIN(vrsmsz->director.pub_bin), vrsmsz->director.ds.pub_vdec_tee_queue,vrsmsz->director.ds.pub_video_encoder,vrsmsz->director.ds.pub_aenc_tee_queue,vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL);
+  gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pub_bin);
 
   if(!gst_element_link_many(vrsmsz->director.ds.pub_vdec_tee_queue, vrsmsz->director.ds.pub_video_encoder, vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL)){
     g_print("link director pub video failed");
     return FALSE;
   }
 
+  GstCaps *caps = gst_caps_from_string("audio/mpeg");
   if(!gst_element_link_filtered(vrsmsz->director.ds.pub_aenc_tee_queue, vrsmsz->director.ds.pub_muxer, caps)){
     g_print("link director pub audio failed");
     return FALSE;
@@ -542,8 +541,61 @@ gboolean director_publish_create(gpointer uri){
  
   return FALSE;
 }
-
 /*****************************************************************************************************/
+
+void director_publish_link_vs(vrstream_t* vs){
+  GstPadLinkReturn ret;
+  // audio 
+  if(!vs->pub_aenc_tee_srcpad){
+      vs->pub_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
+      if(!vs->pub_aenc_tee_srcpad)
+	g_print ("pub aenc failed. \n");
+  }
+  if(!vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad){
+      vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pub_aenc_tee_queue, "sink");
+      if(!vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad)
+	g_print ("pub aenc tee queue failed. \n");
+  }
+  if(!vs->pub_aenc_tee_ghost_srcpad){
+     vs->pub_aenc_tee_ghost_srcpad = gst_ghost_pad_new ("pub-aenc-tee-srcpad", vs->pub_aenc_tee_srcpad);
+     gst_element_add_pad (vs->bin, vs->pub_aenc_tee_ghost_srcpad);
+  }
+
+  if(!vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad){
+    vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad = gst_ghost_pad_new ("pub-aenc-tee-queue-sinkpad", vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad);
+    gst_element_add_pad (vrsmsz->director.pub_bin,vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad);
+  }
+  ret = gst_pad_link (vs->pub_aenc_tee_ghost_srcpad,vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+     g_print ("pub aenc tee Link failed.\n");
+  } else {
+     g_print ("pub Link succeeded .\n");
+  }
+  // video
+  if(!vs->pub_vdec_tee_srcpad)
+    vs->pub_vdec_tee_srcpad = gst_element_get_request_pad (vs->vdec_tee, "src_%u");
+  if(!vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad)
+    vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pub_vdec_tee_queue, "sink");
+
+  if(!vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad){
+    vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad = gst_ghost_pad_new ("pub-vdec-tee-queue-sinkpad", vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad);
+    gst_element_add_pad (vrsmsz->director.pub_bin,vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad );
+  }
+
+  vs->pub_vdec_tee_ghost_srcpad = gst_ghost_pad_new ("pub-vdec-tee-srcpad", vs->pub_vdec_tee_srcpad );
+  gst_element_add_pad (vs->bin, vs->pub_vdec_tee_ghost_srcpad);
+  ret = gst_pad_link(vs->pub_vdec_tee_ghost_srcpad,vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+    g_print ("pub vdec tee Link failed.\n");
+  } else {
+    g_print ("pub Link succeeded .\n");
+  }
+
+  vrsmsz_set_play(vrsmsz->director.pub_bin); // this must be used
+  vrsmsz_play();
+  gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+}
+
 /*****************************************************************************************************/
 void director_preview_link_vs(vrstream_t* vs){
   GstPadLinkReturn ret;
@@ -597,6 +649,38 @@ void director_preview_link_vs(vrstream_t* vs){
   vrsmsz_play();
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
 }
+/****************************************************************************************/
+gboolean director_publish_unlink_vs(vrstream_t* vr){
+  GstPadLinkReturn ret;
+  ret = gst_pad_unlink(vr->pub_aenc_tee_ghost_srcpad, vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+     g_print ("unLink aenc tee ghost failed.\n");
+  } else {
+     g_print ("unLink succeeded .\n");
+  }
+  gst_element_release_request_pad(vr->aenc_tee,vr->pub_aenc_tee_srcpad);
+  gst_element_release_request_pad(vr->bin,vr->pub_aenc_tee_ghost_srcpad);
+  gst_object_unref(vr->pub_aenc_tee_srcpad);
+  //gst_object_unref(vr->pre_aenc_tee_ghost_srcpad);
+  vr->pub_aenc_tee_srcpad = NULL;
+  vr->pub_aenc_tee_ghost_srcpad = NULL;
+
+  ret = gst_pad_unlink (vr->pub_vdec_tee_ghost_srcpad,vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad);
+  if (GST_PAD_LINK_FAILED (ret)) {
+    g_print ("unLink vdec tee failed.\n");
+  } else {
+    g_print ("unLink succeeded .\n");
+  }
+  gst_element_release_request_pad(vr->vdec_tee,vr->pub_vdec_tee_srcpad);
+  gst_element_release_request_pad(vr->bin,vr->pub_vdec_tee_ghost_srcpad);
+  gst_object_unref(vr->pub_vdec_tee_srcpad);
+  //gst_object_unref(vr->pre_vdec_tee_ghost_srcpad);
+  vr->pub_vdec_tee_srcpad= NULL;
+  vr->pub_vdec_tee_ghost_srcpad= NULL;
+
+   return FALSE;   
+}
+
 /*****************************************************************************************************/
 gboolean director_preview_create(vrstream_t* vs){
   gchar name[1024];
@@ -845,6 +929,62 @@ gboolean director_preview_unlink_vs(vrstream_t* vr){
      return FALSE;   
 }
 /*****************************************************************************************************/
+gboolean vrsmsz_publish_stop(){
+   if(vrsmsz->director.stream_id == -1){
+     g_print("no director streams is selector \n");
+     return FALSE;
+   }
+   if(vrsmsz->stream_nbs == 0){
+     g_print("the streams is null  \n");
+     return FALSE;
+   }
+   vrchan_t *vc = vrsmsz->streams + vrsmsz->director.stream_id;
+   director_publish_unlink_vs(&vc->vs);
+   memset(vrsmsz->director.publish_url,0,URL_LEN);
+   gst_element_set_state (vrsmsz->director.pub_bin, GST_STATE_NULL);
+   gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vrsmsz->director.pub_bin,NULL);
+   vrsmsz->director.ds.pub_video_filter_tee_srcpad = NULL;
+   vrsmsz->director.ds.pub_vdec_tee_queue = NULL; 
+   vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad = NULL;
+   vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad = NULL;
+   vrsmsz->director.ds.pub_video_encoder = NULL;
+   vrsmsz->director.ds.pub_aenc_tee_queue = NULL;
+   vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad = NULL;
+   vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad = NULL;
+   vrsmsz->director.ds.pub_muxer = NULL;
+   vrsmsz->director.ds.pub_outer = NULL; 
+   vrsmsz->director.pub_bin = NULL; 
+   return FALSE;
+}
+
+gboolean vrsmsz_publish_stream (gpointer data){
+   gchar* uri = data;
+   if(vrsmsz->director.stream_id == -1){
+     g_print("no director streams is selector \n");
+     return FALSE;
+   }
+   if(vrsmsz->stream_nbs == 0){
+     g_print("the streams is null  \n");
+     return FALSE;
+   }
+   g_print("current publish url:%s\n", vrsmsz->director.publish_url);
+   if(!strncmp(vrsmsz->director.publish_url, uri, strlen(uri))){ // some question error
+     g_print("the stream already published\n");
+     return FALSE;
+   }
+
+   vrchan_t *vc = vrsmsz->streams + vrsmsz->director.stream_id;
+   if(!vrsmsz->director.pub_bin ){ // first pub
+     director_publish_create(uri);
+     director_publish_link_vs(&(vc->vs));
+   }else{
+     vrsmsz_publish_stop();
+     director_publish_create(uri);
+     director_publish_link_vs(&(vc->vs));
+   }
+   g_free(uri);
+   return FALSE;
+}
 /*****************************************************************************************************/
 /*****************************************************************************************************/
 gboolean vrsmsz_switch_stream(gpointer data){
@@ -879,11 +1019,8 @@ gboolean vrsmsz_switch_stream(gpointer data){
   vrchan_t* vc = vrsmsz->streams+streamid;
   g_free(data);
   if(!vrsmsz->isSwitched){// 
-    g_print("first switch %d\n",vc->stream_id);
     director_preview_create(&(vc->vs));
-  g_print("create preview \n");
     director_preview_link_vs(&(vc->vs));
-  g_print("link vs to preview \n");
     vrsmsz->isSwitched = TRUE;
     vrsmsz->director.stream_id = vc->stream_id;
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
@@ -891,11 +1028,16 @@ gboolean vrsmsz_switch_stream(gpointer data){
   }
   
   vrstream_t* vr = &(vrsmsz->streams[vrsmsz->director.stream_id].vs);
-  g_print("unlink vs to preview \n");
   director_preview_unlink_vs(vr);
-  g_print("link new vs to preview \n");
   director_preview_link_vs(&vc->vs);
+
+  if(vrsmsz->director.pub_bin){ // first pub
+    g_print("publish switch");
+    director_publish_unlink_vs(vr);
+    director_publish_link_vs(&vc->vs);
+  }
   vrsmsz->director.stream_id = vc->stream_id;
+
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
   return FALSE;
 #if 0
@@ -1284,6 +1426,10 @@ static void vrsmsz_run_command(gchar* command){
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
     gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
+  }else if(!memcmp(argv[0],"publish",8)){
+    g_idle_add(vrsmsz_publish_stream,arg2);
+  }else if(!memcmp(argv[0],"stoppub",8)){
+    g_idle_add(vrsmsz_publish_stop,arg2);
   }
   g_free(command);
 }

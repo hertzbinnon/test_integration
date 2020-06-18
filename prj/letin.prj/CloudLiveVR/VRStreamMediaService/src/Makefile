@@ -19,7 +19,7 @@ NANO_LDFLAGS = $(shell pkg-config --libs libcsoap)
 all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic
 
 clean:
-	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element
+	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic
 
 
 #httpd.o : httpd.c httpd.h
