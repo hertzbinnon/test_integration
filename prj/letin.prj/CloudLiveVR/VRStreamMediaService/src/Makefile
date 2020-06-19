@@ -13,6 +13,9 @@ GSOUP_LDFLAGS=$(shell pkg-config  --libs libsoup-2.4)
 GST_CONTROLLER_CFLAGS = $(shell pkg-config --cflags gstreamer-controller-1.0)
 GST_CONTROLLER_LDFLAGS = $(shell pkg-config --libs gstreamer-controller-1.0)
 
+GLIB_JSON_CFLAGS = $(shell pkg-config --cflags json-glib-1.0)
+GLIB_JSON_LDFLAGS = $(shell pkg-config --libs json-glib-1.0)
+
 NANO_CFLAGS = $(shell pkg-config --cflags libcsoap)
 NANO_LDFLAGS = $(shell pkg-config --libs libcsoap)
 
@@ -26,16 +29,16 @@ clean:
 #	$(CC) -c  httpd.c $(CFLAGS) $(GST_CFLAGS) $(GSOUP_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
 httpd.o : httpd.c httpd.h
-	$(CC) -c  httpd.c $(CFLAGS) $(GST_CFLAGS) $(NANO_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+	$(CC) -c  httpd.c $(CFLAGS) $(GST_CFLAGS) $(NANO_CFLAGS) 
 
 main.o : main.c httpd.h 
-	$(CC) -c  main.c $(CFLAGS) $(GST_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+	$(CC) -c  main.c $(CFLAGS) $(GST_CFLAGS) 
 
 vrsmsz.o : vrsmsz.c vrsmsz.h
-	$(CC) -c  vrsmsz.c $(CFLAGS) $(GST_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+	$(CC) -c  vrsmsz.c $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_CFLAGS) 
 
 VRsmsz  : httpd.o main.o vrsmsz.o
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
 addstream : examples/addstream.c
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)

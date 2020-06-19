@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "vrsmsz.h"
+#include <json-glib/json-glib.h>
+
 /*
 static gboolean  vrsmsz_remove()
 {
@@ -118,6 +120,8 @@ message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
 }
 
 vrsmsz_t* vrsmsz;
+GList* message_list;
+
 static void enable_factory (const gchar *name, gboolean enable) {
     GstRegistry *registry = NULL;
     GstElementFactory *factory = NULL;
@@ -221,6 +225,7 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
       return;
   }
   r = gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+  vc->status = 2;
 
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
 }
@@ -232,7 +237,8 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
 */
 gboolean vrsmsz_add_stream(gpointer data){
    gchar name[1024];
-   gchar* uri = data;
+   message_t* msg = data;
+   gchar* uri = msg->command.in_url;
    vrstream_t* vs = NULL;
    vrchan_t* vc=NULL;
 
@@ -255,6 +261,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    vc->audio_id = vc->stream_id;
    sprintf(vc->in_url, "%s", uri);
    vc->resolution = 2;
+   vc->status = 1;
 
    g_print("Stream_id is %d\n", vc->stream_id);
    sprintf(name,"chan-%d-bin",vc->stream_id);
@@ -379,7 +386,6 @@ gboolean vrsmsz_add_stream(gpointer data){
 
    (vrsmsz->stream_nbs)++;
    vrsmsz_play();
-   g_free(uri);
 
 #if 1
    GstClockTime now ;
@@ -393,16 +399,18 @@ gboolean vrsmsz_add_stream(gpointer data){
    //g_print("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
   gst_element_set_state (vs->bin, GST_STATE_PLAYING);
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+   
+   msg->vc = vc;
    return FALSE;
 }
 
 /*******************************************************************************/
 gboolean vrsmsz_remove_stream(gpointer data){
-   gint streamid = atoi((gchar*)data);
+   message_t* msg = data;
+   gint streamid = atoi(msg->command.stream_id);
    vrchan_t* vc = NULL;
    vrstream_t* vs = NULL;
 
-   g_free(data);
    if(!vrsmsz->stream_nbs) {
       return FALSE;
    }
@@ -958,7 +966,8 @@ gboolean vrsmsz_publish_stop(){
 }
 
 gboolean vrsmsz_publish_stream (gpointer data){
-   gchar* uri = data;
+   message_t* msg = data;
+   gchar* uri = msg->command.pub_url;
    if(vrsmsz->director.stream_id == -1){
      g_print("no director streams is selector \n");
      return FALSE;
@@ -982,7 +991,6 @@ gboolean vrsmsz_publish_stream (gpointer data){
      director_publish_create(uri);
      director_publish_link_vs(&(vc->vs));
    }
-   g_free(uri);
    return FALSE;
 }
 /*****************************************************************************************************/
@@ -992,7 +1000,8 @@ gboolean vrsmsz_switch_stream(gpointer data){
   //gboolean is_fade = TRUE;
   gboolean is_fade = FALSE;
 #endif
-  gint streamid = atoi((gchar*)data);
+  message_t* msg = data;
+  gint streamid = atoi(msg->command.stream_id);
   //GstPadLinkReturn ret;
   //gchar name[1024];
   g_print("Switch %d \n",streamid);
@@ -1017,7 +1026,6 @@ gboolean vrsmsz_switch_stream(gpointer data){
   }
  
   vrchan_t* vc = vrsmsz->streams+streamid;
-  g_free(data);
   if(!vrsmsz->isSwitched){// 
     director_preview_create(&(vc->vs));
     director_preview_link_vs(&(vc->vs));
@@ -1408,37 +1416,354 @@ static void vrsmsz_null_channel(){
   //vrsmsz->comp = gst_bin_get_by_name("Compositer");
 }
 #endif 
-static void vrsmsz_run_command(gchar* command){
-  gchar argv[2][1024];
-  sscanf(command,"%s %s",argv[0],argv[1]);
-  //g_print("command--> %s %s\n",argv[0],argv[1]);
-  gchar* arg2 = g_strdup(argv[1]);
 
-  if(!memcmp(argv[0],"pull",4)){
-    g_idle_add(vrsmsz_add_stream, arg2);
-  }else if(!memcmp(argv[0],"remove",6)){
-    g_idle_add(vrsmsz_remove_stream, arg2);
-  }else if(!memcmp(argv[0],"switch",6)){
-    g_idle_add(vrsmsz_switch_stream, arg2);
-  }else if(!memcmp(argv[0],"quit",4)){
-    exit(atoi(argv[1]));
-  }else if(!memcmp(argv[0],"recover",7)){
+static void print_cb(JsonObject *obj, const gchar *key, JsonNode *val, gpointer    user_data)
+{
+  gchar *rel_val = "";
+  GType type = json_node_get_value_type(val);
+  g_message("typename:%s", g_type_name(type));
+
+  if (g_type_is_a(type, G_TYPE_STRING)) {
+     rel_val =(gchar *)json_node_get_string(val);
+  }
+
+  g_message("%s:%s", key, rel_val);
+}
+
+message_t* parse_json_msg(gchar* msg){
+
+  JsonParser *parser = json_parser_new();
+  GError *error = NULL;
+  message_t* message = g_malloc(sizeof(*message));
+  if(!message || !parser ){
+    g_error("new msg or parser error");
+    return NULL;
+  }
+  memset(message,0,sizeof(*message));
+  message->timeout = 3;
+  message->is_responsed = FALSE;
+
+  //g_print("len = %lu\n",strlen(msg));
+  memcpy(message->req, msg, strlen(msg)+1);
+  json_parser_load_from_data (parser,message->req,strlen(message->req),&error);
+  if(error) {
+    g_error("Unable to parse %s", msg);
+    g_error_free(error);
+    g_object_unref(parser);
+    return NULL;
+  }
+  JsonNode *root = json_parser_get_root(parser);
+  if(!root) g_error("get root node failed\n");
+  const JsonObject *obj = json_node_get_object(root);
+  const gchar* ret = json_object_get_string_member(obj,"cmd");
+  int r=-1;
+  memcpy(message->command.cmd,ret,strlen(ret)+1);
+  r = json_object_get_int_member (obj,"id"); // refresh will be error
+  message->command.id = r;
+
+  if(!strcmp(message->command.cmd, "pull")){
+    ret = json_object_get_string_member (obj,"url");
+    memcpy(message->command.in_url,ret,strlen(ret)+1);
+
+  }else if(!strcmp(message->command.cmd, "publish")){
+    ret = json_object_get_string_member (obj,"url");
+    memcpy(message->command.pub_url,ret,strlen(ret)+1);
+
+    ret = json_object_get_string_member (obj,"stream_id");
+    memcpy(message->command.stream_id,ret,strlen(ret)+1);
+     
+    JsonObject *sub_obj = json_object_get_object_member (obj,"encoder_params");
+    r = json_object_get_int_member (sub_obj,"bitrate");
+    message->command.pub_bitrate = r;
+    r = json_object_get_int_member (sub_obj,"fps");
+    message->command.pub_fps = r;
+    r = json_object_get_int_member (sub_obj,"width");
+    message->command.pub_width = r;
+    r = json_object_get_int_member (sub_obj,"height");
+    message->command.pub_height = r;
+
+  }else if(!strcmp(message->command.cmd, "switch")){
+    ret = json_object_get_string_member (obj,"stream_id");
+    memcpy(message->command.stream_id,ret,strlen(ret)+1);
+
+    ret = json_object_get_string_member (obj,"effect");
+    memcpy(message->command.effect,ret,strlen(ret)+1);
+
+    r = json_object_get_int_member (obj,"duration");
+    message->command.pub_height = r;
+  }else if(!strcmp(message->command.cmd, "wraper")){
+
+  }else if(!strcmp(message->command.cmd, "delay")){
+    ret = json_object_get_string_member (obj,"stream_id");
+    memcpy(message->command.stream_id,ret,strlen(ret)+1);
+
+    ret = json_object_get_string_member (obj,"type");
+    memcpy(message->command.delay_type,ret,strlen(ret)+1);
+
+    r = json_object_get_int_member (obj,"duration");
+    message->command.duration= r;
+  }else if(!strcmp(message->command.cmd, "refresh")){
+
+  }else if(!strcmp(message->command.cmd, "delete")){
+    ret = json_object_get_string_member (obj,"stream_id");
+    memcpy(message->command.stream_id,ret,strlen(ret)+1);
+
+  }else if(!strcmp(message->command.cmd, "logo")){
+
+  }else if(!strcmp(message->command.cmd, "subtitle")){
+
+  }else if(!strcmp(message->command.cmd, "pip")){
+
+  }else{
+
+  }
+
+  g_object_unref(parser);
+  return message;
+}
+
+static void vrsmsz_run_command(gchar* command){
+  message_t* msg = parse_json_msg(command);
+  if(!msg){g_print("msg parse error \n"); return;}
+  message_list = g_list_append(message_list,msg);
+  //gchar argv[2][1024];
+  //sscanf(command,"%s %s",argv[0],argv[1]);
+  g_print("Command --> %s \n",msg->command.cmd);
+
+  if(!strcmp(msg->command.cmd,"pull")){
+    g_idle_add(vrsmsz_add_stream, msg);
+  }else if(!strcmp(msg->command.cmd,"remove")){
+    g_idle_add(vrsmsz_remove_stream, msg);
+  }else if(!strcmp(msg->command.cmd,"switch")){
+    g_idle_add(vrsmsz_switch_stream, msg);
+  }else if(!strcmp(msg->command.cmd,"quit")){
+    exit(0);
+  }else if(!strcmp(msg->command.cmd,"refresh")){
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
     gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
-  }else if(!memcmp(argv[0],"publish",8)){
-    g_idle_add(vrsmsz_publish_stream,arg2);
-  }else if(!memcmp(argv[0],"stoppub",8)){
-    g_idle_add(vrsmsz_publish_stop,arg2);
+  }else if(!strcmp(msg->command.cmd,"publish")){
+    g_idle_add(vrsmsz_publish_stream,msg);
+  }else if(!strcmp(msg->command.cmd,"stoppub")){
+    g_idle_add(vrsmsz_publish_stop,msg);
   }
   g_free(command);
 }
 
-static gboolean get_command(){
-   gpointer command;
-   command = g_async_queue_try_pop(vrsmsz->queue);
-   if(!command) return TRUE;
-   vrsmsz_run_command(command);
+static void build_response_message(message_t* msg){
+   JsonBuilder *builder = json_builder_new();
+   json_builder_begin_object(builder);
+   g_print("---> %s\n", msg->command.cmd);
+   if(!strcmp(msg->command.cmd,"pull")){
+     g_print("build pull response-->`");
+     if(!msg->vc) return ;
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "pull");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "url");
+     json_builder_add_string_value(builder, msg->vc->preview_url);
+
+     json_builder_set_member_name(builder, "encoder_params");
+       json_builder_begin_object(builder);
+       json_builder_set_member_name(builder, "bitrate");
+       json_builder_add_int_value(builder, msg->command.in_bitrate);
+
+       json_builder_set_member_name(builder, "width");
+       json_builder_add_int_value(builder, msg->command.in_width);
+
+       json_builder_set_member_name(builder, "height");
+       json_builder_add_int_value(builder, msg->command.in_height);
+
+       json_builder_set_member_name(builder, "fps");
+       json_builder_add_int_value(builder, msg->command.in_fps);
+
+       json_builder_end_object(builder);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+   }else if(!strcmp(msg->command.cmd,"publish")){
+     g_print("build publish response-->`");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "publish");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "url");
+     json_builder_add_string_value(builder, vrsmsz->director.publish_url);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+
+  
+   }else if(!strcmp(msg->command.cmd,"switch")){
+     g_print("build switch response-->`");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "switch");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "url");
+     json_builder_add_string_value(builder, vrsmsz->director.preview_url);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+
+   }else if(!strcmp(msg->command.cmd,"delete")){
+     g_print("build delete response-->`");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "delete");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+
+   }else if(!strcmp(msg->command.cmd,"delay")){
+     g_print("build delay response-->");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "delay");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+
+   }else if(!strcmp(msg->command.cmd,"refresh")){
+     g_print("build refresh response-->");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "refresh");
+		   
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+
+   }else if(!strcmp(msg->command.cmd,"logo")){
+     g_print("build logo response-->`");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "logo");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+   }else if(!strcmp(msg->command.cmd,"subtitle")){
+     g_print("build subtitle response-->");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "subtitle");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+   }else if(!strcmp(msg->command.cmd,"pip")){
+     g_print("build pip response-->");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "pip");
+
+     json_builder_set_member_name(builder, "id");
+     json_builder_add_int_value(builder, msg->command.id);
+		   
+     json_builder_set_member_name(builder, "stream_id");
+     json_builder_add_string_value(builder, msg->command.stream_id);
+
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+
+   }else if(!strcmp(msg->command.cmd,"wraper")){
+   }
+   json_builder_end_object(builder);
+
+#if 1
+   JsonNode *node = json_builder_get_root(builder);
+   JsonGenerator *generator = json_generator_new();
+   json_generator_set_root(generator, node);
+   gchar *data = json_generator_to_data(generator, NULL);
+   printf("json data --> %s\n", data);
+   json_node_free(node);
+   g_object_unref(generator);
+
+   g_async_queue_push(vrsmsz->rep_queue, data);
+#endif
+   g_object_unref( builder);
+   msg->is_responsed = TRUE;
+}
+
+static gboolean message_process(){
+   gpointer msg;
+   message_t* p_msg=NULL;
+   //g_print("what is ...\n");
+   msg = g_async_queue_try_pop( vrsmsz->req_queue );
+   if( msg ) 
+     vrsmsz_run_command( msg );
+   GList* it = message_list;
+   for(; it; it=it->next){
+     p_msg = it->data;
+     if( !p_msg->is_responsed ){
+       build_response_message(p_msg);
+       break;
+     }
+   }
+   if(p_msg && p_msg->is_responsed ){
+     message_list = g_list_remove(message_list,p_msg);
+     g_free(p_msg);
+   }
+
    return TRUE;
 }
 
@@ -1500,8 +1825,9 @@ void vrsmsz_init(int argc, char **argv){
     g_error("vrsmsz init failed\n");
   }
 
-  vrsmsz->queue = g_async_queue_new ();
-  create_http_server(8888,NULL,NULL,vrsmsz->queue);
+  vrsmsz->req_queue = g_async_queue_new ();
+  vrsmsz->rep_queue = g_async_queue_new ();
+  create_http_server(8888,NULL,NULL,vrsmsz);
   
   gst_init (&argc, &argv);
   enable_factory("nvh265dec",TRUE); // may be use uridecodebin force 
@@ -1529,6 +1855,7 @@ void vrsmsz_init(int argc, char **argv){
     vrsmsz->streams[i].stream_id = -1;
     vrsmsz->streams[i].subs_id = -1;
     vrsmsz->streams[i].resolution = 0;
+    vrsmsz->streams[i].status = 0;
 
     chan_stream_init(&vrsmsz->streams[i].vs);
   }
@@ -1548,6 +1875,6 @@ void vrsmsz_init(int argc, char **argv){
   vrsmsz_play(); 
   vrsmsz->theclock = gst_element_get_clock (vrsmsz->pipeline);
   if(!vrsmsz->theclock) g_print("the clock false\n");
-  g_timeout_add(10, get_command,NULL);
+  g_timeout_add(10, message_process,NULL);
   //vrsmsz_null_channel();
 }

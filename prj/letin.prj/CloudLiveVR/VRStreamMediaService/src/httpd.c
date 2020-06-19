@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <glib/gstdio.h>
 #include <errno.h>
+#include "vrsmsz.h"
 /*
 	Please ignore this file. This is just for me to test 
 	some features and new functions. In the future this
@@ -91,148 +92,140 @@ void echomime_service(httpd_conn_t *conn, hrequest_t *req)
 		
 }
 */
-static GAsyncQueue *queue = NULL;
+static GAsyncQueue *req_queue = NULL;
+static GAsyncQueue *rep_queue = NULL;
 /*
 SERVICE: http://host:port/postserver
 */
 void post_service(httpd_conn_t *conn, hrequest_t *req)
 {
-	unsigned char *postdata;
-	long received, total=0;
+  unsigned char *postdata;
+  long received, total=0;
 	//unsigned int tmp;
-	char buffer[15];
-	hpair_t *pair;
+  char buffer[15];
+  hpair_t *pair;
 
-	if (req->method == HTTP_REQUEST_POST) {
-		char *content_length_str;
-                long content_length = 0;
-                unsigned char *postdata = NULL;
-                content_length_str =
-                   hpairnode_get_ignore_case(req->header, HEADER_CONTENT_LENGTH);
+  if (req->method == HTTP_REQUEST_POST) {
+    char *content_length_str;
+    long content_length = 0;
+    unsigned char *postdata = NULL;
+    content_length_str =
+                  hpairnode_get_ignore_case(req->header, HEADER_CONTENT_LENGTH);
 
-         if (content_length_str != NULL)
-               content_length = atol(content_length_str);
-         if (content_length == 0){
-       		printf("content is null");
-       		if (!(postdata = (char *) malloc(1))){
-          		log_error2("malloc failed (%s)", strerror(errno));
-        	}
-        	postdata[0] = '\0';
-    	}else{
-      		if (!(postdata = (unsigned char *) malloc(content_length + 1))){
-        	   log_error2("malloc failed (%)", strerror(errno));
-        	}
-      		if (http_input_stream_read(req->in, postdata, (int) content_length) > 0){
-        	   postdata[content_length] = '\0';
-      		}
-    	}
-        printf("post data --> %s\n",postdata);
+    if (content_length_str != NULL)
+      content_length = atol(content_length_str);
+    if (content_length == 0){
+      printf("content is null");
+      if (!(postdata = (char *) malloc(1))){
+       	log_error2("malloc failed (%s)", strerror(errno));
+      }
+      postdata[0] = '\0';
+    }else{
+      if (!(postdata = (unsigned char *) malloc(content_length + 1))){
+        log_error2("malloc failed (%)", strerror(errno));
+      }
+      if (http_input_stream_read(req->in, postdata, (int) content_length) > 0){
+        postdata[content_length] = '\0';
+      }
+    }
+    printf("post data --> %s\n",postdata);
+    g_async_queue_push(req_queue, postdata);
 
-		httpd_send_header(conn, 200, "OK");
-		http_output_stream_write_string(conn->out, "<html><body>\n");
-		http_output_stream_write_string(conn->out, "<h3>You Posted:</h3><hr>\n");
-		while (http_input_stream_is_ready(req->in))
-		{
-			received = http_input_stream_read(req->in, buffer, 10);
-			http_output_stream_write(conn->out, buffer, received);
-			total += received;
-		}
-		http_output_stream_write_string(conn->out, "<h3>Received size</h3><hr>\n");
-		sprintf(buffer, "%d", total);
-		http_output_stream_write_string(conn->out, buffer);
+    printf("Waiting process response -->");
+    gchar* msg = g_async_queue_pop(rep_queue);
+    printf("sent data --> %s\n",msg);
 
-	        //gchar* command;
-	        //command = g_strdup(postdata);
-	        g_print ("command  -> %s\n\n", postdata);
-	        g_async_queue_push(queue, (gpointer)postdata);
+    httpd_send_header(conn, 200, "OK");
+    http_output_stream_write_string(conn->out, msg);
+    free(msg);
+    /*
+    http_output_stream_write_string(conn->out, "<html><body>\n");
+    http_output_stream_write_string(conn->out, "<h3>You Posted:</h3><hr>\n");
+    while (http_input_stream_is_ready(req->in)){
+	received = http_input_stream_read(req->in, buffer, 10);
+	http_output_stream_write(conn->out, buffer, received);
+	total += received;
+    }
+    http_output_stream_write_string(conn->out, "<h3>Received size</h3><hr>\n");
+	sprintf(buffer, "%d", total);
+	http_output_stream_write_string(conn->out, buffer);
+   */
+    //command = g_strdup(postdata);
 
-		//_print_binary_ascii2(postdata[0]);
-		//_print_binary_ascii2(postdata[1]);
-		//_print_binary_ascii2(postdata[2]);
-		//_print_binary_ascii2(postdata[3]);
 	/*	free(postdata);*/
 
-	} else {
+   } else {
 
-		httpd_send_header(conn, 200, "OK");
-		http_output_stream_write_string(conn->out, "<html><body>");
-		http_output_stream_write_string(conn->out, "<form action=\"/postserver\" method=\"POST\">");
-		http_output_stream_write_string(conn->out, "Enter Postdata: <input name=\"field\" type=\"text\">");
-		http_output_stream_write_string(conn->out, "<input type=\"submit\">");
+     httpd_send_header(conn, 200, "OK");
+     http_output_stream_write_string(conn->out, "<html><body>");
+     http_output_stream_write_string(conn->out, "<form action=\"/postserver\" method=\"POST\">");
+     http_output_stream_write_string(conn->out, "Enter Postdata: <input name=\"field\" type=\"text\">");
+     http_output_stream_write_string(conn->out, "<input type=\"submit\">");
 		
-	}
-
-	http_output_stream_write_string(conn->out, "<hr><p><small>Content-Type:");
-	if (req->content_type)
-	{
-  	http_output_stream_write_string(conn->out, req->content_type->type);
-		http_output_stream_write_string(conn->out, "<br>");
-		pair = req->content_type->params;
-		while (pair)
-		{
-  		http_output_stream_write_string(conn->out, pair->key);
-  		http_output_stream_write_string(conn->out, "=");
-  		http_output_stream_write_string(conn->out, pair->value);
-  		http_output_stream_write_string(conn->out, "<br>");
-		  pair = pair->next;
-		}
+  }
+/*
+  http_output_stream_write_string(conn->out, "<hr><p><small>Content-Type:");
+  if (req->content_type){
+    http_output_stream_write_string(conn->out, req->content_type->type);
+    http_output_stream_write_string(conn->out, "<br>");
+    pair = req->content_type->params;
+    while (pair){
+      http_output_stream_write_string(conn->out, pair->key);
+      http_output_stream_write_string(conn->out, "=");
+      http_output_stream_write_string(conn->out, pair->value);
+      http_output_stream_write_string(conn->out, "<br>");
+      pair = pair->next;
+    }
   }
   else
   {
-		http_output_stream_write_string(conn->out, "Not available");
+     http_output_stream_write_string(conn->out, "Not available");
   }
 
-	http_output_stream_write_string(conn->out, "</body></html>");
-
-	
+  http_output_stream_write_string(conn->out, "</body></html>");
+*/
 }
 // -NHTTPport 8888
 
 int httpd_thread(void* data)
 {
-        queue = data;
+  req_queue = ((vrsmsz_t*)data)->req_queue;
+  rep_queue = ((vrsmsz_t*)data)->rep_queue;
 
-	if (!httpd_register("/postserver", post_service)) {
-		fprintf(stderr, "Can not register service");
-		return 1;
-	}
+  if (!httpd_register("/postserver", post_service)) {
+    fprintf(stderr, "Can not register service");
+    return 1;
+  }
 
-	//if (!httpd_register("/axis/services/urn:EchoAttachmentsService", echomime_service)) {
-	//	fprintf(stderr, "Can not register service");
-	//	return 1;
-	//}
+  if (httpd_run()) {
+    fprintf(stderr, "can not run httpd");
+    return 1;
+  }
 
-	if (httpd_run()) {
-		fprintf(stderr, "can not run httpd");
-		return 1;
-	}
-
-	httpd_destroy();
-
+  httpd_destroy();
 #ifdef MEM_DEBUG
   _mem_report();
 #endif
-
 	return 0;
 }
 
 
 int create_http_server(int port , char* tls_cert_file, char* tls_key_file, gpointer data){
-	int argc = 2;
-	char* argv[2];
-	char p[10];
+  int argc = 2;
+  char* argv[2];
+  char p[10];
 
-	sprintf(p,"%d",port);
-	argv[0] = g_strdup("-NHTTPport");
-	argv[1] = g_strdup(p);
+  sprintf(p,"%d",port);
+  argv[0] = g_strdup("-NHTTPport");
+  argv[1] = g_strdup(p);
 	//hlog_set_level(HLOG_VERBOSE);
-	if (httpd_init(argc, argv)) {
-		fprintf(stderr, "can not init httpd");
-		return 1;
-	}
-	g_free(argv[0]);
-	g_free(argv[1]);
-	pthread_t thread;
-	pthread_create (&thread, NULL, httpd_thread, data);
-	return 0;
+  if (httpd_init(argc, argv)) {
+    fprintf(stderr, "can not init httpd");
+    return 1;
+  }
+  g_free(argv[0]);
+  g_free(argv[1]);
+  pthread_t thread;
+  pthread_create (&thread, NULL, httpd_thread, data);
+  return 0;
 }

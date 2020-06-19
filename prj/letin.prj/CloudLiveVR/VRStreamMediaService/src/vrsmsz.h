@@ -7,6 +7,43 @@
 #define URL_LEN 2048
 
 typedef struct{
+  gchar cmd[256];	
+  gint id;
+  gchar in_url[1024];
+  gchar pre_url[1024];
+  gchar pub_url[1024];
+  gchar stream_id[16];
+
+  gchar effect[16];
+  gint duration;
+
+  gint in_bitrate;
+  gint in_width;
+  gint in_height;
+  gint in_fps;
+
+  gint pub_bitrate;
+  gint pub_width;
+  gint pub_height;
+  gint pub_fps;
+
+  gchar logo_path[1024];
+  gchar pip_path[1024];
+  gchar text_string[1024];
+  gint  left;
+  gint  top;
+  gint width;
+  gint height;
+
+  gchar font[16];
+  gint  font_size;
+
+  gchar delay_type[16];
+  gint delay_time;
+
+}command_t;
+
+typedef struct{
   GstElement * uridecodebin; // 
   GstElement * vdec_tee;
   GstElement * vdec_tee_queue;
@@ -34,7 +71,6 @@ typedef struct{
   GstElement  *bin;
 } vrstream_t;
 
-
 typedef struct {
   gint    tracks;
   gint    stream_id;
@@ -46,7 +82,24 @@ typedef struct {
   gchar   preview_url[URL_LEN];
   guint   resolution; // 4k or 8K
   vrstream_t vs;
+
+  gint     status; // 0:null, 1:pending , 2:running, 3: error 
+  gint     audio_status; // 0:null, 1:ready, 2:running, 3: error
+  gint     video_status; // 0:null, 1:ready, 2:running, 3: error
+
 }vrchan_t;
+
+typedef struct {
+  gchar req[4096];
+  gchar rep[4096];
+  gint  errcode;
+  gint  timeout;
+  gboolean is_responsed;
+  command_t command;
+  vrchan_t* vc;
+}message_t;
+
+
 
 typedef struct{
   //GstElement * videoconverter;
@@ -116,7 +169,8 @@ typedef struct{
 
   drchan_t director;
 
-  GAsyncQueue * queue;
+  GAsyncQueue * req_queue;
+  GAsyncQueue * rep_queue;
   gboolean isSwitched;
   
   vrchan_t *remove_chan;
