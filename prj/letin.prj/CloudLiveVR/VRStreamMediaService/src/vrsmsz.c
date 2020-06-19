@@ -292,6 +292,10 @@ gboolean vrsmsz_add_stream(gpointer data){
       g_print("error make\n");
       return FALSE;
     }
+    g_object_set(vs->vdec_tee_queue,"min-threshold-time", 0,NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-time",      0,NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-buffers",   0,          NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-bytes",     0,          NULL);
    }
    if(!vs->video_scale){
      sprintf(name,"vs%d-video_scale",vc->video_id);
@@ -351,6 +355,10 @@ gboolean vrsmsz_add_stream(gpointer data){
        g_print("error make\n");
        return FALSE;
      }
+     g_object_set(vs->aenc_tee_queue,"min-threshold-time", 0,NULL);
+     g_object_set(vs->aenc_tee_queue,"max-size-time",      0,NULL);
+     g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
+     g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
    }
    if(!vs->muxer){
      sprintf(name,"vs%d-muxer",vc->video_id);
@@ -994,6 +1002,67 @@ gboolean vrsmsz_publish_stream (gpointer data){
    return FALSE;
 }
 /*****************************************************************************************************/
+gboolean vrsmsz_stream_delay(gpointer data){
+  message_t* msg = data;
+  gint streamid = atoi(msg->command.stream_id);
+  gint msecs = msg->command.delay_time;
+
+  g_print("stream %d delay %d ms\n",streamid,msecs);
+  if(vrsmsz->stream_nbs == 0){
+    g_print("no stream \n");
+    return FALSE;
+  }
+  if(streamid == vrsmsz->director.stream_id){
+    g_print("delay in director stream is not permit \n");
+    return FALSE;
+  }
+  int i;
+  for(i=0; i<MAX_CHANNEL; i++){
+    if(streamid == vrsmsz->streams_id[i]){
+       break;
+    }
+  }
+  if(i == MAX_CHANNEL){
+    g_print("streamid is error");
+    return FALSE;
+  }
+
+  vrchan_t* vc = vrsmsz->streams+streamid;
+  vrstream_t* vs = &(vc->vs);
+ 
+  if(msecs < 0){
+    g_object_set(vs->vdec_tee_queue,"min-threshold-time", abs(msecs) * 1000000,NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-time",      3000000000,NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-buffers",   0,          NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-bytes",     0,          NULL);
+    
+    g_object_set(vs->aenc_tee_queue,"min-threshold-time", abs(msecs) * 1000000,NULL);
+    g_object_set(vs->aenc_tee_queue,"max-size-time",      3000000000,NULL);
+    g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
+    g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
+  }else{
+    gst_element_set_state (vs->bin, GST_STATE_READY);
+    g_object_set(vs->vdec_tee_queue,"min-threshold-time", msecs * 1000000,NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-time",      3000000000,NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-buffers",   0,          NULL);
+    g_object_set(vs->vdec_tee_queue,"max-size-bytes",     0,          NULL);
+    
+    g_object_set(vs->aenc_tee_queue,"min-threshold-time", msecs * 1000000,NULL);
+    g_object_set(vs->aenc_tee_queue,"max-size-time",      3000000000,NULL);
+    g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
+    g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
+    gst_element_set_state (vs->bin, GST_STATE_PLAYING);
+  }
+
+
+  //g_object_set(vrsmsz->director.ds.pre_vdec_tee_queue,min-threshold-time,msecs * 1000000,NULL);
+  //g_object_set(vrsmsz->director.ds.pre_aenc_tee_queue,min-threshold-time,msecs * 1000000,NULL);
+
+  //g_object_set(vrsmsz->director.ds.pub_vdec_tee_queue,min-threshold-time,msecs * 1000000,NULL);
+  //g_object_set(vrsmsz->director.ds.pub_aenc_tee_queue,min-threshold-time,msecs * 1000000,NULL);
+  return FALSE;
+}
+
 /*****************************************************************************************************/
 gboolean vrsmsz_switch_stream(gpointer data){
 #if 0// effect switch
@@ -1500,8 +1569,8 @@ message_t* parse_json_msg(gchar* msg){
     ret = json_object_get_string_member (obj,"type");
     memcpy(message->command.delay_type,ret,strlen(ret)+1);
 
-    r = json_object_get_int_member (obj,"duration");
-    message->command.duration= r;
+    r = json_object_get_int_member (obj,"time");
+    message->command.delay_time = r;
   }else if(!strcmp(message->command.cmd, "refresh")){
 
   }else if(!strcmp(message->command.cmd, "delete")){
@@ -1532,7 +1601,7 @@ static void vrsmsz_run_command(gchar* command){
 
   if(!strcmp(msg->command.cmd,"pull")){
     g_idle_add(vrsmsz_add_stream, msg);
-  }else if(!strcmp(msg->command.cmd,"remove")){
+  }else if(!strcmp(msg->command.cmd,"delete")){
     g_idle_add(vrsmsz_remove_stream, msg);
   }else if(!strcmp(msg->command.cmd,"switch")){
     g_idle_add(vrsmsz_switch_stream, msg);
@@ -1546,6 +1615,8 @@ static void vrsmsz_run_command(gchar* command){
     g_idle_add(vrsmsz_publish_stream,msg);
   }else if(!strcmp(msg->command.cmd,"stoppub")){
     g_idle_add(vrsmsz_publish_stop,msg);
+  }else if(!strcmp(msg->command.cmd,"delay")){
+    g_idle_add(vrsmsz_stream_delay, msg);
   }
   g_free(command);
 }
@@ -1827,7 +1898,7 @@ void vrsmsz_init(int argc, char **argv){
 
   vrsmsz->req_queue = g_async_queue_new ();
   vrsmsz->rep_queue = g_async_queue_new ();
-  create_http_server(8888,NULL,NULL,vrsmsz);
+  create_http_server(9999,NULL,NULL,vrsmsz);
   
   gst_init (&argc, &argv);
   enable_factory("nvh265dec",TRUE); // may be use uridecodebin force 
