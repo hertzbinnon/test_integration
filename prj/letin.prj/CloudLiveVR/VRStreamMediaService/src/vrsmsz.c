@@ -1578,6 +1578,7 @@ message_t* parse_json_msg(gchar* msg){
     memcpy(message->command.stream_id,ret,strlen(ret)+1);
 
   }else if(!strcmp(message->command.cmd, "logo")){
+    
 
   }else if(!strcmp(message->command.cmd, "subtitle")){
 
@@ -1617,6 +1618,8 @@ static void vrsmsz_run_command(gchar* command){
     g_idle_add(vrsmsz_publish_stop,msg);
   }else if(!strcmp(msg->command.cmd,"delay")){
     g_idle_add(vrsmsz_stream_delay, msg);
+  }else if(!strcmp(msg->command.cmd,"logo")){
+    g_idle_add(vrsmsz_stream_logo, msg);
   }
   g_free(command);
 }

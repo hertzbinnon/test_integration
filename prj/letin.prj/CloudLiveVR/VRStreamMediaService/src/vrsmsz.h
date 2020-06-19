@@ -99,15 +99,19 @@ typedef struct {
   vrchan_t* vc;
 }message_t;
 
-
-
 typedef struct{
-  //GstElement * videoconverter;
+  //compositor for fade;
   GstPad* video_filter_queue_sinkpad; // 
   GstElement * video_filter_queue; // 
   GstElement * videoconvert; // 
   GstElement * video_filter_chain; // 
   GstElement * video_filter_tee; // 
+
+  GstPad* vfilter_queue_vdec_tee_srcpd; // 
+  GstElement * vfilter_vdec_tee_queue; // points
+  GstElement * video_convert; // points
+  GstElement * wrapper ; // points
+  GstElement * vfilter_tee; // 
 
   //GstElement * audio_filter; // 
   GstPad* pre_video_filter_tee_srcpad;
