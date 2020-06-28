@@ -8,9 +8,7 @@ static gboolean  vrsmsz_remove()
    vrchan_t* vc = vrsmsz->remove_chan;
    vrstream_t* vs = &vc->vs;
    gst_element_set_state(vs->bin,GST_STATE_NULL); // sink will not deadlock
-
    gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->bin,NULL);
-
    vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
    vrsmsz->stream_nbs--;
    vc->video_id = -1;
@@ -905,7 +903,6 @@ gboolean director_preview_unlink_vs(vrstream_t* vr){
       //gst_object_unref(vr->pub_vdec_tee_ghost_srcpad);
       vr->pub_vdec_tee_srcpad= NULL;
       vr->pub_vdec_tee_ghost_srcpad= NULL;
-
   ret = gst_pad_unlink (vr->pub_aenc_tee_ghost_srcpad, vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
          g_print ("unLink failed.\n");
@@ -918,8 +915,6 @@ gboolean director_preview_unlink_vs(vrstream_t* vr){
       //gst_object_unref(vr->pub_aenc_tee_ghost_srcpad);
       vr->pub_aenc_tee_srcpad= NULL;
       vr->pub_aenc_tee_ghost_srcpad= NULL;
-
-
       if(!vs->pub_vdec_tee_srcpad)
         vs->pub_vdec_tee_srcpad = gst_element_get_request_pad (vs->vdec_tee, "src_%u");
       if(!vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad)
@@ -930,7 +925,6 @@ gboolean director_preview_unlink_vs(vrstream_t* vr){
       } else {
         g_print ("Link succeeded .\n");
       }
-
       if(!vs->pub_aenc_tee_srcpad)
         vs->pub_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
       if(!vrsmsz->director.ds.pub_aenc_tee_queue_sinkpad)
@@ -1578,11 +1572,14 @@ message_t* parse_json_msg(gchar* msg){
     memcpy(message->command.stream_id,ret,strlen(ret)+1);
 
   }else if(!strcmp(message->command.cmd, "logo")){
-    
 
   }else if(!strcmp(message->command.cmd, "subtitle")){
 
   }else if(!strcmp(message->command.cmd, "pip")){
+
+  }else if(!strcmp(message->command.cmd, "publish_stop")){
+
+  }else if(!strcmp(message->command.cmd, "stop_all")){
 
   }else{
 
@@ -1614,12 +1611,14 @@ static void vrsmsz_run_command(gchar* command){
     gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
   }else if(!strcmp(msg->command.cmd,"publish")){
     g_idle_add(vrsmsz_publish_stream,msg);
-  }else if(!strcmp(msg->command.cmd,"stoppub")){
+  }else if(!strcmp(msg->command.cmd,"publish_stop")){
     g_idle_add(vrsmsz_publish_stop,msg);
   }else if(!strcmp(msg->command.cmd,"delay")){
     g_idle_add(vrsmsz_stream_delay, msg);
   }else if(!strcmp(msg->command.cmd,"logo")){
-    g_idle_add(vrsmsz_stream_logo, msg);
+    //g_idle_add(vrsmsz_stream_logo, msg);
+  }else if(!strcmp(msg->command.cmd,"stop_all")){
+    gst_element_set_state(vrsmsz->pipeline,GST_STATE_NULL);
   }
   g_free(command);
 }
@@ -1629,8 +1628,12 @@ static void build_response_message(message_t* msg){
    json_builder_begin_object(builder);
    g_print("---> %s\n", msg->command.cmd);
    if(!strcmp(msg->command.cmd,"pull")){
+     if(!msg->vc){
+	     g_print("vc = null\n");
+             g_object_unref( builder);
+	     return ;
+     }
      g_print("build pull response-->`");
-     if(!msg->vc) return ;
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "pull");
 
@@ -1638,10 +1641,12 @@ static void build_response_message(message_t* msg){
      json_builder_add_int_value(builder, msg->command.id);
 		   
      json_builder_set_member_name(builder, "stream_id");
-     json_builder_add_string_value(builder, msg->command.stream_id);
+     gchar tmp[1024];
+     sprintf(tmp,"%d",msg->vc->stream_id);
+     json_builder_add_string_value(builder, tmp);
 
      json_builder_set_member_name(builder, "url");
-     json_builder_add_string_value(builder, msg->vc->preview_url);
+     json_builder_add_string_value(builder,msg->vc->preview_url);
 
      json_builder_set_member_name(builder, "encoder_params");
        json_builder_begin_object(builder);
@@ -1800,6 +1805,27 @@ static void build_response_message(message_t* msg){
      json_builder_add_int_value(builder, 0);
 
    }else if(!strcmp(msg->command.cmd,"wraper")){
+   }else if(!strcmp(msg->command.cmd,"publish_stop")){
+     g_print("build publish_stop response-->");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "publish_stop");
+		   
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+   }else if(!strcmp(msg->command.cmd,"stop_all")){
+     g_print("build stop_all response-->");
+     json_builder_set_member_name(builder, "cmd");
+     json_builder_add_string_value(builder, "stop_all");
+		   
+     json_builder_set_member_name(builder, "result");
+     json_builder_add_string_value(builder, "OK");
+
+     json_builder_set_member_name(builder, "errno");
+     json_builder_add_int_value(builder, 0);
+     json_builder_end_object(builder);
    }
    json_builder_end_object(builder);
 
@@ -1901,7 +1927,7 @@ void vrsmsz_init(int argc, char **argv){
 
   vrsmsz->req_queue = g_async_queue_new ();
   vrsmsz->rep_queue = g_async_queue_new ();
-  create_http_server(9999,NULL,NULL,vrsmsz);
+  create_http_server(8888,NULL,NULL,vrsmsz);
   
   gst_init (&argc, &argv);
   enable_factory("nvh265dec",TRUE); // may be use uridecodebin force 
