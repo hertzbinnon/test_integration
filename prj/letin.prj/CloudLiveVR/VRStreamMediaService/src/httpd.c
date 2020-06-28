@@ -191,6 +191,9 @@ int httpd_thread(void* data)
 {
   req_queue = ((vrsmsz_t*)data)->req_queue;
   rep_queue = ((vrsmsz_t*)data)->rep_queue;
+  if( !req_queue || !rep_queue )
+	  g_print("queue is wrong\n");
+   
 
   if (!httpd_register("/postserver", post_service)) {
     fprintf(stderr, "Can not register service");

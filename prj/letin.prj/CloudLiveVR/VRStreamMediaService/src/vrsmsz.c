@@ -1927,6 +1927,9 @@ void vrsmsz_init(int argc, char **argv){
 
   vrsmsz->req_queue = g_async_queue_new ();
   vrsmsz->rep_queue = g_async_queue_new ();
+  if( !vrsmsz->req_queue || !vrsmsz->rep_queue )
+	  g_print("queue is wrong\n");
+   
   create_http_server(8888,NULL,NULL,vrsmsz);
   
   gst_init (&argc, &argv);
