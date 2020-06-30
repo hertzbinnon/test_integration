@@ -58,6 +58,8 @@ typedef struct{
   GstElement * video_scale;
   GstElement * video_capsfilter;
   GstElement * video_encoder;
+  GstElement * video_encoder_queue;
+  GstElement * video_encoder_parser;
   GstElement * audio_convert;
   GstElement * audio_encoder;
   GstElement * aenc_tee;
@@ -113,7 +115,6 @@ typedef struct{
   GstElement * wrapper ; // points
   GstElement * vfilter_tee; // 
 
-  //GstElement * audio_filter; // 
   GstPad* pre_video_filter_tee_srcpad;
   GstElement * pre_vdec_tee_queue; // points
   GstPad *     pre_vdec_tee_queue_sinkpad;
@@ -121,6 +122,8 @@ typedef struct{
   GstElement * pre_video_scale;
   GstElement * pre_capsfilter;
   GstElement * pre_video_encoder;
+  GstElement * pre_video_encoder_queue;
+  GstElement * pre_video_encoder_parser;
   GstElement * pre_aenc_tee_queue;
   GstPad *     pre_aenc_tee_queue_sinkpad;
   GstPad *     pre_aenc_tee_queue_ghost_sinkpad;
@@ -131,16 +134,15 @@ typedef struct{
   GstElement * pub_vdec_tee_queue; // points
   GstPad *     pub_vdec_tee_queue_sinkpad;
   GstPad *     pub_vdec_tee_queue_ghost_sinkpad;
-  //GstElement * pub_capfilter;
   GstElement * pub_video_encoder;
+  GstElement * pub_video_encoder_queue;
+  GstElement * pub_video_encoder_parser;
   GstElement * pub_aenc_tee_queue;
   GstPad *     pub_aenc_tee_queue_sinkpad;
   GstPad *     pub_aenc_tee_queue_ghost_sinkpad;
   GstElement * pub_muxer;
   GstElement * pub_outer; // 
-  //GstElement * audio_encoder;
   GstElement * mixer; // audio mix
-  //GstElement * comp;  // video mix
 
 } drstream_t;
 
