@@ -13,3 +13,5 @@ LINUX_KERNEL_VERSION="Linux version 5.3.0-56-generic (buildd@lcy01-amd64-017) (g
 CUDA_VERSION=10.1
 NVIDIA_SMI=435.21
 NVIDIA_DRIVER_VERSION=435.21
+export PKG_CONFIG_PATH=`pwd`/libsoap-1.1.0/install/lib/pkgconfig/:$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=`pwd`/libsoap-1.1.0/install/lib/:$LD_LIBRARY_PATH

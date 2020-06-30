@@ -1,0 +1,31 @@
+#update kernel 
+cat /proc/version
+sudo apt list | grep linux-generic*
+sudo apt-get install linux-generic-hwe-18.04-edge
+sudo reboot
+sudo uname -r
+#install or update nvidia drivers https://linoxide.com/linux-how-to/how-to-install-nvidia-driver-on-ubuntu/
+#lspci | grep -i 3d
+#lspci | grep -i VGA
+sudo dpkg --list | grep nvidia-*
+sudo apt-get purge nvidia*
+sudo apt-get install ubuntu-drivers-common
+
+sudo hwinfo  --gfxcard --short
+sudo prime-select query
+sudo lshw -c display | grep NVIDIA
+$ sudo lspci -nnk | grep -iA3 vga
+or
+$ sudo lspci | grep -i --color 'vga\|3d\|2d'
+sudo ubuntu-drivers devices
+sudo ubuntu-drivers autoinstall
+cat /proc/driver/nvidia/version
+
+#nvidia-smi指令报错：Failed to initialize NVML: Driver解决
+#https://zhuanlan.zhihu.com/p/94378201
+#https://zhuanlan.zhihu.com/p/89714824
+/usr/local/cuda/bin/nvcc -V 
+ls /usr/src | grep nvidia # verssion
+sudo apt install dkms
+sudo dkms install -m nvidia -v <version>
+
