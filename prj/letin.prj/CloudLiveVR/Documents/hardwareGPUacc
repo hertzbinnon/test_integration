@@ -1,6 +1,15 @@
 https://software.intel.com/en-us/articles/encode-and-decode-capabilities-for-7th-generation-intel-core-processors-and-newer
 https://developer.nvidia.com/video-encode-decode-gpu-support-matrix
 
-NVIDIA Tesla T4: 		14300Ôª
-NVIDIA QUADRO RTX 5000£º17800Ôª
-NVIDIA GeForce RTX 2080Ti£º 7999~9999
+1. NVIDIA Tesla T4: 		14300Ô
+
+2. NVIDIA QUADRO RTX 5000£º17800Ôª                   
+  
+  4k?????6???? 8k??6???
+
+3. NVIDIA GeForce RTX 2080Ti£º 7999~9999  
+
+  ???????????3?
+  ?? 8k preset ll ???
+
+  8k???3????
