@@ -313,7 +313,7 @@ gboolean vrsmsz_add_stream(gpointer data){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vs->video_capsfilter), "caps",
-      "video/x-raw, width=1080, height=720");
+      "video/x-raw, width=1280, height=720");
    }
 #if 0
    if(!vs->video_encoder){
@@ -864,7 +864,7 @@ gboolean director_preview_create(vrstream_t* vs){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vrsmsz->director.ds.pre_capsfilter), "caps",
-      "video/x-raw, width=1080, height=720");
+      "video/x-raw, width=1280, height=720");
   }
 
   if(!vrsmsz->director.ds.pre_video_encoder){
