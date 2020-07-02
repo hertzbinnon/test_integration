@@ -621,7 +621,7 @@ gboolean director_publish_create(gchar* url){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 1000, NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 20000, NULL);
 
 	
      }else{
