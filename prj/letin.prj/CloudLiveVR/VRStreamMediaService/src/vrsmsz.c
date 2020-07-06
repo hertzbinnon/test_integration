@@ -615,15 +615,20 @@ gboolean director_publish_create(gchar* url){
 
   if(!vrsmsz->director.ds.pub_video_encoder){
      sprintf(name,"%s-pub_video_encoder","vrsmsz");
-     if(vrsmsz->mode == 4 || vrsmsz->mode==8){
+     if(vrsmsz->mode == 4 ){
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder){
           g_print("error make\n");
           return FALSE;
         }
         g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 20000, NULL);
-
-	
+     }else if(vrsmsz->mode==8){
+        vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265enc", name); // nvh264enc have no avc
+        if(!vrsmsz->director.ds.pub_video_encoder){
+          g_print("error make\n");
+          return FALSE;
+        }
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 0, "bitrate", 80000, NULL);
      }else{
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder){
@@ -643,13 +648,24 @@ gboolean director_publish_create(gchar* url){
     }
   }
 
-  if(!vrsmsz->director.ds.pub_video_encoder_parser){
+  if(vrsmsz->mode == 8){
+    if(!vrsmsz->director.ds.pub_video_encoder_parser){
+         sprintf(name,"%s-pub_video_encoder_parser","vrsmsz");
+         vrsmsz->director.ds.pub_video_encoder_parser= gst_element_factory_make("h265parse", name); // nvh264enc have no avc
+        if(!vrsmsz->director.ds.pub_video_encoder_parser){
+          g_print("error make\n");
+          return FALSE;
+        }
+    }
+  }else{
+    if(!vrsmsz->director.ds.pub_video_encoder_parser){
          sprintf(name,"%s-pub_video_encoder_parser","vrsmsz");
          vrsmsz->director.ds.pub_video_encoder_parser= gst_element_factory_make("h264parse", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder_parser){
           g_print("error make\n");
           return FALSE;
         }
+    }
   }
 
   if(!vrsmsz->director.ds.pub_aenc_tee_queue){
@@ -660,24 +676,43 @@ gboolean director_publish_create(gchar* url){
       return FALSE;
     }
   }
-  if(!vrsmsz->director.ds.pub_muxer){
-     sprintf(name,"%s-pub_muxer","vrsmsz");
-    vrsmsz->director.ds.pub_muxer= gst_element_factory_make("flvmux", name);
-    if(!vrsmsz->director.ds.pub_muxer){
-      g_print("error make\n");
-      return FALSE;
+  if(vrsmsz->mode == 8){
+     if(!vrsmsz->director.ds.pub_muxer){
+       sprintf(name,"%s-pub_muxer","vrsmsz");
+      vrsmsz->director.ds.pub_muxer= gst_element_factory_make("mpegtsmux", name);
+      if(!vrsmsz->director.ds.pub_muxer){
+        g_print("error make\n");
+        return FALSE;
+      }
     }
-  }
-  if(!vrsmsz->director.ds.pub_outer){
-     sprintf(name,"%s-pub_outer","vrsmsz");
-    vrsmsz->director.ds.pub_outer= gst_element_factory_make("rtmpsink", name);
     if(!vrsmsz->director.ds.pub_outer){
-      g_print("error make\n");
-      return FALSE;
+       sprintf(name,"%s-pub_outer","vrsmsz");
+      vrsmsz->director.ds.pub_outer= gst_element_factory_make("hlssink", name);
+      if(!vrsmsz->director.ds.pub_outer){
+        g_print("error make\n");
+        return FALSE;
+      }
+      g_object_set (vrsmsz->director.ds.pub_outer, "location", "/tmp/hls/%05d.ts", "playlist-length", 6, "playlist-location","/tmp/hls/gst.m3u8","max-files",10,"target-duration",3,NULL);
+   }   
+  }else{
+     if(!vrsmsz->director.ds.pub_muxer){
+      sprintf(name,"%s-pub_muxer","vrsmsz");
+      vrsmsz->director.ds.pub_muxer= gst_element_factory_make("flvmux", name);
+      if(!vrsmsz->director.ds.pub_muxer){
+        g_print("error make\n");
+        return FALSE;
+      }
     }
-    g_object_set (vrsmsz->director.ds.pub_outer, "location", vrsmsz->director.publish_url, NULL);
+    if(!vrsmsz->director.ds.pub_outer){
+      sprintf(name,"%s-pub_outer","vrsmsz");
+      vrsmsz->director.ds.pub_outer= gst_element_factory_make("rtmpsink", name);
+      if(!vrsmsz->director.ds.pub_outer){
+        g_print("error make\n");
+        return FALSE;
+      }
+      g_object_set (vrsmsz->director.ds.pub_outer, "location", vrsmsz->director.publish_url, NULL);
+    }
   }
-
   vrsmsz->director.pub_bin = gst_bin_new("pub_bin");
   gst_bin_add_many(GST_BIN(vrsmsz->director.pub_bin), vrsmsz->director.ds.pub_vdec_tee_queue,vrsmsz->director.ds.pub_video_encoder,vrsmsz->director.ds.pub_video_encoder_queue,vrsmsz->director.ds.pub_video_encoder_parser,vrsmsz->director.ds.pub_aenc_tee_queue,vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL);
   gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pub_bin);

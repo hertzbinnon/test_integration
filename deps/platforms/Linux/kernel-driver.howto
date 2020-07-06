@@ -1,3 +1,8 @@
+# close nouveau driver
+ sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+ sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+sudo update-initramfs -u
+sudo reboot
 #update kernel 
 cat /proc/version
 sudo apt list | grep linux-generic*
@@ -9,6 +14,7 @@ sudo uname -r
 #lspci | grep -i VGA
 sudo dpkg --list | grep nvidia-*
 sudo apt-get purge nvidia*
+#sudo apt-get--fix-broken install
 sudo apt-get install ubuntu-drivers-common
 
 sudo hwinfo  --gfxcard --short
