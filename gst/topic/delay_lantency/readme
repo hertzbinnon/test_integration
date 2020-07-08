@@ -1,5 +1,12 @@
 http://gstreamer-devel.966125.n4.nabble.com/How-to-create-a-delay-in-a-video-stream-td1569875.html
 http://gstreamer-devel.966125.n4.nabble.com/dynamic-change-element-s-parameter-td2536123.html
+#queue to set delay
 http://gstreamer-devel.966125.n4.nabble.com/buffer-v4l2src-for-30-seconds-td4681020.html
 use "min-threshold-time" for queue element
 (or "min-threshold-buffers" where one buffer = one frame).
+
+#test latency
+https://gstreamer.freedesktop.org/documentation/coretracers/latency.html?gi-language=python
+# clock and sync
+https://gstreamer.freedesktop.org/documentation/application-development/advanced/clocks.html?gi-language=c#dynamic-latency
+

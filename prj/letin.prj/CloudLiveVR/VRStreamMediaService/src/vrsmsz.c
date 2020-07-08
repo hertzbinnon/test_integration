@@ -230,6 +230,13 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz");
 }
 
+gint _autoplug_select_cb(GstElement* decodebin, GstPad* pad, GstCaps*caps, GValueArray* factories){
+    GstStructure *new_pad_struct = gst_caps_get_structure (caps, 0);
+    const gchar * new_pad_type = gst_structure_get_name (new_pad_struct);
+    g_print("===== select for %s:%s, %s\n",GST_DEBUG_PAD_NAME (pad), new_pad_type);
+    g_print("checking factory %s\n", GST_OBJECT_NAME (factories));
+    return 0;
+}
 /*
  *
  * uridecodebin uri=rtmp://192.168.0.134/live/ch1 name=src ! tee name=t1 ! queue ! videoscale ! video/x-raw, width=320, height=240 ! x264enc ! flvmux name=muxer ! rtmpsink location=rtmp://192.168.0.134/live/0 src. ! audioconvert ! voaacenc ! tee ! queue ! muxer.
@@ -274,6 +281,8 @@ gboolean vrsmsz_add_stream(gpointer data){
      vs->uridecodebin = gst_element_factory_make("uridecodebin", name);
      g_object_set (vs->uridecodebin,"uri", uri, "expose-all-streams", TRUE, NULL);
      g_signal_connect (vs->uridecodebin, "pad-added", (GCallback) _pad_added_cb, vc);
+
+     g_signal_connect (vs->uridecodebin, "autoplug-select", (GCallback) _autoplug_select_cb, vc);
 
    }
 
@@ -623,12 +632,12 @@ gboolean director_publish_create(gchar* url){
         }
         g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 20000, NULL);
      }else if(vrsmsz->mode==8){
-        vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265enc", name); // nvh264enc have no avc
+        vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265device1enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 0, "bitrate", 80000, NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 3, "bitrate", 40000, "gop-size",30,NULL);
      }else{
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder){

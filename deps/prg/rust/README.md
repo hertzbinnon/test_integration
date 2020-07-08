@@ -1,6 +1,7 @@
 # error refs : https://www.jianshu.com/p/fa3b8b4896cc
 Install:
-curl https://sh.rustup.rs -sSf | sh
+#curl https://sh.rustup.rs -sSf | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
  touch main.rs
  rustc main.rs
  mkdir -v src
