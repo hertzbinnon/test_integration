@@ -625,7 +625,8 @@ gboolean director_publish_create(gchar* url){
   if(!vrsmsz->director.ds.pub_video_encoder){
      sprintf(name,"%s-pub_video_encoder","vrsmsz");
      if(vrsmsz->mode == 4 ){
-        vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
+        //vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
+        vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh264device1enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder){
           g_print("error make\n");
           return FALSE;
@@ -914,7 +915,8 @@ gboolean director_preview_create(vrstream_t* vs){
   if(!vrsmsz->director.ds.pre_video_encoder){
      sprintf(name,"%s-pre_video_encoder","vrsmsz");
      if(vrsmsz->mode == 4 || vrsmsz->mode==8){
-        vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
+        //vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
+        vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264device1enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pre_video_encoder){
           g_print("error make\n");
           return FALSE;
