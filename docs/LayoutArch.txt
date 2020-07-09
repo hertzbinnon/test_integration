@@ -82,7 +82,7 @@ Project
 	+kms
 		-url				https://github.com/Kurento
 		-version			6.7.0
-		-applications		https://github.com/Kurento/kurento-java.git
+		-applications		        https://github.com/Kurento/kurento-java.git
 		-examples			https://github.com/Kurento/kurento-tutorial-java.git
 							
 	+ai*****
@@ -91,8 +91,8 @@ Project
 		voiceDectect
 			-url			https://github.com/alumae/kaldi-gstreamer-server.git
 		framework
-		        -url            https://developer.ridgerun.com/wiki/index.php?title=R2Inference
-			-url            https://developer.ridgerun.com/wiki/index.php?title=GstInference
+		        -url                    https://developer.ridgerun.com/wiki/index.php?title=R2Inference
+			-url                    https://developer.ridgerun.com/wiki/index.php?title=GstInference
 
 	+webbench
 			-url 			https://github.com/yi5971/webbench-1.5.git commit:: 5235bef5a206d24f2aa6d82d85c2571e548a6e75
@@ -145,13 +145,12 @@ Gstreamer  - yolov3
              kaldi
  
 #embedded app
-1. android
-2. vlc
-3. opengl
-4. webrtc
-5. opencv
-6. gstreamer
-7. kaldi
-8. yolov3
+1. vlc       ---> opengl
+2. webrtc    ---> p2p quic 
+3. gstreamer ---> kaldi
+                  yolov3
+                  nnstreamer
+                  GstInference
+                  opencv
 =======
 
