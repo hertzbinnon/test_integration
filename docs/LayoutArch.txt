@@ -49,6 +49,7 @@ Project
 							https://github.com/RidgeRun/r2inference
 							https://github.com/RidgeRun/gst-inference
 					+ NNStreamer
+                                                        https://github.com/nnstreamer
 					+ Opencv DNN
 	+codec
 		+avs+				
@@ -144,13 +145,13 @@ Gstreamer  - yolov3
    	       \
              kaldi
  
-#embedded app
-1. vlc       ---> opengl
-2. webrtc    ---> p2p quic 
-3. gstreamer ---> kaldi
-                  yolov3
-                  nnstreamer
-                  GstInference
-                  opencv
-=======
+
+Windows  ---> blender
+         \ 
+          ---> VLC opengl
+         /---> WebRtc
+Android / 
+
+
+Linux(Server)---> gstreamer(kaldi nnstreamer GstInference)
 
