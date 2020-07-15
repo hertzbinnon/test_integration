@@ -15,3 +15,17 @@ NVIDIA_SMI=435.21
 NVIDIA_DRIVER_VERSION=435.21
 export PKG_CONFIG_PATH=`pwd`/libsoap-1.1.0/install/lib/pkgconfig/:$PKG_CONFIG_PATH
 export LD_LIBRARY_PATH=`pwd`/libsoap-1.1.0/install/lib/:$LD_LIBRARY_PATH
+
+#
+# sudo apt-get install libxv1
+# sudo apt-get install libva2
+ #   sudo apt-get install libva-x11
+ #   sudo apt-get install libva-x11-2
+ #   sudo apt-get install libva-drm
+ #   sudo apt-get install libva-drm-2
+ #   sudo apt-get install libva-drm2
+ #   sudo apt-get install libxcb-shape
+ #   sudo apt-get install xcb-shape
+ #   sudo apt-get install libxcb-shape0
+ #   sudo apt-get install libasound2
+#
