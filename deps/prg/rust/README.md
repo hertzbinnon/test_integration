@@ -1,3 +1,4 @@
+https://www.rust-lang.org/zh-CN/learn/get-started
 # error refs : https://www.jianshu.com/p/fa3b8b4896cc
 Install:
 #curl https://sh.rustup.rs -sSf | sh
