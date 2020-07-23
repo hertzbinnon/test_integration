@@ -9,3 +9,4 @@ gst have  registry.x86_64.bin
 
 
 https://developer.ridgerun.com/wiki/index.php/How_to_generate_a_Gstreamer_pipeline_diagram_(graph)
+GST_PLUGIN_FEATURE_RANK=vah264dec:259 gst-play-1.0 ~/video.mp4

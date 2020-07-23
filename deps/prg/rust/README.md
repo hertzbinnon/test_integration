@@ -11,3 +11,5 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 cargo build --bin=appsrc
  cargo build --release
  cargo run
+cargo check
+cargo doc --open
