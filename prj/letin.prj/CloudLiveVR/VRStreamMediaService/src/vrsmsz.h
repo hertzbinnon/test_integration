@@ -179,7 +179,6 @@ typedef struct{
   GAsyncQueue * rep_queue;
   gboolean isSwitched;
   
-  vrchan_t *remove_chan;
 } vrsmsz_t;
 
 extern vrsmsz_t* vrsmsz;
@@ -201,5 +200,4 @@ void vrsmsz_switch_stream_crossfade();
 void vrsmsz_add_text();
 void vrsmsz_add_pic();
 void vrsmsz_add_clip();
-
 
