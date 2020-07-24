@@ -1,9 +1,13 @@
 extern crate gstreamer as gst;
-use gst::prelude::*;
+//use gst::prelude::*;
 use glib_sys;
 use std::env;
 const MAX_CHANNEL: usize =8;
-
+#[macro_use]
+mod pipeline;
+mod settings;
+use crate::pipeline::Pipeline;
+/*
 struct Command{
   cmd: String,	
   id: i32,
@@ -141,14 +145,19 @@ struct DRStream{
   pub_muxer:gst::Element,
   pub_outer:gst::Element, 
   mixer:gst::Element, 
+}
 
+impl DRStream{
+  fn new() -> DRStream {
+    let video_filter_queue_sinkpad = gst::Pad::new();
+  }
 }
 
 struct DRChan{
-  pre_bin: gst::Element,
-  pub_bin: gst::Element,
-  swt_bin: gst::Element,
-  eff_bin: gst::Element,
+  pre_bin: gst::Bin,
+  pub_bin: gst::Bin,
+  swt_bin: gst::Bin,
+  eff_bin: gst::Bin,
 
   stream_id: i32,
   video_id: i32,
@@ -160,8 +169,29 @@ struct DRChan{
 }
 
 impl DRChan{
-  fn new()->DRChan{
-    
+  fn new(ip:String,port:i32)-> DRChan{
+      let pre_bin = gst::Bin::new(Some("pre_bin"));
+      let pub_bin = gst::Bin::new(Some("pub_bin"));
+      let swt_bin = gst::Bin::new(Some("swt_bin"));
+      let eff_bin = gst::Bin::new(Some("eff_bin"));
+      let stream_id = -1;
+      let video_id = -1;
+      let audio_id = -1;
+      let preview_url = String::from("rtmp://");
+      let publish_url = String::from("rtmp://");
+      let ds = DRStream::new();
+
+      DRChan{
+        pre_bin,
+        pub_bin,
+        swt_bin,
+        eff_bin,
+        stream_id,
+        video_id,
+        audio_id,
+        preview_url,
+        publish_url,
+      }
   }
 }
 
@@ -179,23 +209,23 @@ struct VRSmsz{
 
   director: DRChan,
 
-  req_queue: glib_sys::GAsyncQueue,
-  rep_queue: glib_sys::GAsyncQueue,
+  //req_queue: glib_sys::GAsyncQueue,
+  //rep_queue: glib_sys::GAsyncQueue,
   is_switched:bool,
   
 }
 
 impl VRSmsz{
-  fn new(mode:i32) -> VRSmsz{
+  fn new(mode:i32, mut director: DRchan) -> VRSmsz{
       let pipeline = gst::Pipeline::new(Some("vrsmsz-pipeline"));
       let looper   = glib::MainLoop::new(None, false);
       let theclock = pipeline.get_clock();
       let bus      = pipeline.get_bus().unwrap();
       let streams:[VRChan; MAX_CHANNEL] ; 
       let streams_id:[usize; MAX_CHANNEL];
-      let director = ();//DRChan::new();
-      let req_queue = ();
-      let rep_queue = ();
+      //let director = DRChan::new();
+      //let req_queue = ();
+      //let rep_queue = ();
       let stream_nbs = 0;
       let is_switched = false;
       let mut i = 0;
@@ -218,13 +248,13 @@ impl VRSmsz{
         stream_nbs,
         streams_id,
         director,
-        req_queue,
-        rep_queue,
+        //req_queue,
+        //rep_queue,
         is_switched,
       }
   }
 }
-
+*/
 fn main() {
     let args: Vec<_> = env::args().collect();
     if args.len() != 4 {
@@ -232,4 +262,9 @@ fn main() {
         std::process::exit(-1);
     }
     gst::init().unwrap();
+    let looper  = glib::MainLoop::new(None, false);
+    let pl = Pipeline::new();
+    pl.start().expect("start error");
+    pl.set_clock();
+    looper.run()
 }
