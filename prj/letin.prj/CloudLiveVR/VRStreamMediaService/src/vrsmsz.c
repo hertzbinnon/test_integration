@@ -780,11 +780,11 @@ void director_publish_link_vs(vrstream_t* vs){
     vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad = gst_element_get_static_pad (vrsmsz->director.ds.pub_vdec_tee_queue, "sink");
 
   if(!vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad){
-    vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad = gst_ghost_pad_new ("pub-vdec-tee-queue-sinkpad", vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad);
-    gst_element_add_pad (vrsmsz->director.pub_bin,vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad );
+    vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad = gst_ghost_pad_new("pub-vdec-tee-queue-sinkpad", vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad);
+    gst_element_add_pad( vrsmsz->director.pub_bin,vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad );
   }
 
-  vs->pub_vdec_tee_ghost_srcpad = gst_ghost_pad_new ("pub-vdec-tee-srcpad", vs->pub_vdec_tee_srcpad );
+  vs->pub_vdec_tee_ghost_srcpad = gst_ghost_pad_new ( "pub-vdec-tee-srcpad", vs->pub_vdec_tee_srcpad );
   gst_element_add_pad (vs->bin, vs->pub_vdec_tee_ghost_srcpad);
   ret = gst_pad_link(vs->pub_vdec_tee_ghost_srcpad,vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {

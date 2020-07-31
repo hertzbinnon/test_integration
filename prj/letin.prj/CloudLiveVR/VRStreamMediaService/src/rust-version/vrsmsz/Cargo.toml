@@ -2,11 +2,11 @@
 name = "vrsmsz"
 version = "1.2.0"
 authors = ["hertz <binhe@mail.ustc.edu.cn>"]
-edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
 glib = { git = "https://github.com/gtk-rs/glib" }
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
@@ -17,14 +17,18 @@ gstreamer-audio = { path = "../../gstreamer-rs/gstreamer-audio" }
 gstreamer-base = { path = "../../gstreamer-rs/gstreamer-base" }
 gstreamer-video = { path = "../../gstreamer-rs/gstreamer-video" }
 gstreamer-pbutils = { path = "../../gstreamer-rs/gstreamer-pbutils" }
-
-#gstreamer-sys = { path = "../../gstreamer-rs-sys/gstreamer-sys",version = "0.10.0" }
-#gstreamer-gl-sys = { path = "../../gstreamer-rs-sys/gstreamer-gl-sys", optional = true }
-#gstreamer-app-sys = { path = "../../gstreamer-rs-sys/gstreamer-app-sys" }
-#gstreamer-audio-sys = { path = "../../gstreamer-rs-sys/gstreamer-audio-sys" }
-#gstreamer-base-sys = { path = "../../gstreamer-rs-sys/gstreamer-base-sys" }
-#gstreamer-video-sys = { path = "../../gstreamer-rs-sys/gstreamer-video-sys" }
-#gstreamer-pbutils-sys = { path = "../../gstreamer-rs-sys/gstreamer-pbutils-sys" }
+byte-slice-cast = "0.3"
+failure = "0.1.0"
+rustc-serialize = "0.3"
+tiny_http = { path = "../../tiny-http" }
+#gstreamer-sys = { git = " https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+#gstreamer-gl-sys = { git = " https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys",optional = true}
+#gstreamer-app-sys = {  git = " https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+#gstreamer-audio-sys = {  git = " https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+#gstreamer-base-sys = {  git = " https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+#gstreamer-video-sys = {  git = " https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+#gstreamer-pbutils-sys = {  git = " https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+#gst-sys = { package="gstreamer-sys", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
 
 
 serde = "1"

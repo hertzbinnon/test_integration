@@ -1,270 +1,274 @@
+use std::sync::{Arc, Mutex};
+
+extern crate byte_slice_cast;
+use byte_slice_cast::*;
+
 extern crate gstreamer as gst;
-//use gst::prelude::*;
-use glib_sys;
-use std::env;
-const MAX_CHANNEL: usize =8;
-#[macro_use]
-mod pipeline;
-mod settings;
-use crate::pipeline::Pipeline;
-/*
-struct Command{
-  cmd: String,	
-  id: i32,
-  in_url: String,
-  pre_url: String,
-  pub_url: String,
-  stream_id: String,
+use gst::prelude::*;
+extern crate gstreamer_audio as gst_audio;
+use gst_audio::AudioInfo;
+extern crate gstreamer_app as gst_app;
+use gst_app::{AppSink, AppSrc};
+extern crate glib;
+use glib::source::SourceId;
 
-  effect:String,
-  duration:i32,
+const CHUNK_SIZE: usize = 1024; // Amount of bytes we are sending in each buffer
+const SAMPLE_RATE: u32 = 44_100; // Samples per second we are sending
 
-  in_bitrate:i32,
-  in_width:i32,
-  in_height:i32,
-  in_fps:i32,
+#[derive(Debug)]
+struct CustomData {
+    source_id: Option<SourceId>,
 
-  pub_bitrate:i32,
-  pub_width:i32,
-  pub_height:i32,
-  pub_fps:i32,
+    num_samples: u64, // Number of samples generated so far (for timestamp generation)
+    // For waveform generation
+    a: f64,
+    b: f64,
+    c: f64,
+    d: f64,
 
-  logo_path:String,
-  pip_path: String,
-  text_string:String,
-  left:i32,
-  top: i32,
-  width:i32,
-  height:i32,
-
-  font:String,
-  font_size:i32,
-
-  delay_type:String,
-  delay_time:i32,
-
+    appsrc: AppSrc,
+    appsink: AppSink,
 }
 
-struct VRStream{
-  uridecodebin:gst::Element,  // 
-  vdec_tee:gst::Element, 
-  vdec_tee_queue:gst::Element ,
-  pre_vdec_tee_srcpad:gst::Pad,
-  pre_vdec_tee_ghost_srcpad:gst::Pad,
-  pub_vdec_tee_srcpad:gst::Pad,
-  pub_vdec_tee_ghost_srcpad:gst::Pad,
-  vdec_tee_filter_srcpad:gst::Pad,
-  vdec_filter_tee_queue_sinkpad:gst::Pad,
-  vdec_filter_tee_queue:gst::Element,
-  vdec_filter_tee_convert:gst::Element,
-  video_scale:gst::Element ,
-  video_capsfilter:gst::Element ,
-  video_encoder:gst::Element ,
-  video_encoder_queue:gst::Element ,
-  video_encoder_parser:gst::Element ,
-  audio_convert:gst::Element, 
-  audio_encoder:gst::Element, 
-  aenc_tee:gst::Element ,
-  pre_aenc_tee_srcpad:gst::Pad,
-  pre_aenc_tee_ghost_srcpad:gst::Pad,
-  pub_aenc_tee_srcpad:gst::Pad,
-  pub_aenc_tee_ghost_srcpad:gst::Pad,
-  aenc_tee_queue:gst::Element ,
-  muxer: gst::Element, // 
-  outer: gst::Element, // 
-  bin: gst::Element,
-}
-
-struct VRChan{
-  tracks:i32,
-  stream_id:i32,
-  video_id: i32,
-  audio_id: i32,
-  subs_id: i32,
-  in_url: String,
-  output_url:String,
-  preview_url:String,
-  resolution:i32, 
-  vs: VRStream ,
-
-  status:i32, 
-  audio_status:i32, 
-  video_status:i32,
-}
-
-struct Message{
-  req: String,
-  rep: String,
-  errcode:i32,
-  timeout:i32,
-  is_responsed: bool,
-  command: Command,
-  vc: VRChan,
-}
-
-struct DRStream{
-  //compositor for fade;
-  video_filter_queue_sinkpad: gst::Pad,  
-  video_filter_queue: gst::Element,  
-  videoconvert: gst::Element,  
-  video_filter_chain: gst::Element,  
-  video_filter_tee: gst::Element,  
-
-  vfilter_queue_vdec_tee_srcpd: gst::Pad, 
-  vfilter_vdec_tee_queue: gst::Element,
-  video_convert: gst::Element, 
-  wrapper : gst::Element, 
-  vfilter_tee: gst::Element,  
-
-  pre_video_filter_tee_srcpad:gst::Pad,
-  pre_vdec_tee_queue:gst::Element,
-  pre_vdec_tee_queue_sinkpad:gst::Pad,
-  pre_vdec_tee_queue_ghost_sinkpad:gst::Pad,
-
-  pre_video_scale:gst::Element,
-  pre_capsfilter:gst::Element,
-  pre_video_encoder:gst::Element,
-  pre_video_encoder_queue:gst::Element,
-  pre_video_encoder_parser:gst::Element,
-  pre_aenc_tee_queue:gst::Element,
-  pre_aenc_tee_queue_sinkpad:gst::Pad,
-  pre_aenc_tee_queue_ghost_sinkpad:gst::Pad,
-  pre_muxer:gst::Element,
-  pre_outer:gst::Element,  
-
-  pub_video_filter_tee_srcpad:gst::Pad,
-  pub_vdec_tee_queue:gst::Element,  
-  pub_vdec_tee_queue_sinkpad:gst::Pad,
-  pub_vdec_tee_queue_ghost_sinkpad:gst::Pad,
-  pub_video_encoder:gst::Element,
-  pub_video_encoder_queue:gst::Element,
-  pub_video_encoder_parser:gst::Element,
-  pub_aenc_tee_queue:gst::Element,
-  pub_aenc_tee_queue_sinkpad:gst::Pad,
-  pub_aenc_tee_queue_ghost_sinkpad:gst::Pad,
-  pub_muxer:gst::Element,
-  pub_outer:gst::Element, 
-  mixer:gst::Element, 
-}
-
-impl DRStream{
-  fn new() -> DRStream {
-    let video_filter_queue_sinkpad = gst::Pad::new();
-  }
-}
-
-struct DRChan{
-  pre_bin: gst::Bin,
-  pub_bin: gst::Bin,
-  swt_bin: gst::Bin,
-  eff_bin: gst::Bin,
-
-  stream_id: i32,
-  video_id: i32,
-  audio_id: i32,
-  preview_url: String,
-  publish_url: String,
-
-  ds: DRStream,
-}
-
-impl DRChan{
-  fn new(ip:String,port:i32)-> DRChan{
-      let pre_bin = gst::Bin::new(Some("pre_bin"));
-      let pub_bin = gst::Bin::new(Some("pub_bin"));
-      let swt_bin = gst::Bin::new(Some("swt_bin"));
-      let eff_bin = gst::Bin::new(Some("eff_bin"));
-      let stream_id = -1;
-      let video_id = -1;
-      let audio_id = -1;
-      let preview_url = String::from("rtmp://");
-      let publish_url = String::from("rtmp://");
-      let ds = DRStream::new();
-
-      DRChan{
-        pre_bin,
-        pub_bin,
-        swt_bin,
-        eff_bin,
-        stream_id,
-        video_id,
-        audio_id,
-        preview_url,
-        publish_url,
-      }
-  }
-}
-
-struct VRSmsz{
-  pipeline: gst::Pipeline,
-  looper: glib::MainLoop,
-  theclock: Option<gst::Clock>,
-  bus: gst::Bus ,
-
-  mode: i32,
-
-  streams: [VRChan; MAX_CHANNEL],  
-  stream_nbs: i32,
-  streams_id: [usize; MAX_CHANNEL],
-
-  director: DRChan,
-
-  //req_queue: glib_sys::GAsyncQueue,
-  //rep_queue: glib_sys::GAsyncQueue,
-  is_switched:bool,
-  
-}
-
-impl VRSmsz{
-  fn new(mode:i32, mut director: DRchan) -> VRSmsz{
-      let pipeline = gst::Pipeline::new(Some("vrsmsz-pipeline"));
-      let looper   = glib::MainLoop::new(None, false);
-      let theclock = pipeline.get_clock();
-      let bus      = pipeline.get_bus().unwrap();
-      let streams:[VRChan; MAX_CHANNEL] ; 
-      let streams_id:[usize; MAX_CHANNEL];
-      //let director = DRChan::new();
-      //let req_queue = ();
-      //let rep_queue = ();
-      let stream_nbs = 0;
-      let is_switched = false;
-      let mut i = 0;
-      loop{
-        streams[i] = ();//VRChan::new(i);
-        streams_id[i] = 0;
-        i = i+1;
-        if i == MAX_CHANNEL {
-           break;
+impl CustomData {
+    fn new(appsrc: &AppSrc, appsink: &AppSink) -> CustomData {
+        CustomData {
+            source_id: None,
+            num_samples: 0,
+            a: 0.0,
+            b: 1.0,
+            c: 0.0,
+            d: 1.0,
+            appsrc: appsrc.clone(),
+            appsink: appsink.clone(),
         }
-      }
-
-      VRSmsz{
-        pipeline,
-        looper,
-        theclock,
-        bus,
-        mode,
-        streams,
-        stream_nbs,
-        streams_id,
-        director,
-        //req_queue,
-        //rep_queue,
-        is_switched,
-      }
-  }
-}
-*/
-fn main() {
-    let args: Vec<_> = env::args().collect();
-    if args.len() != 4 {
-        println!("Usage: vrsmsz <host> <port> <mode>");
-        std::process::exit(-1);
     }
-    gst::init().unwrap();
-    let looper  = glib::MainLoop::new(None, false);
-    let pl = Pipeline::new();
-    pl.start().expect("start error");
-    pl.set_clock();
-    looper.run()
+}
+
+fn main() {
+    // Initialize GStreamer
+    if let Err(err) = gst::init() {
+        eprintln!("Failed to initialize Gst: {}", err);
+        return;
+    }
+
+    let appsrc = gst::ElementFactory::make("appsrc", Some("audio_source")).unwrap();
+    let tee = gst::ElementFactory::make("tee", Some("tee")).unwrap();
+    let audio_queue = gst::ElementFactory::make("queue", Some("audio_queue")).unwrap();
+    let audio_convert1 = gst::ElementFactory::make("audioconvert", Some("audio_convert1")).unwrap();
+    let audio_resample =
+        gst::ElementFactory::make("audioresample", Some("audio_resample")).unwrap();
+    let audio_sink = gst::ElementFactory::make("autoaudiosink", Some("audio_sink")).unwrap();
+    let video_queue = gst::ElementFactory::make("queue", Some("video_queue")).unwrap();
+    let audio_convert2 = gst::ElementFactory::make("audioconvert", Some("audio_convert2")).unwrap();
+    let visual = gst::ElementFactory::make("wavescope", Some("visual")).unwrap();
+    let video_convert = gst::ElementFactory::make("videoconvert", Some("video_convert")).unwrap();
+    let video_sink = gst::ElementFactory::make("autovideosink", Some("video_sink")).unwrap();
+    let app_queue = gst::ElementFactory::make("queue", Some("app_queue")).unwrap();
+    let appsink = gst::ElementFactory::make("appsink", Some("app_sink")).unwrap();
+
+    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
+
+    visual.set_property_from_str("shader", "none");
+    visual.set_property_from_str("style", "lines");
+
+    pipeline
+        .add_many(&[
+            &appsrc,
+            &tee,
+            &audio_queue,
+            &audio_convert1,
+            &audio_resample,
+            &audio_sink,
+            &video_queue,
+            &audio_convert2,
+            &visual,
+            &video_convert,
+            &video_sink,
+            &app_queue,
+            &appsink,
+        ])
+        .unwrap();
+
+    gst::Element::link_many(&[&appsrc, &tee]).unwrap();
+    gst::Element::link_many(&[&audio_queue, &audio_convert1, &audio_resample, &audio_sink])
+        .unwrap();
+    gst::Element::link_many(&[
+        &video_queue,
+        &audio_convert2,
+        &visual,
+        &video_convert,
+        &video_sink,
+    ])
+    .unwrap();
+    gst::Element::link_many(&[&app_queue, &appsink]).unwrap();
+
+    let tee_audio_pad = tee.get_request_pad("src_%u").unwrap();
+    println!(
+        "Obtained request pad {} for audio branch",
+        tee_audio_pad.get_name()
+    );
+    let queue_audio_pad = audio_queue.get_static_pad("sink").unwrap();
+    tee_audio_pad.link(&queue_audio_pad).unwrap();
+
+    let tee_video_pad = tee.get_request_pad("src_%u").unwrap();
+    println!(
+        "Obtained request pad {} for video branch",
+        tee_video_pad.get_name()
+    );
+    let queue_video_pad = video_queue.get_static_pad("sink").unwrap();
+    tee_video_pad.link(&queue_video_pad).unwrap();
+    let tee_app_pad = tee.get_request_pad("src_%u").unwrap();
+    let queue_app_pad = app_queue.get_static_pad("sink").unwrap();
+    tee_app_pad.link(&queue_app_pad).unwrap();
+
+    // configure appsrc
+    let info = AudioInfo::builder(gst_audio::AudioFormat::S16le, SAMPLE_RATE, 1)
+        .build()
+        .unwrap();
+    let audio_caps = info.to_caps().unwrap();
+
+    let appsrc = appsrc
+        .dynamic_cast::<AppSrc>()
+        .expect("Source element is expected to be an appsrc!");
+    appsrc.set_caps(Some(&audio_caps));
+    appsrc.set_property_format(gst::Format::Time);
+
+    let appsink = appsink
+        .dynamic_cast::<AppSink>()
+        .expect("Sink element is expected to be an appsink!");
+
+    let data: Arc<Mutex<CustomData>> = Arc::new(Mutex::new(CustomData::new(&appsrc, &appsink)));
+
+    let data_weak = Arc::downgrade(&data);
+    appsrc.connect_need_data(move |_, _size| {
+        let data = match data_weak.upgrade() {
+            Some(data) => data,
+            None => return,
+        };
+        let mut d = data.lock().unwrap();
+
+        if d.source_id.is_none() {
+            println!("start feeding");
+
+            let data_weak = Arc::downgrade(&data);
+            d.source_id = Some(glib::source::idle_add(move || {
+                let data = match data_weak.upgrade() {
+                    Some(data) => data,
+                    None => return glib::Continue(false),
+                };
+
+                let (appsrc, buffer) = {
+                    let mut data = data.lock().unwrap();
+                    let mut buffer = gst::Buffer::with_size(CHUNK_SIZE).unwrap();
+                    let num_samples = CHUNK_SIZE / 2; /* Each sample is 16 bits */
+                    let pts = gst::SECOND
+                        .mul_div_floor(data.num_samples, u64::from(SAMPLE_RATE))
+                        .expect("u64 overflow");
+                    let duration = gst::SECOND
+                        .mul_div_floor(num_samples as u64, u64::from(SAMPLE_RATE))
+                        .expect("u64 overflow");
+
+                    {
+                        let buffer = buffer.get_mut().unwrap();
+                        {
+                            let mut samples = buffer.map_writable().unwrap();
+                            let samples = samples.as_mut_slice_of::<i16>().unwrap();
+
+                            // Generate some psychodelic waveforms
+                            data.c += data.d;
+                            data.d -= data.c / 1000.0;
+                            let freq = 1100.0 + 1000.0 * data.d;
+
+                            for sample in samples.iter_mut() {
+                                data.a += data.b;
+                                data.b -= data.a / freq;
+                                *sample = 500 * (data.a as i16);
+                            }
+
+                            data.num_samples += num_samples as u64;
+                        }
+
+                        buffer.set_pts(pts);
+                        buffer.set_duration(duration);
+                    }
+
+                    (data.appsrc.clone(), buffer)
+                };
+
+                glib::Continue(appsrc.push_buffer(buffer).is_ok())
+            }));
+        }
+    });
+
+    let data_weak = Arc::downgrade(&data);
+    appsrc.connect_enough_data(move |_| {
+        let data = match data_weak.upgrade() {
+            Some(data) => data,
+            None => return,
+        };
+
+        let mut data = data.lock().unwrap();
+        if let Some(source) = data.source_id.take() {
+            println!("stop feeding");
+            glib::source::source_remove(source);
+        }
+    });
+
+    // configure appsink
+    appsink.set_emit_signals(true);
+    appsink.set_caps(Some(&audio_caps));
+
+    let data_weak = Arc::downgrade(&data);
+    appsink.connect_new_sample(move |_| {
+        let data = match data_weak.upgrade() {
+            Some(data) => data,
+            None => return Ok(gst::FlowSuccess::Ok),
+        };
+
+        let appsink = {
+            let data = data.lock().unwrap();
+            data.appsink.clone()
+        };
+
+        if let Ok(_sample) = appsink.pull_sample() {
+            use std::io::{self, Write};
+            // The only thing we do in this example is print a * to indicate a received buffer
+            print!("*");
+            let _ = io::stdout().flush();
+        }
+
+        Ok(gst::FlowSuccess::Ok)
+    });
+
+    let main_loop = glib::MainLoop::new(None, false);
+    let main_loop_clone = main_loop.clone();
+    let bus = pipeline.get_bus().unwrap();
+    #[allow(clippy::single_match)]
+    bus.connect_message(move |_, msg| match msg.view() {
+        gst::MessageView::Error(err) => {
+            let main_loop = &main_loop_clone;
+            eprintln!(
+                "Error received from element {:?}: {}",
+                err.get_src().map(|s| s.get_path_string()),
+                err.get_error()
+            );
+            eprintln!("Debugging information: {:?}", err.get_debug());
+            main_loop.quit();
+        }
+        _ => (),
+    });
+    bus.add_signal_watch();
+
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state.");
+
+    main_loop.run();
+
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state.");
+
+    bus.remove_signal_watch();
 }
