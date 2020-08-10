@@ -1,0 +1,29 @@
+######1.14 or 1.16 
+Install NVDEC and NVENC as GStreamer plugins
+Environment
+Ubuntu 18.04
+NVIDIA driver 430.40
+NVIDIA Video Codec SDK 9.0.20
+Steps
+Clone the gst-plugins-bad and check out to the same version as GStreamer
+git clone git://anongit.freedesktop.org/gstreamer/gst-plugins-bad
+cd gst-plugins-bad/
+git checkout 1.14.0
+Download NVIDIA Video Codec SDK and copy header files
+cd /path/to/video/codec/sdk
+cp /usr/local/cuda/include/cuda.h /path/to/gst-plugins-bad/sys/nvenc
+cp include/nvEncodeAPI.h /path/to/gst-plugins-bad/sys/nvenc
+cp include/cuviddec.h /path/to/gst-plugins-bad/sys/nvdec
+cp include/nvcuvid.h /path/to/gst-plugins-bad/sys/nvdec
+Build plugins
+cd /path/to/gst-plugins-bad
+NVENCODE_CFLAGS="-I/path/to/gst-plugins-bad/sys/nvenc" ./autogen.sh --with-cuda-prefix="/usr/local/cuda"
+cd sys/nvenc
+make
+sudo cp .libs/libgstnvenc.so /usr/lib/x86_64-linux-gnu/gstreamer-1.0/
+cd ../nvdec
+make
+sudo cp .libs/libgstnvdec.so /usr/lib/x86_64-linux-gnu/gstreamer-1.0/
+Check installation
+gst-inspect-1.0 | grep nvenc
+gst-inspect-1.0 | grep nvdec

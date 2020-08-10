@@ -324,7 +324,7 @@ gboolean vrsmsz_add_stream(gpointer data){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vs->video_capsfilter), "caps",
-      "video/x-raw, width=1280, height=720");
+      "video/x-raw, width=720, height=576");
    }
 #if 0
    if(!vs->video_encoder){
@@ -334,27 +334,25 @@ gboolean vrsmsz_add_stream(gpointer data){
       g_print("error make\n");
       return FALSE;
     }
-    g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
+    g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 30, "speed-preset",1,NULL);
    }
 #else
   if(!vs->video_encoder){
      sprintf(name,"vs%d-video_encoder",vc->video_id);
-     if(vrsmsz->mode == 4 || vrsmsz->mode==8){
-        vs->video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
+     if(0/*vrsmsz->mode == 4 || vrsmsz->mode==8*/){
+        vs->video_encoder= gst_element_factory_make("nvh264enc", name); // 
         if(!vs->video_encoder){
           g_print("error make\n");
           return FALSE;
         }
         g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 1000, NULL);
-
-	
-     }else{
-        vs->video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
+     }else if( vrsmsz->mode == 4 || vrsmsz->mode == 8 ){
+        vs->video_encoder= gst_element_factory_make("x264enc", name); // 
         if(!vs->video_encoder){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
+        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1,NULL);
      }
   }
 
@@ -641,7 +639,7 @@ gboolean director_publish_create(gchar* url){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 1, "bitrate", 80000, "gop-size",30,NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 80000, "gop-size",30,NULL);
      }else{
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder){
@@ -701,10 +699,12 @@ gboolean director_publish_create(gchar* url){
     if(!vrsmsz->director.ds.pub_outer){
        sprintf(name,"%s-pub_outer","vrsmsz");
       vrsmsz->director.ds.pub_outer= gst_element_factory_make("hlssink", name);
+      //vrsmsz->director.ds.pub_outer= gst_element_factory_make("udpsink", name);
       if(!vrsmsz->director.ds.pub_outer){
         g_print("error make\n");
         return FALSE;
       }
+      //g_object_set (vrsmsz->director.ds.pub_outer,"host","192.168.1.32","port",12346,NULL);
       g_object_set (vrsmsz->director.ds.pub_outer, "location", "/tmp/hls/%05d.ts", "playlist-length", 6, "playlist-location","/tmp/hls/gst.m3u8","max-files",10,"target-duration",3,NULL);
    }   
   }else{
@@ -912,12 +912,12 @@ gboolean director_preview_create(vrstream_t* vs){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vrsmsz->director.ds.pre_capsfilter), "caps",
-      "video/x-raw, width=1280, height=720");
+      "video/x-raw, width=720, height=576");
   }
 
   if(!vrsmsz->director.ds.pre_video_encoder){
      sprintf(name,"%s-pre_video_encoder","vrsmsz");
-     if(vrsmsz->mode == 4 || vrsmsz->mode==8){
+     if(0/*vrsmsz->mode == 4 || vrsmsz->mode==8*/){
         vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
         //vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264device1enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pre_video_encoder){
@@ -927,13 +927,13 @@ gboolean director_preview_create(vrstream_t* vs){
         g_object_set (vrsmsz->director.ds.pre_video_encoder, "preset", 4, "bitrate", 1000, NULL);
 
 	
-     }else{
+     }else if(vrsmsz->mode == 4 || vrsmsz->mode==8){
         vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pre_video_encoder){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, NULL);
+        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, NULL);
      }
   }
 
@@ -949,7 +949,7 @@ gboolean director_preview_create(vrstream_t* vs){
 
   if(!vrsmsz->director.ds.pre_video_encoder_parser){
          sprintf(name,"%s-pre_video_encoder_parser","vrsmsz");
-         vrsmsz->director.ds.pre_video_encoder_parser= gst_element_factory_make("h264parse", name); // nvh264enc have no avc
+         vrsmsz->director.ds.pre_video_encoder_parser= gst_element_factory_make("h264parse", name); // 
         if(!vrsmsz->director.ds.pre_video_encoder_parser){
           g_print("error make\n");
           return FALSE;
@@ -1285,6 +1285,7 @@ gboolean vrsmsz_stream_delay(gpointer data){
 }
 
 /*****************************************************************************************************/
+//#define TEST_8K
 gboolean vrsmsz_switch_stream(gpointer data){
 #if 0// effect switch
   //gboolean is_fade = TRUE;
@@ -1317,17 +1318,21 @@ gboolean vrsmsz_switch_stream(gpointer data){
  
   vrchan_t* vc = vrsmsz->streams+streamid;
   if(!vrsmsz->isSwitched){// 
+#ifndef TEST_8K
     director_preview_create(&(vc->vs));
     director_preview_link_vs(&(vc->vs));
+    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+#endif
     vrsmsz->isSwitched = TRUE;
     vrsmsz->director.stream_id = vc->stream_id;
-    gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
     return FALSE;
   }
   
   vrstream_t* vr = &(vrsmsz->streams[vrsmsz->director.stream_id].vs);
+#ifndef TEST_8K
   director_preview_unlink_vs(vr);
   director_preview_link_vs(&vc->vs);
+#endif
 
   if(vrsmsz->director.pub_bin){ // first pub
     g_print("publish switch");
