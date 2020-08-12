@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 """
+ gst-launch-1.0 srtsrc uri=srt://127.0.0.1:8888 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! videoconvert ! fakesink
+ gst-launch-1.0 videotestsrc ! x264enc ! mpegtsmux ! srtsink uri=srt://:8888
+
 gst-launch-1.0  filesrc location=/home/hebin/Game.Of.Thrones.S01.E09.2011.1080p.mkv ! queue ! matroskademux name=demuxer ! queue ! h264parse ! queue ! mpegtsmux name=mux alignment=7 ! queue ! udpsink  host=192.168.61.26 port=12345 demuxer. ! queue ! avdec_dca ! audioconvert ! audioresample ! queue ! fdkaacenc ! audio/mpeg,channels=6 ! mux.
 
 gst-launch-1.0 multifilesrc location=/tmp/h264+aac/%d.ts ! tsdemux name=d ! queue ! h264parse ! queue ! mpegtsmux name=mux alignment=7  ! udpsink  host=192.168.8.62 port=12346  d. ! queue ! aacparse  ! mux.
