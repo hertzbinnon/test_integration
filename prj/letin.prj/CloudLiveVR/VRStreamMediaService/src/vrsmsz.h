@@ -70,7 +70,7 @@ typedef struct{
   GstElement * aenc_tee_queue;
   GstElement * muxer; // 
   GstElement * outer; // 
-  GstElement  *bin;
+  GstElement * bin;
 } vrstream_t;
 
 typedef struct {

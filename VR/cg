@@ -1,4 +1,4 @@
-#CG
+###CG
 https://www.zhihu.com/question/349302834
 http://staff.ustc.edu.cn/~lgliu/Resources/CG/What_is_CG.htm
 http://www.kevinbeason.com/smallpt/
@@ -9,6 +9,8 @@ https://trenki2.github.io/blog/2017/06/06/developing-a-software-renderer-part1/
 https://learnopengl-cn.github.io/#
 http://www.cppblog.com/doing5552/archive/2009/01/08/71532.html // good Opengl study for newers :: webpage/71532.html
 
+# free glut and reading Readme.cmake for build
+http://freeglut.sourceforge.net/
 
 ### misc 
 https://photooxy.com/other-design/convert-image-to-360-degree-online-156.html  # Converting 2D to 360 image
