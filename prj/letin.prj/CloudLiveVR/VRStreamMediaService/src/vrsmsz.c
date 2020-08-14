@@ -324,7 +324,7 @@ gboolean vrsmsz_add_stream(gpointer data){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vs->video_capsfilter), "caps",
-      "video/x-raw, width=720, height=576");
+      "video/x-raw, width=1280, height=720");
    }
 #if 0
    if(!vs->video_encoder){
@@ -352,7 +352,7 @@ gboolean vrsmsz_add_stream(gpointer data){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1,NULL);
+        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", 3000,NULL);
      }
   }
 
@@ -639,7 +639,7 @@ gboolean director_publish_create(gchar* url){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 80000, "gop-size",30,NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 1, "bitrate", 80000, "gop-size",30,NULL);
      }else{
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pub_video_encoder){
@@ -912,7 +912,7 @@ gboolean director_preview_create(vrstream_t* vs){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vrsmsz->director.ds.pre_capsfilter), "caps",
-      "video/x-raw, width=720, height=576");
+      "video/x-raw, width=1280, height=720");
   }
 
   if(!vrsmsz->director.ds.pre_video_encoder){
@@ -933,7 +933,7 @@ gboolean director_preview_create(vrstream_t* vs){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, NULL);
+        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1,"bitrate", 3000, NULL);
      }
   }
 
