@@ -51,10 +51,12 @@ typedef struct{
   GstPad* pre_vdec_tee_ghost_srcpad;
   GstPad* pub_vdec_tee_srcpad;
   GstPad* pub_vdec_tee_ghost_srcpad;
+
   GstPad* vdec_tee_filter_srcpad;
   GstPad* vdec_filter_tee_queue_sinkpad;
   GstElement* vdec_filter_tee_queue;
   GstElement* vdec_filter_tee_convert;
+
   GstElement * video_scale;
   GstElement * video_capsfilter;
   GstElement * video_encoder;
@@ -103,20 +105,20 @@ typedef struct {
 
 typedef struct{
   //compositor for fade;
-  GstPad* video_filter_queue_sinkpad; // 
-  GstElement * video_filter_queue; // 
-  GstElement * videoconvert; // 
-  GstElement * video_filter_chain; // 
-  GstElement * video_filter_tee; // 
+  GstPad* video_filter_queue_sinkpad;
+  GstElement * video_filter_queue;  
+  GstElement * videoconvert;  
+  GstElement * video_filter_chain;  
+  GstElement * video_filter_tee;  
 
-  GstPad* vfilter_queue_vdec_tee_srcpd; // 
-  GstElement * vfilter_vdec_tee_queue; // points
-  GstElement * video_convert; // points
-  GstElement * wrapper ; // points
-  GstElement * vfilter_tee; // 
+  GstPad* vfilter_queue_vdec_tee_srcpd;  
+  GstElement * vfilter_vdec_tee_queue;  
+  GstElement * video_convert;  
+  GstElement * wrapper ;  
+  GstElement * vfilter_tee;  
 
   GstPad* pre_video_filter_tee_srcpad;
-  GstElement * pre_vdec_tee_queue; // points
+  GstElement * pre_vdec_tee_queue;  
   GstPad *     pre_vdec_tee_queue_sinkpad;
   GstPad *     pre_vdec_tee_queue_ghost_sinkpad;
   GstElement * pre_video_scale;

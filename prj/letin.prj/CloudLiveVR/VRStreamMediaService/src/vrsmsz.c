@@ -352,7 +352,7 @@ gboolean vrsmsz_add_stream(gpointer data){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", 3000,NULL);
+        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", 1000,NULL);
      }
   }
 
@@ -933,7 +933,7 @@ gboolean director_preview_create(vrstream_t* vs){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1,"bitrate", 3000, NULL);
+        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1,"bitrate", 1000, NULL);
      }
   }
 
