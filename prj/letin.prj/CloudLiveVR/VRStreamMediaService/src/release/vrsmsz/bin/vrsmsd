@@ -3,8 +3,9 @@
 export GST_PLUGIN_PATH=/usr/local/lib64/plugins
 export LD_LIBRARY_PATH=/usr/local/lib64
 source /etc/vrsmsd.conf
-sudo $LD_LIBRARY_PATH/../nginx/sbin/nginx -p $LD_LIBRARY_PATH/../nginx 
-sudo killall _vrsmsz > /dev/null 2>&1 
+$LD_LIBRARY_PATH/../nginx/sbin/nginx -s stop
+$LD_LIBRARY_PATH/../nginx/sbin/nginx -p $LD_LIBRARY_PATH/../nginx 
+killall _vrsmsz > /dev/null 2>&1 
 sleep 3
-_vrsmsz $RTMP_HOST $RTMP_PORT 4 > /dev/null 2>&1 &
-sudo chown $USER.$USER -r /tmp
+_vrsmsz $RTMP_HOST $RTMP_PORT 4 > /tmp/vrsmsd.log 2>&1 &
+#sudo chown $USER.$USER -r /tmp
