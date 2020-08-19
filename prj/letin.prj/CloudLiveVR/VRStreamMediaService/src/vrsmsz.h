@@ -15,7 +15,6 @@ typedef struct{
   gchar stream_id[16];
 
   gchar effect[16];
-  gint duration;
 
   gint in_bitrate;
   gint in_width;
@@ -34,6 +33,9 @@ typedef struct{
   gint  top;
   gint width;
   gint height;
+  gchar action[1024];
+  gint duration;
+  gint render_id;
 
   gchar font[16];
   gint  font_size;
@@ -121,6 +123,8 @@ typedef struct{
   GstElement * pre_vdec_tee_queue;  
   GstPad *     pre_vdec_tee_queue_sinkpad;
   GstPad *     pre_vdec_tee_queue_ghost_sinkpad;
+  GstElement * pre_render1;
+  GstElement * pre_render2;
   GstElement * pre_video_scale;
   GstElement * pre_capsfilter;
   GstElement * pre_video_encoder;
@@ -136,6 +140,8 @@ typedef struct{
   GstElement * pub_vdec_tee_queue; // points
   GstPad *     pub_vdec_tee_queue_sinkpad;
   GstPad *     pub_vdec_tee_queue_ghost_sinkpad;
+  GstElement * pub_render1;
+  GstElement * pub_render2;
   GstElement * pub_video_encoder;
   GstElement * pub_video_encoder_queue;
   GstElement * pub_video_encoder_parser;
@@ -149,6 +155,17 @@ typedef struct{
 } drstream_t;
 
 typedef struct{
+  gchar url[URL_LEN];
+  gint    left;
+  gint    top;
+  gint    width;
+  gint    height;
+  gint    duration;
+  gint    type;
+  gint    id;
+}vrrender_t;
+
+typedef struct{
   GstElement  *pre_bin;
   GstElement  *pub_bin;
   GstElement  *swt_bin;
@@ -159,8 +176,11 @@ typedef struct{
   gint    audio_id;
   gchar   preview_url[URL_LEN];
   gchar   publish_url[URL_LEN];
-
   drstream_t ds;
+
+  vrrender_t render[2];
+  int  num_render;
+
 } drchan_t;
 
 typedef struct{

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "vrsmsz.h"
 #include <json-glib/json-glib.h>
-
+#define TEST_RENDER
 /*
 static gboolean  vrsmsz_remove()
 {
@@ -339,13 +339,13 @@ gboolean vrsmsz_add_stream(gpointer data){
 #else
   if(!vs->video_encoder){
      sprintf(name,"vs%d-video_encoder",vc->video_id);
-     if(0/*vrsmsz->mode == 4 || vrsmsz->mode==8*/){
+     if(vrsmsz->mode == 4 || vrsmsz->mode==8){
         vs->video_encoder= gst_element_factory_make("nvh264enc", name); // 
         if(!vs->video_encoder){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 1000, NULL);
+        g_object_set (vs->video_encoder, "preset", 4, "bitrate", 1000, NULL);
      }else if( vrsmsz->mode == 4 || vrsmsz->mode == 8 ){
         vs->video_encoder= gst_element_factory_make("x264enc", name); // 
         if(!vs->video_encoder){
@@ -495,6 +495,8 @@ gboolean  vrsmsz_remove_all(){
      vrsmsz->director.ds.pub_vdec_tee_queue= NULL; // points
      vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad= NULL;
      vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad= NULL;
+     vrsmsz->director.ds.pub_render1 = NULL;
+     vrsmsz->director.ds.pub_render2 = NULL;
      vrsmsz->director.ds.pub_video_encoder= NULL;
      vrsmsz->director.ds.pub_video_encoder_queue= NULL;
      vrsmsz->director.ds.pub_video_encoder_parser= NULL;
@@ -514,6 +516,8 @@ gboolean  vrsmsz_remove_all(){
      vrsmsz->director.ds.pre_vdec_tee_queue = NULL; // points
      vrsmsz->director.ds.pre_vdec_tee_queue_sinkpad = NULL;
      vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad = NULL;
+     vrsmsz->director.ds.pre_render1= NULL;
+     vrsmsz->director.ds.pre_render2= NULL;
      vrsmsz->director.ds.pre_video_scale = NULL;
      vrsmsz->director.ds.pre_capsfilter = NULL;
      vrsmsz->director.ds.pre_video_encoder = NULL;
@@ -621,7 +625,24 @@ gboolean director_publish_create(gchar* url){
       return FALSE;
     }
   }
-
+#ifdef TEST_RENDER
+  if(!vrsmsz->director.ds.pub_render1){
+     sprintf(name,"%s-pub_render1","vrsmsz");
+    vrsmsz->director.ds.pub_render1= gst_element_factory_make("gdkpixbufoverlay", name);
+    if(!vrsmsz->director.ds.pub_render1){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
+  if(!vrsmsz->director.ds.pub_render2){
+     sprintf(name,"%s-pub_render2","vrsmsz");
+    vrsmsz->director.ds.pub_render2= gst_element_factory_make("gdkpixbufoverlay", name);
+    if(!vrsmsz->director.ds.pub_render2){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
+#endif
   if(!vrsmsz->director.ds.pub_video_encoder){
      sprintf(name,"%s-pub_video_encoder","vrsmsz");
      if(vrsmsz->mode == 4 ){
@@ -727,10 +748,18 @@ gboolean director_publish_create(gchar* url){
     }
   }
   vrsmsz->director.pub_bin = gst_bin_new("pub_bin");
-  gst_bin_add_many(GST_BIN(vrsmsz->director.pub_bin), vrsmsz->director.ds.pub_vdec_tee_queue,vrsmsz->director.ds.pub_video_encoder,vrsmsz->director.ds.pub_video_encoder_queue,vrsmsz->director.ds.pub_video_encoder_parser,vrsmsz->director.ds.pub_aenc_tee_queue,vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL);
+  gst_bin_add_many(GST_BIN(vrsmsz->director.pub_bin), vrsmsz->director.ds.pub_vdec_tee_queue,
+#ifdef TEST_RENDER 
+                          vrsmsz->director.ds.pub_render1,vrsmsz->director.ds.pub_render2,
+#endif 
+		  vrsmsz->director.ds.pub_video_encoder,vrsmsz->director.ds.pub_video_encoder_queue,vrsmsz->director.ds.pub_video_encoder_parser,vrsmsz->director.ds.pub_aenc_tee_queue,vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL);
   gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pub_bin);
 
-  if(!gst_element_link_many(vrsmsz->director.ds.pub_vdec_tee_queue, vrsmsz->director.ds.pub_video_encoder, vrsmsz->director.ds.pub_video_encoder_queue, vrsmsz->director.ds.pub_video_encoder_parser, vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL)){
+  if(!gst_element_link_many(vrsmsz->director.ds.pub_vdec_tee_queue, 
+#ifdef TEST_RENDER 
+                          vrsmsz->director.ds.pub_render1,vrsmsz->director.ds.pub_render2,
+#endif 
+			  vrsmsz->director.ds.pub_video_encoder, vrsmsz->director.ds.pub_video_encoder_queue, vrsmsz->director.ds.pub_video_encoder_parser, vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL)){
     g_print("link director pub video failed");
     return FALSE;
   }
@@ -896,6 +925,24 @@ gboolean director_preview_create(vrstream_t* vs){
        return FALSE;
      }
   }
+ #ifdef TEST_RENDER
+  if(!vrsmsz->director.ds.pre_render1){
+     sprintf(name,"%s-pre_render1","vrsmsz");
+    vrsmsz->director.ds.pre_render1 = gst_element_factory_make("gdkpixbufoverlay", name);
+    if(!vrsmsz->director.ds.pre_render1){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
+  if(!vrsmsz->director.ds.pre_render2){
+     sprintf(name,"%s-pre_render2","vrsmsz");
+    vrsmsz->director.ds.pre_render2 = gst_element_factory_make("gdkpixbufoverlay", name);
+    if(!vrsmsz->director.ds.pre_render2){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
+#endif
   if(!vrsmsz->director.ds.pre_video_scale){
      sprintf(name,"%s-pre_video_scale","vrsmsz");
     vrsmsz->director.ds.pre_video_scale= gst_element_factory_make("videoscale", name);
@@ -917,8 +964,8 @@ gboolean director_preview_create(vrstream_t* vs){
 
   if(!vrsmsz->director.ds.pre_video_encoder){
      sprintf(name,"%s-pre_video_encoder","vrsmsz");
-     if(0/*vrsmsz->mode == 4 || vrsmsz->mode==8*/){
-        vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264enc", name); // nvh264enc have no avc
+     if(vrsmsz->mode == 4 || vrsmsz->mode==8){
+        vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264enc", name); // 
         //vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264device1enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pre_video_encoder){
           g_print("error make\n");
@@ -982,10 +1029,18 @@ gboolean director_preview_create(vrstream_t* vs){
     g_object_set (vrsmsz->director.ds.pre_outer, "location", vrsmsz->director.preview_url, NULL);
   }
    vrsmsz->director.pre_bin = gst_bin_new("pre_bin");
-  gst_bin_add_many(GST_BIN(vrsmsz->director.pre_bin), vrsmsz->director.ds.pre_vdec_tee_queue, vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, vrsmsz->director.ds.pre_video_encoder_queue,vrsmsz->director.ds.pre_video_encoder_parser, vrsmsz->director.ds.pre_aenc_tee_queue, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL);
+  gst_bin_add_many(GST_BIN(vrsmsz->director.pre_bin), vrsmsz->director.ds.pre_vdec_tee_queue,
+#ifdef TEST_RENDER 
+			  vrsmsz->director.ds.pre_render1,vrsmsz->director.ds.pre_render2,
+#endif
+		  vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, vrsmsz->director.ds.pre_video_encoder_queue,vrsmsz->director.ds.pre_video_encoder_parser, vrsmsz->director.ds.pre_aenc_tee_queue, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL);
   gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pre_bin);
 
-  if(!gst_element_link_many(vrsmsz->director.ds.pre_vdec_tee_queue, vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder,vrsmsz->director.ds.pre_video_encoder_queue, vrsmsz->director.ds.pre_video_encoder_parser, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL)){
+  if(!gst_element_link_many(vrsmsz->director.ds.pre_vdec_tee_queue, 
+#ifdef TEST_RENDER 
+			  vrsmsz->director.ds.pre_render1,vrsmsz->director.ds.pre_render2,
+#endif
+			  vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder,vrsmsz->director.ds.pre_video_encoder_queue, vrsmsz->director.ds.pre_video_encoder_parser, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL)){
      g_print("link director pre viedo failed");
      return FALSE;
   }
@@ -1035,7 +1090,11 @@ gboolean director_switch_effect_create(vrstream_t* vs){
     }
     gst_bin_add_many(GST_BIN(vrsmsz->director.swt_bin),vrsmsz->director.ds.video_filter_queue,vrsmsz->director.ds.videoconvert,vrsmsz->director.ds.video_filter_chain,vrsmsz->director.ds.video_filter_tee,NULL);
 
-    if(!gst_element_link_many(vrsmsz->director.ds.pre_vdec_tee_queue, vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, 
+    if(!gst_element_link_many(vrsmsz->director.ds.pre_vdec_tee_queue, 
+#ifdef TEST_RENDER
+                            vrsmsz->director.ds.pre_render1,vrsmsz->director.ds.pre_render2,
+#endif
+			    vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, 
 #if 1
 			    vrsmsz->director.ds.pre_video_encoder_queue,vrsmsz->director.ds.pre_video_encoder_parser,
 #endif
@@ -1182,6 +1241,8 @@ gboolean vrsmsz_publish_stop(){
    vrsmsz->director.ds.pub_vdec_tee_queue = NULL; 
    vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad = NULL;
    vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad = NULL;
+   vrsmsz->director.ds.pub_render1 = NULL;
+   vrsmsz->director.ds.pub_render2 = NULL;
    vrsmsz->director.ds.pub_video_encoder = NULL;
    vrsmsz->director.ds.pub_video_encoder_queue = NULL;
    vrsmsz->director.ds.pub_video_encoder_parser= NULL;
@@ -1219,6 +1280,16 @@ gboolean vrsmsz_publish_stream (gpointer data){
      vrsmsz_publish_stop();
      director_publish_create(uri);
      director_publish_link_vs(&(vc->vs));
+   }
+   if(vrsmsz->director.render[0].url[0] != 0){
+     g_object_set(vrsmsz->director.ds.pub_render1,"location",vrsmsz->director.render[0].url,NULL);
+     g_object_set(vrsmsz->director.ds.pub_render1,"offset-x",vrsmsz->director.render[0].left,NULL);
+     g_object_set(vrsmsz->director.ds.pub_render1,"offset-y",vrsmsz->director.render[0].top,NULL);
+   }
+   if(vrsmsz->director.render[1].url[0] != 0){
+     g_object_set(vrsmsz->director.ds.pub_render2,"location",vrsmsz->director.render[1].url,NULL);
+     g_object_set(vrsmsz->director.ds.pub_render2,"offset-x",vrsmsz->director.render[1].left,NULL);
+     g_object_set(vrsmsz->director.ds.pub_render2,"offset-y",vrsmsz->director.render[1].top,NULL);
    }
    return FALSE;
 }
@@ -1285,6 +1356,125 @@ gboolean vrsmsz_stream_delay(gpointer data){
 }
 
 /*****************************************************************************************************/
+gboolean  vrsmsz_stream_logo(gpointer data){
+  message_t* msg = data;
+  gint streamid = atoi(msg->command.stream_id);
+  
+  g_print("logo process %d \n",streamid);
+  int i;
+  for(i=0; i<MAX_CHANNEL; i++){
+    if(streamid == vrsmsz->streams_id[i]){
+       break;
+    }
+  }
+  if(i == MAX_CHANNEL){
+    g_print("streamid is error");
+    return FALSE;
+  }
+
+  if(vrsmsz->director.stream_id == -1){
+    return FALSE;
+  }
+  if(!strcmp(msg->command.action, "add")){
+    if(vrsmsz->director.num_render == 2) return FALSE;
+    for(int i=0; i<2;i++){
+       if(vrsmsz->director.render[i].id == -1){
+         memcpy( vrsmsz->director.render[i].url, msg->command.logo_path, strlen(msg->command.logo_path)+1 );
+         vrsmsz->director.render[i].left   = msg->command.left;
+         vrsmsz->director.render[i].top    = msg->command.top;
+         vrsmsz->director.render[i].width  = msg->command.width;
+         vrsmsz->director.render[i].height = msg->command.height;
+         vrsmsz->director.render[i].id = i;
+	 msg->command.render_id = i;
+         g_print("add logo render_id %d\n",i);
+         break;
+       }
+    }
+    vrsmsz->director.num_render++;
+  }else if(!strcmp(msg->command.action, "update")){
+    if(vrsmsz->director.num_render == 0) return FALSE;
+    g_print("update logo %d\n",msg->command.render_id);
+    vrsmsz->director.render[msg->command.render_id].left   = msg->command.left;
+    vrsmsz->director.render[msg->command.render_id].top    = msg->command.top;
+    vrsmsz->director.render[msg->command.render_id].width  = msg->command.width;
+    vrsmsz->director.render[msg->command.render_id].height = msg->command.height;
+    g_object_set(vrsmsz->director.ds.pre_render1,"offset-x",vrsmsz->director.render[msg->command.render_id].left,NULL);
+    g_object_set(vrsmsz->director.ds.pre_render1,"offset-y",vrsmsz->director.render[msg->command.render_id].top,NULL);
+    g_object_set(vrsmsz->director.ds.pub_render1,"offset-x",vrsmsz->director.render[msg->command.render_id].left,NULL);
+    g_object_set(vrsmsz->director.ds.pub_render1,"offset-y",vrsmsz->director.render[msg->command.render_id].top,NULL);
+
+    g_object_set(vrsmsz->director.ds.pre_render2,"offset-x",vrsmsz->director.render[msg->command.render_id].left,NULL);
+    g_object_set(vrsmsz->director.ds.pre_render2,"offset-y",vrsmsz->director.render[msg->command.render_id].top,NULL);
+    g_object_set(vrsmsz->director.ds.pub_render2,"offset-x",vrsmsz->director.render[msg->command.render_id].left,NULL);
+    g_object_set(vrsmsz->director.ds.pub_render2,"offset-y",vrsmsz->director.render[msg->command.render_id].top,NULL);
+  }else{
+    if(vrsmsz->director.num_render == 0) return FALSE;
+    int i = msg->command.render_id ;
+    g_print("delete logo %d\n",i);
+    memset(vrsmsz->director.render[i].url,0,URL_LEN);
+    vrsmsz->director.render[i].left = 0;
+    vrsmsz->director.render[i].top = 0;
+    vrsmsz->director.render[i].width = 0;
+    vrsmsz->director.render[i].height = 0;
+    vrsmsz->director.render[i].duration = 0;
+    vrsmsz->director.render[i].type = 0;
+    vrsmsz->director.render[i].id = -1;
+    if(i == 0 ){
+      g_object_set(vrsmsz->director.ds.pre_render1,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pre_render1,"offset-x",vrsmsz->director.render[0].left,NULL);
+      g_object_set(vrsmsz->director.ds.pre_render1,"offset-y",vrsmsz->director.render[0].top,NULL);
+
+      g_object_set(vrsmsz->director.ds.pub_render1,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pub_render1,"offset-x",vrsmsz->director.render[0].left,NULL);
+      g_object_set(vrsmsz->director.ds.pub_render1,"offset-y",vrsmsz->director.render[0].top,NULL);
+      //g_object_set(vrsmsz->director.ds.pre_render1,"alpha",0,NULL);
+      //g_object_set(vrsmsz->director.ds.pub_render1,"alpha",0,NULL);
+    }else {
+      g_object_set(vrsmsz->director.ds.pre_render2,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pre_render2,"offset-x",vrsmsz->director.render[0].left,NULL);
+      g_object_set(vrsmsz->director.ds.pre_render2,"offset-y",vrsmsz->director.render[0].top,NULL);
+
+      g_object_set(vrsmsz->director.ds.pub_render2,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pub_render2,"offset-x",vrsmsz->director.render[0].left,NULL);
+      g_object_set(vrsmsz->director.ds.pub_render2,"offset-y",vrsmsz->director.render[0].top,NULL);
+      //g_object_set(vrsmsz->director.ds.pre_render2,"alpha",0,NULL);
+      //g_object_set(vrsmsz->director.ds.pub_render2,"alpha",0,NULL);
+    }
+    vrsmsz->director.num_render--;
+  }
+  
+  if(vrsmsz->director.pre_bin){
+      if(vrsmsz->director.render[0].url[0] != 0){
+        g_object_set(vrsmsz->director.ds.pre_render1,"location",vrsmsz->director.render[0].url,NULL);
+        g_object_set(vrsmsz->director.ds.pre_render1,"offset-x",vrsmsz->director.render[0].left,NULL);
+        g_object_set(vrsmsz->director.ds.pre_render1,"offset-y",vrsmsz->director.render[0].top,NULL);
+        //g_object_set(vrsmsz->director.ds.pre_render1,"alpha",1,NULL);
+      }
+      if(vrsmsz->director.render[1].url[0] != 0){
+        g_object_set(vrsmsz->director.ds.pre_render2,"location",vrsmsz->director.render[1].url,NULL);
+        g_object_set(vrsmsz->director.ds.pre_render2,"offset-x",vrsmsz->director.render[1].left,NULL);
+        g_object_set(vrsmsz->director.ds.pre_render2,"offset-y",vrsmsz->director.render[1].top,NULL);
+        //g_object_set(vrsmsz->director.ds.pre_render2,"alpha",1,NULL);
+      }
+  }
+
+  if(vrsmsz->director.pub_bin){
+      if(vrsmsz->director.render[0].url[0] != 0){
+        g_object_set(vrsmsz->director.ds.pub_render1,"location",vrsmsz->director.render[0].url,NULL);
+        g_object_set(vrsmsz->director.ds.pub_render1,"offset-x",vrsmsz->director.render[0].left,NULL);
+        g_object_set(vrsmsz->director.ds.pub_render1,"offset-y",vrsmsz->director.render[0].top,NULL);
+        //g_object_set(vrsmsz->director.ds.pub_render1,"alpha",1,NULL);
+      }
+      if(vrsmsz->director.render[1].url[0] != 0){
+        g_object_set(vrsmsz->director.ds.pub_render2,"location",vrsmsz->director.render[1].url,NULL);
+        g_object_set(vrsmsz->director.ds.pub_render2,"offset-x",vrsmsz->director.render[1].left,NULL);
+        g_object_set(vrsmsz->director.ds.pub_render2,"offset-y",vrsmsz->director.render[1].top,NULL);
+        //g_object_set(vrsmsz->director.ds.pub_render2,"alpha",1,NULL);
+      }
+  }
+  return FALSE;
+}
+
 //#define TEST_8K
 gboolean vrsmsz_switch_stream(gpointer data){
 #if 0// effect switch
@@ -1545,7 +1735,11 @@ gboolean vrsmsz_switch_stream(gpointer data){
       }
     }
   }else{
-    if(!gst_element_link_many(vrsmsz->pre_vdec_tee_queue, vrsmsz->pre_video_scale, vrsmsz->pre_capsfilter, vrsmsz->pre_video_encoder, 
+    if(!gst_element_link_many(vrsmsz->pre_vdec_tee_queue,
+#ifdef TEST_RENDER
+                            vrsmsz->pre_render1,vrsmsz->pre_render2,
+#endif
+			    vrsmsz->pre_video_scale, vrsmsz->pre_capsfilter, vrsmsz->pre_video_encoder, 
 #if 1
 			    vrsmsz->pre_video_encoder_queue, vrsmsz->pre_video_encoder_parser, 
 #endif
@@ -1812,6 +2006,27 @@ message_t* parse_json_msg(gchar* msg){
     memcpy(message->command.stream_id,ret,strlen(ret)+1);
 
   }else if(!strcmp(message->command.cmd, "logo")){
+    ret = json_object_get_string_member (obj,"stream_id");
+    memcpy(message->command.stream_id,ret, strlen(ret)+1);
+    ret = json_object_get_int_member (obj,"render_id");
+    message->command.render_id = ret;
+    ret = json_object_get_string_member (obj,"action");
+    memcpy(message->command.action,ret,strlen(ret)+1);
+    JsonArray  *array = json_object_get_array_member(obj, "logo_params");
+    JsonObject *sub_obj = json_array_get_object_element(array, 0);
+    ret =  json_object_get_string_member (sub_obj,"pathname");
+    memcpy(message->command.logo_path, ret, strlen(ret)+1);
+    JsonObject *sub_obj1 = json_object_get_object_member (sub_obj,"rect");
+    ret =  json_object_get_int_member (sub_obj1,"left");
+    message->command.left = ret;
+    ret =  json_object_get_int_member (sub_obj1,"top");
+    message->command.top = ret;
+    ret =  json_object_get_int_member (sub_obj1,"width");
+    message->command.width = ret;
+    ret =  json_object_get_int_member (sub_obj1,"height");
+    message->command.height = ret;
+    ret =  json_object_get_int_member (sub_obj,"duration");
+    message->command.duration = ret;
 
   }else if(!strcmp(message->command.cmd, "subtitle")){
 
@@ -1858,7 +2073,7 @@ static void vrsmsz_run_command(gchar* command){
   }else if(!strcmp(msg->command.cmd,"delay")){
     g_idle_add(vrsmsz_stream_delay, msg);
   }else if(!strcmp(msg->command.cmd,"logo")){
-    //g_idle_add(vrsmsz_stream_logo, msg);
+    g_idle_add(vrsmsz_stream_logo, msg);
   }else if(!strcmp(msg->command.cmd,"stop_all")){
     //gst_element_set_state(vrsmsz->pipeline,GST_STATE_NULL);
     vrsmsz_remove_all();
@@ -1897,10 +2112,10 @@ static void build_response_message(message_t* msg){
        json_builder_add_int_value(builder, msg->command.in_bitrate);
 
        json_builder_set_member_name(builder, "width");
-       json_builder_add_int_value(builder, msg->command.in_width);
+       json_builder_add_int_value(builder, 3840);
 
        json_builder_set_member_name(builder, "height");
-       json_builder_add_int_value(builder, msg->command.in_height);
+       json_builder_add_int_value(builder, 1920);
 
        json_builder_set_member_name(builder, "fps");
        json_builder_add_int_value(builder, msg->command.in_fps);
@@ -1999,7 +2214,7 @@ static void build_response_message(message_t* msg){
      json_builder_add_int_value(builder, 0);
 
    }else if(!strcmp(msg->command.cmd,"logo")){
-     g_print("build logo response-->`");
+     g_print("build logo response-->\n");
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "logo");
 
@@ -2009,6 +2224,9 @@ static void build_response_message(message_t* msg){
      json_builder_set_member_name(builder, "stream_id");
      json_builder_add_string_value(builder, msg->command.stream_id);
 
+     json_builder_set_member_name(builder, "render_id");
+     json_builder_add_int_value(builder, msg->command.render_id);
+		   
      json_builder_set_member_name(builder, "result");
      json_builder_add_string_value(builder, "OK");
 
@@ -2145,6 +2363,8 @@ void director_stream_init(drstream_t* ds){
   ds->pub_video_filter_tee_srcpad= NULL;
   ds->pre_vdec_tee_queue = NULL;
   ds->pre_vdec_tee_queue_sinkpad = NULL;
+  ds->pre_render1 = NULL;
+  ds->pre_render2 = NULL;
   ds->pre_video_scale = NULL;
   ds->pre_capsfilter = NULL;
   ds->pre_video_encoder = NULL;
@@ -2156,6 +2376,8 @@ void director_stream_init(drstream_t* ds){
   ds->pre_outer= NULL;
   ds->pub_vdec_tee_queue= NULL;
   ds->pub_vdec_tee_queue_sinkpad= NULL;
+  ds->pub_render1 = NULL;
+  ds->pub_render2 = NULL;
   ds->pub_video_encoder= NULL;
   ds->pub_video_encoder_queue= NULL;
   ds->pub_video_encoder_parser= NULL;
@@ -2221,6 +2443,17 @@ void vrsmsz_init(int argc, char **argv){
   vrsmsz->director.stream_id = -1;
   vrsmsz->director.video_id = -1;
   vrsmsz->director.audio_id = -1;
+  vrsmsz->director.num_render = 0;
+  for(int i=0;i<2;i++){
+    vrsmsz->director.render[i].left = 0;
+    vrsmsz->director.render[i].top = 0;
+    vrsmsz->director.render[i].width = 0;
+    vrsmsz->director.render[i].height = 0;
+    vrsmsz->director.render[i].duration = 0;
+    vrsmsz->director.render[i].type = 0;
+    vrsmsz->director.render[i].id = -1;
+    memset(vrsmsz->director.render[i].url,0,URL_LEN);
+  }
 
   director_stream_init(&vrsmsz->director.ds);
 

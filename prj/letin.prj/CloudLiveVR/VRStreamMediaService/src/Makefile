@@ -28,7 +28,7 @@ clean:
 #httpd.o : httpd.c httpd.h
 #	$(CC) -c  httpd.c $(CFLAGS) $(GST_CFLAGS) $(GSOUP_CFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-httpd.o : httpd.c httpd.h
+httpd.o : httpd.c httpd.h vrsmsz.h
 	$(CC) -c  httpd.c $(CFLAGS) $(GST_CFLAGS) $(NANO_CFLAGS) 
 
 main.o : main.c httpd.h 

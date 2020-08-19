@@ -15,3 +15,6 @@ wget -S -d --post-data "{\"cmd\":\"delete\",\"id\":1,\"stream_id\":\"0\"}" http:
 
 
 wget -S -d --post-data "{\"cmd\":\"delay\",\"id\":1,\"stream_id\":\"0\",\"type\":\"all\",\"time\":-100}" http://192.168.0.134:8888/postserver
+
+wget -S -d --post-data "{\"cmd\":\"logo\",\"id\":0,\"stream_id\":\"0\",\"action\":\"add\",\"render_id\":-1,\"logo_params\":[{\"pathname\":\"/tmp/image.jpg\",\"rect\":{\"left\":100,\"top\":100,\"width\":100,\"height\":100},\"duration\":10}]}" http://192.168.1.32:8888/postserver
+wget -S -d --post-data "{\"cmd\":\"logo\",\"id\":0,\"stream_id\":\"0\",\"action\":\"delete\",\"render_id\":0,\"logo_params\":[{\"pathname\":\"/tmp/image.jpg\",\"rect\":{\"left\":100,\"top\":100,\"width\":100,\"height\":100},\"duration\":10}]}" http://192.168.1.32:8888/postserver
