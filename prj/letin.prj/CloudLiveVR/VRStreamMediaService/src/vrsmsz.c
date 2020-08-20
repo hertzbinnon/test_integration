@@ -2,6 +2,7 @@
 #include "vrsmsz.h"
 #include <json-glib/json-glib.h>
 #define TEST_RENDER
+#define MEDIA_PATH "/tmp"
 /*
 static gboolean  vrsmsz_remove()
 {
@@ -1379,7 +1380,7 @@ gboolean  vrsmsz_stream_logo(gpointer data){
     if(vrsmsz->director.num_render == 2) return FALSE;
     for(int i=0; i<2;i++){
        if(vrsmsz->director.render[i].id == -1){
-         memcpy( vrsmsz->director.render[i].url, msg->command.logo_path, strlen(msg->command.logo_path)+1 );
+	 sprintf(vrsmsz->director.render[i].url, "%s/%s",MEDIA_PATH,msg->command.logo_path);
          vrsmsz->director.render[i].left   = msg->command.left;
          vrsmsz->director.render[i].top    = msg->command.top;
          vrsmsz->director.render[i].width  = msg->command.width;
@@ -1420,21 +1421,21 @@ gboolean  vrsmsz_stream_logo(gpointer data){
     vrsmsz->director.render[i].type = 0;
     vrsmsz->director.render[i].id = -1;
     if(i == 0 ){
-      g_object_set(vrsmsz->director.ds.pre_render1,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pre_render1,"location","/var/local/vrsmsz/image.jpg",NULL);
       g_object_set(vrsmsz->director.ds.pre_render1,"offset-x",vrsmsz->director.render[0].left,NULL);
       g_object_set(vrsmsz->director.ds.pre_render1,"offset-y",vrsmsz->director.render[0].top,NULL);
 
-      g_object_set(vrsmsz->director.ds.pub_render1,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pub_render1,"location","/var/local/vrsmsz/image.jpg",NULL);
       g_object_set(vrsmsz->director.ds.pub_render1,"offset-x",vrsmsz->director.render[0].left,NULL);
       g_object_set(vrsmsz->director.ds.pub_render1,"offset-y",vrsmsz->director.render[0].top,NULL);
       //g_object_set(vrsmsz->director.ds.pre_render1,"alpha",0,NULL);
       //g_object_set(vrsmsz->director.ds.pub_render1,"alpha",0,NULL);
     }else {
-      g_object_set(vrsmsz->director.ds.pre_render2,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pre_render2,"location","/var/local/vrsmsz/image.jpg",NULL);
       g_object_set(vrsmsz->director.ds.pre_render2,"offset-x",vrsmsz->director.render[0].left,NULL);
       g_object_set(vrsmsz->director.ds.pre_render2,"offset-y",vrsmsz->director.render[0].top,NULL);
 
-      g_object_set(vrsmsz->director.ds.pub_render2,"location","/home/lanting/image.jpg",NULL);
+      g_object_set(vrsmsz->director.ds.pub_render2,"location","/var/local/vrsmsz/image.jpg",NULL);
       g_object_set(vrsmsz->director.ds.pub_render2,"offset-x",vrsmsz->director.render[0].left,NULL);
       g_object_set(vrsmsz->director.ds.pub_render2,"offset-y",vrsmsz->director.render[0].top,NULL);
       //g_object_set(vrsmsz->director.ds.pre_render2,"alpha",0,NULL);

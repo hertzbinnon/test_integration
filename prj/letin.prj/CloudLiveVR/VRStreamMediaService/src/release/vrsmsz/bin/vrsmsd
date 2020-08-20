@@ -8,4 +8,9 @@ $LD_LIBRARY_PATH/../nginx/sbin/nginx -p $LD_LIBRARY_PATH/../nginx
 killall _vrsmsz > /dev/null 2>&1 
 sleep 3
 _vrsmsz $RTMP_HOST $RTMP_PORT 4 > /tmp/vrsmsd.log 2>&1 &
+cd /var/local/vrsmsz/env
+. ./bin/activate
+cd /var/local/vrsmsz/env/uploadmodule
+python manage.py runserver 0.0.0.0:9999 > /tmp/upload.log 2>&1 &
+deactivate
 #sudo chown $USER.$USER -r /tmp
