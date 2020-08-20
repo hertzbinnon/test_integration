@@ -131,7 +131,7 @@ void post_service(httpd_conn_t *conn, hrequest_t *req)
     printf("post data --> %s\n",postdata);
     g_async_queue_push(req_queue, postdata);
 
-    printf("Waiting process response -->");
+    printf("Waiting process response -->\n");
     gchar* msg = g_async_queue_pop(rep_queue);
     printf("sent data --> %s\n",msg);
 

@@ -26,3 +26,6 @@ wget -S -d --post-data "{\"cmd\":\"logo\",\"id\":0,\"stream_id\":\"0\",\"action\
 wget -S -d --post-data "{\"cmd\":\"logo\",\"id\":0,\"stream_id\":\"0\",\"action\":\"update\",\"render_id\":1,\"logo_params\":[{\"pathname\":\"render2.jpg\",\"rect\":{\"left\":600,\"top\":700,\"width\":100,\"height\":100},\"duration\":10}]}" http://192.168.1.32:8888/postserver
 wget -S -d --post-data "{\"cmd\":\"logo\",\"id\":0,\"stream_id\":\"0\",\"action\":\"delete\",\"render_id\":0,\"logo_params\":[{\"pathname\":\"render2.jpg\",\"rect\":{\"left\":600,\"top\":700,\"width\":100,\"height\":100},\"duration\":10}]}" http://192.168.1.32:8888/postserver
 wget -S -d --post-data "{\"cmd\":\"logo\",\"id\":0,\"stream_id\":\"0\",\"action\":\"delete\",\"render_id\":1,\"logo_params\":[{\"pathname\":\"render2.jpg\",\"rect\":{\"left\":600,\"top\":700,\"width\":100,\"height\":100},\"duration\":10}]}" http://192.168.1.32:8888/postserver
+
+#https://www.iteye.com/blog/yztzz-2167336
+curl -F "picFile=@/home/lanting/render1.jpg;filename=render1.jpg;type=image/jpeg"  http://192.168.1.32:8080/upload

@@ -3,6 +3,7 @@
 #include <json-glib/json-glib.h>
 #define TEST_RENDER
 #define MEDIA_PATH "/tmp"
+#define X264_ENC 
 /*
 static gboolean  vrsmsz_remove()
 {
@@ -340,6 +341,7 @@ gboolean vrsmsz_add_stream(gpointer data){
 #else
   if(!vs->video_encoder){
      sprintf(name,"vs%d-video_encoder",vc->video_id);
+#ifndef X264_ENC
      if(vrsmsz->mode == 4 || vrsmsz->mode==8){
         vs->video_encoder= gst_element_factory_make("nvh264enc", name); // 
         if(!vs->video_encoder){
@@ -347,7 +349,9 @@ gboolean vrsmsz_add_stream(gpointer data){
           return FALSE;
         }
         g_object_set (vs->video_encoder, "preset", 4, "bitrate", 1000, NULL);
-     }else if( vrsmsz->mode == 4 || vrsmsz->mode == 8 ){
+     }else 
+#endif
+     if( vrsmsz->mode == 4 || vrsmsz->mode == 8 ){
         vs->video_encoder= gst_element_factory_make("x264enc", name); // 
         if(!vs->video_encoder){
           g_print("error make\n");
@@ -727,7 +731,7 @@ gboolean director_publish_create(gchar* url){
         return FALSE;
       }
       //g_object_set (vrsmsz->director.ds.pub_outer,"host","192.168.1.32","port",12346,NULL);
-      g_object_set (vrsmsz->director.ds.pub_outer, "location", "/tmp/hls/%05d.ts", "playlist-length", 6, "playlist-location","/tmp/hls/gst.m3u8","max-files",10,"target-duration",3,NULL);
+      g_object_set (vrsmsz->director.ds.pub_outer, "location", "/tmp/hls/%05d.ts", "playlist-length", 6, "playlist-location","/tmp/hls/publish.m3u8","max-files",10,"target-duration",3,NULL);
    }   
   }else{
      if(!vrsmsz->director.ds.pub_muxer){
@@ -965,6 +969,7 @@ gboolean director_preview_create(vrstream_t* vs){
 
   if(!vrsmsz->director.ds.pre_video_encoder){
      sprintf(name,"%s-pre_video_encoder","vrsmsz");
+#ifndef X264_ENC
      if(vrsmsz->mode == 4 || vrsmsz->mode==8){
         vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264enc", name); // 
         //vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("nvh264device1enc", name); // nvh264enc have no avc
@@ -975,7 +980,9 @@ gboolean director_preview_create(vrstream_t* vs){
         g_object_set (vrsmsz->director.ds.pre_video_encoder, "preset", 4, "bitrate", 1000, NULL);
 
 	
-     }else if(vrsmsz->mode == 4 || vrsmsz->mode==8){
+     }else 
+#endif
+        if(vrsmsz->mode == 4 || vrsmsz->mode==8){
         vrsmsz->director.ds.pre_video_encoder= gst_element_factory_make("x264enc", name); // nvh264enc have no avc
         if(!vrsmsz->director.ds.pre_video_encoder){
           g_print("error make\n");
@@ -2085,14 +2092,14 @@ static void vrsmsz_run_command(gchar* command){
 static void build_response_message(message_t* msg){
    JsonBuilder *builder = json_builder_new();
    json_builder_begin_object(builder);
-   g_print("---> %s\n", msg->command.cmd);
+   g_print("Start building resp ---> %s\n", msg->command.cmd);
    if(!strcmp(msg->command.cmd,"pull")){
      if(!msg->vc){
 	     g_print("vc = null\n");
              g_object_unref( builder);
 	     return ;
      }
-     g_print("build pull response-->`");
+     g_print("build pull response-->\n");
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "pull");
 
@@ -2129,7 +2136,7 @@ static void build_response_message(message_t* msg){
      json_builder_set_member_name(builder, "errno");
      json_builder_add_int_value(builder, 0);
    }else if(!strcmp(msg->command.cmd,"publish")){
-     g_print("build publish response-->`");
+     g_print("build publish response-->\n");
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "publish");
 
@@ -2150,7 +2157,7 @@ static void build_response_message(message_t* msg){
 
   
    }else if(!strcmp(msg->command.cmd,"switch")){
-     g_print("build switch response-->`");
+     g_print("build switch response-->\n");
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "switch");
 
@@ -2170,7 +2177,7 @@ static void build_response_message(message_t* msg){
      json_builder_add_int_value(builder, 0);
 
    }else if(!strcmp(msg->command.cmd,"delete")){
-     g_print("build delete response-->`");
+     g_print("build delete response-->\n");
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "delete");
 
@@ -2187,7 +2194,7 @@ static void build_response_message(message_t* msg){
      json_builder_add_int_value(builder, 0);
 
    }else if(!strcmp(msg->command.cmd,"delay")){
-     g_print("build delay response-->");
+     g_print("build delay response-->\n");
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "delay");
 
@@ -2204,7 +2211,7 @@ static void build_response_message(message_t* msg){
      json_builder_add_int_value(builder, 0);
 
    }else if(!strcmp(msg->command.cmd,"refresh")){
-     g_print("build refresh response-->");
+     g_print("build refresh response-->\n");
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "refresh");
 		   
@@ -2216,6 +2223,11 @@ static void build_response_message(message_t* msg){
 
    }else if(!strcmp(msg->command.cmd,"logo")){
      g_print("build logo response-->\n");
+     if(msg->command.render_id == -1){
+	     g_print("render = -1\n");
+             g_object_unref( builder);
+	     return ;
+     }
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "logo");
 
