@@ -1,0 +1,14 @@
+#!/bin/bash
+while true
+do
+
+        wget --timeout=2  -t 3 --post-data "{\"cmd\":\"delete\",\"id\":-99,\"stream_id\":\"-99\"}"  http://$RTMP_HOST:8888/postserver -O /dev/null > /dev/null 2>&1
+        if [ $? != 0 ]; then
+            vrsmsd
+            echo vrsmsd
+        fi
+
+        sleep 1
+done
+
+exit 0
