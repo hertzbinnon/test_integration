@@ -3,7 +3,7 @@
 #include <json-glib/json-glib.h>
 #define TEST_RENDER
 #define MEDIA_PATH "/tmp"
-#define X264_ENC 
+//#define X264_ENC 
 /*
 static gboolean  vrsmsz_remove()
 {
@@ -2084,6 +2084,8 @@ static void vrsmsz_run_command(gchar* command){
     g_idle_add(vrsmsz_stream_logo, msg);
   }else if(!strcmp(msg->command.cmd,"stop_all")){
     //gst_element_set_state(vrsmsz->pipeline,GST_STATE_NULL);
+    g_print("exit \n");
+    exit(0);
     vrsmsz_remove_all();
   }
   g_free(command);
@@ -2119,11 +2121,19 @@ static void build_response_message(message_t* msg){
        json_builder_set_member_name(builder, "bitrate");
        json_builder_add_int_value(builder, msg->command.in_bitrate);
 
+       gint x=0,y=0;
+       if(vrsmsz->mode == 4 ){
+	     x=3840,y=1920;
+       }else if(vrsmsz->mode == 8 ){
+	     x=7680,y=3840;
+       }else{
+	     x=3840,y=1920;
+       }
        json_builder_set_member_name(builder, "width");
-       json_builder_add_int_value(builder, 3840);
+       json_builder_add_int_value(builder, x);
 
        json_builder_set_member_name(builder, "height");
-       json_builder_add_int_value(builder, 1920);
+       json_builder_add_int_value(builder, y);
 
        json_builder_set_member_name(builder, "fps");
        json_builder_add_int_value(builder, msg->command.in_fps);

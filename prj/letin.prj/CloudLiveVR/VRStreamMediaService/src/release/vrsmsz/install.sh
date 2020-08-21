@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo rm -rf /usr/local/lib64 /var/local/vrsmsz /etc/vrsmsd.conf /usr/local/bin/* /usr/local/nginx
 sudo mkdir -pv /usr/local/lib64
-sudo apt install python3 libx11-xcb1 libjbig0
+sudo apt install python3 libx11-xcb1 libjbig0 -y
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 sudo apt install python3-pip -y
 sudo ln -s /usr/bin/pip3 /usr/bin/pip
