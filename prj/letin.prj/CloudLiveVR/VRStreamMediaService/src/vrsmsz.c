@@ -1401,7 +1401,9 @@ gboolean  vrsmsz_stream_logo(gpointer data){
     vrsmsz->director.num_render++;
   }else if(!strcmp(msg->command.action, "update")){
     if(vrsmsz->director.num_render == 0) return FALSE;
-    g_print("update logo %d\n",msg->command.render_id);
+    int i = msg->command.render_id ;
+    g_print("update logo %d\n",i);
+    if(i == -1){ msg->command.render_id == -2;return FALSE;}
     vrsmsz->director.render[msg->command.render_id].left   = msg->command.left;
     vrsmsz->director.render[msg->command.render_id].top    = msg->command.top;
     vrsmsz->director.render[msg->command.render_id].width  = msg->command.width;
@@ -1419,6 +1421,7 @@ gboolean  vrsmsz_stream_logo(gpointer data){
     if(vrsmsz->director.num_render == 0) return FALSE;
     int i = msg->command.render_id ;
     g_print("delete logo %d\n",i);
+    if(i == -1){ msg->command.render_id == -2;return FALSE;}
     memset(vrsmsz->director.render[i].url,0,URL_LEN);
     vrsmsz->director.render[i].left = 0;
     vrsmsz->director.render[i].top = 0;
@@ -2021,20 +2024,22 @@ message_t* parse_json_msg(gchar* msg){
     ret = json_object_get_string_member (obj,"action");
     memcpy(message->command.action,ret,strlen(ret)+1);
     JsonArray  *array = json_object_get_array_member(obj, "logo_params");
-    JsonObject *sub_obj = json_array_get_object_element(array, 0);
-    ret =  json_object_get_string_member (sub_obj,"pathname");
-    memcpy(message->command.logo_path, ret, strlen(ret)+1);
-    JsonObject *sub_obj1 = json_object_get_object_member (sub_obj,"rect");
-    ret =  json_object_get_int_member (sub_obj1,"left");
-    message->command.left = ret;
-    ret =  json_object_get_int_member (sub_obj1,"top");
-    message->command.top = ret;
-    ret =  json_object_get_int_member (sub_obj1,"width");
-    message->command.width = ret;
-    ret =  json_object_get_int_member (sub_obj1,"height");
-    message->command.height = ret;
-    ret =  json_object_get_int_member (sub_obj,"duration");
-    message->command.duration = ret;
+    if(strcmp(ret,"delete")) {
+      JsonObject *sub_obj = json_array_get_object_element(array, 0);
+      ret =  json_object_get_string_member (sub_obj,"pathname");
+      memcpy(message->command.logo_path, ret, strlen(ret)+1);
+      JsonObject *sub_obj1 = json_object_get_object_member (sub_obj,"rect");
+      ret =  json_object_get_int_member (sub_obj1,"left");
+      message->command.left = ret;
+      ret =  json_object_get_int_member (sub_obj1,"top");
+      message->command.top = ret;
+      ret =  json_object_get_int_member (sub_obj1,"width");
+      message->command.width = ret;
+      ret =  json_object_get_int_member (sub_obj1,"height");
+      message->command.height = ret;
+      ret =  json_object_get_int_member (sub_obj,"duration");
+      message->command.duration = ret;
+   }
 
   }else if(!strcmp(message->command.cmd, "subtitle")){
 
@@ -2240,6 +2245,9 @@ static void build_response_message(message_t* msg){
      }
      json_builder_set_member_name(builder, "cmd");
      json_builder_add_string_value(builder, "logo");
+
+     json_builder_set_member_name(builder, "action");
+     json_builder_add_string_value(builder, msg->command.action);
 
      json_builder_set_member_name(builder, "id");
      json_builder_add_int_value(builder, msg->command.id);
