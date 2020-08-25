@@ -8,3 +8,8 @@ https://stackoverflow.com/questions/50417045/gstreamer-change-source-element-dyn
 
 动态控制参数
 https://blog.csdn.net/zong596568821xp/article/details/105838767
+
+# NOTE important 
+https://stackoverflow.com/questions/49433453/switch-on-the-fly-between-two-sources-in-gstreamer
+https://github.com/RidgeRun/gst-interpipe
+https://developer.ridgerun.com/wiki/index.php?title=GstInterpipe_-_Dynamic_Switching

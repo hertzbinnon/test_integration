@@ -357,7 +357,7 @@ gboolean vrsmsz_add_stream(gpointer data){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", 1000,NULL);
+        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", 2000,NULL);
      }
   }
 
@@ -988,7 +988,7 @@ gboolean director_preview_create(vrstream_t* vs){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1,"bitrate", 1000, NULL);
+        g_object_set (vrsmsz->director.ds.pre_video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1,"bitrate", 2000, NULL);
      }
   }
 
@@ -2088,7 +2088,7 @@ static void vrsmsz_run_command(gchar* command){
   }else if(!strcmp(msg->command.cmd,"logo")){
     g_idle_add(vrsmsz_stream_logo, msg);
   }else if(!strcmp(msg->command.cmd,"stop_all")){
-    //gst_element_set_state(vrsmsz->pipeline,GST_STATE_NULL);
+    gst_element_set_state(vrsmsz->pipeline,GST_STATE_NULL);
     g_print("exit \n");
     exit(0);
     vrsmsz_remove_all();

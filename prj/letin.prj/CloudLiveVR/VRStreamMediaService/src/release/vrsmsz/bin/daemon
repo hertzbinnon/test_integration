@@ -1,4 +1,5 @@
 #!/bin/bash
+. /etc/vrsmsd.conf
 while true
 do
 

@@ -3,11 +3,11 @@
 export GST_PLUGIN_PATH=/usr/local/lib64/plugins
 export LD_LIBRARY_PATH=/usr/local/lib64
 source /etc/vrsmsd.conf
-$LD_LIBRARY_PATH/../nginx/sbin/nginx -s stop
+#$LD_LIBRARY_PATH/../nginx/sbin/nginx -s stop
 $LD_LIBRARY_PATH/../nginx/sbin/nginx -p $LD_LIBRARY_PATH/../nginx 
 killall _vrsmsz > /dev/null 2>&1 
 sleep 3
-_vrsmsz $RTMP_HOST $RTMP_PORT 4 > /tmp/vrsmsd.log 2>&1 &
+_vrsmsz $RTMP_HOST $RTMP_PORT $MODE > /tmp/vrsmsd.log 2>&1 &
 cd /var/local/vrsmsz/env
 . ./bin/activate
 cd /var/local/vrsmsz/env/uploadmodule
