@@ -19,7 +19,7 @@ GLIB_JSON_LDFLAGS = $(shell pkg-config --libs json-glib-1.0)
 NANO_CFLAGS = $(shell pkg-config --cflags libcsoap)
 NANO_LDFLAGS = $(shell pkg-config --libs libcsoap)
 
-all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic
+all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe
 
 clean:
 	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic
@@ -57,3 +57,6 @@ crossfade: examples/crossfade.c
 
 comp-switch-dynamic: examples/comp-switch-dynamic.c
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
+
+interpipe: examples/interpipe.c
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)

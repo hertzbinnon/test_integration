@@ -18,7 +18,7 @@ pip install -e django-master
 deactivate
 cd -
 cp -rf bin/*.jpg /var/local/vrsmsz
-sudo mv -f bin/*.conf /etc
+sudo cp -f bin/*.conf /etc
 sudo cp -rf bin/* /usr/local/bin/
 sudo cp -rf lib/* /usr/local/lib64
 sudo cp -rf  nginx /usr/local/

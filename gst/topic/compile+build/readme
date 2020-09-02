@@ -27,3 +27,9 @@ sudo cp .libs/libgstnvdec.so /usr/lib/x86_64-linux-gnu/gstreamer-1.0/
 Check installation
 gst-inspect-1.0 | grep nvenc
 gst-inspect-1.0 | grep nvdec
+
+
+# build opencv and deps sqlite3
+#edit recipes/gst-plugins-bad-1.0.recipe
+ 'opencv': 'enabled',
+ export CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1"
