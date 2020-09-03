@@ -1,0 +1,15 @@
+###collabora
+https://www.collabora.com/news-and-blog/?blogs
+
+###ridgerun
+https://developer.ridgerun.com/wiki/index.php
+
+https://developer.ridgerun.com/wiki/index.php?title=Birds_Eye_View/Introduction/Dataset  
+https://www.ridgerun.com/post/birds-eye-view-on-nvidia-jetson-boards
+                    
+                    |
+blender -- Birds_Eye_View(ridgerun) -- gstreamer 
+                    |
+                    |
+                 opencv
+                  
