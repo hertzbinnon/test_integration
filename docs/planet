@@ -1,3 +1,10 @@
+                 openxr   
+                    |
+                    |
+blender -- Birds_Eye_View(ridgerun) -- gstreamer 
+                    |
+                    |
+                 opencv
 ###collabora
 https://www.collabora.com/news-and-blog/?blogs
 
@@ -6,10 +13,9 @@ https://developer.ridgerun.com/wiki/index.php
 
 https://developer.ridgerun.com/wiki/index.php?title=Birds_Eye_View/Introduction/Dataset  
 https://www.ridgerun.com/post/birds-eye-view-on-nvidia-jetson-boards
-                    
-                    |
-blender -- Birds_Eye_View(ridgerun) -- gstreamer 
-                    |
-                    |
-                 opencv
+#nvidia 
+https://developer.nvidia.com/blog/building-multi-camera-media-server-ai-processing-jetson/
+
                   
+#blender
+https://wiki.blender.org/wiki/Tools/Tips_for_Coding_Blender
