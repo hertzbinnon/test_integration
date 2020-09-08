@@ -19,3 +19,8 @@ https://blender.stackexchange.com/questions/106972/what-will-happen-with-blender
 
 ### 
 https://upbge.org/
+
+### Build
+make debug #debug version
+
+make  # release version

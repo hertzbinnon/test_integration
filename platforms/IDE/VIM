@@ -1,0 +1,9 @@
+#ubuntu 18.04
+## gdb debug 
+:packadd termdebug
+:Termdebug
+### open gdb
+(gdb) file <blender>
+  Or
+:Termdebug <blender>
+
