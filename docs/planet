@@ -1,3 +1,8 @@
+##################################
+https://gitlab.gnome.org/
+https://gitlab.freedesktop.org/
+
+##################################
                  openxr   
                     |
                     |
@@ -15,7 +20,22 @@ https://developer.ridgerun.com/wiki/index.php?title=Birds_Eye_View/Introduction/
 https://www.ridgerun.com/post/birds-eye-view-on-nvidia-jetson-boards
 #nvidia 
 https://developer.nvidia.com/blog/building-multi-camera-media-server-ai-processing-jetson/
-
                   
 #blender
 https://wiki.blender.org/wiki/Tools/Tips_for_Coding_Blender
+
+# xrdesktop is vr desktop by openhmd on vr-device(https://www.collabora.com/news-and-blog/news-and-events/xrdesktop-014-with-openxr-support-released.html,https://www.collabora.com/news-and-blog/news-and-events/moving-the-linux-desktop-to-another-reality.html), it not need streamVR compositor,
+
+# webrtc+xrdesktop maybe implement steamvr+alvr remote vr desktop 
+
+####### 2020-09-11 #######
+
+Base: LinuxOS,Network,audio,video,cg
+Free Project: Gstreamer,Blender,Rust
+Tools: vlc,ffmpeg,nginx,opencv,nnstreamer,gst-inference,django,kaldi,gstreamer-kaldi-server,tornado
+Language: c/rust/python/shell/c++
+API: OpenGL,WebRtc,
+
+// blender+rust
+https://www.janwalter.org/jekyll/blender/rust/blendinfo/2019/05/28/blend_info.html
+https://www.rs-pbrt.org/blog/

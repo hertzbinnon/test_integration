@@ -5,8 +5,15 @@ http://www.kevinbeason.com/smallpt/
 http://www.3dcpptutorials.sk/index.php?id=15
 https://trenki2.github.io/blog/2017/06/06/developing-a-software-renderer-part1/
 
+https://github.com/paroj/gltut
+https://paroj.github.io/gltut/
 ### OpenGl
+# opengl 3.0 and 4.0
 https://learnopengl-cn.github.io/#
+
+http://www.opengl-tutorial.org/
+
+# opengl 1.0 and 2.0
 http://www.cppblog.com/doing5552/archive/2009/01/08/71532.html // good Opengl study for newers :: webpage/71532.html
 
 # free glut and reading Readme.cmake for build
@@ -14,3 +21,7 @@ http://freeglut.sourceforge.net/
 
 ### misc 
 https://photooxy.com/other-design/convert-image-to-360-degree-online-156.html  # Converting 2D to 360 image
+
+### Vulkan
+https://vulkan-tutorial.com/
+

@@ -157,3 +157,4 @@ Android /
 
 Linux(Server)---> gstreamer(kaldi nnstreamer GstInference)
 
+R(ust)+G(streamer)+B(lender)

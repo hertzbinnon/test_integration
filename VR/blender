@@ -1,4 +1,5 @@
-examples:
+### How to use ,examples:
+https://blenderartists.org/
 https://www.bilibili.com/video/av59983022
 
 https://www.blenderguru.com/tutorials/couch-william
@@ -11,16 +12,34 @@ https://wiki.blender.org/wiki/Source/File_Structure # Source Code files layout
 https://archive.blender.org/wiki/index.php/Dev:Source/ # Old archive
 
 https://wiki.blender.org/wiki/User:Severin/GSoC-2019/Final_Report # Openxr VR
+https://skarredghost.com/2020/04/10/how-to-blender-vr/
 
 https://wiki.blender.org/wiki/Tools/Tips_for_Coding_Blender
 
+https://www.janwalter.org/jekyll/blender/rust/blendinfo/2019/05/28/blend_info.html
+https://www.rs-pbrt.org/blog/
+
 ### remove gameengine from 2.8 
 https://blender.stackexchange.com/questions/106972/what-will-happen-with-blender-2-8-game-engine
-
-### 
 https://upbge.org/
 
 ### Build
 make debug #debug version
 
 make  # release version
+
+###################################################################################################
+Open Window --> WM_check(C) blender-git/blender/source/blender/windowmanager/intern/wm_files.c
+
+draw        --> wm_window_swap_buffers() blender-git/blender/source/blender/windowmanager/intern/wm_window.c
+
+
+[1]. ghost--> [Stands for General Handy Operating System Toolkit.
+   This library abstracts platform specific operations. So we can avoid using OSX/Win32/X11 API calls in the rest of Blender's code.
+
+   It handles window management actions, the OpenGL context and reading events from the mouse and keyboard, it also supports less common input devices such as a tablet or NDOF device.]
+
+
+
+
+################################################################################################### 
