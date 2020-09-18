@@ -1,6 +1,7 @@
-
+http://blog.nirbheek.in/2018/02/gstreamer-webrtc.html
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
 Note: This is self-singed cert.
 	  The last step Eamail: youname@<domain> #cat /etc/hostname > domain 
 
 ./webrtc-sendrecv --peer-id=5769 --server=wss://192.168.61.22:8443 --disable-ssl
+

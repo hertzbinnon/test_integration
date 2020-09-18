@@ -29,7 +29,12 @@ gst-inspect-1.0 | grep nvenc
 gst-inspect-1.0 | grep nvdec
 
 
-# build opencv and deps sqlite3
-#edit recipes/gst-plugins-bad-1.0.recipe
- 'opencv': 'enabled',
- export CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1"
+#1. build python>3.7 (--enable-shared )
+ ./configure --with-system-ffi --enable-optimizations --with-system-ffi --enable-shared
+# switch python to 3.7
+#2. build opencv and deps sqlite3
+#   edit recipes/gst-plugins-bad-1.0.recipe
+#   'opencv': 'enabled',
+export CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1"
+#3 building with python support
+./cerbero-uninstalled -v python,gi package gstreamer-1.0
