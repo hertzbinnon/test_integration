@@ -2,6 +2,8 @@
 
 export GST_PLUGIN_PATH=/usr/local/lib64/plugins
 export LD_LIBRARY_PATH=/usr/local/lib64
+sudo nvidia-smi -pm 1
+sudo nvidia-smi -ac 5003,1592
 source /etc/vrsmsd.conf
 #$LD_LIBRARY_PATH/../nginx/sbin/nginx -s stop
 $LD_LIBRARY_PATH/../nginx/sbin/nginx -p $LD_LIBRARY_PATH/../nginx 

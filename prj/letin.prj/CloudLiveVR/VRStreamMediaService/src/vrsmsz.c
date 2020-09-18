@@ -2,6 +2,7 @@
 #include "vrsmsz.h"
 #include <json-glib/json-glib.h>
 #define TEST_RENDER
+//#define TEST_FADE
 #define MEDIA_PATH "/tmp"
 //#define X264_ENC 
 /*
@@ -500,6 +501,7 @@ gboolean  vrsmsz_remove_all(){
      vrsmsz->director.ds.pub_vdec_tee_queue= NULL; // points
      vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad= NULL;
      vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad= NULL;
+     vrsmsz->director.ds.pub_fade = NULL;
      vrsmsz->director.ds.pub_render1 = NULL;
      vrsmsz->director.ds.pub_render2 = NULL;
      vrsmsz->director.ds.pub_video_encoder= NULL;
@@ -631,6 +633,16 @@ gboolean director_publish_create(gchar* url){
     }
   }
 #ifdef TEST_RENDER
+#ifdef TEST_FADE
+  if(!vrsmsz->director.ds.pub_fade){
+     sprintf(name,"%s-pub_fade","vrsmsz");
+    vrsmsz->director.ds.pub_fade= gst_element_factory_make("videomixer", name);
+    if(!vrsmsz->director.ds.pub_fade){
+      g_print("error make\n");
+      return FALSE;
+    }
+  }
+#endif
   if(!vrsmsz->director.ds.pub_render1){
      sprintf(name,"%s-pub_render1","vrsmsz");
     vrsmsz->director.ds.pub_render1= gst_element_factory_make("gdkpixbufoverlay", name);
@@ -657,7 +669,7 @@ gboolean director_publish_create(gchar* url){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 20000, NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 10000, NULL);
      }else if(vrsmsz->mode==8){
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265enc", name); // nvh264enc have no avc
         //vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265device1enc", name); // nvh264enc have no avc
@@ -754,6 +766,9 @@ gboolean director_publish_create(gchar* url){
   }
   vrsmsz->director.pub_bin = gst_bin_new("pub_bin");
   gst_bin_add_many(GST_BIN(vrsmsz->director.pub_bin), vrsmsz->director.ds.pub_vdec_tee_queue,
+#ifdef TEST_FADE
+                          vrsmsz->director.ds.pub_fade,
+#endif 
 #ifdef TEST_RENDER 
                           vrsmsz->director.ds.pub_render1,vrsmsz->director.ds.pub_render2,
 #endif 
@@ -761,6 +776,9 @@ gboolean director_publish_create(gchar* url){
   gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pub_bin);
 
   if(!gst_element_link_many(vrsmsz->director.ds.pub_vdec_tee_queue, 
+#ifdef TEST_FADE
+                          vrsmsz->director.ds.pub_fade,
+#endif 
 #ifdef TEST_RENDER 
                           vrsmsz->director.ds.pub_render1,vrsmsz->director.ds.pub_render2,
 #endif 
@@ -1249,6 +1267,7 @@ gboolean vrsmsz_publish_stop(){
    vrsmsz->director.ds.pub_vdec_tee_queue = NULL; 
    vrsmsz->director.ds.pub_vdec_tee_queue_sinkpad = NULL;
    vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad = NULL;
+   vrsmsz->director.ds.pub_fade = NULL;
    vrsmsz->director.ds.pub_render1 = NULL;
    vrsmsz->director.ds.pub_render2 = NULL;
    vrsmsz->director.ds.pub_video_encoder = NULL;
@@ -2407,6 +2426,7 @@ void director_stream_init(drstream_t* ds){
   ds->pre_outer= NULL;
   ds->pub_vdec_tee_queue= NULL;
   ds->pub_vdec_tee_queue_sinkpad= NULL;
+  ds->pub_fade= NULL;
   ds->pub_render1 = NULL;
   ds->pub_render2 = NULL;
   ds->pub_video_encoder= NULL;

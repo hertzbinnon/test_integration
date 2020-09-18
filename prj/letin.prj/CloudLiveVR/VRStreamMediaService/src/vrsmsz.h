@@ -123,6 +123,7 @@ typedef struct{
   GstElement * pre_vdec_tee_queue;  
   GstPad *     pre_vdec_tee_queue_sinkpad;
   GstPad *     pre_vdec_tee_queue_ghost_sinkpad;
+  GstElement * pre_fade;
   GstElement * pre_render1;
   GstElement * pre_render2;
   GstElement * pre_video_scale;
@@ -140,6 +141,7 @@ typedef struct{
   GstElement * pub_vdec_tee_queue; // points
   GstPad *     pub_vdec_tee_queue_sinkpad;
   GstPad *     pub_vdec_tee_queue_ghost_sinkpad;
+  GstElement * pub_fade;
   GstElement * pub_render1;
   GstElement * pub_render2;
   GstElement * pub_video_encoder;

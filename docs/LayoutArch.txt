@@ -141,20 +141,22 @@ webrtc - Delay
        \
          JB FEC BWE AEC AGC
 
-             opencv
+             Opencv
            /
-Gstreamer  - yolov3
+Gstreamer  - Yolov3
    	       \
-             kaldi
+             Kaldi
  
 
-Windows  ---> blender
+Windows  ---> Blender
          \ 
           ---> VLC opengl
          /---> WebRtc
 Android / 
 
 
-Linux(Server)---> gstreamer(kaldi nnstreamer GstInference)
+Linux(Server)  ----> gstreamer(kaldi nnstreamer GstInference gstd)
 
-R(ust)+G(streamer)+B(lender)
+Linux(Desktop) ----> G(streamer)+OpenGL+X11
+
+B(lender)(CrossPlatform) --> Cloud Render Engine
