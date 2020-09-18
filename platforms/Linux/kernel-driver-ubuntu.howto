@@ -25,6 +25,7 @@ or
 $ sudo lspci | grep -i --color 'vga\|3d\|2d'
 sudo ubuntu-drivers devices
 sudo ubuntu-drivers autoinstall
+# or sudo apt install nvidia-driver-390
 cat /proc/driver/nvidia/version
 
 #nvidia-smi指令报错：Failed to initialize NVML: Driver解决
@@ -35,3 +36,7 @@ ls /usr/src | grep nvidia # verssion
 sudo apt install dkms
 sudo dkms install -m nvidia -v <version>
 
+# https://askubuntu.com/questions/1031948/cant-start-ubuntu-desktop-after-upgrade-to-18-04
+sudo apt install lightdm  
+sudo dpkg-reconfigure lightdm   
+sudo reboot  
