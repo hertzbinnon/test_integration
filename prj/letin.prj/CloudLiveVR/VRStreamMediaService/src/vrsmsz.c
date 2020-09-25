@@ -71,6 +71,9 @@ void vrsmsz_set_play(GstElement* bin){
   }
 }
 
+vrsmsz_t* vrsmsz;
+GList* message_list;
+
 static gboolean
 message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
 {
@@ -109,11 +112,24 @@ message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
       g_free (name);
       break;
     }
-    case GST_MESSAGE_EOS:
-      g_print ("======> Got EOS\n");
+    case GST_MESSAGE_EOS:{
+      GError *err = NULL;
+      gchar *name, *debug = NULL;
+
+      name = gst_object_get_path_string (message->src);
+      gst_message_parse_warning (message, &err, &debug);
+
+      g_print ("======> Got EOS name=%s\n",name);
+      if( err )
+        g_printerr ("ERROR: from element %s: %s\n", name, err->message);
+      if (debug )
+        g_printerr ("Additional debug info:\n%s\n", debug);
+      //gst_element_set_state (vrsmsz->pipeline, GST_STATE_READY);
+      //gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
       //vrsmsz_remove();
       //g_main_loop_quit (loop);
       break;
+    }
     default:
       //g_print("==> %s\n",gst_message_type_get_name (GST_MESSAGE_TYPE (message)));
       break;
@@ -122,8 +138,6 @@ message_cb (GstBus * bus, GstMessage * message, gpointer user_data)
   return TRUE;
 }
 
-vrsmsz_t* vrsmsz;
-GList* message_list;
 
 static void enable_factory (const gchar *name, gboolean enable) {
     GstRegistry *registry = NULL;
@@ -800,6 +814,7 @@ gboolean director_publish_create(gchar* url){
 void director_publish_link_vs(vrstream_t* vs){
   GstPadLinkReturn ret;
   // audio 
+if(!vrsmsz->isPubSwitched ){ // first pub
   if(!vs->pub_aenc_tee_srcpad){
       vs->pub_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
       if(!vs->pub_aenc_tee_srcpad)
@@ -825,6 +840,7 @@ void director_publish_link_vs(vrstream_t* vs){
   } else {
      g_print ("pub Link succeeded .\n");
   }
+}
   // video
   if(!vs->pub_vdec_tee_srcpad)
     vs->pub_vdec_tee_srcpad = gst_element_get_request_pad (vs->vdec_tee, "src_%u");
@@ -853,6 +869,7 @@ void director_publish_link_vs(vrstream_t* vs){
 /*****************************************************************************************************/
 void director_preview_link_vs(vrstream_t* vs){
   GstPadLinkReturn ret;
+if(!vrsmsz->isPreSwitched){// 
   // audio 
   if(!vs->pre_aenc_tee_srcpad){
       vs->pre_aenc_tee_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
@@ -879,6 +896,7 @@ void director_preview_link_vs(vrstream_t* vs){
   } else {
      g_print ("pre Link succeeded .\n");
   }
+}
   // video
   if(!vs->pre_vdec_tee_srcpad)
     vs->pre_vdec_tee_srcpad = gst_element_get_request_pad (vs->vdec_tee, "src_%u");
@@ -906,6 +924,7 @@ void director_preview_link_vs(vrstream_t* vs){
 /****************************************************************************************/
 gboolean director_publish_unlink_vs(vrstream_t* vr){
   GstPadLinkReturn ret;
+if(!vrsmsz->isPubSwitched ){ // first pub
   ret = gst_pad_unlink(vr->pub_aenc_tee_ghost_srcpad, vrsmsz->director.ds.pub_aenc_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
      g_print ("unLink aenc tee ghost failed.\n");
@@ -918,7 +937,7 @@ gboolean director_publish_unlink_vs(vrstream_t* vr){
   //gst_object_unref(vr->pre_aenc_tee_ghost_srcpad);
   vr->pub_aenc_tee_srcpad = NULL;
   vr->pub_aenc_tee_ghost_srcpad = NULL;
-
+}
   ret = gst_pad_unlink (vr->pub_vdec_tee_ghost_srcpad,vrsmsz->director.ds.pub_vdec_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
     g_print ("unLink vdec tee failed.\n");
@@ -1173,6 +1192,7 @@ gboolean director_switch_effect_create(vrstream_t* vs){
 
 gboolean director_preview_unlink_vs(vrstream_t* vr){
   GstPadLinkReturn ret;
+if(!vrsmsz->isPreSwitched){// 
   ret = gst_pad_unlink(vr->pre_aenc_tee_ghost_srcpad, vrsmsz->director.ds.pre_aenc_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
      g_print ("unLink aenc tee ghost failed.\n");
@@ -1185,6 +1205,7 @@ gboolean director_preview_unlink_vs(vrstream_t* vr){
   //gst_object_unref(vr->pre_aenc_tee_ghost_srcpad);
   vr->pre_aenc_tee_srcpad = NULL;
   vr->pre_aenc_tee_ghost_srcpad = NULL;
+}
 
   ret = gst_pad_unlink (vr->pre_vdec_tee_ghost_srcpad,vrsmsz->director.ds.pre_vdec_tee_queue_ghost_sinkpad);
   if (GST_PAD_LINK_FAILED (ret)) {
@@ -1259,6 +1280,7 @@ gboolean vrsmsz_publish_stop(){
      return FALSE;
    }
    vrchan_t *vc = vrsmsz->streams + vrsmsz->director.stream_id;
+   vrsmsz->isPubSwitched = FALSE;
    director_publish_unlink_vs(&vc->vs);
    memset(vrsmsz->director.publish_url,0,URL_LEN);
    gst_element_set_state (vrsmsz->director.pub_bin, GST_STATE_NULL);
@@ -1300,9 +1322,10 @@ gboolean vrsmsz_publish_stream (gpointer data){
    }
 
    vrchan_t *vc = vrsmsz->streams + vrsmsz->director.stream_id;
-   if(!vrsmsz->director.pub_bin ){ // first pub
+   if(!vrsmsz->isPubSwitched ){ // first pub
      director_publish_create(uri);
      director_publish_link_vs(&(vc->vs));
+     vrsmsz->isPubSwitched= TRUE;
    }else{
      vrsmsz_publish_stop();
      director_publish_create(uri);
@@ -1537,13 +1560,13 @@ gboolean vrsmsz_switch_stream(gpointer data){
   }
  
   vrchan_t* vc = vrsmsz->streams+streamid;
-  if(!vrsmsz->isSwitched){// 
+  if(!vrsmsz->isPreSwitched){// 
 #ifndef TEST_8K
     director_preview_create(&(vc->vs));
     director_preview_link_vs(&(vc->vs));
     gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
 #endif
-    vrsmsz->isSwitched = TRUE;
+    vrsmsz->isPreSwitched = TRUE;
     vrsmsz->director.stream_id = vc->stream_id;
     return FALSE;
   }
@@ -1554,7 +1577,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
   director_preview_link_vs(&vc->vs);
 #endif
 
-  if(vrsmsz->director.pub_bin){ // first pub
+  if(vrsmsz->isPubSwitched){ // first pub
     g_print("publish switch");
     director_publish_unlink_vs(vr);
     director_publish_link_vs(&vc->vs);
@@ -1837,7 +1860,7 @@ gboolean vrsmsz_switch_stream(gpointer data){
     }
 
 
-   vrsmsz->isSwitched = TRUE;
+   vrsmsz->isPreSwitched = TRUE;
   }
   vrsmsz->v_director = streamid;
   vrsmsz->a_director = streamid;
@@ -2468,7 +2491,8 @@ void vrsmsz_init(int argc, char **argv){
   vrsmsz->mode = atoi(argv[3]);
 
   vrsmsz->stream_nbs = 0;
-  vrsmsz->isSwitched= FALSE;
+  vrsmsz->isPreSwitched= FALSE;
+  vrsmsz->isPubSwitched= FALSE;
   for( int i=0; i<MAX_CHANNEL; i++){ 
     memset(vrsmsz->streams + i, 0, sizeof(vrsmsz->streams[i]));
     vrsmsz->streams_id[i] = -1;

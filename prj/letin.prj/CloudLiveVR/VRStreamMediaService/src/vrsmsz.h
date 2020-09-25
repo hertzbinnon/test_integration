@@ -201,7 +201,8 @@ typedef struct{
 
   GAsyncQueue * req_queue;
   GAsyncQueue * rep_queue;
-  gboolean isSwitched;
+  gboolean isPreSwitched;
+  gboolean isPubSwitched;
   
 } vrsmsz_t;
 

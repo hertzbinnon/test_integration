@@ -49,3 +49,6 @@ ffmpeg -i input.mp4 -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/Fr
 
 
 
+ffmpeg -itsoffset 1  -i rtmp://117.50.7.118/live/ch0  -f dshow -i audio="Microphone (Realtek(R) Audio)" -map 0:1 -map 1:0  -f flv rtmp://117.50.7.118/live/test
+ffmpeg  -i rtmp://117.50.7.118/live/ch0  -f dshow -itsoffset 3  -i audio="Microphone (Realtek(R) Audio)"  -c:a aac  -map 0:1 -map 1:0  -f flv rtmp://117.50.7.118/live/test
+ffmpeg -list_devices true -f dshow -i dummy
