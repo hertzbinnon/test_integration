@@ -13,6 +13,8 @@ typedef struct{
   gchar pre_url[1024];
   gchar pub_url[1024];
   gchar stream_id[16];
+  gchar video_id[16];
+  gchar audio_id[16];
 
   gchar effect[16];
 
