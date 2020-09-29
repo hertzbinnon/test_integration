@@ -20,6 +20,7 @@ https://developer.ridgerun.com/wiki/index.php?title=Birds_Eye_View/Introduction/
 https://www.ridgerun.com/post/birds-eye-view-on-nvidia-jetson-boards
 #nvidia 
 https://developer.nvidia.com/blog/building-multi-camera-media-server-ai-processing-jetson/
+https://developer.nvidia.com/cuda-10.1-download-archive-base?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal
                   
 #blender
 https://wiki.blender.org/wiki/Tools/Tips_for_Coding_Blender
@@ -39,3 +40,6 @@ API: OpenGL,WebRtc,
 // blender+rust
 https://www.janwalter.org/jekyll/blender/rust/blendinfo/2019/05/28/blend_info.html
 https://www.rs-pbrt.org/blog/
+
+https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
+https://www.ibm.com/developerworks/library/wa-webcachinga/index.html

@@ -1358,6 +1358,9 @@ gboolean vrsmsz_stream_delay(gpointer data){
   gint msecs = msg->command.delay_time;
 
   g_print("stream %d delay %d ms\n",streamid,msecs);
+  gint videoid = atoi(msg->command.video_id);
+  gint audioid = atoi(msg->command.audio_id);
+
   if(vrsmsz->stream_nbs == 0){
     g_print("no stream \n");
     return FALSE;
@@ -1381,26 +1384,35 @@ gboolean vrsmsz_stream_delay(gpointer data){
   vrstream_t* vs = &(vc->vs);
  
   if(msecs < 0){
+    if(videoid > 0){
     g_object_set(vs->vdec_tee_queue,"min-threshold-time", abs(msecs) * 1000000,NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-time",      3000000000,NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-buffers",   0,          NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-bytes",     0,          NULL);
+    }
     
+    if(audioid > 0){
     g_object_set(vs->aenc_tee_queue,"min-threshold-time", abs(msecs) * 1000000,NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-time",      3000000000,NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
+    }
   }else{
     gst_element_set_state (vs->bin, GST_STATE_READY);
+
+    if(videoid > 0){
     g_object_set(vs->vdec_tee_queue,"min-threshold-time", msecs * 1000000,NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-time",      3000000000,NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-buffers",   0,          NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-bytes",     0,          NULL);
+    }
     
+    if(audioid > 0){
     g_object_set(vs->aenc_tee_queue,"min-threshold-time", msecs * 1000000,NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-time",      3000000000,NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
+    }
     gst_element_set_state (vs->bin, GST_STATE_PLAYING);
   }
 
