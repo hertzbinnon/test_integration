@@ -1,0 +1,4 @@
+#ubuntu
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 20
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 10
+sudo update-alternatives --config python
