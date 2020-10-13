@@ -1,11 +1,15 @@
 #!/bin/bash
-INSTALL_PATH=/tmp/ITVLT
+if [ $# != 1 ];then
+	echo "$0 <dir>"
+	exit 11
+fi
+INSTALL_PATH=$1
 VERSION=1.0.0-Ubuntu1804
 SYSVERSION="Ubuntu 18.04.4 LTS"
 HDWVERSION="GeForce GTX 960"
 
-SYS=lsb_release -a 2> /dev/null | grep Description | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'
-HDW=nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}'
+SYS=`lsb_release -a 2> /dev/null | grep Description | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
+HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}'`
 if [ $SYS != $SYSVERSION ]; then
   echo "$SYS not supported !!!"
   exit 1
@@ -14,6 +18,18 @@ if [ $HDW != $HDWVERSION ]; then
   echo "$HDW not supported !!!"
   exit 2
 fi
+sudo apt install ntpdate
+if [ $? != 0 ];then
+	echo "Please check network !!! "
+       	exit 3
+fi
+sudo ntpdate ntp.ntsc.ac.cn
+if [ $? != 0 ];then
+	echo "sync date failed !!! "
+       	exit 4
+fi
+Exp_time=2020-10-18
+Elps=`date -d "1 month ago" +"%Y-%m-%d"`
 
 sudo rm -rf /usr/local/lib64 /var/local/vrsmsz /etc/vrsmsd.conf /usr/local/bin/* /usr/local/nginx
 sudo mkdir -pv /usr/local/lib64
@@ -26,14 +42,6 @@ sudo ln -s /home/$USER/.local/bin/virtualenv /usr/bin/virtualenv
 sudo mkdir -pv /var/local/vrsmsz
 sudo chown -R $USER.$USER /var/local/vrsmsz
 virtualenv --python=python /var/local/vrsmsz/env
-pushd  $INSTALL_PATH > /dev/null
-    ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ {print NR + 1; exit 0; }' $basepath/$0`
-    tail -n+$ARCHIVE $basepath/$0 | tar xz
-popd  > /dev/null
-if [ $? != 0 ]; then
-        echo "unpack error."
-        exit 1;
-fi
 cd $INSTALL_PATH
 cp -rf django-master /var/local/vrsmsz/env
 cp -rf uploadmodule /var/local/vrsmsz/env
@@ -50,4 +58,3 @@ sudo cp -rf  nginx /usr/local/
 sudo chown -R $USER.$USER /usr/local/nginx
 rm -rf $INSTALL_PATH/
 exit 0;
-__ARCHIVE_BELOW__

@@ -10,6 +10,11 @@ do
         fi
 
         sleep 1
+	vrsync
+	if [ $? !=0 ]; then
+	    echo "Authorization expired"
+	    killall _vrsmsz
+	fi
 done
 
 exit 0

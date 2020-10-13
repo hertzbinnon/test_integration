@@ -13,7 +13,7 @@
 //#define NTP_SERVER_3 "218.75.4.130"   //cn.pool.ntp.org
 #define NTP_SERVER_3 "114.118.7.163"   //ntp.ntsc.ac.cn
  
-struct tm pkg_time={.tm_year=2020-1900,.tm_mon=10-1,.tm_mday=16,.tm_hour=0,.tm_min=0,.tm_sec=0,.tm_isdst=0};
+struct tm exp_time={.tm_year=YEAR-1900,.tm_mon=MONTH-1,.tm_mday=DAY,.tm_hour=0,.tm_min=0,.tm_sec=0,.tm_isdst=0};
 
 void construct_ntp_packet(char content[])
 {
@@ -104,14 +104,14 @@ int main()
 	//strftime(date_buf, sizeof(date_buf), "date -s \"%F %T\"", net_tm);
 	//system(date_buf);
 	cur=mktime(net_tm);
-	pt = mktime(&pkg_time);
-	diff=cur-pt;
-	//printf("==> %s\n",asctime(net_tm));
-	//printf("==> %ld\n",cur);
-	//printf("+==> %s\n",asctime(&pkg_time));
-	//printf("==> %ld\n",pt);
-	//printf("%ld\n",diff);
-        if(diff>30*24*3600 || diff < 0 )
+	pt = mktime(&exp_time);
+	diff=pt-cur;
+	printf("==> %s\n",asctime(net_tm));
+	printf("==> %ld\n",cur);
+	printf("+==> %s\n",asctime(&exp_time));
+	printf("==> %ld\n",pt);
+	printf("%ld\n",diff);
+        if( diff > 0 )
 		return 1;
 
 	return (0);
