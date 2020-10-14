@@ -15,5 +15,6 @@ cd /var/local/vrsmsz/env
 cd /var/local/vrsmsz/env/uploadmodule
 python manage.py runserver 0.0.0.0:9999 > /tmp/upload.log 2>&1 &
 deactivate
-nohup _daemon > /dev/null 2>&1 &
+killall director
+nohup director > /dev/null 2>&1 &
 #sudo chown $USER.$USER -r /tmp

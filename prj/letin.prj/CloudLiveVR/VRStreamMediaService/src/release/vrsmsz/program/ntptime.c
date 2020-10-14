@@ -106,10 +106,10 @@ int main()
 	cur=mktime(net_tm);
 	pt = mktime(&exp_time);
 	diff=pt-cur;
-	printf("==> %s\n",asctime(net_tm));
-	printf("==> %ld\n",cur);
-	printf("+==> %s\n",asctime(&exp_time));
-	printf("==> %ld\n",pt);
+	//printf("==> %s\n",asctime(net_tm));
+	//printf("==> %ld\n",cur);
+	//printf("+==> %s\n",asctime(&exp_time));
+	//printf("==> %ld\n",pt);
 	printf("%ld\n",diff);
         if( diff > 0 )
 		return 1;

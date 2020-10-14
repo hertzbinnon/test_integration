@@ -28,8 +28,14 @@ if [ $? != 0 ];then
 	echo "sync date failed !!! "
        	exit 4
 fi
-Exp_time=2020-10-18
-Elps=`date -d "1 month ago" +"%Y-%m-%d"`
+Exp_time=1602993600
+let exp_time=$Exp_time
+let elps_time=`date "+%s"`
+
+if [ $elps_time -lt $exp_time];then
+	echo "out of time !!!"
+	exit 5
+fi
 
 sudo rm -rf /usr/local/lib64 /var/local/vrsmsz /etc/vrsmsd.conf /usr/local/bin/* /usr/local/nginx
 sudo mkdir -pv /usr/local/lib64

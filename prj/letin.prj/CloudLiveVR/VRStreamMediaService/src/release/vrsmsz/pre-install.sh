@@ -1,5 +1,5 @@
 #!/bin/bash
-INSTALL_PATH=/tmp/ITVLT
+INSTALL_PATH=/tmp/.ITVLT
 VERSION=1.0.0-Ubuntu1804
 rm -rf $INSTALL_PATH/
 if [ ! -d $INSTALL_PATH ]; then
