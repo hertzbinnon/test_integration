@@ -5,11 +5,11 @@ if [ $# != 1 ];then
 fi
 INSTALL_PATH=$1
 VERSION=1.0.0-Ubuntu1804
-SYSVERSION="Ubuntu 18.04.4 LTS"
-HDWVERSION="GeForce GTX 960"
+SYSVERSION="18.04"
+HDWVERSION="TeslaT4"
 
-SYS=`lsb_release -a 2> /dev/null | grep Description | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
-HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}'`
+SYS=`lsb_release -a 2> /dev/null | grep Release | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
+HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}' | sed s/[[:space:]]//g`
 if [ $SYS != $SYSVERSION ]; then
   echo "$SYS not supported !!!"
   exit 1
@@ -28,7 +28,7 @@ if [ $? != 0 ];then
 	echo "sync date failed !!! "
        	exit 4
 fi
-Exp_time=1602993600
+Exp_time=1606712400
 let exp_time=$Exp_time
 let elps_time=`date "+%s"`
 
@@ -55,7 +55,7 @@ cd /var/local/vrsmsz/env
 . ./bin/activate
 pip install -e django-master
 deactivate
-cd -
+cd - > /dev/null 2>&1
 cp -rf bin/*.jpg /var/local/vrsmsz
 sudo cp -f bin/*.conf /etc
 sudo cp -rf bin/* /usr/local/bin/

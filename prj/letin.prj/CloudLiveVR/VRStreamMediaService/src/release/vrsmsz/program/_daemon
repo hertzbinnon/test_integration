@@ -6,12 +6,12 @@ do
         wget --timeout=2  -t 3 --post-data "{\"cmd\":\"delete\",\"id\":-99,\"stream_id\":\"-99\"}"  http://$RTMP_HOST:8888/postserver -O /dev/null > /dev/null 2>&1
         if [ $? != 0 ]; then
             vrsmsd
-            echo vrsmsd
+            echo "setup director"
         fi
 
         sleep 1
 	vrsync
-	if [ $? !=0 ]; then
+	if [ $? != 0 ]; then
 	    echo "Authorization expired"
 	    killall _vrsmsz
 	fi

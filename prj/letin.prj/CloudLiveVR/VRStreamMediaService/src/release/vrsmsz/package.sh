@@ -6,20 +6,21 @@
 PACKAGENAME=director-setup.bin
 ARCHIVEFILE=director.tar.gz
 . Expiration
-
+rm $PACKAGENAME
 cd  program
 ../shc -e $DAY/$MONTH/$YEAR -r -f _daemon
 ../shc -e $DAY/$MONTH/$YEAR -r -f vrsmsd 
-cp -f _daemon.x ../bin/director
+../shc -e $DAY/$MONTH/$YEAR -r -f director 
+cp -f _daemon.x ../bin/_daemon
 cp -f vrsmsd.x ../bin/vrsmsd
+cp -f director.x ../bin/director
 gcc -o vrsync -DYEAR=$YEAR -DMONTH=$MONTH -DDAY=$DAY ntptime.c
 cp -f vrsync ../bin/vrsync
 cd ..
 Exp_time=`date -d "$YEAR-$MONTH-$DAY 00:00:00" +"%s"`
 sed -i "/Exp_time=/cExp_time=$Exp_time" install.sh
-shc -e $DAY/$MONTH/$YEAR -r -f install.sh 
+./shc -e $DAY/$MONTH/$YEAR -r -f install.sh 
 mv install.sh.x install.bin
-exit 0
 tar zcf $ARCHIVEFILE install.bin bin django-master nginx uploadmodule lib
 cat pre-install.sh $ARCHIVEFILE  > $PACKAGENAME
 rm $ARCHIVEFILE install.bin install.sh.x.c

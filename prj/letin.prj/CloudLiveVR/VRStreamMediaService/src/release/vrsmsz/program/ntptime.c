@@ -111,7 +111,7 @@ int main()
 	//printf("+==> %s\n",asctime(&exp_time));
 	//printf("==> %ld\n",pt);
 	printf("%ld\n",diff);
-        if( diff > 0 )
+        if( diff < 0 )
 		return 1;
 
 	return (0);
