@@ -10,7 +10,7 @@ ffmpeg -v quiet -re  -i /home/hebin/2-2.ts  -c copy -f mpegts - | ./bin/vlc-stat
 ffmpeg -v quiet -re  -i /home/hebin/2-2.ts  -c copy -f mpegts - | ./bin/vlc-static - -vvv --sout="#std{access=udp,mux=ts,dst=192.168.8.62:12346}" # vlc must be close all interface 
 ffmpeg -report -re -fflags +genpts -fflags nobuffer -probesize 50 -analyzeduration 100 -stream_loop -1 -i /home/hebin/CHC/100M.mp4 -acodec copy -f flv rtmp://localhost:1936/big/test
 # backgroud executing 
-nohup ./ffmpeg -report -re -fflags +genpts -fflags nobuffer -probesize 50 -analyzeduration 100  -stream_loop -1 -i /home/fjcmcc/100M.mp4 -c:v copy  -acodec copy  -f flv rtmp://localhost/big/test > /dev/null 2>&1 &
+nohup ./ffmpeg -report -re -fflags +genpts -fflags nobuffer -probesize 50 -analyzeduration 100 -stream_loop -1 -i /home/fjcmcc/100M.mp4 -c:v copy -acodec copy  -f flv rtmp://localhost/big/test > /dev/null 2>&1 &
 
 ffmpeg -nostats -report  -i /home/hebin/hunan2.ts -filter:a volumedetect -vn -sn -dn  -f null /dev/null
 
@@ -46,8 +46,6 @@ ffmpeg -i video.mpg -ignore_loop 0 -i loop.gif -filter_complex  "[0:v][1:v]overl
 ffmpeg  -i  input  -vf  drawtext=fontfile=arial.ttf:text=welcome output
 #实现周期显示输入的文字水印
 ffmpeg -i input.mp4 -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf:text='testtest':x=w-100:y=100:enable=lt(mod(t\,3)\,1):fontsize=24:fontcolor=yellow@0.5:shadowy=2" output.mp4
-
-
 
 ffmpeg -itsoffset 1  -i rtmp://117.50.7.118/live/ch0  -f dshow -i audio="Microphone (Realtek(R) Audio)" -map 0:1 -map 1:0  -f flv rtmp://117.50.7.118/live/test
 ffmpeg  -i rtmp://117.50.7.118/live/ch0  -f dshow -itsoffset 3  -i audio="Microphone (Realtek(R) Audio)"  -c:a aac  -map 0:1 -map 1:0  -f flv rtmp://117.50.7.118/live/test

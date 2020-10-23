@@ -1617,11 +1617,18 @@ gboolean vrsmsz_switch_stream(gpointer data){
   vrstream_t* vrv = &(vrsmsz->streams[vrsmsz->director.video_id].vs);
   vrstream_t* vra = &(vrsmsz->streams[vrsmsz->director.audio_id].vs);
 
+  if(!vcv) { 
+          vcv = vrsmsz->streams+vrsmsz->director.video_id;
+	  g_print("audio switch\n");
+  }
+  if(!vca) { 
+          vca = vrsmsz->streams+vrsmsz->director.audio_id;
+	  g_print("video switch\n");
+  }
 #ifndef TEST_8K
   director_preview_unlink_vs(vrv,vra);
   director_preview_link_vs(&(vcv->vs),&(vca->vs));
 #endif
-
 
   if(vrsmsz->isPubSwitched){ // first pub
     g_print("publish switch");
@@ -2539,6 +2546,10 @@ void director_stream_init(drstream_t* ds){
 
 void vrsmsz_init(int argc, char **argv){
 
+  if(!sync_time()){
+    g_error("sync failed\n");
+    return 1;
+  }
   vrsmsz =  g_malloc0 ( sizeof(vrsmsz_t) );
   if( !vrsmsz ){
     g_error("vrsmsz init failed\n");

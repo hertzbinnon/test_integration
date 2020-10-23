@@ -1,3 +1,4 @@
+include release/vrsmsz/Expiration
 CFLAGS ?= -O2 -g -Wall
 LDFLAGS ?=
 
@@ -34,10 +35,13 @@ httpd.o : httpd.c httpd.h vrsmsz.h
 main.o : main.c httpd.h 
 	$(CC) -c  main.c $(CFLAGS) $(GST_CFLAGS) 
 
+vrsync.o : vrsync.c 
+	$(CC) -c  vrsync.c -DYEAR=$(YEAR) -DMONTH=$(MONTH) -DDAY=$(DAY)
+
 vrsmsz.o : vrsmsz.c vrsmsz.h
 	$(CC) -c  vrsmsz.c $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_CFLAGS) 
 
-VRsmsz  : httpd.o main.o vrsmsz.o
+VRsmsz  : httpd.o main.o vrsmsz.o vrsync.o
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
 addstream : examples/addstream.c
