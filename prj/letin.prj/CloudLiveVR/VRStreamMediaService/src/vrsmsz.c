@@ -282,7 +282,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    }
 
    if(!vc) return FALSE;
-   if(strncmp(uri,"rtmp",4)) return FALSE;
+   if(strncmp(uri,"rtmp",4)) {msg->vc = vc;return FALSE;}
    vc->video_id = vc->stream_id;
    vc->audio_id = vc->stream_id;
    sprintf(vc->in_url, "%s", uri);

@@ -1,0 +1,22 @@
+#Rlease the Cache
+echo 3 > /proc/sys/vm/drop_caches
+echo 2 > /proc/sys/vm/drop_caches
+echo 1 > /proc/sys/vm/drop_caches
+
+https://lonesysadmin.net/2013/12/22/better-linux-disk-caching-performance-vm-dirty_ratio/
+#Check 
+sysctl -a | grep dirty
+cat /proc/vmstat | egrep "dirty|writeback"
+
+#Decreasing the Cache
+lower vm.dirty_background_ratio and vm.dirty_ratio by adding new numbers to /etc/sysctl.conf and reloading with “sysctl –p”
+"""
+vm.dirty_background_ratio = 5
+vm.dirty_ratio = 10
+"""
+
+#Increasing the Cache
+"""
+vm.dirty_background_ratio = 50
+vm.dirty_ratio = 80
+"""
