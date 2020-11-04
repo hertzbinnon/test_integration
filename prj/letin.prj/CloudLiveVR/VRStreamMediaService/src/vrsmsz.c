@@ -272,7 +272,8 @@ gboolean vrsmsz_add_stream(gpointer data){
    }
    /**********************dispatch stream id ***********************/
    g_print("start pull stream uri= %s\n",uri);
-   for(int i=0; i<MAX_CHANNEL; i++){
+   int i = 0;
+   for(i=0; i<MAX_CHANNEL; i++){
        if(vrsmsz->streams_id[i] == -1){
           vrsmsz->streams_id[i] = i;
           vc = vrsmsz->streams + vrsmsz->streams_id[i];
@@ -282,7 +283,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    }
 
    if(!vc) return FALSE;
-   if(strncmp(uri,"rtmp",4)) {msg->vc = vc;return FALSE;}
+   if(strncmp(uri,"rtmp",4)) {msg->vc = vc;vc->stream_id = -1;vrsmsz->streams_id[i] = -1;msg->errcode=-1;return FALSE;}
    vc->video_id = vc->stream_id;
    vc->audio_id = vc->stream_id;
    sprintf(vc->in_url, "%s", uri);
@@ -2260,7 +2261,7 @@ static void build_response_message(message_t* msg){
      json_builder_add_string_value(builder, "OK");
 
      json_builder_set_member_name(builder, "errno");
-     json_builder_add_int_value(builder, 0);
+     json_builder_add_int_value(builder, msg->errcode);
    }else if(!strcmp(msg->command.cmd,"publish")){
      g_print("build publish response-->\n");
      json_builder_set_member_name(builder, "cmd");

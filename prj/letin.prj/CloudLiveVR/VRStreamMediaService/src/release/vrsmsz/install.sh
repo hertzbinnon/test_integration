@@ -8,6 +8,7 @@ VERSION=1.0.0-Ubuntu1804
 SYSVERSION="18.04"
 HDWVERSION="TeslaT4"
 
+sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 -y
 SYS=`lsb_release -a 2> /dev/null | grep Release | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
 HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}' | sed s/[[:space:]]//g`
 if [ $SYS != $SYSVERSION ]; then
@@ -18,7 +19,7 @@ if [ $HDW != $HDWVERSION ]; then
   echo "$HDW not supported !!!"
   exit 2
 fi
-sudo apt install ntpdate
+#sudo apt install ntpdate -y
 if [ $? != 0 ];then
 	echo "Please check network !!! "
        	exit 3
@@ -32,25 +33,33 @@ Exp_time=1606712400
 let exp_time=$Exp_time
 let elps_time=`date "+%s"`
 
-if [ $elps_time -lt $exp_time];then
+#echo "==$elps_time"
+#echo "==$exp_time"
+
+if [ $exp_time -lt $elps_time ];then
 	echo "out of time !!!"
 	exit 5
 fi
 
+cd $INSTALL_PATH
+export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 sudo rm -rf /usr/local/lib64 /var/local/vrsmsz /etc/vrsmsd.conf /usr/local/bin/* /usr/local/nginx
 sudo mkdir -pv /usr/local/lib64
 sudo rm -rf /usr/bin/pip  /usr/bin/virtualenv 
-sudo apt-get remove --purge python3 python3-pip -y
-sudo apt install python3 libx11-xcb1 libjbig0 -y
-sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+sudo cp -rf Python-3.7.5/* /usr/local/
+#sudo apt-get remove --purge python3 python3-pip -y
+#sudo apt install python3 libx11-xcb1 libjbig0 -y
+#sudo apt install libx11-xcb1 libjbig0 -y
+sudo update-alternatives --install /usr/bin/python python /usr/local/bin/python3 3
 sudo apt install python3-pip -y
-sudo ln -s /usr/bin/pip3 /usr/bin/pip
-pip install virtualenv
-sudo ln -s /home/$USER/.local/bin/virtualenv /usr/bin/virtualenv
+sudo ln -s /usr/bin/pip3 /usr/local/bin/pip
+#pip install virtualenv
+#sudo ln -s /home/$USER/.local/bin/virtualenv /usr/bin/virtualenv
 sudo mkdir -pv /var/local/vrsmsz
 sudo chown -R $USER.$USER /var/local/vrsmsz
-virtualenv --python=python /var/local/vrsmsz/env
-cd $INSTALL_PATH
+#virtualenv --python=python /var/local/vrsmsz/env
+pyvenv-3.7 /var/local/vrsmsz/env
+#cd $INSTALL_PATH
 cp -rf django-master /var/local/vrsmsz/env
 cp -rf uploadmodule /var/local/vrsmsz/env
 cd /var/local/vrsmsz/env

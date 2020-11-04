@@ -21,7 +21,7 @@ Exp_time=`date -d "$YEAR-$MONTH-$DAY 00:00:00" +"%s"`
 sed -i "/Exp_time=/cExp_time=$Exp_time" install.sh
 ./shc -e $DAY/$MONTH/$YEAR -r -f install.sh 
 mv install.sh.x install.bin
-tar zcf $ARCHIVEFILE install.bin bin django-master nginx uploadmodule lib
+tar zcf $ARCHIVEFILE install.bin bin django-master nginx uploadmodule lib python-3.7.7
 cat pre-install.sh $ARCHIVEFILE  > $PACKAGENAME
 rm $ARCHIVEFILE install.bin install.sh.x.c
 chmod a+x $PACKAGENAME
