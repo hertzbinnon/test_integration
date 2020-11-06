@@ -6,3 +6,9 @@ https://nnstreamer.ai/
 
 #tensorflow
 https://tensorflow.google.cn/install/lang_c
+
+#nsfw 
+https://cloud.tencent.com/developer/article/1551004
+https://github.com/alex000kim/nsfw_data_scraper
+https://scrolller.com/r/nsfw
+
