@@ -438,6 +438,8 @@ gboolean vrsmsz_add_stream(gpointer data){
        g_print("error make\n");
        return FALSE;
      }
+     g_object_set (vs->muxer, "encoder", "LetinVR 1.0.0", NULL);
+     g_object_set (vs->muxer, "metadatacreator", "LetinVR 1.0.0", NULL);
    }
    if(!vs->outer){
      sprintf(name,"vs%d-outer",vc->video_id);
@@ -768,6 +770,8 @@ gboolean director_publish_create(gchar* url){
         g_print("error make\n");
         return FALSE;
       }
+     g_object_set (vrsmsz->director.ds.pub_muxer, "encoder", "LetinVR 1.0.0", NULL);
+     g_object_set (vrsmsz->director.ds.pub_muxer, "metadatacreator", "LetinVR 1.0.0", NULL);
     }
     if(!vrsmsz->director.ds.pub_outer){
       sprintf(name,"%s-pub_outer","vrsmsz");
@@ -1069,6 +1073,8 @@ gboolean director_preview_create(vrstream_t* vs){
       g_print("error make\n");
       return FALSE;
     }
+     g_object_set (vrsmsz->director.ds.pre_muxer, "encoder", "LetinVR 1.0.0", NULL);
+     g_object_set (vrsmsz->director.ds.pre_muxer, "metadatacreator", "LetinVR 1.0.0", NULL);
   }
   if(!vrsmsz->director.ds.pre_outer){
      sprintf(name,"%s-pre_outer","vrsmsz");
@@ -1358,16 +1364,16 @@ gboolean vrsmsz_stream_delay(gpointer data){
   gint streamid = atoi(msg->command.stream_id);
   gint msecs = msg->command.delay_time;
 
-  g_print("stream %d delay %d ms\n",streamid,msecs);
   gint videoid = atoi(msg->command.video_id);
   gint audioid = atoi(msg->command.audio_id);
+  g_print("stream id %d videoid %d audioid %d delay %d ms \n",streamid,videoid ,audioid,msecs);
 
   if(vrsmsz->stream_nbs == 0){
     g_print("no stream \n");
     return FALSE;
   }
   if(streamid == vrsmsz->director.stream_id){
-    g_print("delay in director stream is not permit \n");
+    g_print("Delaying in director stream is not permitted \n");
     return FALSE;
   }
   int i;
@@ -1399,7 +1405,7 @@ gboolean vrsmsz_stream_delay(gpointer data){
     g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
     }
   }else{
-    gst_element_set_state (vs->bin, GST_STATE_READY);
+    //gst_element_set_state (vs->bin, GST_STATE_READY);
 
     if(videoid > 0){
     g_object_set(vs->vdec_tee_queue,"min-threshold-time", msecs * 1000000,NULL);
@@ -1414,7 +1420,7 @@ gboolean vrsmsz_stream_delay(gpointer data){
     g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
     }
-    gst_element_set_state (vs->bin, GST_STATE_PLAYING);
+    //gst_element_set_state (vs->bin, GST_STATE_PLAYING);
   }
 
 
@@ -2111,14 +2117,21 @@ message_t* parse_json_msg(gchar* msg){
     ret = json_object_get_string_member (obj,"stream_id");
     memcpy(message->command.stream_id,ret,strlen(ret)+1);
 
-    ret = json_object_get_string_member (obj,"video_id");
-    memcpy(message->command.video_id,ret,strlen(ret)+1);
+    //ret = json_object_get_string_member (obj,"video_id");
+    //memcpy(message->command.video_id,ret,strlen(ret)+1);
 
-    ret = json_object_get_string_member (obj,"audio_id");
-    memcpy(message->command.audio_id,ret,strlen(ret)+1);
+    //ret = json_object_get_string_member (obj,"audio_id");
+    //memcpy(message->command.audio_id,ret,strlen(ret)+1);
 
     ret = json_object_get_string_member (obj,"type");
     memcpy(message->command.delay_type,ret,strlen(ret)+1);
+    if(!strcmp(ret,"video")) {
+    memcpy(message->command.video_id , message->command.stream_id, strlen(message->command.stream_id)+1); 
+    memcpy(message->command.audio_id , "-1",2);
+    }else { 
+    memcpy(message->command.audio_id , message->command.stream_id, strlen(message->command.stream_id)+1); 
+    memcpy(message->command.video_id , "-1",2);
+    }
 
     r = json_object_get_int_member (obj,"time");
     message->command.delay_time = r;

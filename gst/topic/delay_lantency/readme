@@ -4,9 +4,82 @@ http://gstreamer-devel.966125.n4.nabble.com/dynamic-change-element-s-parameter-t
 http://gstreamer-devel.966125.n4.nabble.com/buffer-v4l2src-for-30-seconds-td4681020.html
 use "min-threshold-time" for queue element
 (or "min-threshold-buffers" where one buffer = one frame).
+https://stackoverflow.com/questions/16977233/pipeline-gstremer-video-streaming-with-delay
 
 #test latency
 https://gstreamer.freedesktop.org/documentation/coretracers/latency.html?gi-language=python
 # clock and sync
 https://gstreamer.freedesktop.org/documentation/application-development/advanced/clocks.html?gi-language=c#dynamic-latency
+
+https://www.dazhuanlan.com/2019/11/18/5dd2a7c42c909/
+https://stackoverflow.com/questions/32908047/gstreamer-increase-and-decrease-delay-on-the-fly
+{
+手动添加直播流延时，延时时间可以控制。输入源为测试视频、桌面截屏、rtmp视频流
+
+测试视频测试通过
+//默认的几种模式 videotestsrc  延时通过 音频也通过 
+gst-launch-1.0 videotestsrc is-live=true ! videoconvert ! x264enc bitrate=1000 tune=zerolatency ! video/x-h264 ! h264parse ! video/x-h264 ! 
+queue ! flvmux name=mux ! 
+queue max-size-buffers=0 max-size-bytes=0 max-size-time=90000000000 ! queue max-size-buffers=0 max-size-time=90000000000 min-threshold-time=6000000000 ! 
+rtmpsink location='rtmp://192.168.18.188/live/999' 
+audiotestsrc is-live=true ! audioconvert ! audioresample ! audio/x-raw,rate=48000 ! voaacenc bitrate=96000 ! audio/mpeg ! aacparse ! audio/mpeg, mpegversion=4 ! mux.
+输入源为videotestsrc，包括多种模式显示不同视频。输入不同视频的时候在videotestsrc后面跟上参数pattern=snow，可以选择不听的图案，集体包括那些图案参考官方文档。
+
+videotestsrc官方文档
+
+flvmux将不同的流复合到flv文件中，这里是将不同的流混合后输出为rtmp流，可以理解为音频流和视频流的混合。
+
+videoconvert后面跟的是视频格式
+
+flvmux name=mux后面的是添加延时的操作。
+
+queue max-size-buffers=0 max-size-bytes=0 max-size-time=$MAX_DELAY ! 
+queue max-size-time=$SMALL_DELAY min-threshold-time=$DELAY
+$DELAY = 延时时间
+$MAX_DELAY = 最多延时时间
+$SMALL_DELAY = 最小延时时间
+测试后发现，$DELAY是起作用的参数。
+
+该策略是具有两个队列，其中第一个作为缓冲区，第二个队列作为一个平衡器，确保所有消息都被精确延迟$DELAY时间。 这不能使用一个队列来完成。
+
+当需要更改延迟时，$DELAY值将在第二个队列中更改。 之后，管道需要使用新的延迟作为延迟发送延迟事件。 这会导致流水线冻结一段时间（如果延迟增加），或快速向前追赶（如果延迟减少）。
+
+通过读取第一个队列上的当前级别时间属性并将其与设置的延迟进行比较，可以获得缓冲状态。
+
+stackoverflow参考资料
+
+rtmpsink：是把视频流达到后面的rtmp地址上去。
+
+这里的Sink Element是媒体处理pipline的终点。可以理解成最后收集媒体流的地方。
+
+更多资料参考rtmpsink官方文档
+
+audiotestsrc这里和video类似，都是测试用的。
+
+截取屏幕打流测试通过
+//屏幕打流延时 15秒延时 通过 加上音频也通过
+gst-launch-1.0 ximagesrc startx=0 use-damage=0 ! 
+videoconvert ! x264enc bitrate=1000 tune=zerolatency ! video/x-h264 ! h264parse ! video/x-h264 ! 
+queue ! flvmux name=mux ! queue max-size-buffers=0 max-size-bytes=0 max-size-time=90000000000 !  queue max-size-buffers=0    max-size-time=90000000000 min-threshold-time=15000000000 ! 
+rtmpsink location='rtmp://192.168.18.188/live/999' 
+audiotestsrc is-live=true ! audioconvert ! audioresample ! audio/x-raw,rate=48000 ! voaacenc bitrate=96000 ! audio/mpeg ! aacparse ! audio/mpeg, mpegversion=4 ! mux.
+拉取rtmp流打流到新的地址测试通过（不加延时）
+//拉取rtmp流不加延时通过   decodebin 要加这个 然后音视频合并
+gst-launch-1.0 -v rtmpsrc location=rtmp://192.168.18.188/live/1 ! decodebin ! x264enc bitrate=1000 tune=zerolatency ! video/x-h264 ! h264parse ! video/x-h264  ！  ! flvmux ! rtmpsink location='rtmp://192.168.18.188/live/999'
+拉取rtmp流打流到新的地址测试通过（加延时无音频）
+// 拉取rtmp流加延时 通过
+gst-launch-1.0 -v rtmpsrc location=rtmp://192.168.18.188/live/1 ! 
+decodebin ! videoconvert ! x264enc bitrate=1000 tune=zerolatency ! video/x-h264 ! h264parse ! video/x-h264 ! 
+queue ! flvmux streamable=true ! 
+queue max-size-buffers=0 max-size-bytes=0 max-size-time=90000000000 !  queue max-size-buffers=0    max-size-time=90000000000 min-threshold-time=15000000000 ! 
+rtmpsink location='rtmp://192.168.18.188/live/999'
+拉取rtmp流打流到新地址测试通过（有延时音频同步）
+//rtmp输入 视频 音频 flvdemux 后 flvmux 然后添加延时。 测试通过 
+gst-launch-1.0 rtmpsrc location=rtmp://192.168.18.188/live/1 ! 
+flvdemux name=mydemuxer flvmux name=mymuxer ! 
+queue max-size-buffers=0 max-size-bytes=0 max-size-time=90000000000 !  queue max-size-buffers=0    max-size-time=90000000000 min-threshold-time=15000000000  ! 
+queue ! rtmpsink location=rtmp://192.168.18.188/live/999  
+mydemuxer.audio ! queue ! mymuxer.audio mydemuxer.video ! queue ! mymuxer.video
+}
+
 

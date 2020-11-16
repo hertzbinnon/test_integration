@@ -1,3 +1,17 @@
+Topology:
+        Django/Torndo => App web server 
+        Mysql /Nosql  => DataBase
+        Ceph          => Data storage
+        Nginx         => load blance or web server fontend
+        Traffic       => Cache or web server fontend
+        LVS/Keeplive  => load blance or rubost
+     Html5/CSS3/JS/JQ => web fontend
+        Redis         => Memmory Database
+        Gstd          => Streaming Media Server
+        NNStreamer/GstInference/Kaldi => AI 
+        Blender                => Content Building
+        Pitivi                 => Content Edit 
+        ffmpeg/opencv/vlc/gstreamer   => Base dependency
 Project
 	+cdn
 		+nginx
@@ -160,3 +174,49 @@ Linux(Server)  ----> gstreamer(kaldi nnstreamer GstInference gstd)
 Linux(Desktop) ----> G(streamer)+OpenGL+X11
 
 B(lender)(CrossPlatform) --> Cloud Render Engine
+
+Design:
+   SMS: Transcode, Director, Content Analysis, Content Edit, Render/Blender, MediaGateway, SFU, MCU.
+   Deliver: CDN, Multicast, Broadcast  
+   Interact: Conference, Call, IM. 
+   Express: Webpage, App.
+   Admin:   DateBase, Content, Server.
+
+
+                                        
+                                 Web Portal
+                     
+                                 Web Server(Nginx) ----> static web                          
+                  
+                                 App (build html/js)
+
+                                 App server (django) ----> dynamic web
+
+				 Storage (image,video,audio,Ceph)  
+
+				 DataBase/Cache(Mysql/Nosql_redis) 
+
+                                 Streaming Media server[
+				    Analysis (NSFW/voice) 
+				    Filter   (aec,asr)
+				    Render   (logo,pip) 
+                                    Sample Edit(like pitivi)
+                                 ]
+
+				 Statistics(Monitor)
+
+				 AI/DNN/ML
+
+                                
+
+
+
+
+
+
+
+
+
+
+
+

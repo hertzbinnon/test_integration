@@ -56,3 +56,9 @@ ffmpeg -list_devices true -f dshow -i dummy
 ./ffmpeg -i daojishioutput1.mp4 -c:v h264_nvenc -b:v 10M -video_track_timescale 25 -c:a aac -ar 48k -ab 128k -f mp4 -movflags frag_keyframe+empty_moov -y daojishioutput2.mp4
 ffmpeg -f dshow -i video="screen-capture-recorder":audio="Stereo Mix (Realtek(R) Audio)" -c:v libx264 -r 25 -b:v 1M -bf 0 -s 3840x1920 -preset 0 -video_track_timescale 25  -c:a aac -ar 48k -ab 128k -y output.mp4
 ffmpeg -f dshow -i video="screen-capture-recorder":audio="Stereo Mix (Realtek(R) Audio)" -c:v libx264 -r 25 -b:v 1M -s 3840x1920 -preset 0 -pix_fmt yuv420p  -bf 0 -video_track_timescale 25  -c:a aac -ar 48k -ab 128k  -f mp4 -movflags frag_keyframe+empty_moov  -y output.mp4
+
+#delay video
+ffmpeg  -i rtmp://117.50.19.251/live/ch6 -itsoffset 3  -i rtmp://117.50.19.251/live/ch6  -c:a copy -c:v copy -map 0:a -map 1:v  -f flv rtmp://117.50.19.251/live/test
+
+#delay audio 
+ffmpeg -i rtmp://10.9.91.51/live/ch6 -itsoffset 3 -i rtmp://10.9.91.51/live/ch6 -c:a copy -c:v copy -map 0:v -map 1:a -f flv rtmp://10.9.91.51/live/test
