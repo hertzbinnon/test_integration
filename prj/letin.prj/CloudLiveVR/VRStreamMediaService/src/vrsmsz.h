@@ -49,6 +49,10 @@ typedef struct{
 
 typedef struct{
   GstElement * uridecodebin; // 
+  GstPad* video_src_pad;
+  GstPad* audio_src_pad;
+  gint video_time;
+  gint audio_time;
   GstElement * vdec_tee;
   GstElement * vdec_tee_queue;
   GstPad* pre_vdec_tee_srcpad;

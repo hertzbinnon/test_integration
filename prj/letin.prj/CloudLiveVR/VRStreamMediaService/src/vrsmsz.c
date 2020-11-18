@@ -208,6 +208,9 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
       g_print ("Type is '%s' but link failed.\n", new_pad_type);
     } else {
       g_print ("Link succeeded (type '%s').\n", new_pad_type);
+      vs->audio_src_pad = new_pad;
+      if(vs->audio_time != 0)
+        gst_pad_set_offset(vs->audio_src_pad, vs->audio_time );
     }
   }else if(g_str_has_prefix (new_pad_type, "video/x-raw")){
     g_print ("It has type '%s' which is raw video. \n", new_pad_type);
@@ -217,6 +220,9 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
       g_print ("Type is '%s' but link failed.\n", new_pad_type);
     } else {
       g_print ("Link succeeded (type '%s').\n", new_pad_type);
+      vs->video_src_pad = new_pad;
+      if(vs->video_time != 0)
+        gst_pad_set_offset(vs->video_src_pad, vs->video_time );
     }
   }else{
     g_print ("It has type '%s' which is not supported. \n", new_pad_type);
@@ -1390,6 +1396,17 @@ gboolean vrsmsz_stream_delay(gpointer data){
   vrchan_t* vc = vrsmsz->streams+streamid;
   vrstream_t* vs = &(vc->vs);
  
+  if(videoid > 0 || videoid == 0){
+     gst_pad_set_offset(vs->video_src_pad, msecs * 1000000);
+     vs->video_time = msecs * 1000000;
+     g_print("--> %lld\n",gst_pad_get_offset(vs->video_src_pad));
+  }
+  if(audioid > 0|| audioid == 0){
+     gst_pad_set_offset(vs->audio_src_pad, msecs * 1000000);
+     vs->audio_time = msecs * 1000000;
+     g_print("--> %lld\n",gst_pad_get_offset(vs->audio_src_pad));
+  }
+  return FALSE;
   if(msecs < 0){
     if(videoid > 0){
     g_object_set(vs->vdec_tee_queue,"min-threshold-time", abs(msecs) * 1000000,NULL);
@@ -1407,19 +1424,20 @@ gboolean vrsmsz_stream_delay(gpointer data){
   }else{
     //gst_element_set_state (vs->bin, GST_STATE_READY);
 
-    if(videoid > 0){
+    //if(videoid > 0){
     g_object_set(vs->vdec_tee_queue,"min-threshold-time", msecs * 1000000,NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-time",      3000000000,NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-buffers",   0,          NULL);
     g_object_set(vs->vdec_tee_queue,"max-size-bytes",     0,          NULL);
-    }
+    //}
     
-    if(audioid > 0){
+    //if(audioid > 0){
     g_object_set(vs->aenc_tee_queue,"min-threshold-time", msecs * 1000000,NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-time",      3000000000,NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
     g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
-    }
+    //}
+
     //gst_element_set_state (vs->bin, GST_STATE_PLAYING);
   }
 
@@ -1472,7 +1490,7 @@ gboolean  vrsmsz_stream_logo(gpointer data){
     if(vrsmsz->director.num_render == 0) return FALSE;
     int i = msg->command.render_id ;
     g_print("update logo %d\n",i);
-    if(i == -1){ msg->command.render_id == -2;return FALSE;}
+    if(i == -1){ msg->command.render_id = -2;return FALSE;}
     vrsmsz->director.render[msg->command.render_id].left   = msg->command.left;
     vrsmsz->director.render[msg->command.render_id].top    = msg->command.top;
     vrsmsz->director.render[msg->command.render_id].width  = msg->command.width;
@@ -1490,7 +1508,7 @@ gboolean  vrsmsz_stream_logo(gpointer data){
     if(vrsmsz->director.num_render == 0) return FALSE;
     int i = msg->command.render_id ;
     g_print("delete logo %d\n",i);
-    if(i == -1){ msg->command.render_id == -2;return FALSE;}
+    if(i == -1){ msg->command.render_id = -2;return FALSE;}
     memset(vrsmsz->director.render[i].url,0,URL_LEN);
     vrsmsz->director.render[i].left = 0;
     vrsmsz->director.render[i].top = 0;
@@ -2128,9 +2146,12 @@ message_t* parse_json_msg(gchar* msg){
     if(!strcmp(ret,"video")) {
     memcpy(message->command.video_id , message->command.stream_id, strlen(message->command.stream_id)+1); 
     memcpy(message->command.audio_id , "-1",2);
-    }else { 
+    }else if (!strcmp(ret,"audio")){ 
     memcpy(message->command.audio_id , message->command.stream_id, strlen(message->command.stream_id)+1); 
     memcpy(message->command.video_id , "-1",2);
+    }else{
+    memcpy(message->command.audio_id , message->command.stream_id, strlen(message->command.stream_id)+1); 
+    memcpy(message->command.video_id , message->command.stream_id, strlen(message->command.stream_id)+1); 
     }
 
     r = json_object_get_int_member (obj,"time");
@@ -2498,6 +2519,10 @@ static gboolean message_process(){
 
 void chan_stream_init(vrstream_t* vs){
   vs->uridecodebin = NULL;  
+  vs->video_src_pad = NULL;
+  vs->audio_src_pad = NULL;
+  vs->video_time = 0;
+  vs->audio_time = 0;
   vs->vdec_tee= NULL;
   vs->vdec_tee_queue= NULL;
   vs->pre_vdec_tee_srcpad= NULL;

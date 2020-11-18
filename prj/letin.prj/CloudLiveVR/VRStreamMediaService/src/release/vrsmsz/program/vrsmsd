@@ -8,6 +8,7 @@ source /etc/vrsmsd.conf
 #$LD_LIBRARY_PATH/../nginx/sbin/nginx -s stop
 $LD_LIBRARY_PATH/../nginx/sbin/nginx -p $LD_LIBRARY_PATH/../nginx 
 killall _vrsmsz > /dev/null 2>&1 
+cat /tmp/vrsmsd.log >> /tmp/vrsmsd.log.1
 sleep 3
 _vrsmsz $RTMP_HOST $RTMP_PORT $MODE > /tmp/vrsmsd.log 2>&1 &
 cd /var/local/vrsmsz/env
