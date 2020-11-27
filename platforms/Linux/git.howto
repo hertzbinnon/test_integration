@@ -161,3 +161,16 @@ git tag -a v1.4 -m "my version 1.4"
 git show v1.4
 # Lightweight Tags
 git tag v1.4-lw
+
+6. Delete 
+https://www.cnblogs.com/mafeng/p/10959874.html
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/gst-plugins-bad-vr/build.sh src/gst-plugins-base-vr/build.sh' --prune-empty --tag-name-filter cat -- --all
+[or]
+git filter-branch --force --index-filter 'git rm -r --cached --ignore-unmatch src' --prune-empty --tag-name-filter cat -- --all
+
+git push origin master -f [or] git push origin master --force --tags
+
+rm -rf .git/refs/original/
+git reflog expire --expire=now --all
+git gc --prune=now
+git gc --aggressive --prune=now

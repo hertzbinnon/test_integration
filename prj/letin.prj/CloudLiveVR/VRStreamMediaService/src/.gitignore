@@ -27,3 +27,11 @@ SVT-HEVC
 youtube-dl
 WebKit-https
 blender-git
+deps
+Books
+srs
+libsoap-1.1.0
+django-master
+transform360
+vrProjector
+opencv_base
