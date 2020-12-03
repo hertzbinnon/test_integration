@@ -781,7 +781,7 @@ gboolean director_publish_create(gchar* url){
     }
     if(!vrsmsz->director.ds.pub_outer){
       sprintf(name,"%s-pub_outer","vrsmsz");
-      vrsmsz->director.ds.pub_outer= gst_element_factory_make("rtmpsink", name);
+      vrsmsz->director.ds.pub_outer= gst_element_factory_make("rtmp2sink", name);
       if(!vrsmsz->director.ds.pub_outer){
         g_print("error make\n");
         return FALSE;

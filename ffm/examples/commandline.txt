@@ -62,3 +62,9 @@ ffmpeg  -i rtmp://117.50.19.251/live/ch6 -itsoffset 3  -i rtmp://117.50.19.251/l
 
 #delay audio 
 ffmpeg -i rtmp://10.9.91.51/live/ch6 -itsoffset 3 -i rtmp://10.9.91.51/live/ch6 -c:a copy -c:v copy -map 0:v -map 1:a -f flv rtmp://10.9.91.51/live/test
+#360
+./ffmpeg -i ../../../../../../4k/ASMR\ VR360\ _\ Affectionate\ Cat\ Girlfriend\ _\ VTuber\ Scenarios-4k.mp4 -vf v360=eac:e_pad=0.01 test.mp4
+./ffmpeg -i ../../../../../../4k/ASMR\ VR360\ _\ Affectionate\ Cat\ Girlfriend\ _\ VTuber\ Scenarios-4k.mp4 -vf v360=eac:e test.mp4
+./ffmpeg -i ../../../../../../4k/ASMR\ VR360\ _\ Affectionate\ Cat\ Girlfriend\ _\ VTuber\ Scenarios-4k.mp4 -b:v 10M -vf v360=eac:e test.mp4
+./ffmpeg -i ../../../../../vrProjector/images/bottom.png -vf v360=c3x2:e test.png
+./ffmpeg -i ../../../../../vrProjector/images/bottom.png -vf v360=e:e test.png

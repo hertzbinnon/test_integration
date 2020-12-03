@@ -42,6 +42,9 @@ draw        --> wm_window_swap_buffers() blender-git/blender/source/blender/wind
    It handles window management actions, the OpenGL context and reading events from the mouse and keyboard, it also supports less common input devices such as a tablet or NDOF device.]
 
 
-
-
 ################################################################################################### 
+#blender camera config
+https://www.douban.com/note/733577494/
+#blender camera operater 
+https://www.bilibili.com/video/BV1CT4y1J7uL?from=search&seid=3650353677332472280
+

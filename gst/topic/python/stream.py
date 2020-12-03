@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """
+ gst-launch-1.0 uridecodebin uri=rtmp://117.50.19.251/live/ch2 name=src ! tee name=vt ! queue ! videoscale ! video/x-raw, width=720, height=576 ! videomixer name=mix sink_0::alpha=0.7 sink_1::alpha=0.5 background=2  ! x264enc ! queue ! flvmux name=muxer ! rtmp2sink location=rtmp://106.75.117.203/live/ch5 uridecodebin uri=rtmp://117.50.19.251/live/ch3 name=src1 ! tee name=vt1 ! queue ! videoscale ! video/x-raw, width=1920, height=1080  ! mix. src. ! audioconvert ! volume volume=0.9 ! level   ! audiomixer name=mix1   ! audioconvert !  avenc_aac perfect-timestamp=TRUE ! muxer. src1. ! audioconvert ! volume volume=0.1 ! level  ! mix1.
  gst-launch-1.0 srtsrc uri=srt://127.0.0.1:8888 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! videoconvert ! fakesink
  gst-launch-1.0 videotestsrc ! x264enc ! mpegtsmux ! srtsink uri=srt://:8888
 
