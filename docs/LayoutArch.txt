@@ -208,7 +208,11 @@ Design:
 				 AI/DNN/ML
 
                                 
+Blender <- Blender Game Engine <- Gstreamer ==>  VR game 
 
+xrdesktop <- vulkan(opengl) <- openvr/openxr 
+
+gstreamer-vr
 
 
 
