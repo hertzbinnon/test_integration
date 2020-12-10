@@ -38,3 +38,4 @@ gst-inspect-1.0 | grep nvdec
 export CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1"
 #3 building with python support
 ./cerbero-uninstalled -v python,gi package gstreamer-1.0
+# 
