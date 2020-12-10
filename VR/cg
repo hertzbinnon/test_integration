@@ -39,10 +39,12 @@ https://github.com/bhautikj/vrProjector
 https://stackoverflow.com/questions/35092216/how-can-i-use-ffmpeg-to-change-360-video-projection
 https://github.com/facebook/transform360
 
-
 https://graphicdesign.stackexchange.com/questions/84774/how-to-convert-a-normal-photo-into-an-equirectangular-image
-
-
+https://graphicdesign.stackexchange.com/questions/121750/how-can-i-paint-equirectangular-360-degree-images#
 
 ###
+#仿射变换(Affine Transformation)
+https://www.cnblogs.com/happystudyeveryday/p/10547316.html
+### base cg
 http://paulbourke.net/geometry/transformationprojection/
+https://www.cs.cmu.edu/afs/cs/academic/class/15462-f11/www/

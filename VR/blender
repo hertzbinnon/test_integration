@@ -45,11 +45,17 @@ draw        --> wm_window_swap_buffers() blender-git/blender/source/blender/wind
 ################################################################################################### 
 #blender camera config
 https://www.douban.com/note/733577494/
+#blender canvas
+https://www.bilibili.com/video/av712093069
 #blender camera operater 
 https://www.bilibili.com/video/BV1CT4y1J7uL?from=search&seid=3650353677332472280
+# script control camera
+http://www.voidcn.com/article/p-zaikulge-buy.html
 
 ## blender图片编辑教程
 https://www.bilibili.com/video/av412820507
+# multicamera switch animation
+https://www.bilibili.com/video/av76391297/
 ##360 video build
 https://docs.blender.org/manual/en/latest/render/cycles/object_settings/cameras.html
 https://www.veer.tv/blog/blender-tutorial-how-to-render-a-3d-vr-video-from-blender/
