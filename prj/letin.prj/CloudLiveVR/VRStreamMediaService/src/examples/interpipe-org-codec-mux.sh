@@ -19,13 +19,25 @@ gstd-client pipeline_create pipe_11_src audiotestsrc wave=0 is-live=true ! queue
 
 echo -e "\n ====> Create the scr_pipe_2 \n"
 gstd-client pipeline_create pipe_2_src videotestsrc pattern=snow is-live=true \
-! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_2 caps=video/x-raw,width=640,height=480,framerate=30/1 sync=false async=false \
-audiotestsrc wave=1 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_22 sync=false async=false
+! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_2 caps=video/x-raw sync=false async=false 
+
+gstd-client pipeline_create pipe_22_src audiotestsrc wave=1 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_22 caps=audio/mpeg sync=false async=false
 
 echo -e "\n ====> Create the scr_pipe_3 \n"
 gstd-client pipeline_create pipe_3_src videotestsrc pattern=smpte is-live=true \
-! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_3 caps=video/x-raw,width=640,height=480,framerate=30/1 sync=false async=false \
-audiotestsrc wave=2 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_33 sync=false async=false
+! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_3 caps=video/x-raw sync=false async=false 
+
+gstd-client pipeline_create pipe_33_src audiotestsrc wave=2 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_33 caps=audio/mpeg sync=false async=false
+
+#echo -e "\n ====> Create the scr_pipe_2 \n"
+#gstd-client pipeline_create pipe_2_src videotestsrc pattern=snow is-live=true \
+#! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_2 caps=video/x-raw,width=640,height=480,framerate=30/1 sync=false async=false \
+#audiotestsrc wave=1 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_22 sync=false async=false
+
+#echo -e "\n ====> Create the scr_pipe_3 \n"
+#gstd-client pipeline_create pipe_3_src videotestsrc pattern=smpte is-live=true \
+#! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_3 caps=video/x-raw,width=640,height=480,framerate=30/1 sync=false async=false \
+#audiotestsrc wave=2 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_33 sync=false async=false
 
 echo -e "\n ====> Create the sink_pipe_4 (listener) \n"
 #gstd-client pipeline_create pipe_4_sink interpipesrc name=interpipesrc1 listen-to=src_1 \
@@ -45,18 +57,20 @@ echo -e "\n ====> Change to PLAYING STATE \n"
 gstd-client pipeline_play pipe_1_src
 gstd-client pipeline_play pipe_11_src
 gstd-client pipeline_play pipe_2_src
+gstd-client pipeline_play pipe_22_src
 gstd-client pipeline_play pipe_3_src
+gstd-client pipeline_play pipe_33_src
 gstd-client pipeline_play pipe_4_sink
 
 echo -e "\n ====> Every 3 seconds the sink_pipe will change the src_pipe that is listening to \n"
 echo -e "\n ====> Start listening to scr_pipe_1 \n"
-sleep 3
+sleep 10
 
 # Start alternating the source pipeline being listened
 while :
 do
 	gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_2
-	#gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_22
+	gstd-client element_set pipe_4_sink interpipesrc11 listen-to src_22
 	echo -e "\n ====> Change to listening to scr_pipe_2 \n"
 	sleep 0.3
 	if [ $STOP -ne 0 ]
@@ -65,7 +79,7 @@ do
 	fi
 
 	gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_3
-	#gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_33
+	gstd-client element_set pipe_4_sink interpipesrc11 listen-to src_33
 	echo -e "\n ====> Change to listening to scr_pipe_3 \n"
 	sleep 0.3
 	if [ $STOP -ne 0 ]
@@ -74,7 +88,7 @@ do
 	fi
 
 	gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_1
-	#gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_11
+	gstd-client element_set pipe_4_sink interpipesrc11 listen-to src_11
 	echo -e "\n ====> Change to listening to scr_pipe_1 \n"
 	echo -e "\n ====> Type Ctrl+C to stop the example execution, otherwise it will iterate infinitely!\n"
 	sleep 0.3
@@ -89,7 +103,9 @@ done
 gstd-client pipeline_delete pipe_1_src
 gstd-client pipeline_delete pipe_11_src
 gstd-client pipeline_delete pipe_2_src
+gstd-client pipeline_delete pipe_22_src
 gstd-client pipeline_delete pipe_3_src
+gstd-client pipeline_delete pipe_33_src
 gstd-client pipeline_delete pipe_4_sink
 
 echo -e "\n ====> CCTV Example Finished!!! \n"
