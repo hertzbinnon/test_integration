@@ -13,16 +13,14 @@ trap "STOP=1" SIGINT
 # Create pipelines
 echo -e "\n ====> Create the scr_pipe_1 \n"
 gstd-client pipeline_create pipe_1_src videotestsrc pattern=ball is-live=true \
-! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_1 \
-caps=video/x-raw sync=false async=false 
+! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_1 caps=video/x-raw sync=false async=false 
 
 gstd-client pipeline_create pipe_11_src audiotestsrc wave=0 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_11 caps=audio/mpeg sync=false async=false
 
 echo -e "\n ====> Create the scr_pipe_2 \n"
 gstd-client pipeline_create pipe_2_src videotestsrc pattern=snow is-live=true \
-! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_2 \
-caps=video/x-raw,width=640,height=480,framerate=30/1 sync=false async=false audiotestsrc wave=1 is-live=true \
-! queue ! interpipesink name=src_22 sync=false async=false
+! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_2 caps=video/x-raw,width=640,height=480,framerate=30/1 sync=false async=false \
+audiotestsrc wave=1 is-live=true ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_22 sync=false async=false
 
 echo -e "\n ====> Create the scr_pipe_3 \n"
 gstd-client pipeline_create pipe_3_src videotestsrc pattern=smpte is-live=true \
@@ -40,8 +38,8 @@ echo -e "\n ====> Create the sink_pipe_4 (listener) \n"
 #gstd-client pipeline_create pipe_4_sink interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true ! videoconvert ! x264enc ! h264parse ! queue ! flvmux name=muxer ! rtmp2sink location=rtmp://192.168.0.134/live/chan0 sync=false interpipesrc name=interpipesrc11 listen-to=src_11 is-live=true allow-renegotiation=true ! audioconvert ! voaacenc ! aacparse ! queue ! muxer.
 
 gstd-client pipeline_create pipe_4_sink flvmux name=muxer ! rtmp2sink location=rtmp://192.168.0.134/live/chan0 sync=false \
-	interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! videoconvert ! x264enc key-int-max=30 ! h264parse !  muxer. \
-	interpipesrc name=interpipesrc11 listen-to=src_11 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! aacparse !  muxer.
+	interpipesrc name=interpipesrc1 listen-to=src_2 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! videoconvert ! x264enc key-int-max=30 ! h264parse !  muxer. \
+	interpipesrc name=interpipesrc11 listen-to=src_22 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! aacparse !  muxer.
 
 # Change pipelines to PLAYING STATE
 echo -e "\n ====> Change to PLAYING STATE \n"
