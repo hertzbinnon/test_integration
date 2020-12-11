@@ -39,7 +39,7 @@ echo -e "\n ====> Create the sink_pipe_4 (listener) \n"
 
 #gstd-client pipeline_create pipe_4_sink interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true ! videoconvert ! x264enc ! h264parse ! queue ! flvmux name=muxer ! rtmp2sink location=rtmp://192.168.0.134/live/chan0 sync=false interpipesrc name=interpipesrc11 listen-to=src_11 is-live=true allow-renegotiation=true ! audioconvert ! voaacenc ! aacparse ! queue ! muxer.
 
-gstd-client pipeline_create pipe_4_sink mpegtsmux name=muxer alignment=7 ! udpsink host=192.168.0.166 port=12349 sync=false \
+gstd-client pipeline_create pipe_4_sink flvmux name=muxer ! rtmp2sink location=rtmp://192.168.0.134/live/chan0 sync=false \
 	interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! videoconvert ! x264enc key-int-max=30 ! h264parse !  muxer. \
 	interpipesrc name=interpipesrc11 listen-to=src_11 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! aacparse !  muxer.
 
