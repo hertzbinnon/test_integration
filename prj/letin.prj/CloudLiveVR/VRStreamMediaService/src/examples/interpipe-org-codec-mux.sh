@@ -4,6 +4,9 @@
 #gst-launch-1.0 videotestsrc pattern=ball is-live=true ! "video/x-raw, framerate=30/1, width=640, height=480, format=I420" ! queue ! interpipesink name=src_1 caps=video/x-raw,width=640,height=480,framerate=30/1 sync=false async=false   interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true ! videoconvert ! x264enc ! h264parse ! mpegtsmux ! udpsink host=192.168.0.166 max-bitrate=7000000  port=12349 sync=false
 # gst-launch-1.0 uridecodebin uri=rtmp://192.168.0.134/live/ch0 name=source ! video/x-raw, framerate=30/1, width=720, height=576, format=Y444_10LE ! queue ! interpipesink name=src_1 caps="video/x-raw,width=720,height=576,framerate=30/1" sync=false async=false forward-events=true forward-eos=true  interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true stream-type=0 ! queue ! videoconvert ! x264enc ! h264parse ! queue ! mpegtsmux name=muxer latency=1000000000 alignment=7 ! queue ! udpsink host=192.168.0.166 port=12349 sync=false async=false
 
+# gst-launch-1.0 uridecodebin uri=udp://192.168.0.134:12346 name=source ! "video/x-raw, framerate=30/1, width=720, height=576, format=Y444_10LE" ! queue ! interpipesink name=src_1 caps=video/x-raw,width=720,height=576,framerate=30/1 sync=false async=false  source. ! queue ! audioconvert ! voaacenc ! aacparse ! queue ! interpipesink name=src_11 caps=audio/mpeg sync=false async=false flvmux name=muxer ! rtmp2sink location=rtmp://192.168.0.134/live/ch5 sync=false interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! videoconvert ! x264enc key-int-max=30 ! h264parse !  muxer. interpipesrc name=interpipesrc11 listen-to=src_11 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! aacparse ! muxer.
+
+#gst-launch-1.0 -v rtmp2src location=rtmp://192.168.0.134/live/ch0 timeout=10 ! flvdemux  name=source ! h264parse ! avdec_h264 ! video/x-raw, framerate=30/1, width=720, height=576 ! queue ! interpipesink name=src_1 caps="video/x-raw,width=720,height=576,framerate=30/1" sync=false async=false forward-events=true forward-eos=true  interpipesrc name=interpipesrc1 listen-to=src_1 is-live=true allow-renegotiation=true format=3 stream-sync=2 ! queue ! videoconvert ! x264enc ! h264parse ! queue ! mpegtsmux name=muxer alignment=7 ! queue ! udpsink host=192.168.0.166 port=12349 sync=false async=false
 echo -e "\n ====== CCTV Example (Switch the scr_pipe to listen in runtime) ====== \n"
 
 STOP=0
@@ -82,7 +85,7 @@ do
 	gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_2
 	gstd-client element_set pipe_4_sink interpipesrc11 listen-to src_22
 	echo -e "\n ====> Change to listening to scr_pipe_2 \n"
-	sleep 0.04
+	sleep 1.04
 	if [ $STOP -ne 0 ]
 	then
 		break
@@ -91,7 +94,7 @@ do
 	gstd-client element_set pipe_4_sink interpipesrc1 listen-to src_3
 	gstd-client element_set pipe_4_sink interpipesrc11 listen-to src_33
 	echo -e "\n ====> Change to listening to scr_pipe_3 \n"
-	sleep 0.04
+	sleep 1.04
 	if [ $STOP -ne 0 ]
 	then
 		break
@@ -101,7 +104,7 @@ do
 	gstd-client element_set pipe_4_sink interpipesrc11 listen-to src_11
 	echo -e "\n ====> Change to listening to scr_pipe_1 \n"
 	echo -e "\n ====> Type Ctrl+C to stop the example execution, otherwise it will iterate infinitely!\n"
-	sleep 0.04
+	sleep 1.04
 	if [ $STOP -ne 0 ]
 	then
 		break

@@ -5,7 +5,7 @@ Topology:
         Nginx         => load blance or web server fontend
         Traffic       => Cache or web server fontend
         LVS/Keeplive  => load blance or rubost
-     Html5/CSS3/JS/JQ => web fontend
+        Html5/CSS3/JS/JQ => web fontend
         Redis         => Memmory Database
         Gstd          => Streaming Media Server
         NNStreamer/GstInference/Kaldi => AI 
@@ -120,7 +120,7 @@ Project
 	+pitivi
 
 	+cheat-sheet 
-							http://lzone.de/cheat-sheet
+					http://lzone.de/cheat-sheet
 	+Flatpak
 
 	p2p-cdns
@@ -134,13 +134,23 @@ Project
 	+x264svc		
 					http://code.google.com/p/x264svc 
 	+openGL*****	
+                                        http://www.ogldev.org/index.html
 					git clone --recurse-submodules https://github.com/ssloy/hellOGL.git
+                                        https://github.com/JoeyDeVries/LearnOpenGL
+                                        https://www.cs.cmu.edu/afs/cs/academic/class/15462-f11/www/
+                                        https://paroj.github.io/gltut/Texturing/Tutorial%2014.html
+                                        http://www.opengl-tutorial.org/beginners-tutorials/tutorial-5-a-textured-cube/
+                                        http://paulbourke.net/panorama/cubemaps/
 	 
     +vlc
 					https://code.videolan.org/videolan
 					https://code.videolan.org/videolan/docker-images
     +blender 
                                         http://i.youku.com/u/UMTgzMTA0NDc2MA 
+    +ceph                               
+                                        https://github.com/ceph
+    +DevOps
+                                        https://library.prof.wang/handbook/h/hdbk-MWnS99ThmLVDi7U5mVFrB9#toc330
 TechTree for app
 
 	Qt+windows 
@@ -213,6 +223,27 @@ Blender <- Blender Game Engine <- Gstreamer ==>  VR game
 xrdesktop <- vulkan(opengl) <- openvr/openxr 
 
 gstreamer-vr
+
+|-------------------------------------------------------------------|
+|                                                                   |
+|                           GNU/linux                               |
+|                                                                   |
+|-------------------------------------------------------------------|
+|---------------------||---------------------||---------------------|
+|                     ||                     ||                     |
+|    Blender          ||    Gstreamer        ||    NNStreamer       |
+|                     ||                     ||                     |
+|---------------------||---------------------||---------------------|
+
+
+
+
+
+
+
+
+
+
 
 
 
