@@ -13,3 +13,5 @@ cargo build --bin=appsrc
  cargo run
 cargo check
 cargo doc --open
+
+rustup update

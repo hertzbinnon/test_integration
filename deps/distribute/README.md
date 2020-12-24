@@ -12,7 +12,7 @@ Weblayer			NGX web	front
 -------------------------------------------> link pools
 Servicelayer		Tornado 
 -------------------------------------------> data balance,request balance
-Datalayer		    mysql/mongodb cluster
+Datalayer		        mysql/mongodb cluster
 						|
 						V
 					 ceph/hdfs cluster

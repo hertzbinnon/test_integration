@@ -38,16 +38,16 @@ Queuing delay
 ------------
 	V---------------------------MTU ---------------------V
 	|---------|------------------------|------------------|
-	|IP header|		TCP header		   | max segment size |
-	|20 Bytes |	[20,32,40,60] bytes	   |  mss = 1460	  |
-	|		  |						   |				  |
+	|IP header|TCP header		   | max segment size |
+	|20 Bytes |[20,32,40,60] bytes	   | mss = 1460       |
+	|	  |			   |                  |
 	|---------|------------------------|------------------|
-	|         |		UDP header		   | no  max segment  |
-	|         |     [20] bytes		   |  	  			  |
-	|		  |						   |				  |
+	|         |UDP header		   | no  max segment  |
+	|         |     [20] bytes	   |  	  	      |
+	|	  |			   |		      |
 	|---------|------------------------|------------------|
 	|IP segment, only the first ip package have udp header|
-	|		  						   				      |
+	|	  					      |
 	|---------|------------------------|------------------|
 
 3.1	The IP, or Internet Protocol, which is a pure datagram protocol, is what provides the host-to-host routing and addressing.
