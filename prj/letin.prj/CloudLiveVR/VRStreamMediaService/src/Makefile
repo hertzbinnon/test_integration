@@ -20,10 +20,10 @@ GLIB_JSON_LDFLAGS = $(shell pkg-config --libs json-glib-1.0)
 NANO_CFLAGS = $(shell pkg-config --cflags libcsoap)
 NANO_LDFLAGS = $(shell pkg-config --libs libcsoap)
 
-all: VRsmsz addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe
+all: VRsmsz #addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe
 
 clean:
-	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic
+	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe 
 
 
 #httpd.o : httpd.c httpd.h
@@ -44,23 +44,23 @@ vrsmsz.o : vrsmsz.c vrsmsz.h
 VRsmsz  : httpd.o main.o vrsmsz.o vrsync.o
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-addstream : examples/addstream.c
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+#addstream : examples/addstream.c
+#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-test-effect-switch: examples/test-effect-switch.c
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+#test-effect-switch: examples/test-effect-switch.c
+#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-doc-effect-switch: examples/doc-effect-switch.c
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+#doc-effect-switch: examples/doc-effect-switch.c
+#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-switch-src-element: examples/switch-src-element.c
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+#switch-src-element: examples/switch-src-element.c
+#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-crossfade: examples/crossfade.c
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
+#crossfade: examples/crossfade.c
+#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
 
-comp-switch-dynamic: examples/comp-switch-dynamic.c
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
+#comp-switch-dynamic: examples/comp-switch-dynamic.c
+#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
 
-interpipe: examples/interpipe.c
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+#interpipe: examples/interpipe.c
+#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)

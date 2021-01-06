@@ -24,8 +24,8 @@ Project
 		-shell	 		ngx/nginx_configure.sh
 		-plugins 																										
    					+ nginx-rtmp-module	
-							-url 		https://github.com/arut/nginx-rtmp-module.git	 
-							-patchs 	ngx/nginx-rtmp-module/hls/hls.patch														
+						-url 		https://github.com/arut/nginx-rtmp-module.git	 
+						-patchs 	ngx/nginx-rtmp-module/hls/hls.patch														
 		-examples
 						ngx/conf/*.conf
 	+ats				
@@ -34,8 +34,8 @@ Project
 		-shell			ats/ats_configure.sh		
 		-plugins
 					+ carp								
-							-url 		https://github.com/apache/trafficserver/pull/843.patch 
-							-patch		843.patch
+						-url 		https://github.com/apache/trafficserver/pull/843.patch 
+						-patch		843.patch
 		-examples
 						ats/etc/*.config
 						tests.hertz
@@ -229,7 +229,7 @@ gstreamer-vr
 
 |-------------------------------------------------------------------|
 |                                                                   |
-|                           GNU/linux                               |
+|           GNU&linux/Distribue/Network/AI/Streaming                |
 |                                                                   |
 |-------------------------------------------------------------------|
 |---------------------||---------------------||---------------------|
@@ -237,24 +237,3 @@ gstreamer-vr
 |    Blender          ||    Gstreamer        ||    NNStreamer       |
 |                     ||                     ||                     |
 |---------------------||---------------------||---------------------|
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

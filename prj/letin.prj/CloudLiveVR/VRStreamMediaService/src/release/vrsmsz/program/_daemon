@@ -12,8 +12,14 @@ do
         sleep 1
 	vrsync
 	if [ $? != 0 ]; then
-	    echo "Authorization expired"
+	    #echo "Authorization expired"
 	    killall _vrsmsz
+	fi
+	let enc=`nvidia-smi dmon -c 1 | awk '{print $7}' | grep '[0-9]'`
+	echo "$enc"
+	if [ $enc -eq 0 ];then
+		echo "nvidia error $enc"
+                wget --timeout=2  -t 3 --post-data "{\"cmd\":\"refresh\"}"  http://$RTMP_HOST:8888/postserver -O /dev/null > /dev/null 2>&1
 	fi
 done
 

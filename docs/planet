@@ -44,7 +44,6 @@ https://www.rs-pbrt.org/blog/
 https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
 https://www.ibm.com/developerworks/library/wa-webcachinga/index.html
 
-
 https://www.roxlu.com/
 https://www.collabora.com/
 https://www.linux.com/news/linus-torvalds-explains-how-linux-still-surprises-and-motivates-him/
@@ -54,3 +53,15 @@ https://insights.stackoverflow.com/survey/2019
 
 # OS operation
 https://www.geeksforgeeks.org/microkernel-in-operating-systems/
+
+# voice audio wave 
+https://www.waves.com/
+## 360 audio
+https://www.waves.com/ambisonics-explained-guide-for-sound-engineers#:~:text=Ambisonics%20is%20a%20method%20for%20recording%2C%20mixing%20and,the%20VR%20industry%20which%20requires%20360%C2%B0%20audio%20solutions.
+
+# ambisonics audio format
+https://lib.rs/crates/ambisonic
+
+# RTC commuication
+https://telecom.altanai.com/tag/gstreammer/
+https://telecom.altanai.com/category/session-initiation-prot-sip/sip-servers/kamailio/
