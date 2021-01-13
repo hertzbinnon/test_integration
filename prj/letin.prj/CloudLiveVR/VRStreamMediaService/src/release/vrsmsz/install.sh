@@ -44,7 +44,7 @@ fi
 cd $INSTALL_PATH
 export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 sudo rm -rf /usr/local/lib64 /var/local/vrsmsz /etc/vrsmsd.conf /usr/local/bin/* /usr/local/nginx
-sudo mkdir -pv /usr/local/lib64
+sudo mkdir -p /usr/local/lib64
 sudo rm -rf /usr/bin/pip  /usr/bin/virtualenv 
 sudo cp -rf Python-3.7.5/* /usr/local/
 #sudo apt-get remove --purge python3 python3-pip -y
@@ -55,7 +55,7 @@ sudo apt install python3-pip -y
 sudo ln -s /usr/bin/pip3 /usr/local/bin/pip
 #pip install virtualenv
 #sudo ln -s /home/$USER/.local/bin/virtualenv /usr/bin/virtualenv
-sudo mkdir -pv /var/local/vrsmsz
+sudo mkdir -p /var/local/vrsmsz
 sudo chown -R $USER.$USER /var/local/vrsmsz
 #virtualenv --python=python /var/local/vrsmsz/env
 pyvenv-3.7 /var/local/vrsmsz/env

@@ -1,7 +1,19 @@
 #!/bin/bash
-pid=`ps aux | grep _daemon | grep -v grep | cut -d ' ' -f 4`
+_vrsmszpid=`ps aux | grep _vrsmsz | grep -v grep | grep -v daemon | awk '{print $2}' | grep '[0-9]'`
+_daemonid=`ps aux | grep _daemon | grep -v color | awk '{print $2}' | grep '[0-9]'`
+runserverpar=`ps aux | grep runserver | grep -v grep  | awk '{print $2}' | grep '[0-9]' | head -1`
+runserverchd=`ps aux | grep runserver | grep -v grep  | awk '{print $2}' | grep '[0-9]' | tail -1`
+cacheid=`ps aux | grep cache.sh | grep -v grep | awk '{print $2}' | grep '[0-9]'`
+
+pid=$_daemonid
 kill -9 $pid > /dev/null 2>&1 
-pid=`ps aux | grep runserver | grep -v grep | cut -d ' ' -f 4`
+pid=$_vrsmszpid
 kill -9 $pid > /dev/null 2>&1
-killall _vrsmsz > /dev/null 2>&1 
-nohup _daemon > /tmp/vrsmsd.d 2>&1 &
+pid=$runserverpar
+kill -9 $pid > /dev/null 2>&1
+pid=$runserverchd
+kill -9 $pid > /dev/null 2>&1
+pid=$cacheid
+sudo kill -9 $pid > /dev/null 2>&1
+
+nohup _daemon > /tmp/.xxycc 2>&1 &
