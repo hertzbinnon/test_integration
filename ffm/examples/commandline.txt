@@ -68,3 +68,6 @@ ffmpeg -i rtmp://10.9.91.51/live/ch6 -itsoffset 3 -i rtmp://10.9.91.51/live/ch6 
 ./ffmpeg -i ../../../../../../4k/ASMR\ VR360\ _\ Affectionate\ Cat\ Girlfriend\ _\ VTuber\ Scenarios-4k.mp4 -b:v 10M -vf v360=eac:e test.mp4
 ./ffmpeg -i ../../../../../vrProjector/images/bottom.png -vf v360=c3x2:e test.png
 ./ffmpeg -i ../../../../../vrProjector/images/bottom.png -vf v360=e:e test.png
+
+# 0 track start from 5s and track 1 start from 10s
+./ffmpeg -i rtmp://10.9.126.203/live/hong -map 0:0 -ss 5  -map 0:1 -ss 10  -c copy  -f flv rtmp://10.9.112.161/live/test

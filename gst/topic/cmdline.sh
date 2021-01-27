@@ -9,3 +9,4 @@ gst-launch-1.0 videotestsrc ! x264enc ! rtspclientsink location=rtsp://127.0.0.1
 #./test-rtsp-record "( appsink )"
 ./test-rtsp-launch "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
 #./test-rtsp-launch "( appsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
+gst-launch-1.0 videotestsrc ! video/x-raw ! glupload ! gloverlay location=/usr/share/pixmaps/faces/sky.jpg ! glimagesink
