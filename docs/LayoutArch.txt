@@ -225,15 +225,13 @@ Blender <- Blender Game Engine <- Gstreamer ==>  VR game
 
 xrdesktop <- vulkan(opengl) <- openvr/openxr 
 
-gstreamer-vr
-
 |-------------------------------------------------------------------|
 |                                                                   |
-|           GNU&linux/Distribue/Network/AI/Streaming                |
+|  GNU&linux/Windows/Android Distribue/Network/AI/Web/Render        |
 |                                                                   |
 |-------------------------------------------------------------------|
 |---------------------||---------------------||---------------------|
 |                     ||                     ||                     |
-|    Blender          ||    Gstreamer        ||    NNStreamer       |
+|    Blender          ||    GStreamer        ||    NNStreamer       |
 |                     ||                     ||                     |
 |---------------------||---------------------||---------------------|

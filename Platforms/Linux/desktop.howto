@@ -1,2 +1,8 @@
 xrandr--size 4:3
 xrandr --size 1366x768
+# ubuntu close pingbao
+关闭息屏，最后0是代表关闭锁屏，将0替换为60代表60s后自动息屏，以此类推。
+gsettings set org.gnome.desktop.session idle-delay 0
+ 
+关闭锁屏
+gsettings set org.gnome.desktop.screensaver lock-enabled false
