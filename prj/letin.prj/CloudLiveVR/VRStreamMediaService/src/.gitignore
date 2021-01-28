@@ -17,7 +17,6 @@ gstreamer-rs
 janus-gateway
 kaldi-dev
 kms-omni-build
-libwebrtc-cn
 nnstreamer
 faceswap
 ffmpeg-python
@@ -35,3 +34,4 @@ django-master
 transform360
 vrProjector
 opencv_base
+toolchains

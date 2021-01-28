@@ -172,6 +172,7 @@ webrtc源码只提供客户端功能，没有流媒体服务器功能。真正�
 		
 		cd src
 		gn gen out/Debug --args='target_os="android" target_cpu="arm"'
+		#or gn gen out/Debug --args='target_os="android" target_cpu="arm" is_debug=false'
 		#To build for ARM64: use target_cpu="arm64"
 		#To build for 32-bit x86: use target_cpu="x86"
 		#To build for 64-bit x64: use target_cpu="x64"
