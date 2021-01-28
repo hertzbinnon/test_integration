@@ -35,3 +35,12 @@ transform360
 vrProjector
 opencv_base
 toolchains
+VRsmsz
+gst-ci
+gst-py
+release/*.gz
+chromium
+*.so
+*.o
+cudatest
+gst-plugins-extenal
