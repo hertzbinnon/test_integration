@@ -3,7 +3,7 @@
 webrtc源码只提供客户端功能，没有流媒体服务器功能。真正的p2p不会提供很好体验。
 这套源码的别名叫做libwebrtc,(gstreamer 项目组有一篇 http://blog.nirbheek.in/2018/02/gstreamer-webrtc.html,写的非常好。)
 
-1.  在windows/linux上同步时先安装git,python2.7,
+1.在windows/linux上同步时先安装git,python2.7,
 
 windows上可以使用git-bash.exe 并
 export DEPOT_TOOLS_WIN_TOOLCHAIN=0
@@ -77,11 +77,12 @@ solutions = [
 ]
 target_os = [ 'android' ] #'windows','linux'
 
-3 执行
+3 执行同步
 gclient sync
 
 4.编译设置
-
+4.0 linux 设置
+./build/install-build-deps.sh
 4.1 android 设置
 apt-get install -y software-properties-common
 add-apt-repository -y ppa:openjdk-r/ppa
