@@ -86,10 +86,35 @@ gclient sync
 apt-get install -y software-properties-common
 add-apt-repository -y ppa:openjdk-r/ppa
 src/build/install-build-deps-android.sh
+
 4.2 windows 设置
 cmd --> "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
     --> D:\hertz\GitHub\webrtc\libwebrtc\src> SET PATH=D:\hertz\mytools\Python27;D:\hertz\mytools\Python27\Scripts;%PATH%;%cd%\depot_tools
+src\build\gn_run_binary.py --> "#if not os.path.isabs(path):
+                               #  path = './' + path"
+src\third_party\yasm\run_yasm.py -->"	# Assemble.
+					new_argv = [];
+					for i in sys.argv:
+					  new_argv.append(i)
+					new_argv[1]="yasm"
+					result_code = subprocess.call(new_argv[1:])
+					#result_code = subprocess.call(sys.argv[1:])
+					if result_code != 0:
+					  sys.exit(result_code)
 
+					# Now generate the .d file listing the dependencies. The -M option makes yasm
+					# write the Makefile-style dependencies to stdout, but it seems that inhibits
+					# generating any compiled output so we need to do this in a separate pass.
+					# However, outputting deps seems faster than actually assembling, and yasm is
+					# so fast anyway this is not a big deal.
+					#
+					# This guarantees proper dependency management for assembly files. Otherwise,
+					# we would have to require people to manually specify the .inc files they
+					# depend on in the build file, which will surely be wrong or out-of-date in
+					# some cases.
+					#deps = subprocess.check_output(sys.argv[1:] + ['-M'])
+					deps = subprocess.check_output(new_argv[1:] + ['-M'])
+				    "
 5.编译
 gn gen out/Release "--args=is_debug=false"
 
