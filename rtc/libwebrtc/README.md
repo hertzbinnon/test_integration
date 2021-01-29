@@ -1,10 +1,99 @@
-源码版本git：
-			commit 596b64d730de15bf09c3267d17b2530f50ad106d
-			Author: François Beaufort <beaufort.francois@gmail.com>
-			Date:   Wed Mar 7 11:08:59 2018 +0000
+源码版本libwetrtc.cn
 
 webrtc源码只提供客户端功能，没有流媒体服务器功能。真正的p2p不会提供很好体验。
 这套源码的别名叫做libwebrtc,(gstreamer 项目组有一篇 http://blog.nirbheek.in/2018/02/gstreamer-webrtc.html,写的非常好。)
+
+1.  在windows/linux上同步时先安装git,python2.7,
+
+windows上可以使用git-bash.exe 并
+export DEPOT_TOOLS_WIN_TOOLCHAIN=0
+
+export WORKSPACE=`pwd`
+export CDS_CLANG_BUCKET_OVERRIDE=http://120.92.49.206:3232/chromiumsrc/commondatastorage/raw/master/public/chromium-browser-clang
+export PATH=$PATH:$WORKSPACE/depot_tools
+export PATH=$PATH:/D/Program\ Files/Git/usr/bin
+export PATH=/D/hertz/mytools/Python27:/D/hertz/mytools/Python27/Scripts:$PATH
+
+#!/bin/bash
+git config --global url.http://120.92.49.206:3232/chromiumsrc/webrtc.git.insteadOf https://chromium.googlesource.com/external/webrtc.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/base.git.insteadOf https://chromium.googlesource.com/chromium/src/base
+git config --global url.http://120.92.49.206:3232/chromiumsrc/build.git.insteadOf https://chromium.googlesource.com/chromium/src/build
+git config --global url.http://120.92.49.206:3232/chromiumsrc/buildtools.git.insteadOf https://chromium.googlesource.com/chromium/src/buildtools
+git config --global url.http://120.92.49.206:3232/chromiumsrc/gradle.git.insteadOf https://chromium.googlesource.com/external/github.com/gradle/gradle.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/ios.git.insteadOf https://chromium.googlesource.com/chromium/src/ios.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/testing.git.insteadOf https://chromium.googlesource.com/chromium/src/testing
+git config --global url.http://120.92.49.206:3232/chromiumsrc/third_party.git.insteadOf https://chromium.googlesource.com/chromium/src/third_party
+git config --global url.http://120.92.49.206:3232/chromiumsrc/clang-format.git.insteadOf https://chromium.googlesource.com/chromium/llvm-project/cfe/tools/clang-format.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/libcxx.git.insteadOf https://chromium.googlesource.com/chromium/llvm-project/libcxx.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/libcxxabi.git.insteadOf https://chromium.googlesource.com/chromium/llvm-project/libcxxabi.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/libunwind.git.insteadOf https://chromium.googlesource.com/external/llvm.org/libunwind.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/android_ndk.git.insteadOf https://chromium.googlesource.com/android_ndk.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/android_tools.git.insteadOf https://chromium.googlesource.com/android_tools.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/auto.git.insteadOf https://chromium.googlesource.com/external/github.com/google/auto.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/catapult.git.insteadOf https://chromium.googlesource.com/catapult.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/compact_enc_det.git.insteadOf https://chromium.googlesource.com/external/github.com/google/compact_enc_det.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/colorama.git.insteadOf https://chromium.googlesource.com/external/colorama.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/depot_tools.git.insteadOf https://chromium.googlesource.com/chromium/tools/depot_tools.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/errorprone.git.insteadOf https://chromium.googlesource.com/chromium/third_party/errorprone.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/ffmpeg.git.insteadOf https://chromium.googlesource.com/chromium/third_party/ffmpeg.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/findbugs.git.insteadOf https://chromium.googlesource.com/chromium/deps/findbugs.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/freetype2.git.insteadOf https://chromium.googlesource.com/chromium/src/third_party/freetype2.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/harfbuzz.git.insteadOf https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/gtest-parallel.git.insteadOf https://chromium.googlesource.com/external/github.com/google/gtest-parallel
+git config --global url.http://120.92.49.206:3232/chromiumsrc/googletest.git.insteadOf https://chromium.googlesource.com/external/github.com/google/googletest.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/icu.git.insteadOf https://chromium.googlesource.com/chromium/deps/icu.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/jsr-305.git.insteadOf https://chromium.googlesource.com/external/jsr-305.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/jsoncpp.git.insteadOf https://chromium.googlesource.com/external/github.com/open-source-parsers/jsoncpp.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/junit.git.insteadOf https://chromium.googlesource.com/external/junit.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/fuzzer.git.insteadOf https://chromium.googlesource.com/chromium/llvm-project/compiler-rt/lib/fuzzer.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/libjpeg_turbo.git.insteadOf https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/libsrtp.git.insteadOf https://chromium.googlesource.com/chromium/deps/libsrtp.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/libvpx.git.insteadOf https://chromium.googlesource.com/webm/libvpx.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/libyuv.git.insteadOf https://chromium.googlesource.com/libyuv/libyuv.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/linux-syscall-support.git.insteadOf https://chromium.googlesource.com/linux-syscall-support.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/mockito.git.insteadOf https://chromium.googlesource.com/external/mockito/mockito.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/nasm.git.insteadOf https://chromium.googlesource.com/chromium/deps/nasm.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/openh264.git.insteadOf https://chromium.googlesource.com/external/github.com/cisco/openh264
+git config --global url.http://120.92.49.206:3232/chromiumsrc/requests.git.insteadOf https://chromium.googlesource.com/external/github.com/kennethreitz/requests.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/robolectric.git.insteadOf https://chromium.googlesource.com/external/robolectric.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/ub-uiautomator.git.insteadOf https://chromium.googlesource.com/chromium/third_party/ub-uiautomator.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/usrsctp.git.insteadOf https://chromium.googlesource.com/external/github.com/sctplab/usrsctp
+git config --global url.http://120.92.49.206:3232/chromiumsrc/binaries.git.insteadOf https://chromium.googlesource.com/chromium/deps/yasm/binaries.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/patched-yasm.git.insteadOf https://chromium.googlesource.com/chromium/deps/yasm/patched-yasm.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/tools.git.insteadOf https://chromium.googlesource.com/chromium/src/tools
+git config --global url.http://120.92.49.206:3232/chromiumsrc/client-py.git.insteadOf https://chromium.googlesource.com/infra/luci/client-py.git
+git config --global url.http://120.92.49.206:3232/chromiumsrc/boringssl.git.insteadOf https://boringssl.googlesource.com/boringssl.git
+
+2.编辑webrtc/.gclient
+solutions = [
+  { "name"        : "src",
+    "url"         : "https://chromium.googlesource.com/external/webrtc.git@gitlab",
+    "deps_file"   : "DEPS",
+    "managed"     : True,
+    "custom_deps" : {
+    },
+    "custom_vars": {},
+  },
+]
+target_os = [ 'android' ] #'windows','linux'
+
+3 执行
+gclient sync
+
+4.编译设置
+
+4.1 android 设置
+apt-get install -y software-properties-common
+add-apt-repository -y ppa:openjdk-r/ppa
+src/build/install-build-deps-android.sh
+4.2 windows 设置
+cmd --> "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+    --> D:\hertz\GitHub\webrtc\libwebrtc\src> SET PATH=D:\hertz\mytools\Python27;D:\hertz\mytools\Python27\Scripts;%PATH%;%cd%\depot_tools
+
+5.编译
+gn gen out/Release "--args=is_debug=false"
+
+
 			
 /*************************************************************************************************************/
 (0) 实验环境：<https://raw.githubusercontent.com/havfo/Kurento-Nodejs-SIP/master/images/sipnode.png>
