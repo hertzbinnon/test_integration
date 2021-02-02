@@ -154,6 +154,12 @@ Project
                                         https://library.prof.wang/handbook/h/hdbk-MWnS99ThmLVDi7U5mVFrB9#toc330
     +grafana
                                         https://github.com/grafana/grafana
+    +point cloud
+                                        https://blog.csdn.net/abccc250110119/article/details/93471816
+                                        https://blog.csdn.net/abccc250110119/article/details/105074333
+                                        https://blog.csdn.net/abccc250110119/article/details/105075101
+                                        https://blog.csdn.net/Asabc12345/article/details/107094066
+                                        https://blog.csdn.net/stq054188/article/details/105089550
 TechTree for app
 
 	Qt+windows 

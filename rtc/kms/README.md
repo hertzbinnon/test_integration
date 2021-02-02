@@ -1,5 +1,6 @@
 https://github.com/Kurento
 https://www.kurento.org/blog/kurento-6140-june-2020
+https://doc-kurento.readthedocs.io/en/latest/dev/dev_guide.html
 kurento
 ├── gst-libav
 ├── gst-plugins-bad

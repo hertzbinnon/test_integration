@@ -82,7 +82,14 @@ gclient sync
 
 4.编译设置
 4.0 linux 设置
+sudo apt-get install gmodule-2.0 gtk+-3.0 gio-2.0x11 proto-dev
+export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig/:/usr/share/pkgconfig/
 ./build/install-build-deps.sh
+src/build/linux/install-chromeos-fonts.py --> URL_TEMPLATE = ('http://120.92.49.206:3232/chromiumsrc/commondatastorage/raw/master/public/chromeos-localmirror/'
+                                              'distfiles/%(name)s-%(version)s.tar.bz2')
+src/build/linux/sysroot_scripts/install-sysroot.py --> URL_PREFIX = 'http://120.92.49.206:3232'
+                                                       URL_PATH = 'chromiumsrc/chrome-linux-sysroot/raw/master/public/toolchain'
+
 4.1 android 设置
 apt-get install -y software-properties-common
 add-apt-repository -y ppa:openjdk-r/ppa
