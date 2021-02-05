@@ -5,8 +5,8 @@ export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
 ROOT_PATH=/usr/local
 sudo nvidia-smi -pm 1
 sudo nvidia-smi -ac 5003,1592
-sudo killall cache.sh > /dev/null 2>&1 
-sudo /usr/local/bin/cache.sh > /dev/null 2>&1 &
+#sudo killall cache.sh > /dev/null 2>&1 
+#sudo /usr/local/bin/cache.sh > /dev/null 2>&1 &
 ulimit -c 0
 source /etc/vrsmsd.conf
 #$LD_LIBRARY_PATH/../nginx/sbin/nginx -s stop
