@@ -1,3 +1,6 @@
+### Base cg
+http://paulbourke.net/geometry/transformationprojection/
+https://www.cs.cmu.edu/afs/cs/academic/class/15462-f11/www/
 ###CG
 https://www.zhihu.com/question/349302834
 http://staff.ustc.edu.cn/~lgliu/Resources/CG/What_is_CG.htm
@@ -10,10 +13,10 @@ https://www.khronos.org/opengl/wiki/Programming_OpenGL_in_Linux:_GLX_and_Xlib
 
 # Opengl 3.0 and 4.0
 https://learnopengl-cn.github.io/#
-
 http://www.opengl-tutorial.org/
 https://github.com/paroj/gltut
 https://paroj.github.io/gltut/
+http://www.ogldev.org/
 
 # Opengl 1.0 and 2.0
 http://www.cppblog.com/doing5552/archive/2009/01/08/71532.html // good Opengl study for newers :: webpage/71532.html
@@ -45,6 +48,3 @@ https://graphicdesign.stackexchange.com/questions/121750/how-can-i-paint-equirec
 ###
 #仿射变换(Affine Transformation)
 https://www.cnblogs.com/happystudyeveryday/p/10547316.html
-### base cg
-http://paulbourke.net/geometry/transformationprojection/
-https://www.cs.cmu.edu/afs/cs/academic/class/15462-f11/www/

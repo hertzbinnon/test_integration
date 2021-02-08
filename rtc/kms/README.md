@@ -41,3 +41,6 @@ kurento/modules/kurento/SdpEndpoint.conf.json
       "name" : "H264/90000"
     }
 ]
+#mediasoup-demo
+npm install
+npm start

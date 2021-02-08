@@ -14,4 +14,4 @@ sudo apt-get install graphviz
 dot -Tpng 0.00.24.846778049-gst-launch.PLAYING_PAUSED.dot > pipeline.png
 eog pipeline.png
 
-GST_PLUGIN_FEATURE_RANK=vah264dec:259 gst-play-1.0 ~/video.mp4
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-play-1.0 ~/video.mp4
