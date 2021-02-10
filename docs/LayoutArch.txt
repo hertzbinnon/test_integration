@@ -1,17 +1,21 @@
+Key:
+    World   Bank   Group
+    web blender gstreamer
 Topology:
-        Django/Torndo => App web server 
-        Mysql /Nosql  => DataBase
-        Ceph          => Data storage
-        Nginx         => load blance or web server fontend
-        Traffic       => Cache or web server fontend
-        LVS/Keeplive  => load blance or rubost
-        Html5/CSS3/JS/JQ => web fontend
-        Redis         => Memmory Database
-        Gstd          => Streaming Media Server
-        NNStreamer/GstInference/Kaldi => AI 
-        Blender                => Content Building
-        Pitivi                 => Content Edit 
-        ffmpeg/opencv/vlc/gstreamer   => Base dependency
+    Django/Torndo => App web server 
+    Mysql /Nosql  => DataBase
+    Ceph          => Data storage
+    Nginx         => load blance or web server fontend
+    Traffic       => Cache or web server fontend
+    LVS/Keeplive  => load blance or rubost
+    Html5/CSS3/JS/JQ => web fontend
+    Redis         => Memmory Database
+    Gstd          => Streaming Media Server
+    NNStreamer/GstInference/Kaldi => AI 
+    Blender                => Content Building
+    Pitivi                 => Content Edit 
+    ffmpeg/opencv/vlc/gstreamer   => Base dependency
+
 Project
 	+cdn
 		+nginx

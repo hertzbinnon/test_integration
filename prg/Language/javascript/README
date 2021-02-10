@@ -1,0 +1,6 @@
+# clear local(global) cache
+sudo npm cache clean
+# 全局安装时须要sudo
+sudo npm install --global gulp
+# 只安装在当前目录
+# npm insall
