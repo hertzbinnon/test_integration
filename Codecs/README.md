@@ -3,3 +3,5 @@ https://developer.nvidia.com/ffmpeg
 https://code.ihub.org.cn/projects/1350/repository/uavs3e
 https://github.com/uavs3
 
+https://www.videoproc.com/resource/h266-vvc.htm
+

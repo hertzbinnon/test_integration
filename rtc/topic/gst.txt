@@ -7,3 +7,5 @@ Note: This is self-singed cert.
 
 ./webrtc-sendrecv --peer-id=5769 --server=wss://192.168.61.22:8443 --disable-ssl
 
+cp knockplop/*.pem path/to/your
+

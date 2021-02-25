@@ -30,7 +30,7 @@
 		if( video == null) console.log("video is null");
 		if( textarea == null) console.log("document.getElementById");
 		if (textarea.value == '')
-        textarea.value = JSON.stringify(constraints);
+                  textarea.value = JSON.stringify(constraints);
 		navigator.mediaDevices.getUserMedia(constraints).then(gotStream);//, gotStream, logError);
 		//navigator.getUserMedia(constraints, gotStream, logError);  
 

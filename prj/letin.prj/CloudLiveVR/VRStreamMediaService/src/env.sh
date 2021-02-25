@@ -19,14 +19,14 @@ export LD_LIBRARY_PATH=`pwd`/libsoap-1.1.0/install/lib/:$LD_LIBRARY_PATH
 #
 # sudo apt-get install libxv1
 # sudo apt-get install libva2
- #   sudo apt-get install libva-x11
- #   sudo apt-get install libva-x11-2
- #   sudo apt-get install libva-drm
- #   sudo apt-get install libva-drm-2
- #   sudo apt-get install libva-drm2
- #   sudo apt-get install libxcb-shape
- #   sudo apt-get install xcb-shape
- #   sudo apt-get install libxcb-shape0
- #   sudo apt-get install libasound2
+# sudo apt-get install libva-x11
+# sudo apt-get install libva-x11-2
+# sudo apt-get install libva-drm
+# sudo apt-get install libva-drm-2
+# sudo apt-get install libva-drm2
+# sudo apt-get install libxcb-shape
+# sudo apt-get install xcb-shape
+# sudo apt-get install libxcb-shape0
+# sudo apt-get install libasound2
 #
 #gcc -o opengl_demo opengl_demo.c -Ifreeglut-3.2.1/include freeglut-3.2.1/build/lib/libglut.so /usr/lib/x86_64-linux-gnu/libGL.so
