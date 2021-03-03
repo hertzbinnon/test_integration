@@ -29,7 +29,7 @@ if [ $? != 0 ];then
 	echo "sync date failed !!! "
        	exit 4
 fi
-Exp_time=1614315600
+Exp_time=1621224000
 let exp_time=$Exp_time
 let elps_time=`date "+%s"`
 
@@ -75,4 +75,5 @@ sudo cp -rf lib/* /usr/local/lib64
 sudo cp -rf  nginx /usr/local/
 sudo chown -R $USER.$USER /usr/local/nginx
 rm -rf $INSTALL_PATH/
+rm -rf ~/.cache/gstreamer-1.0/registry.x86_64.bin
 exit 0;

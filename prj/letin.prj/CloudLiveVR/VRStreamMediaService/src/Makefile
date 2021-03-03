@@ -1,4 +1,4 @@
-include release/vrsmsz/Expiration
+include ../release/vrsmsz/Expiration
 CFLAGS ?= -O2 -g -Wall
 LDFLAGS ?=
 
@@ -39,7 +39,7 @@ vrsync.o : vrsync.c
 	$(CC) -c  vrsync.c -DYEAR=$(YEAR) -DMONTH=$(MONTH) -DDAY=$(DAY)
 
 vrsmsz.o : vrsmsz.c vrsmsz.h
-	$(CC) -c  vrsmsz.c $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_CFLAGS) 
+	$(CC) -c  vrsmsz.c $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_CFLAGS) $(GSOUP_CFLAGS) 
 
 VRsmsz  : httpd.o main.o vrsmsz.o vrsync.o
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
