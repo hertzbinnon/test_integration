@@ -1,4 +1,5 @@
 #include <gst/gst.h>
+#include <gst/sdp/sdp.h>
 #include "httpd.h"
 #define MAX_CHANNEL 16
 #define MAX_VIDEO_TRACK  16
@@ -31,8 +32,8 @@ typedef struct{
   gchar logo_path[1024];
   gchar pip_path[1024];
   gchar text_string[1024];
-  gint  left;
-  gint  top;
+  gint left;
+  gint top;
   gint width;
   gint height;
   gchar action[1024];
@@ -68,6 +69,7 @@ typedef struct{
   GstElement * video_scale;
   GstElement * video_capsfilter;
   GstElement * video_encoder;
+  GstElement * venc_tee;
   GstElement * video_encoder_queue;
   GstElement * video_encoder_parser;
   GstElement * audio_convert;
@@ -87,6 +89,29 @@ typedef struct{
   gchar our_id[256];
   gchar peer_id[256];
   gint  src_id;
+
+  GstSDPMessage *sdp;
+
+  GstPad *    audio_srcpad;
+  GstPad *    audio_ghost_srcpad;
+  GstPad *    audio_sinkpad;
+  GstPad *    audio_ghost_sinkpad;
+  GstElement* audioenc_queue;
+  GstElement* audiortppay;
+  GstElement* audioqueue;
+  GstElement* audiocaps;
+
+  GstPad *    video_srcpad;
+  GstPad *    video_ghost_srcpad;
+  GstPad *    video_sinkpad;
+  GstPad *    video_ghost_sinkpad;
+  GstElement* videoenc_queue;
+  GstElement* videortppay;
+  GstElement* videoqueue;
+  GstElement* videocaps;
+  GstElement* webrtc;
+  GstElement *bin;
+
 } PeerStruct;
 
 typedef struct {

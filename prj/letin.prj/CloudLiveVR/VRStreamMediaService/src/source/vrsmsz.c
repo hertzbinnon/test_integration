@@ -3,7 +3,6 @@
 #include <libsoup/soup.h>
 #include <json-glib/json-glib.h>
 #include <string.h>
-#include <gst/sdp/sdp.h>
 #define GST_USE_UNSTABLE_API
 #include <gst/webrtc/webrtc.h>
 
@@ -11,7 +10,6 @@
 #define TEST_RENDER
 //#define TEST_FADE
 #define MEDIA_PATH "/tmp"
-//#define X264_ENC 
 /*
 static gboolean  vrsmsz_remove()
 {
@@ -34,6 +32,10 @@ static gboolean  vrsmsz_remove()
    return FALSE;
 }
 */
+static SoupWebsocketConnection *ws_conn = NULL;
+static enum AppState app_state = 0;
+static const gchar *server_url = "wss://192.168.0.134:9443";
+#define STUN_SERVER "stun://stun.l.google.com:19302 "
 void vrsmsz_set_play(GstElement* bin){
   GstStateChangeReturn r;
 #if 1
@@ -273,16 +275,16 @@ gint _autoplug_select_cb(GstElement* decodebin, GstPad* pad, GstCaps*caps, GValu
  *
 */
 
+
 static gboolean
-register_with_server (vrchan_t* vc);
-{
+register_with_server (vrchan_t* vc){
   gchar *hello;
 
   if (soup_websocket_connection_get_state (ws_conn) !=
       SOUP_WEBSOCKET_STATE_OPEN)
     return FALSE;
 
-  hello = g_strdup_printf ("HELLO %s", vc->vs.our_id);
+  hello = g_strdup_printf ("HELLO %s", vc->ps.our_id);
 
   app_state = SERVER_REGISTERING;
 
@@ -292,6 +294,140 @@ register_with_server (vrchan_t* vc);
   g_free (hello);
 
   return TRUE;
+}
+
+static gboolean
+cleanup_and_quit_loop (const gchar * msg, enum AppState state)
+{
+  if (msg)
+    gst_printerr ("%s\n", msg);
+  if (state > 0)
+    app_state = state;
+
+  if (ws_conn) {
+    if (soup_websocket_connection_get_state (ws_conn) ==
+        SOUP_WEBSOCKET_STATE_OPEN)
+      /* This will call us again */
+      soup_websocket_connection_close (ws_conn, 1000, "");
+    else
+      g_clear_object (&ws_conn);
+  }
+
+  /* To allow usage as a GSourceFunc */
+  return G_SOURCE_REMOVE;
+}
+
+static gchar *
+get_string_from_json_object (JsonObject * object)
+{
+  JsonNode *root;
+  JsonGenerator *generator;
+  gchar *text;
+
+  /* Make it the root node */
+  root = json_node_init_object (json_node_alloc (), object);
+  generator = json_generator_new ();
+  json_generator_set_root (generator, root);
+  text = json_generator_to_data (generator, NULL);
+
+  /* Release everything */
+  g_object_unref (generator);
+  json_node_free (root);
+  return text;
+}
+
+
+static void
+send_sdp_to_peer (GstWebRTCSessionDescription * desc)
+{
+  gchar *text;
+  JsonObject *msg, *sdp;
+
+  if (app_state < PEER_CALL_NEGOTIATING) {
+    cleanup_and_quit_loop ("Can't send SDP to peer, not in call",
+        APP_STATE_ERROR);
+    return;
+  }
+
+  text = gst_sdp_message_as_text (desc->sdp);
+  sdp = json_object_new ();
+
+  if (desc->type == GST_WEBRTC_SDP_TYPE_OFFER) {
+    gst_print ("Sending offer:\n%s\n", text);
+    json_object_set_string_member (sdp, "type", "offer");
+  } else if (desc->type == GST_WEBRTC_SDP_TYPE_ANSWER) {
+    gst_print ("Sending answer:\n%s\n", text);
+    json_object_set_string_member (sdp, "type", "answer");
+  } else {
+    g_assert_not_reached ();
+  }
+
+  json_object_set_string_member (sdp, "sdp", text);
+  g_free (text);
+
+  msg = json_object_new ();
+  json_object_set_object_member (msg, "sdp", sdp);
+  text = get_string_from_json_object (msg);
+  json_object_unref (msg);
+
+  soup_websocket_connection_send_text (ws_conn, text);
+  g_free (text);
+}
+
+
+static void
+on_answer_created (GstPromise * promise, gpointer user_data)
+{
+  GstElement* webrtc = user_data;
+  GstWebRTCSessionDescription *answer = NULL;
+  const GstStructure *reply;
+
+  g_assert_cmphex (app_state, ==, PEER_CALL_NEGOTIATING);
+
+  g_assert_cmphex (gst_promise_wait (promise), ==, GST_PROMISE_RESULT_REPLIED);
+  reply = gst_promise_get_reply (promise);
+  gst_structure_get (reply, "answer",
+      GST_TYPE_WEBRTC_SESSION_DESCRIPTION, &answer, NULL);
+  gst_promise_unref (promise);
+
+  promise = gst_promise_new ();
+  g_print("--> 4\n");
+  g_signal_emit_by_name (webrtc, "set-local-description", answer, promise);
+  gst_promise_interrupt (promise);
+  gst_promise_unref (promise);
+
+  /* Send answer to peer */
+  send_sdp_to_peer (answer);
+  gst_webrtc_session_description_free (answer);
+}
+
+
+static void
+on_offer_set (GstPromise * promise, gpointer user_data)
+{
+  GstElement* webrtc = user_data;
+  gst_promise_unref (promise);
+  promise = gst_promise_new_with_change_func (on_answer_created, webrtc, NULL);
+  g_print("--> 3\n");
+  g_signal_emit_by_name (webrtc, "create-answer", NULL, promise);
+}
+
+static void
+on_offer_received (GstSDPMessage * sdp, GstElement* webrtc)
+{
+  GstWebRTCSessionDescription *offer = NULL;
+  GstPromise *promise;
+
+  offer = gst_webrtc_session_description_new (GST_WEBRTC_SDP_TYPE_OFFER, sdp);
+  g_assert_nonnull (offer);
+
+  /* Set remote description on our pipeline */
+  {
+    promise = gst_promise_new_with_change_func (on_offer_set, webrtc, NULL);
+    g_print("--> 2 %x \n",webrtc);
+    g_signal_emit_by_name (webrtc, "set-remote-description", offer, promise);
+  }
+  gst_webrtc_session_description_free (offer);
 }
 
 gboolean vrsmsz_add_stream(gpointer data){
@@ -392,7 +528,6 @@ gboolean vrsmsz_add_stream(gpointer data){
 #else
   if(!vs->video_encoder){
      sprintf(name,"vs%d-video_encoder",vc->video_id);
-#ifndef X264_ENC
      if(vrsmsz->mode == 4 || vrsmsz->mode==8){
         vs->video_encoder= gst_element_factory_make("nvh264enc", name); // 
         if(!vs->video_encoder){
@@ -400,15 +535,17 @@ gboolean vrsmsz_add_stream(gpointer data){
           return FALSE;
         }
         g_object_set (vs->video_encoder, "preset", 4, "bitrate", 1000, NULL);
-     }else 
-#endif
-     if( vrsmsz->mode == 4 || vrsmsz->mode == 8 ){
-        vs->video_encoder= gst_element_factory_make("x264enc", name); // 
-        if(!vs->video_encoder){
+     }
+  }
+
+  if(!vs->venc_tee){
+     sprintf(name,"vs%d-venc_tee",vc->video_id);
+     if(vrsmsz->mode == 4 || vrsmsz->mode==8){
+        vs->venc_tee= gst_element_factory_make("tee", name); // 
+        if(!vs->venc_tee){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", 2000,NULL);
      }
   }
 
@@ -487,10 +624,10 @@ gboolean vrsmsz_add_stream(gpointer data){
      g_object_set (vs->outer, "location", vc->preview_url, NULL);
    }
 
-   gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
+   gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
    gst_bin_add(GST_BIN(vrsmsz->pipeline),vs->bin);
 
-   if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->video_encoder_queue,vs->video_encoder_parser, vs->muxer,vs->outer,NULL)){
+   if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->muxer,vs->outer,NULL)){
       g_print("push link failed\n");
       return FALSE;
    }
@@ -517,8 +654,8 @@ gboolean vrsmsz_add_stream(gpointer data){
   gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
    
    msg->vc = vc;
-   vc->src_id = vc->stream_id;
-   sprintf(vc->our_id,"%d",vc->src_id);
+   vc->ps.src_id = vc->stream_id;
+   sprintf(vc->ps.our_id,"%d",vc->ps.src_id);
    register_with_server (vc);
 
    return FALSE;
@@ -542,7 +679,7 @@ gboolean  vrsmsz_remove_all(){
 	  vs = &(vc->vs);
           gst_element_set_state(vs->bin,GST_STATE_NULL); // sink will not deadlock
           gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->bin,NULL);
-          vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->video_encoder_queue=NULL,vs->video_encoder_parser=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
+          vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->venc_tee=NULL,vs->video_encoder_queue=NULL,vs->video_encoder_parser=NULL,vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
 	  vs->bin = NULL;
 	  vrsmsz->streams_id[i] = -1; 
 	}
@@ -654,7 +791,7 @@ gboolean vrsmsz_remove_stream(gpointer data){
    //gst_object_unref(vs->muxer);
    //gst_object_unref(vs->outer);
    gst_bin_remove_many(GST_BIN (vrsmsz->pipeline),vs->bin,NULL);
-   vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->video_encoder_queue=NULL;vs->video_encoder_parser=NULL;vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
+   vs->uridecodebin=NULL,vs->vdec_tee=NULL,vs->vdec_tee_queue=NULL,vs->video_scale=NULL,vs->video_capsfilter=NULL, vs->video_encoder=NULL,vs->venc_tee=NULL,vs->video_encoder_queue=NULL;vs->video_encoder_parser=NULL;vs->audio_convert=NULL,vs->audio_encoder=NULL,vs->aenc_tee=NULL,vs->aenc_tee_queue=NULL,vs->muxer=NULL,vs->outer=NULL;
    vrsmsz->stream_nbs--;
    vc->tracks = 0;
    vc->video_id = -1;
@@ -2567,6 +2704,7 @@ void chan_stream_init(vrstream_t* vs){
   vs->video_scale= NULL;
   vs->video_capsfilter= NULL;
   vs->video_encoder= NULL;
+  vs->venc_tee= NULL;
   vs->video_encoder_queue = NULL;
   vs->video_encoder_parser= NULL;
   vs->audio_convert= NULL;
@@ -2616,9 +2754,234 @@ void director_stream_init(drstream_t* ds){
   //vrsmsz->comp= NULL;
 }
 
-static SoupWebsocketConnection *ws_conn = NULL;
-static enum AppState app_state = 0;
-static const gchar *server_url = "wss://webrtc.nirbheek.in:8443";
+
+static void
+on_negotiation_needed (GstElement * element, gpointer user_data)
+{
+  app_state = PEER_CALL_NEGOTIATING;
+
+  gchar *msg = g_strdup_printf ("OFFER_REQUEST");
+  soup_websocket_connection_send_text (ws_conn, msg);
+  g_free (msg);
+}
+
+static void
+send_ice_candidate_message (GstElement * webrtc G_GNUC_UNUSED, guint mlineindex,
+    gchar * candidate, gpointer user_data G_GNUC_UNUSED)
+{
+  gchar *text;
+  JsonObject *ice, *msg;
+
+  if (app_state < PEER_CALL_NEGOTIATING) {
+    cleanup_and_quit_loop ("Can't send ICE, not in call", APP_STATE_ERROR);
+    return;
+  }
+
+  ice = json_object_new ();
+  json_object_set_string_member (ice, "candidate", candidate);
+  json_object_set_int_member (ice, "sdpMLineIndex", mlineindex);
+  msg = json_object_new ();
+  json_object_set_object_member (msg, "ice", ice);
+  text = get_string_from_json_object (msg);
+  json_object_unref (msg);
+
+  soup_websocket_connection_send_text (ws_conn, text);
+  g_free (text);
+}
+
+
+static void
+on_ice_gathering_state_notify (GstElement * webrtcbin, GParamSpec * pspec,
+    gpointer user_data)
+{
+  GstWebRTCICEGatheringState ice_gather_state;
+  const gchar *new_state = "unknown";
+
+  g_object_get (webrtcbin, "ice-gathering-state", &ice_gather_state, NULL);
+  switch (ice_gather_state) {
+    case GST_WEBRTC_ICE_GATHERING_STATE_NEW:
+      new_state = "new";
+      break;
+    case GST_WEBRTC_ICE_GATHERING_STATE_GATHERING:
+      new_state = "gathering";
+      break;
+    case GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE:
+      new_state = "complete";
+      break;
+  }
+  gst_print ("ICE gathering state changed to %s\n", new_state);
+}
+
+static void
+on_incoming_stream (GstElement * webrtc, GstPad * pad, GstElement * pipe)
+{
+  GstElement *fakesink;
+  GstPad *sinkpad;
+
+  if (GST_PAD_DIRECTION (pad) != GST_PAD_SRC)
+    return;
+
+  fakesink = gst_element_factory_make ("fakesink", NULL);
+  gst_bin_add (GST_BIN (pipe), fakesink);
+  gst_element_sync_state_with_parent (fakesink);
+
+}
+
+static gboolean
+start_pipeline (gint our_id){
+   gchar name[1024];
+   vrchan_t* vc = vrsmsz->streams+our_id;
+   vrstream_t* vs = &vc->vs;
+   PeerStruct* ps = &vc->ps;
+   GstPadLinkReturn ret;
+   g_print("our_id %d\n",our_id);
+   
+   sprintf(name,"webrtcbin-%d",our_id);
+   ps->webrtc = gst_element_factory_make("webrtcbin", name);
+   if( !ps->webrtc ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   gst_util_set_object_arg (G_OBJECT (ps->webrtc), "stun-server","stun://stun.l.google.com:19302");
+   //***************************************************************/
+   sprintf(name,"audioenc_queue-%d",our_id);
+   ps->audioenc_queue = gst_element_factory_make("queue", name);
+   if( !ps->audioenc_queue ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   sprintf(name,"audiortppay-%d",our_id);
+   ps->audiortppay = gst_element_factory_make("rtpmp4apay", name);
+   if( !ps->audiortppay ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   sprintf(name,"audioenc_queue-%d",our_id);
+   ps->audioenc_queue = gst_element_factory_make("queue", name);
+   if( !ps->audioenc_queue ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   sprintf(name,"audiocaps-%d",our_id);
+   ps->audiocaps = gst_element_factory_make("capsfilter", name);
+   if( !ps->audiocaps){
+     g_print("error make\n");
+     return FALSE;
+   }
+   gst_util_set_object_arg (G_OBJECT (ps->audiocaps), "caps",
+      "application/x-rtp,media=audio,encoding-name=MP4A-LATM,payload=127");
+   //***************************************************************/
+   sprintf(name,"videoenc_queue-%d",our_id);
+   ps->videoenc_queue = gst_element_factory_make("queue", name);
+   if( !ps->videoenc_queue ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   sprintf(name,"videortppay-%d",our_id);
+   ps->videortppay = gst_element_factory_make("rtph264pay", name);
+   if( !ps->videortppay ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   sprintf(name,"videoenc_queue-%d",our_id);
+   ps->videoenc_queue = gst_element_factory_make("queue", name);
+   if( !ps->videoenc_queue ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   sprintf(name,"videocaps-%d",our_id);
+   ps->videocaps = gst_element_factory_make("capsfilter", name);
+   if( !ps->videocaps ){
+     g_print("error make\n");
+     return FALSE;
+   }
+   gst_util_set_object_arg (G_OBJECT (ps->videocaps), "caps",
+      "application/x-rtp,media=video,encoding-name=H264,payload=96");
+
+   sprintf(name,"peerbin-%d",our_id);
+   ps->bin = gst_bin_new(name);
+   gst_bin_add_many(GST_BIN(ps->bin), 
+     ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,
+     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,NULL
+   );
+   gst_bin_add(GST_BIN(vrsmsz->pipeline),ps->bin);
+
+   if(!gst_element_link_many(
+     ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,ps->webrtc)){
+	g_print ("webrtc link 1  failed. \n");
+   }
+   if(!gst_element_link_many(
+     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc)){
+	g_print ("webrtc link 2 failed. \n");
+   }
+
+   ps->audio_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
+   if(!ps->audio_srcpad)
+	g_print ("webrtc arnc failed. \n");
+   ps->audio_ghost_srcpad = gst_ghost_pad_new ("audio-ghost-srcpad", ps->audio_srcpad);
+   gst_element_add_pad (vs->bin, ps->audio_ghost_srcpad);
+
+   ps->audio_sinkpad = gst_element_get_static_pad (ps->audioenc_queue, "sink");
+   if(!ps->audio_sinkpad)
+	g_print ("webrtc asnc failed. \n");
+   ps->audio_ghost_sinkpad = gst_ghost_pad_new ("audio-ghost-sinkpad", ps->audio_sinkpad);
+   if(!gst_element_add_pad (ps->bin, ps->audio_ghost_sinkpad)){
+	g_print ("webrtc asnc failed. \n");
+   }
+
+   ret = gst_pad_link (ps->audio_ghost_srcpad,ps->audio_ghost_sinkpad);
+   if (GST_PAD_LINK_FAILED (ret)) {
+      g_print ("webrtc link 3 failed %d\n",ret);
+   }
+
+   ps->video_srcpad = gst_element_get_request_pad (vs->venc_tee, "src_%u");
+   if(!ps->video_srcpad)
+      g_print ("webrtc vrnc failed. \n");
+   ps->video_ghost_srcpad = gst_ghost_pad_new ("video-ghost-srcpad", ps->video_srcpad);
+   gst_element_add_pad (vs->bin, ps->video_ghost_srcpad);
+
+   ps->video_sinkpad = gst_element_get_static_pad (ps->videoenc_queue, "sink");
+   if(!ps->video_sinkpad)
+      g_print ("webrtc vsnc failed. \n");
+   ps->video_ghost_sinkpad = gst_ghost_pad_new ("video-ghost-sinkpad", ps->video_sinkpad);
+   gst_element_add_pad (ps->bin, ps->video_ghost_sinkpad);
+
+   ret = gst_pad_link (ps->video_ghost_srcpad,ps->video_ghost_sinkpad);
+   if (GST_PAD_LINK_FAILED (ret)) {
+      g_print ("webrtc link 4 failed\n");
+   }
+
+  g_signal_connect (ps->webrtc, "on-negotiation-needed",
+      G_CALLBACK (on_negotiation_needed), NULL);
+  g_signal_connect (ps->webrtc, "on-ice-candidate",
+      G_CALLBACK (send_ice_candidate_message), NULL);
+  g_signal_connect (ps->webrtc, "notify::ice-gathering-state",
+      G_CALLBACK (on_ice_gathering_state_notify), NULL);
+  g_signal_connect (ps->webrtc, "pad-added", 
+      G_CALLBACK (on_incoming_stream), ps->bin);
+
+  //gst_element_set_state (ps->bin, GST_STATE_READY);
+
+  vrsmsz_set_play(ps->bin);
+  vrsmsz_play();
+  g_print("--> 5\n");
+  return FALSE;
+}
+
+static gboolean
+_start_pipeline (gpointer data){
+   vrchan_t* vc = vrsmsz->streams+0;
+   //vrstream_t* vs = &vc->vs;
+   PeerStruct* ps = &vc->ps;
+   gint our_id = *(gint*)data;
+   if (start_pipeline (our_id)) {
+     cleanup_and_quit_loop ("ERROR: failed to start pipeline",
+     PEER_CALL_ERROR);
+   }
+   on_offer_received (ps->sdp, ps->webrtc);
+   return FALSE;
+}
+
 
 static void
 on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
@@ -2652,6 +3015,7 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
     gst_print ("Registered with server\n");
 
   } else if (g_strcmp0 (text, "SESSION_OK") == 0) {
+#if 0
     /* The call initiated by us has been setup by the server; now we can start
      * negotiation */
     if (app_state != PEER_CONNECTING) {
@@ -2675,6 +3039,7 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
     if (!start_pipeline (TRUE))
       cleanup_and_quit_loop ("ERROR: failed to start pipeline",
           PEER_CALL_ERROR);
+#endif
   } else if (g_str_has_prefix (text, "ERROR")) {
     /* Handle errors */
     switch (app_state) {
@@ -2715,14 +3080,20 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
 
     /* If peer connection wasn't made yet and we are expecting peer will
      * connect to us, launch pipeline at this moment */
-    if (!webrtc1 && our_id) {
-      if (!start_pipeline (FALSE)) {
+    //if (!webrtc1 && our_id) {
+   vrchan_t* vc = vrsmsz->streams+0;
+   //vrstream_t* vs = &vc->vs;
+   PeerStruct* ps = &vc->ps;
+    g_idle_add(_start_pipeline, &ps->src_id);
+    /*  
+       if (!start_pipeline (0)) {
         cleanup_and_quit_loop ("ERROR: failed to start pipeline",
             PEER_CALL_ERROR);
       }
+    */
 
       app_state = PEER_CALL_NEGOTIATING;
-    }
+    //}
 
     object = json_node_get_object (root);
     /* Check type of JSON message */
@@ -2756,6 +3127,7 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
       g_assert_cmphex (ret, ==, GST_SDP_OK);
 
       if (g_str_equal (sdptype, "answer")) {
+#if 0
         gst_print ("Received answer:\n%s\n", text);
         answer = gst_webrtc_session_description_new (GST_WEBRTC_SDP_TYPE_ANSWER,
             sdp);
@@ -2770,9 +3142,11 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
           gst_promise_unref (promise);
         }
         app_state = PEER_CALL_STARTED;
+#endif
       } else {
         gst_print ("Received offer:\n%s\n", text);
-        on_offer_received (sdp);
+	ps->sdp = sdp;
+        //on_offer_received (sdp, ps->webrtc);
       }
 
     } else if (json_object_has_member (object, "ice")) {
@@ -2784,7 +3158,8 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
       sdpmlineindex = json_object_get_int_member (child, "sdpMLineIndex");
 
       /* Add ice candidate sent by remote peer */
-      g_signal_emit_by_name (webrtc1, "add-ice-candidate", sdpmlineindex,
+      g_print("--> 1\n");
+      g_signal_emit_by_name (ps->webrtc, "add-ice-candidate", sdpmlineindex,
           candidate);
     } else {
       gst_printerr ("Ignoring unknown JSON message:\n%s\n", text);
@@ -2839,8 +3214,8 @@ connect_to_websocket_server_async (void)
   const char *https_aliases[] = { "wss", NULL };
 
   session =
-      soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, TRUE,
-      //SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
+      soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE,
+      SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
       //SOUP_SESSION_SSL_CA_FILE, "/etc/ssl/certs/ca-bundle.crt",
       SOUP_SESSION_HTTPS_ALIASES, https_aliases, NULL);
 

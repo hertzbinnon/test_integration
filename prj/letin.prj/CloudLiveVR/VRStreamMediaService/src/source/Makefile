@@ -20,6 +20,9 @@ GLIB_JSON_LDFLAGS = $(shell pkg-config --libs json-glib-1.0)
 NANO_CFLAGS = $(shell pkg-config --cflags libcsoap)
 NANO_LDFLAGS = $(shell pkg-config --libs libcsoap)
 
+GWEBRTC_LDFLAGS = $(shell pkg-config --libs gstreamer-webrtc-1.0) 
+GSDP_LDFLAGS = $(shell pkg-config --libs gstreamer-sdp-1.0)
+
 all: VRsmsz #addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe
 
 clean:
@@ -42,7 +45,7 @@ vrsmsz.o : vrsmsz.c vrsmsz.h
 	$(CC) -c  vrsmsz.c $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_CFLAGS) $(GSOUP_CFLAGS) 
 
 VRsmsz  : httpd.o main.o vrsmsz.o vrsync.o
-	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GSOUP_LDFLAGS) $(GWEBRTC_LDFLAGS) $(GSDP_LDFLAGS)
 
 #addstream : examples/addstream.c
 #	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)

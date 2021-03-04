@@ -13,7 +13,6 @@ int main (int argc, char *argv[])
     return -1;
   }
   vrsmsz_init(argc,argv);
-  connect_to_websocket_server_async ();
   vrsmsz_start();// loop
   vrsmsz_stop();// null
   vrsmsz_deinit();

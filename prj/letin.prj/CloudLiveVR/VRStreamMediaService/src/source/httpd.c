@@ -223,7 +223,7 @@ int create_http_server(int port , char* tls_cert_file, char* tls_key_file, gpoin
   argv[1] = g_strdup(p);
 	//hlog_set_level(HLOG_VERBOSE);
   if (httpd_init(argc, argv)) {
-    fprintf(stderr, "can not init httpd");
+    fprintf(stderr, "can not init httpd\n");
     return 1;
   }
   g_free(argv[0]);
