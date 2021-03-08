@@ -2811,7 +2811,7 @@ on_ice_gathering_state_notify (GstElement * webrtcbin, GParamSpec * pspec,
   }
   gst_print ("ICE gathering state changed to %s\n", new_state);
 }
-
+/*
 static void
 on_incoming_stream (GstElement * webrtc, GstPad * pad, GstElement * pipe)
 {
@@ -2826,6 +2826,95 @@ on_incoming_stream (GstElement * webrtc, GstPad * pad, GstElement * pipe)
   gst_element_sync_state_with_parent (fakesink);
 
 }
+*/
+
+static void
+handle_media_stream (GstPad * pad, GstElement * pipe, const char *convert_name,
+    const char *sink_name)
+{
+  GstPad *qpad;
+  GstElement *q, *conv, *resample, *sink;
+  GstPadLinkReturn ret;
+
+  gst_println ("Trying to handle stream with %s ! %s", convert_name, sink_name);
+
+  q = gst_element_factory_make ("queue", NULL);
+  g_assert_nonnull (q);
+  conv = gst_element_factory_make (convert_name, NULL);
+  g_assert_nonnull (conv);
+  sink = gst_element_factory_make (sink_name, NULL);
+  g_assert_nonnull (sink);
+
+  if (g_strcmp0 (convert_name, "audioconvert") == 0) {
+    /* Might also need to resample, so add it just in case.
+     * Will be a no-op if it's not required. */
+    resample = gst_element_factory_make ("audioresample", NULL);
+    g_assert_nonnull (resample);
+    gst_bin_add_many (GST_BIN (pipe), q, conv, resample, sink, NULL);
+    gst_element_sync_state_with_parent (q);
+    gst_element_sync_state_with_parent (conv);
+    gst_element_sync_state_with_parent (resample);
+    gst_element_sync_state_with_parent (sink);
+    gst_element_link_many (q, conv, resample, sink, NULL);
+  } else {
+    gst_bin_add_many (GST_BIN (pipe), q, conv, sink, NULL);
+    gst_element_sync_state_with_parent (q);
+    gst_element_sync_state_with_parent (conv);
+    gst_element_sync_state_with_parent (sink);
+    gst_element_link_many (q, conv, sink, NULL);
+  }
+
+  qpad = gst_element_get_static_pad (q, "sink");
+
+  ret = gst_pad_link (pad, qpad);
+  g_assert_cmphex (ret, ==, GST_PAD_LINK_OK);
+}
+static void
+on_incoming_decodebin_stream (GstElement * decodebin, GstPad * pad,
+    GstElement * pipe)
+{
+  GstCaps *caps;
+  const gchar *name;
+
+  if (!gst_pad_has_current_caps (pad)) {
+    gst_printerr ("Pad '%s' has no caps, can't do anything, ignoring\n",
+        GST_PAD_NAME (pad));
+    return;
+  }
+
+  caps = gst_pad_get_current_caps (pad);
+  name = gst_structure_get_name (gst_caps_get_structure (caps, 0));
+
+  if (g_str_has_prefix (name, "video")) {
+    handle_media_stream (pad, pipe, "videoconvert", "autovideosink");
+  } else if (g_str_has_prefix (name, "audio")) {
+    handle_media_stream (pad, pipe, "audioconvert", "autoaudiosink");
+  } else {
+    gst_printerr ("Unknown pad %s, ignoring", GST_PAD_NAME (pad));
+  }
+  gst_debug_bin_to_dot_file (GST_BIN_CAST(pipe), GST_DEBUG_GRAPH_SHOW_ALL, "webrtc1");
+}
+
+static void
+on_incoming_stream (GstElement * webrtc, GstPad * pad, GstElement * pipe)
+{
+  GstElement *decodebin;
+  GstPad *sinkpad;
+
+  if (GST_PAD_DIRECTION (pad) != GST_PAD_SRC)
+    return;
+
+  decodebin = gst_element_factory_make ("decodebin", NULL);
+  g_signal_connect (decodebin, "pad-added",
+      G_CALLBACK (on_incoming_decodebin_stream), pipe);
+  gst_bin_add (GST_BIN (pipe), decodebin);
+  gst_element_sync_state_with_parent (decodebin);
+
+  sinkpad = gst_element_get_static_pad (decodebin, "sink");
+  gst_pad_link (pad, sinkpad);
+  gst_object_unref (sinkpad);
+}
+
 
 static gboolean
 start_pipeline (gint our_id){
@@ -2856,9 +2945,9 @@ start_pipeline (gint our_id){
      g_print("error make\n");
      return FALSE;
    }
-   sprintf(name,"audioenc_queue-%d",our_id);
-   ps->audioenc_queue = gst_element_factory_make("queue", name);
-   if( !ps->audioenc_queue ){
+   sprintf(name,"audioqueue-%d",our_id);
+   ps->audioqueue = gst_element_factory_make("queue", name);
+   if( !ps->audioqueue ){
      g_print("error make\n");
      return FALSE;
    }
@@ -2883,9 +2972,9 @@ start_pipeline (gint our_id){
      g_print("error make\n");
      return FALSE;
    }
-   sprintf(name,"videoenc_queue-%d",our_id);
-   ps->videoenc_queue = gst_element_factory_make("queue", name);
-   if( !ps->videoenc_queue ){
+   sprintf(name,"videoqueue-%d",our_id);
+   ps->videoqueue = gst_element_factory_make("queue", name);
+   if( !ps->videoqueue ){
      g_print("error make\n");
      return FALSE;
    }
@@ -2901,20 +2990,25 @@ start_pipeline (gint our_id){
    sprintf(name,"peerbin-%d",our_id);
    ps->bin = gst_bin_new(name);
    gst_bin_add_many(GST_BIN(ps->bin), 
+#if 0
      ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,
-     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,NULL
+#endif
+     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc,NULL
    );
    gst_bin_add(GST_BIN(vrsmsz->pipeline),ps->bin);
 
+#if 0
    if(!gst_element_link_many(
-     ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,ps->webrtc)){
-	g_print ("webrtc link 1  failed. \n");
+     ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,ps->webrtc, NULL)){
+	g_print ("webrtc link 1  failed. %x %x %x %x %x \n",ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,ps->webrtc);
    }
+#endif
    if(!gst_element_link_many(
-     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc)){
+     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc, NULL)){
 	g_print ("webrtc link 2 failed. \n");
    }
 
+#if 0
    ps->audio_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
    if(!ps->audio_srcpad)
 	g_print ("webrtc arnc failed. \n");
@@ -2933,6 +3027,7 @@ start_pipeline (gint our_id){
    if (GST_PAD_LINK_FAILED (ret)) {
       g_print ("webrtc link 3 failed %d\n",ret);
    }
+#endif
 
    ps->video_srcpad = gst_element_get_request_pad (vs->venc_tee, "src_%u");
    if(!ps->video_srcpad)
@@ -2960,11 +3055,12 @@ start_pipeline (gint our_id){
   g_signal_connect (ps->webrtc, "pad-added", 
       G_CALLBACK (on_incoming_stream), ps->bin);
 
-  //gst_element_set_state (ps->bin, GST_STATE_READY);
+  gst_element_set_state (ps->bin, GST_STATE_PLAYING);
 
   vrsmsz_set_play(ps->bin);
   vrsmsz_play();
   g_print("--> 5\n");
+  gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz-webrtc");
   return FALSE;
 }
 
@@ -3084,7 +3180,6 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
    vrchan_t* vc = vrsmsz->streams+0;
    //vrstream_t* vs = &vc->vs;
    PeerStruct* ps = &vc->ps;
-    g_idle_add(_start_pipeline, &ps->src_id);
     /*  
        if (!start_pipeline (0)) {
         cleanup_and_quit_loop ("ERROR: failed to start pipeline",
@@ -3145,6 +3240,7 @@ on_server_message (SoupWebsocketConnection * conn, SoupWebsocketDataType type,
 #endif
       } else {
         gst_print ("Received offer:\n%s\n", text);
+        g_idle_add(_start_pipeline, &ps->src_id);
 	ps->sdp = sdp;
         //on_offer_received (sdp, ps->webrtc);
       }
