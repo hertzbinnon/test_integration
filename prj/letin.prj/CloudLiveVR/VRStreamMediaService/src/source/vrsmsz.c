@@ -275,7 +275,6 @@ gint _autoplug_select_cb(GstElement* decodebin, GstPad* pad, GstCaps*caps, GValu
  *
 */
 
-
 static gboolean
 register_with_server (vrchan_t* vc){
   gchar *hello;
@@ -336,6 +335,55 @@ get_string_from_json_object (JsonObject * object)
   return text;
 }
 
+static void
+data_channel_on_error (GObject * dc, gpointer user_data)
+{
+  cleanup_and_quit_loop ("Data channel error", 0);
+}
+
+static void
+data_channel_on_open (GObject * dc, gpointer user_data)
+{
+  GBytes *bytes = g_bytes_new ("data", strlen ("data"));
+  gst_print ("data channel opened\n");
+  g_signal_emit_by_name (dc, "send-string", "Hi! from GStreamer");
+  g_signal_emit_by_name (dc, "send-data", bytes);
+  g_bytes_unref (bytes);
+}
+
+static void
+data_channel_on_close (GObject * dc, gpointer user_data)
+{
+  cleanup_and_quit_loop ("Data channel closed", 0);
+}
+
+static void
+data_channel_on_message_string (GObject * dc, gchar * str, gpointer user_data)
+{
+  gst_print ("Received data channel message: %s\n", str);
+}
+
+static void
+connect_data_channel_signals (GObject * data_channel)
+{
+  g_signal_connect (data_channel, "on-error",
+      G_CALLBACK (data_channel_on_error), NULL);
+  g_signal_connect (data_channel, "on-open", G_CALLBACK (data_channel_on_open),
+      NULL);
+  g_signal_connect (data_channel, "on-close",
+      G_CALLBACK (data_channel_on_close), NULL);
+  g_signal_connect (data_channel, "on-message-string",
+      G_CALLBACK (data_channel_on_message_string), NULL);
+}
+
+static void
+on_data_channel (GstElement * webrtc, GObject * data_channel,
+    gpointer user_data)
+{
+  PeerStruct *ps = user_data;
+  connect_data_channel_signals (data_channel);
+  ps->receive_channel = data_channel;
+}
 
 static void
 send_sdp_to_peer (GstWebRTCSessionDescription * desc)
@@ -537,7 +585,18 @@ gboolean vrsmsz_add_stream(gpointer data){
         g_object_set (vs->video_encoder, "preset", 4, "bitrate", 1000, NULL);
      }
   }
-
+#if 0
+  if(!vs->video_enccapsfilter){
+     sprintf(name,"vs%d-video_enccapsfilter",vc->video_id);
+     vs->video_enccapsfilter = gst_element_factory_make("capsfilter", name);
+    if(!vs->video_enccapsfilter){
+      g_print("error make\n");
+      return FALSE;
+    }
+     gst_util_set_object_arg (G_OBJECT (vs->video_enccapsfilter), "caps",
+      "video/x-h264, profile=high,framerate=29/1");
+  }
+#endif
   if(!vs->venc_tee){
      sprintf(name,"vs%d-venc_tee",vc->video_id);
      if(vrsmsz->mode == 4 || vrsmsz->mode==8){
@@ -575,6 +634,7 @@ gboolean vrsmsz_add_stream(gpointer data){
       return FALSE;
     }
    }
+#if 0
    if(!vs->audio_encoder){
      sprintf(name,"vs%d-audio_encoder",vc->audio_id);
      vs->audio_encoder = gst_element_factory_make("voaacenc", name);
@@ -582,7 +642,16 @@ gboolean vrsmsz_add_stream(gpointer data){
       g_print("error make\n");
       return FALSE;
     }
+#else
+   if(!vs->audio_encoder){
+     sprintf(name,"vs%d-audio_encoder",vc->audio_id);
+     vs->audio_encoder = gst_element_factory_make("opusenc", name);
+    if(!vs->audio_encoder){
+      g_print("error make\n");
+      return FALSE;
+    }
    }
+#endif
    if(!vs->aenc_tee){
      sprintf(name,"vs%d-aenc_tee",vc->audio_id);
      vs->aenc_tee = gst_element_factory_make("tee", name);
@@ -603,6 +672,7 @@ gboolean vrsmsz_add_stream(gpointer data){
      g_object_set(vs->aenc_tee_queue,"max-size-buffers",   0,          NULL);
      g_object_set(vs->aenc_tee_queue,"max-size-bytes",     0,          NULL);
    }
+#if 0
    if(!vs->muxer){
      sprintf(name,"vs%d-muxer",vc->video_id);
      vs->muxer = gst_element_factory_make("flvmux", name);
@@ -615,7 +685,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    }
    if(!vs->outer){
      sprintf(name,"vs%d-outer",vc->video_id);
-     vs->outer= gst_element_factory_make("rtmpsink", name);
+     vs->outer= gst_element_factory_make("rtmp2sink", name);
      if(!vs->outer){
        g_print("error make\n");
        return FALSE;
@@ -623,16 +693,43 @@ gboolean vrsmsz_add_stream(gpointer data){
      g_print("preview put uri = %s\n",vc->preview_url);
      g_object_set (vs->outer, "location", vc->preview_url, NULL);
    }
-
-   gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
+#else
+   if(!vs->audio_encoder_parser){
+     sprintf(name,"vs%d-audio_encoder_parser",vc->video_id);
+     vs->audio_encoder_parser= gst_element_factory_make("opusparse", name);
+     if(!vs->audio_encoder_parser){
+       g_print("error make\n");
+       return FALSE;
+     }
+   }
+   if(!vs->muxer){
+     sprintf(name,"vs%d-muxer",vc->video_id);
+     vs->muxer = gst_element_factory_make("mpegtsmux", name);
+     if(!vs->muxer){
+       g_print("error make\n");
+       return FALSE;
+     }
+   }
+   if(!vs->outer){
+     sprintf(name,"vs%d-outer",vc->video_id);
+     vs->outer= gst_element_factory_make("udpsink", name);
+     if(!vs->outer){
+       g_print("error make\n");
+       return FALSE;
+     }
+     g_object_set (vs->outer, "host", "127.0.0.1", NULL);
+     g_object_set (vs->outer, "port", 12346, NULL);
+   }
+#endif
+   gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder, /*vs->video_enccapsfilter, */vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_encoder,vs->audio_encoder_parser, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
    gst_bin_add(GST_BIN(vrsmsz->pipeline),vs->bin);
 
-   if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->muxer,vs->outer,NULL)){
+   if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder, /*vs->video_enccapsfilter, */vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->muxer,vs->outer,NULL)){
       g_print("push link failed\n");
       return FALSE;
    }
 
-   if(!gst_element_link_many(vs->audio_convert,vs->audio_encoder,vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,NULL)){
+   if(!gst_element_link_many(vs->audio_convert,vs->audio_encoder,vs->audio_encoder_parser,vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,NULL)){
       g_print("push link failed\n");
       return FALSE;
    }
@@ -1254,7 +1351,7 @@ gboolean director_preview_create(vrstream_t* vs){
   }
   if(!vrsmsz->director.ds.pre_outer){
      sprintf(name,"%s-pre_outer","vrsmsz");
-    vrsmsz->director.ds.pre_outer= gst_element_factory_make("rtmpsink", name);
+    vrsmsz->director.ds.pre_outer= gst_element_factory_make("rtmp2sink", name);
     if(!vrsmsz->director.ds.pre_outer){
       g_print("error make\n");
       return FALSE;
@@ -2932,6 +3029,7 @@ start_pipeline (gint our_id){
      return FALSE;
    }
    gst_util_set_object_arg (G_OBJECT (ps->webrtc), "stun-server","stun://stun.l.google.com:19302");
+   gst_util_set_object_arg (G_OBJECT (ps->webrtc), "bundle-policy","max-bundle");
    //***************************************************************/
    sprintf(name,"audioenc_queue-%d",our_id);
    ps->audioenc_queue = gst_element_factory_make("queue", name);
@@ -2940,7 +3038,11 @@ start_pipeline (gint our_id){
      return FALSE;
    }
    sprintf(name,"audiortppay-%d",our_id);
+#if 0
    ps->audiortppay = gst_element_factory_make("rtpmp4apay", name);
+#else
+   ps->audiortppay = gst_element_factory_make("rtpopuspay", name);
+#endif
    if( !ps->audiortppay ){
      g_print("error make\n");
      return FALSE;
@@ -2958,7 +3060,12 @@ start_pipeline (gint our_id){
      return FALSE;
    }
    gst_util_set_object_arg (G_OBJECT (ps->audiocaps), "caps",
-      "application/x-rtp,media=audio,encoding-name=MP4A-LATM,payload=127");
+#if 0
+      "application/x-rtp,media=audio,encoding-name=MP4A-LATM,payload=111");
+#else
+      "application/x-rtp,media=audio,encoding-name=OPUS,payload=111"
+#endif
+   );
    //***************************************************************/
    sprintf(name,"videoenc_queue-%d",our_id);
    ps->videoenc_queue = gst_element_factory_make("queue", name);
@@ -2985,30 +3092,25 @@ start_pipeline (gint our_id){
      return FALSE;
    }
    gst_util_set_object_arg (G_OBJECT (ps->videocaps), "caps",
-      "application/x-rtp,media=video,encoding-name=H264,payload=96");
+      "application/x-rtp,media=video,encoding-name=H264,payload=102");
 
    sprintf(name,"peerbin-%d",our_id);
    ps->bin = gst_bin_new(name);
    gst_bin_add_many(GST_BIN(ps->bin), 
-#if 0
      ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,
-#endif
      ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc,NULL
    );
    gst_bin_add(GST_BIN(vrsmsz->pipeline),ps->bin);
 
-#if 0
    if(!gst_element_link_many(
      ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,ps->webrtc, NULL)){
 	g_print ("webrtc link 1  failed. %x %x %x %x %x \n",ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,ps->webrtc);
    }
-#endif
    if(!gst_element_link_many(
      ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc, NULL)){
 	g_print ("webrtc link 2 failed. \n");
    }
 
-#if 0
    ps->audio_srcpad = gst_element_get_request_pad (vs->aenc_tee, "src_%u");
    if(!ps->audio_srcpad)
 	g_print ("webrtc arnc failed. \n");
@@ -3027,7 +3129,6 @@ start_pipeline (gint our_id){
    if (GST_PAD_LINK_FAILED (ret)) {
       g_print ("webrtc link 3 failed %d\n",ret);
    }
-#endif
 
    ps->video_srcpad = gst_element_get_request_pad (vs->venc_tee, "src_%u");
    if(!ps->video_srcpad)
@@ -3055,11 +3156,22 @@ start_pipeline (gint our_id){
   g_signal_connect (ps->webrtc, "pad-added", 
       G_CALLBACK (on_incoming_stream), ps->bin);
 
-  gst_element_set_state (ps->bin, GST_STATE_PLAYING);
+  gst_element_set_state (ps->bin, GST_STATE_READY);
+
+  g_signal_emit_by_name (ps->webrtc, "create-data-channel", "channel", NULL,
+      &ps->send_channel);
+  if (ps->send_channel) {
+    gst_print ("Created data channel\n");
+    connect_data_channel_signals (ps->send_channel);
+  } else {
+    gst_print ("Could not create data channel, is usrsctp available?\n");
+  }
+
+  g_signal_connect (ps->webrtc, "on-data-channel", G_CALLBACK (on_data_channel), ps);
 
   vrsmsz_set_play(ps->bin);
   vrsmsz_play();
-  g_print("--> 5\n");
+
   gst_debug_bin_to_dot_file (GST_BIN_CAST(vrsmsz->pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "vrsmsz-webrtc");
   return FALSE;
 }

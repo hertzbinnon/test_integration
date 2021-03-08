@@ -69,12 +69,14 @@ typedef struct{
   GstElement * video_scale;
   GstElement * video_capsfilter;
   GstElement * video_encoder;
+  GstElement * video_enccapsfilter;
   GstElement * venc_tee;
   GstElement * video_encoder_queue;
   GstElement * video_encoder_parser;
   GstElement * audio_convert;
   GstElement * audio_encoder;
   GstElement * aenc_tee;
+  GstElement * audio_encoder_parser;
   GstPad* pre_aenc_tee_srcpad;
   GstPad* pre_aenc_tee_ghost_srcpad;
   GstPad* pub_aenc_tee_srcpad;
@@ -112,6 +114,8 @@ typedef struct{
   GstElement* webrtc;
   GstElement *bin;
 
+  GObject *send_channel;
+  GObject *receive_channel;
 } PeerStruct;
 
 typedef struct {
