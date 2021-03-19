@@ -585,7 +585,7 @@ gboolean vrsmsz_add_stream(gpointer data){
         g_object_set (vs->video_encoder, "preset", 4, "bitrate", 1000, NULL);
      }
   }
-#if 0
+
   if(!vs->video_enccapsfilter){
      sprintf(name,"vs%d-video_enccapsfilter",vc->video_id);
      vs->video_enccapsfilter = gst_element_factory_make("capsfilter", name);
@@ -594,9 +594,9 @@ gboolean vrsmsz_add_stream(gpointer data){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vs->video_enccapsfilter), "caps",
-      "video/x-h264, profile=high,framerate=29/1");
+      "video/x-h264, profile=baseline,framerate=29/1");
   }
-#endif
+
   if(!vs->venc_tee){
      sprintf(name,"vs%d-venc_tee",vc->video_id);
      if(vrsmsz->mode == 4 || vrsmsz->mode==8){
@@ -618,12 +618,13 @@ gboolean vrsmsz_add_stream(gpointer data){
   }
 
   if(!vs->video_encoder_parser){
-         sprintf(name,"vs%d-video_encoder_parser",vc->video_id);
-         vs->video_encoder_parser= gst_element_factory_make("h264parse", name); // nvh264enc have no avc
-        if(!vs->video_encoder_parser){
-          g_print("error make\n");
-          return FALSE;
-        }
+     sprintf(name,"vs%d-video_encoder_parser",vc->video_id);
+     vs->video_encoder_parser= gst_element_factory_make("h264parse", name); // nvh264enc have no avc
+     if(!vs->video_encoder_parser){
+       g_print("error make\n");
+       return FALSE;
+     }
+     g_object_set(vs->video_encoder_parser,"config-interval",     -1,          NULL);
   }
 #endif
    if(!vs->audio_convert){
@@ -721,10 +722,10 @@ gboolean vrsmsz_add_stream(gpointer data){
      g_object_set (vs->outer, "port", 12346, NULL);
    }
 #endif
-   gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder, /*vs->video_enccapsfilter, */vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_encoder,vs->audio_encoder_parser, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
+   gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->video_enccapsfilter, vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_encoder,vs->audio_encoder_parser, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
    gst_bin_add(GST_BIN(vrsmsz->pipeline),vs->bin);
 
-   if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder, /*vs->video_enccapsfilter, */vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->muxer,vs->outer,NULL)){
+   if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder, vs->video_enccapsfilter, vs->venc_tee,vs->video_encoder_queue,vs->video_encoder_parser, vs->muxer,vs->outer,NULL)){
       g_print("push link failed\n");
       return FALSE;
    }
@@ -3073,12 +3074,29 @@ start_pipeline (gint our_id){
      g_print("error make\n");
      return FALSE;
    }
+     sprintf(name,"ps%d-video_encoder_parser",our_id);
+     ps->video_encoder_parser= gst_element_factory_make("h264parse", name); // nvh264enc have no avc
+     if(!ps->video_encoder_parser){
+       g_print("error make\n");
+       return FALSE;
+     }
+     g_object_set(ps->video_encoder_parser,"config-interval",     -1,          NULL);
+
+     sprintf(name,"ps%d-video_capsfilter",our_id);
+     ps->video_capsfilter = gst_element_factory_make("capsfilter", name);
+    if(!ps->video_capsfilter){
+      g_print("error make\n");
+      return FALSE;
+    }
+     gst_util_set_object_arg (G_OBJECT (ps->video_capsfilter), "caps",
+      "video/x-h264,stream-format=byte-stream");
    sprintf(name,"videortppay-%d",our_id);
    ps->videortppay = gst_element_factory_make("rtph264pay", name);
    if( !ps->videortppay ){
      g_print("error make\n");
      return FALSE;
    }
+   g_object_set(ps->videortppay ,"config-interval",     -1,          NULL);
    sprintf(name,"videoqueue-%d",our_id);
    ps->videoqueue = gst_element_factory_make("queue", name);
    if( !ps->videoqueue ){
@@ -3098,7 +3116,7 @@ start_pipeline (gint our_id){
    ps->bin = gst_bin_new(name);
    gst_bin_add_many(GST_BIN(ps->bin), 
      ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,
-     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc,NULL
+     ps->videoenc_queue, ps->video_encoder_parser, ps->video_capsfilter, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc,NULL
    );
    gst_bin_add(GST_BIN(vrsmsz->pipeline),ps->bin);
 
@@ -3107,7 +3125,7 @@ start_pipeline (gint our_id){
 	g_print ("webrtc link 1  failed. %x %x %x %x %x \n",ps->audioenc_queue, ps->audiortppay, ps->audioqueue,ps->audiocaps,ps->webrtc);
    }
    if(!gst_element_link_many(
-     ps->videoenc_queue, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc, NULL)){
+     ps->videoenc_queue, ps->video_encoder_parser, ps->video_capsfilter, ps->videortppay, ps->videoqueue,ps->videocaps,ps->webrtc, NULL)){
 	g_print ("webrtc link 2 failed. \n");
    }
 

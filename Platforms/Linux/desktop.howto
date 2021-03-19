@@ -6,3 +6,9 @@ gsettings set org.gnome.desktop.session idle-delay 0
  
 关闭锁屏
 gsettings set org.gnome.desktop.screensaver lock-enabled false
+
+安装图形并启动窗口系统
+sudo apt-get  install gnome
+sudo systemctl reboot
+sudo systemctl set-default graphical.target
+vim /etc/systemd/system/default.target

@@ -108,6 +108,8 @@ typedef struct{
   GstPad *    video_sinkpad;
   GstPad *    video_ghost_sinkpad;
   GstElement* videoenc_queue;
+  GstElement * video_encoder_parser;
+  GstElement * video_capsfilter;
   GstElement* videortppay;
   GstElement* videoqueue;
   GstElement* videocaps;

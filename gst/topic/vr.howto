@@ -1,0 +1,16 @@
+
+gst-launch-1.0 uridecodebin uri=udp://192.168.0.134:12340 ! video/x-raw'(memory:GLMemory)', format=I420, width=352, height=288  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+
+GST_DEBUG=gl*:6 ./gst-launch-1.0 uridecodebin uri=rtmp://10.9.126.203/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=3840, height=1920  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://10.9.112.161/live/tmp
+
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/4k5.mp4 ! \
+               glupload ! glcolorconvert ! videorate ! vrcompositor ! \
+               video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 ! \
+               hmdwarp ! gtkglsink
+
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/low.png ! \
+    imagefreeze ! glupload ! glcolorconvert ! vrcompositor ! \
+    video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 ! \
+    hmdwarp ! glimagesink
+#https://stackoverflow.com/questions/55503366/gst-launch-and-multiple-lines-of-text
+gst-launch-1.0 videotestsrc pattern=0 horizontal-speed=0 is-live=1     ! textoverlay text="PLEASE <b>STAND</b> <span foreground=\"blue\" size=\"x-large\">\nBY</span>Next <u>under-line</u>" valignment=center halignment=center font-desc="Sans, 24" ! autovideosink

@@ -1,5 +1,5 @@
 include ../release/vrsmsz/Expiration
-CFLAGS ?= -O2 -g -Wall
+CFLAGS ?= -O0 -ggdb -Wall
 LDFLAGS ?=
 
 GST_CFLAGS = $(shell pkg-config --cflags gstreamer-1.0)

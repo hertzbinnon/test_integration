@@ -40,3 +40,6 @@ sudo dkms install -m nvidia -v <version>
 sudo apt install lightdm  
 sudo dpkg-reconfigure lightdm   
 sudo reboot  
+
+# check Opengl Vender
+glxinfo -B 
