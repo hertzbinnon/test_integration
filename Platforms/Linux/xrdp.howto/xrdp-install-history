@@ -1,0 +1,2000 @@
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl > /tmp/log 2>&1
+export GST_DEBUG=6
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl > /tmp/log 2>&1
+export GST_DEBUG=1
+export GST_PLUGIN_FEATURE_RANK=nvh264dec:259
+gdb --args ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+gdb --args ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+gdb --args ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+gdb --args ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl > /tmp/log 2>&1
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=0 --disable-ssl
+fg
+make
+ls
+cp webrtc-sendrecv /tmp/
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+pwd
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+pwd
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+cp webrtc-sendrecv /tmp/webrtc-sendrecv1
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+cp webrtc-sendrecv /tmp/webrtc-sendrecv1
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+cp webrtc-sendrecv /tmp/webrtc-sendrecv1
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+cp webrtc-sendrecv /tmp/webrtc-sendrecv1
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=0 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=4643 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=8305 --disable-ssl
+pwd
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=7056 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=7566 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6612 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=4512 --disable-ssl
+ls
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=8537 --disable-ssl
+janus
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=4935 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=4938 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=0 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=0 --disable-ssl
+ls
+pwd
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --our-id=2401 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=2401 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=2403 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6537 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6888 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6888 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=715 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=7971 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=8855 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=7176 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=1774 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=383 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=4609 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6087 --disable-ssl
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6087 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=3464 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=1280 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=5412 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=3786 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=891 --disable-ssl
+pwd
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=891 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=8604 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6511 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=2151 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=4763 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=2335 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=2962 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=7446 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=7466 --disable-ssl
+ps aux | grep vim 
+killall vim 
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=1719 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=1449 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=1690 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=1566 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=3366 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=1503 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=4245 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=5681 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=3242 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --peer-id=6917 --disable-ssl
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1330
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8190
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5853
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=4257
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=4656
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=307
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=2430
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8954
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8235
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1030
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5905
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8881
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3161
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1636
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1727
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=2650
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=23230
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3230
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=2341
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=4540
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8459
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8359
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1616
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1900
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8154
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=328
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=364
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=791
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8914
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6508
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5675
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=374
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=646
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5114
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5174
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3957
+maek
+make\
+
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3670
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3673
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3897
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=786
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3850
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1606
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1607
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=2507
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=7178
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6282
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=7547
+janus
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=913
+janus
+locate janus.plugin.audiobridge.cfg
+janus
+pwd
+ls ~/sdb1/
+ls ~/sdb1/Qt/
+ls ~/sdb1/Qt/Qt-5.14.2/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/third_party/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/third_party/webrtc
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/third_party/webrtc/pc/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/third_party/webrtc/examples/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/third_party/webrtc/examples/peerconnection/
+ls
+history | grep simple
+pwd
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6016
+ls
+vim webrtc-sendrecv.c 
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6016
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5291
+fg
+vim webrtc-sendrecv.c 
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1215
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1315
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3006
+fg
+vun webrtc-sendrecv.c
+vim\ webrtc-sendrecv.c
+vim webrtc-sendrecv.c
+make\
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6656
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=4012
+ls
+cp web/webrtc.js /tmp/
+cp web/index.htm /tmp/
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3011
+ls
+vim web/webrtc.js 
+git show
+cp web/webrtc.js /tmp/
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=2520
+vim web/webrtc.js 
+fg
+cp web/webrtc.js /tmp/
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=321
+fg
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=1075
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=829
+fg\
+fg
+vim web/index.html
+cp  web/index.html /tmp/
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=4184
+fg
+vim webrtc-sendrecv.c 
+fg
+vim web/index.html
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6555
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=3732
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8480
+fg
+vim webrtc-sendrecv.c 
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=8480
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6624
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5379
+fg
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=5379
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6155
+vim web/index.html
+vim web/webrtc.js 
+vim webrtc-sendrecv.c 
+fg
+make
+GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6230
+echo  GST_PLUGIN_FEATURE_RANK=nvh264dec:259 ./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl  --peer-id=6230 > /tmp/txt
+ffplay rtmp://117.50.19.251/live/ch2
+pwd
+cd -
+history | grep hello
+pwd
+ls
+./webrtc-sendrecv --server=wss://192.168.0.134:9443 --disable-ssl --peer-id=1103
+./webrtc-sendrecv-preview --server=wss://192.168.0.134:9443 --disable-ssl --peer-id=1103
+./webrtc-sendrecv-preview --server=wss://192.168.0.134:9443 --disable-ssl --peer-id=5824
+./webrtc-sendrecv-preview --server=wss://192.168.0.134:9443 --disable-ssl --peer-id=1852
+./webrtc-sendrecv-preview --server=wss://192.168.0.134:9443 --disable-ssl --peer-id=4595
+./webrtc-sendrecv-preview --server=wss://192.168.0.134:9443 --disable-ssl --peer-id=2468
+;sls
+ls
+vim command.sh
+cat /tmp/txt 
+ffplay -f lavfi -i testsrc2=size=1280x720:rate=30000/1001,format=yuv420p -vf oscilloscope=x=0.5:y=200/720:s=1:c=1
+ls
+history | grep cd
+ls
+history | grep cd
+pwd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/
+ls
+cd blender-git/
+ls
+cd build_linux_debug/bin/
+ls
+./blender
+pwd
+cd ~/sdb1/hbsmsz/
+ls
+cd gst-webrtc/
+ls
+cd signalling/
+ls
+./simple_server.py --port 9443
+./simple_server.py --port 9443 --addr 192.168.0.134
+ls
+pwd
+cd ../sendrecv/gst/gstwebrtc-demos/
+ls
+cd -
+cd ../sendrecv/gst/gstwebrtc-demos/gst-to-browser/gst/
+ls
+cd -
+cd ../sendrecv/gst/gstwebrtc-demos/gst-to-browser
+ls
+./signal-server.py 
+vim signal-server.py 
+./signal-server.py 
+cd -
+ls
+history | grep cd
+pushd  /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/
+cd -
+popd
+cd -
+pushd  /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/
+ls
+cd gst-build/
+python
+echo GST_PLUGUN_PATH
+echo $GST_PLUGUN_PATH
+echo $GST_PLUGIN_PATH
+gst-launch-1.0 --version
+ls
+meson configure
+meson -C __builddir
+pip3 install meson
+meson  __builddir
+ls
+ls subprojects/
+git branch -a
+git branch --set-upstream-to origin/master
+git branch -a
+ls
+ninja -C __builddir git-update
+cd ../../
+./git-update 
+cd ../../
+pwd
+./git-update 
+cd ../../
+./git-update 
+cd ../../
+./git-update 
+ls
+ls subprojects/
+cd ../
+./git-update 
+pwd
+cd -
+cd gst-build/
+./git-update 
+cd ../../
+./git-update 
+pwd
+cd .../../
+cd ../../
+./git-update 
+cd ../../
+./git-update 
+cd  ../../
+ls
+./git-update 
+cd ../../
+./git-update 
+cd ../../
+./git-update 
+cd ../../
+./git-update 
+cd ../../
+./git-update 
+cd ../../
+./git-update 
+cd -
+cd ../../
+./git-update 
+cd -
+cd ../../
+./git-update 
+pwd
+cd ../../
+./git-update 
+pwd
+cd ../../
+./gst-env.py git-update
+ls
+./git-update
+cd .././
+cd ..
+ls
+./git-update 
+cd ../../
+ls
+./git-update 
+sudo apt install update-manager-core
+sudo do-release-upgrade -m desktop
+lsb_release -a
+sudo do-release-upgrade -m desktop 
+gnome-tweaks 
+gnome-shell-set-vr enable
+gnome-tweaks 
+lsb_release 
+cat /etc/issue
+sudo apt install lsb_release
+sudo apt-get install lsb-core
+lsb_release 
+uname -a
+cat /etc/issue
+sudo apt autoremove
+cat /etc/issue
+cat /profile/version
+cat /proc/version
+uname -a
+lsb_release 
+lsb_release -a
+ls
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/xrdesktop/gulkan/
+ls
+ls ../deps/
+ls
+meson __builddir
+sudo apt install graphene-1.0
+sudo apt install libgraphene-1.0
+sudo apt install graphene
+sudo apt install graphene-dev
+sudo apt install libgraphene-1.0-dev
+meson __builddir
+sudo apt install libgraphene-1.0-dev libglslc-dev
+sudo apt install libgraphene-1.0-dev glslangValidator
+sudo apt install libgraphene-1.0-dev libglslangValidator
+sudo apt install libgraphene-1.0-dev libglslangValidator-dev
+sudo apt install libgraphene-1.0-dev glslangValidator-dev
+sudo apt install libgraphene-1.0-dev vulkan-tools
+meson __builddir
+dpkg -L vulkan-tools
+vulkaninfo 
+sudo apt install libgraphene-1.0-dev vulkan-tools glslang-tools
+meson __builddir
+ninja -C __builddir
+dpkg -l | grep glfw
+sudo apt install libgraphene-1.0-dev vulkan-tools glslang-tools libglfw-dev
+vim examples/common/plane-example.c
+lcoate glfw3.h
+locate glfw3.h
+fg
+vim examples/common/plane-example.c
+vim /usr/local/include/GLFW/glfw3.h 
+ls
+vim README.md 
+ls
+rm -rf __builddir
+meson build -Dapi_doc=true
+ninja -C build
+vim /tmp/txt
+vim examples/common/plane-example.c
+ninja -C build
+find . -name glfw3.h
+locate glfw3.h
+ls ../deps/
+vim /usr/local/include/GLFW/glfw3.h
+fg
+sudo vim /usr/local/include/GLFW/glfw3.h
+ninja -C build
+ls /usr/local/include/
+ls /usr/local/include/ -al
+ls /usr/local/include/GLFW/ -al
+fg
+ninja -C build
+sudo apt install libgraphene-1.0-dev vulkan-tools glslang-tools libglfw-dev
+sudo apt install libgraphene-1.0-dev vulkan-tools glslang-tools libglfw3-dev
+dpkg -L libglfw3-dev
+rm -rf build
+meson build -Dapi_doc=true
+ninja -C build
+dpkg -L libglfw3-dev
+vim /usr/include/GLFW/glfw3.h
+fg
+ls
+mv /usr/local/include/GLFW /usr/local/include/GLFW.low
+sudo mv /usr/local/include/GLFW /usr/local/include/GLFW.low
+rm -rf build
+meson build -Dapi_doc=true
+ninja -C build
+ls /usr/local/lib/pkgconfig/
+sudo mv /usr/local/include/GLFW.low /usr/local/include/GLFW
+export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
+rm -rf build
+meson __builddir
+ninja -C __builddir
+pkg-config --modversion glfw
+pkg-config --modversion glfw3
+vim /usr/local/include/GLFW/glfw3.h 
+vim /usr/local/lib/pkgconfig/glfw3.pc 
+ls /usr/local/lib/
+vim /usr/local/lib/pkgconfig/glfw3.pc 
+ls -al /usr/local/lib/pkgconfig/glfw3.pc 
+locate glfw3.pc
+ls /home/hertz/sdb1/point-cloud/openMVG/src/dependencies/glfw/src/glfw3.pc.in
+ls -al /home/hertz/sdb1/point-cloud/openMVG/src/dependencies/glfw/src/glfw3.pc.in
+cd /home/hertz/sdb1/point-cloud/openMVG/src/
+ls
+git status
+cd dependencies/
+ls
+ls glfw/
+ls
+cd ../
+ls
+cd ../
+ls
+cd __builddir/
+ls
+sudo make uninstall
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/xrdesktop/gulkan/
+ls
+rm -rf __builddir
+meson __builddir
+ninja -C __builddir/
+cd -
+ls
+cd ../../
+ls
+cd openMVS/
+ls
+history 
+/home/hertz/sdb1/point-cloud/openMVG/s
+/home/hertz/sdb1/point-cloud/openMVG/
+cd /home/hertz/sdb1/point-cloud/openMVG/
+;s
+ls
+cd __builddir/
+ls
+sudo cmake uninstall
+sudo make uninstall
+ls
+cd ..
+ls
+vim README.md 
+ls
+ls src/
+cd src/dependencies/glfw/
+ls
+vim README.md 
+cd ../
+ls
+cd ../
+ls
+cd dependencies/glfw/
+ls
+find ./ -name *.pc.in
+vim src/glfw3.pc.in 
+mkdir -v __builddir
+cd __builddir/
+ls
+cmake ../
+make
+sudo make uninstall
+sudo make install
+vim /usr/local/lib/pkgconfig/glfw3.pc
+sudo make uninstall
+vim "/usr/local/lib/pkgconfig/glfw3.pc"
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/xrdesktop/gulkan/
+ls
+rm -rf __builddir/
+meson __builddir
+ninja -C __builddir
+ninja 
+sudo ninja -C __builddir install
+ls __builddir/
+ls __builddir/meson-uninstalled/
+sudo add-apt-repository ppa:xrdesktop/xrdesktop
+sudo apt update
+sudo apt gnome-shell-extension-xrdesktop xrdesktop libsdl2-2.0-0
+sudo apt install gnome-shell-extension-xrdesktop xrdesktop libsdl2-2.0-0
+sudo apt install gnome-shell gnome-shell-extension-xrdesktop xrdesktop libsdl2-2.0-0
+dpkg -L libgxr-0.15
+dpkg -L libgxr-0.15-0
+yay -S gnome-shell-xrdesktop-git gnome-shell-extension-xrdesktop
+locate steamvr
+dpkg -L gnome-shell-xrdesktop
+sudo apt install gnome-shell-xrdesktop
+dpkg -L gnome-shell-extension-xrdesktop
+sudo apt install gnome-shell-xrdesktop
+sudo apt install gnome-shell-xrdesktop-extension
+dpkg -L xrdesktop
+journalctl /usr/bin/gnome-shell -f
+locate steamvr
+vim /home/hertz/sdb1/smszvr/steamvr.sh
+fg
+ls
+. ~/sdb1/cerbero/running.sh 
+gst-inspect-1.0 | grep gloverlay
+gst-inspect-1.0  gloverlay
+ps aux | grep x11
+ps aux | grep 11
+ps aux | grep gnome
+glxinfo
+ps aux | grep gdm3
+ps aux | grep gdm
+vim ~/sdb1/smszvr/env.sh 
+vim ~/sdb1/smszvr/examples.cmd 
+fg
+ls ../../gst-plugins-advanced/gst-plugins-vr/__builddir/meson-uninstalled/
+find ../../gst-plugins-advanced/gst-plugins-vr/__builddir/ -name *.so
+gst-inspect-1.0 ../../gst-plugins-advanced/gst-plugins-vr/__builddir/libgstvrplugins.so
+gst-inspect-1.0 ~/sdb1/smszvr/gst-plugins-vr/build/libgstvrplugins.so 
+;s
+cd ../../
+ls
+cd gst-plugins-advanced/gst-plugins-vr/
+ls
+ldd __builddir/libgstvrplugins.so 
+ldd -r __builddir/libgstvrplugins.so 
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
+ldd -r __builddir/libgstvrplugins.so 
+export LD_LIBRARY_PATH=/usr/local/lib/x86_64-linux-gnu/
+ldd -r __builddir/libgstvrplugins.so 
+locate libassimp.so.4
+export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/
+ldd -r __builddir/libgstvrplugins.so 
+;s
+s
+ls
+ldd __builddir/
+ls
+ls __builddir/
+locate libgstvrplugins.so
+ldd -r __builddir/libgstvrplugins.so 
+vim /usr/lib/x86_64-linux-gnu/pkgconfig/assimp.pc 
+ls /usr/lib/x86_64-linux-gnu/libassimp.so.4
+sudo apt-file search /usr/lib/x86_64-linux-gnu/pkgconfig/assimp.pc 
+dpkg -L libassimp-dev
+ls /usr/lib/x86_64-linux-gnu/libassimp.so
+ls /usr/lib/x86_64-linux-gnu/libassimp.so -al
+ls
+ldd __builddir/libgst3d-1.0.so
+ls
+cd ../../
+vim ../../../../../gst/topic/compile+build/
+vim ../../../../../gst/topic/cmdline.sh 
+vim ../../../../../gst/topic/python/stream.py 
+find ../../../../../gst/ | xargs grep -sn vrcompositor
+find ../../../../../VR | xargs grep -sn vrcompositor
+ls
+cd -
+ls
+ls ~/sdb1/hbsmsz/
+vim ~/sdb1/hbsmsz/gl_pipeline.txt 
+ls
+cp 2.flv /tmp/
+ls ~/sdb1/hbsmsz/gl_pipeline.txt 
+ls ~/sdb1/smszvr/examples.cmd 
+cd -
+vim ../../../../../gst/topic/vr.howto
+fg
+git status
+git add ../../../../../gst/topic/vr.howto
+rm -rf tools/postserver*
+git status
+ls
+cd -
+ls
+fg
+cd -
+vim ../../../../../gst/topic/vr.howto
+history | grep cd
+history | grep scp
+ls
+ls ~/vrcerbero/
+ls ~/vrcerbero/tools/
+ls ~/vrcerbero/
+ls ~/vrcerbero/director/
+ls ~/vrcerbero/director/gstreamer-1.0-1.17.1/
+ls ~/vrcerbero/director/gstreamer-1.0-1.17.1/tools/
+ls ~/vrcerbero/director/gstreamer-1.0-1.17.1/_builddir/
+ls ~/vrcerbero/director/gstreamer-1.0-1.17.1/_builddir/tools/
+vim ../../../../../Platforms/Linux/desktop.howto 
+git status
+vim ../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+locate prime-select
+apt-file search /usr/bin/prime-select 
+fg
+sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf 
+exit
+ls
+fg
+ls
+vim examples.desktop 
+ls
+pwd
+ls
+ls sdb1/
+ps aux | grep server
+ps aux | grep gnome
+ls
+history | grep cd
+ls /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/Platforms/Linux/
+vim /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/Platforms/Linux/desktop.howto 
+vim /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/Platforms/Linux/remotedesktop.howto 
+cd https://c-nergy.be/downloads/xRDP/xrdp-installer-1.2.2.zip
+ls
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/Platforms/Linux/
+ls
+wget https://c-nergy.be/downloads/xRDP/xrdp-installer-1.2.2.zip
+ls
+unzip xrdp-installer-1.2.2.zip 
+ls
+rm -rf xrdp-installer-1.2.2.zip 
+ls
+chmod +x xrdp-installer-1.2.2.sh 
+ls
+./xrdp-installer-1.2.2.sh --help
+./xrdp-installer-1.2.2.sh -c -s
+history | grep wget
+wget http://106.75.117.203:8080/hls/Downloads.tar.gz
+ls
+mv Downloads.tar.gz ~/Downloads/
+ls
+cd ~/Downloads/
+ls
+tar xzf Downloads.tar.gz 
+ls
+mv Downloads/* .
+ls
+rm -rf Downloads
+ls
+cd -
+ls
+./xrdp-installer-1.2.2.sh 
+./xrdp-installer-1.2.2.sh -c -s
+sudo systemctl status xrdp
+lsof -i:3309
+vim /etc/xrdp/xrdp.ini 
+lsof -i:3389
+sudo lsof -i:3389
+tail -f /var/log/xrdp.log 
+ls
+ls ~/ -al
+ls ~/.x* -al
+vim /home/hertz/.xsessionrc 
+sudo systemctl restart xrdp
+ls
+cd -
+cd ~/
+ls
+ls -a
+fg
+chmod +x .xsession
+chmod +x .xsessionrc
+history | grep restart
+sudo systemctl restart xrdp
+vim .xsession
+vim .xsessionrc
+sudo systemctl restart xrdp
+fg
+ls
+sudo vim /etc/xrdp/startwm.sh
+sudo systemctl restart xrdp
+fg
+sudo systemctl restart xrdp
+fg
+cp /etc/xrdp/startwm.sh .
+fg
+sudo systemctl restart xrdp
+fg
+ls
+ls ~
+ls -a
+d -
+ls
+cd -
+ls
+history | grep installer
+./xrdp-installer-1.2.2.sh -h
+cd -
+tail -f .xsession-errors
+ls
+ping 106.75.117.203
+ldd -r  /usr/lib/x86_64-linux-gnu/libgnome-desktop-3.so.17
+ls /usr/lib/x86_64-linux-gnu/libgnome-desktop-3.so.19 | grep cai
+ls /usr/lib/x86_64-linux-gnu/libcairo.so.2
+ls /usr/lib/x86_64-linux-gnu/libcairo.so.2 -al
+ldd -r  /usr/lib/x86_64-linux-gnu/libgnome-desktop-3.so.19 | grep cai
+history | grep grep 
+history | grep installer
+history | grep gst-lau
+ls
+cd -
+history | grep cd
+ls
+cd sdb1/smszvr/
+ls
+cat examples.cmd 
+cd ../hbsmsz/
+ls
+. ~/sdb1/cerbero/running.sh 
+cat gl_pipeline.txt 
+gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=352, height=288  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload !   gloverlay location=./sky.jpg  ! glcolorconvert  !  glimagesink
+sudo gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=352, height=288  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload !   gloverlay location=./sky.jpg  ! glcolorconvert  !  glimagesink
+locate sky.jpg
+pwd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload !   gloverlay location=./sky.jpg  ! glcolorconvert  !  glimagesink
+eog sky.jpg 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload !   gloverlay location=./sky.jpg  ! glcolorconvert  !  glimagesink
+locate sky.jpg
+pwd
+ls
+gst-inspect-1.0 gloverlay
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload !   gloverlay location=./sky.jpg  overlay-height=1920 overlay-width=720  ! glcolorconvert  !  glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload !   gloverlay location=./sky.jpg  overlay-height=480 overlay-width=240  ! glcolorconvert  !  glimagesink
+wall yes
+wall “Don’t forget to save your work before logging off”
+echo ST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload !   gloverlay location=./sky.jpg  overlay-height=480 overlay-width=240  ! glcolorconvert  !  glimagesink > /tmp/txt
+glxinfo 
+ls
+pwd
+vim ../../../../../../../Platforms/Linux/desktop.howto 
+vim ../../../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+sudo prime-select query
+glxinfo 
+glxinfo --help
+glxinfo -display
+glxinfo 
+nvidia-smi dmon
+pwd
+find ../../../../../../../Platforms/Linux/ | xargs grep -sn /modprobe
+find ../../../../../../../Platforms/Linux/ | xargs grep -sn modprobe
+vim ../../../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+fg
+;s
+cd ~
+ls
+cd /tmp/
+glxinfo
+sudo apt-file search glxinfo
+sudo apt-file search /usr/bin/glxinfo
+vim ~/sdb1/smszvr/examples.cmd 
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/low.png !     imagefreeze ! glupload ! glcolorconvert ! vrcompositor !     video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 !     hmdwarp ! glimagesink
+locate vrcompositor
+ls
+pwd
+cd -
+ls
+cd sdb1/smszvr/
+LS
+ls
+. ~/sdb1/cerbero/running.sh 
+ls gst-plugins-vr/
+ls gst-plugins-vr/build/
+ldd gst-plugins-vr/build/libgstvrplugins.so 
+locate libopenhmd.so.0
+locate libassimp.so.4
+export LD_LIBRARY_PATH=/home/hertz/sdb1/install/lib/x86_64-linux-gnu/:/usr/lib/x86_64-linux-gnu
+ldd gst-plugins-vr/build/libgstvrplugins.so 
+locate libassimp.so.4
+locate assimp.pc
+pwd
+ls
+cd gst-plugins-vr/
+ls
+rm -rf build/
+ls
+mkdir -v __builddir
+cd __builddir/
+cmake ..
+ls
+vim ../../examples.cmd 
+ls
+cd ../../
+ls
+vim env.sh 
+ls
+. env.sh 
+ls
+cd gst-plugins-vr/__builddir/
+cmake ..
+make -j8
+
+fg
+cd -
+ls
+vim env.sh 
+locate openhmd.h
+locate openhmd.pc
+vim /home/hertz/sdb1/install/lib/x86_64-linux-gnu/pkgconfig/openhmd.pc
+vim env.sh 
+. env.sh 
+cd -
+ls
+cmake ..
+rm -rf ./*
+cmake ..
+make
+ls
+locate openhmd.h
+rm -rf ./*
+CFLAGS="-I/home/hertz/sdb1/install/include" cmake ..
+make -j8
+rm -rf ./*
+CFLAGS="-I/home/hertz/sdb1/install/include" LDFLAGS="-L/home/hertz/sdb1/install/lib/x86_64-linux-gnu" cmake ..
+make -j8
+locate libhidapi-libusb.so
+rm -rf ./*
+CFLAGS="-I/home/hertz/sdb1/install/include" LDFLAGS="-L/home/hertz/sdb1/install/lib/x86_64-linux-gnu -L/home/hertz/sdb1/install/lib" cmake ..
+make -j8
+ls
+vim ../build.sh
+ls
+gst-inspect-1.0 --version
+gst-inspect-1.0 libgstvrplugins.so
+gst-inspect-1.0 ./libgstvrplugins.so
+ldd libgstvrplugins.so 
+ldd libgst3d-1.0.so 
+gst-inspect-1.0 ./libgstvrplugins.so
+ldd libgst3d-1.0.so -r
+ldd -r libgst3d-1.0.so 
+ldd --help
+ldd -r ./libgst3d-1.0.so 
+ls
+ldd -r /home/hertz/sdb1/install/lib/x86_64-linux-gnu/libhidapi.so
+pwd
+locate assimp.pc
+history | grep assimp
+ls
+ldd libgst3d-1.0
+ldd libgst3d-1.0.so 
+ls
+rm -rf ./*
+CFLAGS="-I/home/hertz/sdb1/install/include" LDFLAGS="-L/home/hertz/sdb1/install/lib/x86_64-linux-gnu -L/home/hertz/sdb1/install/lib -lassimp" cmake ..
+make -j8
+ldd libgst3d-1.0.so 
+ldd libgst3d-1.0.so | grep ass
+ldd -r ./libgst3d-1.0.so 
+make clean
+make V=1
+ldd -r ./libgst3d-1.0.so 
+make clean
+make VERBOSE=1
+/usr/bin/cc -fPIC -I/home/hertz/sdb1/install/include -std=gnu99 -L/home/hertz/sdb1/install/lib/x86_64-linux-gnu -L/home/hertz/sdb1/install/lib -lassimp -shared -Wl,-soname,libgst3d-1.0.so -o libgst3d-1.0.so CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera_arcball.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera_hmd.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera_wasd.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dhmd.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dmath.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dmesh.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dnode.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3drenderer.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dscene.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dshader.c.o  -lgraphene-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lglib-2.0 -lgstgl-1.0 -lgstvideo-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstvideo-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lopenhmd -lhidapi-libusb -lgstreamer-1.0 -lgstgl-1.0 -lgstvideo-1.0 -lgstbase-1.0 -lgio-2.0 -lopenhmd -lhidapi-libusb
+ldd -r ./libgst3d-1.0.so 
+/usr/bin/cc -fPIC -I/home/hertz/sdb1/install/include -std=gnu99 -L/home/hertz/sdb1/install/lib/x86_64-linux-gnu -L/home/hertz/sdb1/install/lib -lassimp -shared -Wl,-soname,libgst3d-1.0.so -o libgst3d-1.0.so CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera_arcball.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera_hmd.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dcamera_wasd.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dhmd.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dmath.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dmesh.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dnode.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3drenderer.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dscene.c.o CMakeFiles/gst3d-1.0.dir/gst-libs/gst/3d/gst3dshader.c.o  -lgraphene-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lglib-2.0 -lgstgl-1.0 -lgstvideo-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstvideo-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lopenhmd -lhidapi-libusb -lgstreamer-1.0 -lgstgl-1.0 -lgstvideo-1.0 -lgstbase-1.0 -lgio-2.0 -lopenhmd -lhidapi-libusb -lassimp
+ldd -r ./libgst3d-1.0.so 
+ls
+gst-inspect-1.0 ./libgstvrplugins.so 
+gst-inspect-1.0 vrcompositor 
+ls
+export GST_PLUGIN_PATH=./
+gst-inspect-1.0 vrcompositor 
+s
+ls
+pwd
+export GST_PLUGIN_PATH=/home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir
+cd ../
+ls
+cd ../
+ls
+vim examples.cmd 
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/low.png !     imagefreeze ! glupload ! glcolorconvert ! vrcompositor !     video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 !     hmdwarp ! glimagesink
+fg
+vim examples.cmd 
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/4k5.mp4 !                glupload ! glcolorconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 !                hmdwarp ! gtkglsink
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/4k5.mp4 !                glupload ! glcolorconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 !                hmdwarp ! glimagesink
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/4k5.mp4 !                glupload ! glcolorconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1  ! glimagesink
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr/
+gst-launch-1.0 uridecodebin uri=file://./1.flv !                glupload ! glcolorconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1  ! glimagesink
+gst-launch-1.0 uridecodebin uri=file:///1.flv !                glupload ! glcolorconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1  ! glimagesink
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/4k5.mp4 !                glupload ! glcolorconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1  ! glimagesink
+gst-launch-1.0 uridecodebin uri=file:///tmp/2.flv !       glupload ! glcolorconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1  ! glimagesink
+janus
+/usr/local/nginx/sbin/nginx 
+janus
+ls ~/Downloads/
+cat /tmp/txt 
+ST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload ! gloverlay location=./sky.jpg overlay-height=480 overlay-width=240 ! glcolorconvert ! glimagesink
+pwd
+ls
+cd -
+ls
+cd -
+history 
+ST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload ! gloverlay location=./sky.jpg overlay-height=480 overlay-width=240 ! glcolorconvert ! glimagesink
+ls
+ST_DEBUG=gl*:4 gst-launch-1.0 rtmp2src location=rtmp://106.75.37.158/live/lv ! flvdemux ! h264parse ! queue ! nvh264dec ! videoconvert ! glupload ! gloverlay location=./sky.jpg overlay-height=480 overlay-width=240 ! glcolorconvert ! glimagesink
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/low.png !     imagefreeze ! glupload ! glcolorconvert ! vrcompositor !     video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 !     hmdwarp ! glimagesink
+ls
+cat ~/sdb1/hbsmsz/gl_pipeline.txt 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+cat "GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesin" ~/pipelie
+cat "GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesin" > ~/pipelie
+echo "GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesin" > ~/pipelie
+sudo reboot
+glxinfo 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr/
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+ls
+. ~/sdb1/cerbero/running.sh 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+pwd
+fg
+history | grep vim
+vim ../../../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+sudo apt list | grep linux-generic*
+fg
+sudo dpkg --list | grep nvidia-*
+fg
+sudo ubuntu-drivers devices
+fg
+sudo ubuntu-drivers autoinstall
+fg
+sudo apt-get purge nvidia*
+fg
+sudo ubuntu-drivers autoinstall
+fg
+sudo hwinfo  --gfxcard --short
+fg
+sudo prime-select query
+fg
+cat /proc/driver/nvidia/version
+nvidia-smi 
+fg
+ls /usr/src | grep nvidia 
+fg
+sudo apt install dkms
+fg
+sudo dkms install -m nvidia -v nvidia-460.56
+ls /usr/src/
+sudo dkms install -m nvidia -v 460.56
+nvidia-smi 
+fg
+sudo reboot
+nvidia-smi 
+cat /proc/driver/nvidia/version
+ls
+history 
+glxinfo | grep nvidia
+glxinfo | grep mesa
+glxinfo | grep MESA
+glxinfo | grep NVIDIA
+glxinfo -B
+lspci -k | grep -EA3 'VGA|3D|Display'
+lshw -c display
+sudo lshw -c display
+ubuntu-drivers devices
+fg
+vim ../../../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr/
+vim ../../../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+sudo prime-select
+sudo prime-select query
+glxinfo -B
+fg
+glxinfo -B
+fg
+exit
+glxinfo -B
+sudo dpkg-reconfigure lightdm
+sudo systemctl start lightdm
+lightdm start
+sudo lightdm start
+ls -l /etc/systemd/system/default.target
+ls -l /etc/systemd/system/
+glxinfo -B
+sudo reboot
+glxinfo -B
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr/
+. ~/sdb1/cerbero/running.sh 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+glxinfo -B
+ls -l /etc/systemd/system/
+ls -l /etc/systemd/system/default.target.wants/
+fg
+history | grep cd
+ls
+vim Platforms/Linux/desktop.howto 
+sudo systemctl set-default graphical.target
+ls -l /etc/systemd/system/default.target
+vim /lib/systemd/system/graphical.target
+ls /lib/systemd/system/
+sudo systemctl set-default multi-user.target
+sudo reboot
+glxinfo -B
+sudo systemctl set-default graphical.target
+sudo reboot
+glxinfo -B
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+pwd
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr/
+. ~/sdb1/cerbero/running.sh 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+GST_DEBUG=nvh264dec:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+nvidia-smi dmon
+GST_DEBUG=nvh264dec:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+fg
+GST_DEBUG=nvh264dec:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+ls
+vim text.txt 
+ls
+vim ~/sdb1/hbsmsz/gl_pipeline.txt 
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr/
+fg
+GST_DEBUG=gl*:3 ./gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=3840, height=1920  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+GST_DEBUG=gl*:3 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=3840, height=1920  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+GST_DEBUG=gl*:3 GST_PLUGIN_FEATURE_RANK=nvh264dec:259  gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=3840, height=1920  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+vim ~/sdb1/hbsmsz/gl_pipeline.txt 
+fg
+gst-inspect-1.0 | grep videoconvert
+gst-inspect-1.0 | grep gl
+gst-inspect-1.0 | grep glclo
+gst-inspect-1.0 | grep colo
+gst-inspect-1.0 gloverlay
+gst-inspect-1.0 | grep text
+gst-inspect-1.0 textoverlay
+find ../../../../../../../gst/ | xargs grep -sn textoverlay
+find ../../../../../../../gst/ | xargs grep -sn overlay
+vim ../../../../../../../gst/topic/cmdline.sh 
+vim ../../../../../../../gst/topic/vr.howto 
+gst-launch-1.0 videotestsrc pattern=0 horizontal-speed=0 is-live=1 \
+st-launch-1.0 videotestsrc pattern=0 horizontal-speed=0 is-live=1     ! textoverlay text="PLEASE <b>STAND</b> <span foreground=\"blue\" size=\"x-large\">\nBY</span>Next <u>under-line</u>" valignment=center halignment=center font-desc="Sans, 24" ! autosink
+gst-launch-1.0 videotestsrc pattern=0 horizontal-speed=0 is-live=1     ! textoverlay text="PLEASE <b>STAND</b> <span foreground=\"blue\" size=\"x-large\">\nBY</span>Next <u>under-line</u>" valignment=center halignment=center font-desc="Sans, 24" ! autosink
+gst-launch-1.0 videotestsrc pattern=0 horizontal-speed=0 is-live=1     ! textoverlay text="PLEASE <b>STAND</b> <span foreground=\"blue\" size=\"x-large\">\nBY</span>Next <u>under-line</u>" valignment=center halignment=center font-desc="Sans, 24" ! autovideosink
+ls
+vim ../../../../../../../gst/topic/vr.howto 
+ls
+cd ~/sdb1/cerbero/
+ls
+fg
+cd -
+vim ../../../../../../../gst/topic/compile+build/readme 
+ls
+vim ../../../../../../../gst/topic/compile+build/readme 
+cd -
+ls
+./cerbero-uninstalled bootstrap
+git pull -v
+./cerbero-uninstalled --help
+./cerbero-uninstalled wipe
+python
+ls
+cd -
+vim ../../../../../../../Platforms/Linux/python.howto 
+sudo update-alternatives --config python
+python
+ls
+fg
+cd -
+ls
+fg
+./cerbero-uninstalled -v python,gi package gstreamer-1.0
+ls
+find build/dist/linux_x86_64/lib/ | xargs grep -sn ffi_type_void
+find build/dist/linux_x86_64/lib/ | xargs grep -sn ffi_type_void@LIBFFI_BASE_7.0
+history | grep exort
+ls
+./cerbero-uninstalled wipe
+pwd
+ninja -C _builddir/
+cd _builddir/
+'gcc', '-o', '/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/tmp-introspecth3vhqwa8/GstGL-1.0', '-m64', '/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/tmp-introspecth3vhqwa8/GstGL-1.0.o', '-L.', '-Wl,-rpath,.', '-Wl,--no-as-needed', '-L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video', '-L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl', '-L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video', '-L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/allocators', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/allocators', '-L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-Wl,-rpath,/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-L/usr/lib/x86_64-linux-gnu', '-Wl,-rpath,/usr/lib/x86_64-linux-gnu', '-lgstgl-1.0', '-lgstvideo-1.0', '-lgstbase-1.0', '-lgstreamer-1.0', '-lgobject-2.0', '-lglib-2.0', '-lm', '-lorc-0.4', '-lgmodule-2.0', '-lGLESv2', '-lGL', '-lEGL', '-lwayland-client', '-lwayland-cursor', '-lwayland-egl', '-lX11', '-lX11-xcb', '-lxcb', '-lgirepository-1.0', '-L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib', '-lgio-2.0', '-lgobject-2.0', '-Wl,--export-dynamic', '-lgmodule-2.0', '-pthread', '-lglib-2.0', '-m64', '-L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib'
+ls
+exit
+ls
+pwd
+find ../../../dist/linux_x86_64/lib | xargs grep -sn ffi_type_void@LIBFFI_BASE_7.0
+find ../../../dist/linux_x86_64/lib | xargs grep -sn ffi_type_void
+ls
+cd _builddir/
+ninja -v -d keeprsp
+ls
+gcc -Igst/gio/libgstgio.so.p -Igst/gio -I../gst/gio -I. -I.. -Igst-libs -I../gst-libs -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/gstreamer-1.0 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/glib-2.0 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib/glib-2.0/include -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O2 -g -fvisibility=hidden -fno-strict-aliasing -DG_DISABLE_DEPRECATED -Wmissing-declarations -Wredundant-decls -Wundef -Wwrite-strings -Wformat -Wformat-nonliteral -Wformat-security -Winit-self -Wmissing-include-dirs -Waddress -Wno-multichar -Wvla -Wpointer-arith -Wmissing-prototypes -Wdeclaration-after-statement -m64 -fPIC -pthread -DHAVE_CONFIG_H -MD -MQ gst/gio/libgstgio.so.p/gstgiobasesrc.c.o -MF gst/gio/libgstgio.so.p/gstgiobasesrc.c.o.d -o gst/gio/libgstgio.so.p/gstgiobasesrc.c.o -c ../gst/gio/gstgiobasesrc.c
+[18/504] /home/hertz/sdb1/cerbero/build/dist/linux_x86_64/bin/g-ir-scanner --no-libtool --namespace=GstGL --nsversion=1.0 --warn-all --output gst-libs/gst/gl/GstGL-1.0.gir '--add-init-section=extern void gst_init(gint*,gchar**);g_setenv("GST_REGISTRY_DISABLE", "yes", TRUE);g_setenv("GST_REGISTRY_1.0", "/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gir_empty_registry.reg", TRUE);g_setenv("GST_PLUGIN_PATH_1_0", "", TRUE);g_setenv("GST_PLUGIN_SYSTEM_PATH_1_0", "", TRUE);gst_init(NULL,NULL);' --quiet --c-include=gst/gl/gl.h -I/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/gst-libs/gst/gl -I/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl -I./. -I../. -I./gst-libs -I../gst-libs -I./gst-libs -I../gst-libs -I./gst-libs -I../gst-libs --filelist=/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl/libgstgl-1.0.so.0.1900.0.p/GstGL_1.0_gir_filelist --include=Gst-1.0 --include=GstBase-1.0 --include=GstVideo-1.0 --symbol-prefix=gst --identifier-prefix=Gst --pkg-export=gstreamer-gl-1.0 --cflags-begin -fvisibility=hidden -fno-strict-aliasing -DG_DISABLE_DEPRECATED -Wmissing-declarations -Wredundant-decls -Wundef -Wwrite-strings -Wformat -Wformat-nonliteral -Wformat-security -Winit-self -Wmissing-include-dirs -Waddress -Wno-multichar -Wvla -Wpointer-arith -Wmissing-prototypes -Wdeclaration-after-statement -I./. -I../. -I./gst-libs -I../gst-libs -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/gstreamer-1.0 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/glib-2.0 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib/glib-2.0/include -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/orc-0.4 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/gobject-introspection-1.0 --cflags-end --add-include-path=/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/share/gir-1.0 --add-include-path=/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib --extra-library=gstvideo-1.0 --library gstgl-1.0 -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/allocators -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib --extra-library=gstbase-1.0 --extra-library=gstreamer-1.0 --extra-library=gobject-2.0 --extra-library=glib-2.0 --extra-library=m --extra-library=orc-0.4 --extra-library=gmodule-2.0 -L/usr/lib/x86_64-linux-gnu --extra-library=GLESv2 --extra-library=GL --extra-library=EGL --extra-library=wayland-client --extra-library=wayland-cursor --extra-library=wayland-egl --extra-library=X11 --extra-library=X11-xcb --extra-library=xcb --extra-library=girepository-1.0
+/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/bin/g-ir-scanner --no-libtool --namespace=GstGL --nsversion=1.0 --warn-all --output gst-libs/gst/gl/GstGL-1.0.gir '--add-init-section=extern void gst_init(gint*,gchar**);g_setenv("GST_REGISTRY_DISABLE", "yes", TRUE);g_setenv("GST_REGISTRY_1.0", "/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gir_empty_registry.reg", TRUE);g_setenv("GST_PLUGIN_PATH_1_0", "", TRUE);g_setenv("GST_PLUGIN_SYSTEM_PATH_1_0", "", TRUE);gst_init(NULL,NULL);' --quiet --c-include=gst/gl/gl.h -I/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/gst-libs/gst/gl -I/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl -I./. -I../. -I./gst-libs -I../gst-libs -I./gst-libs -I../gst-libs -I./gst-libs -I../gst-libs --filelist=/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl/libgstgl-1.0.so.0.1900.0.p/GstGL_1.0_gir_filelist --include=Gst-1.0 --include=GstBase-1.0 --include=GstVideo-1.0 --symbol-prefix=gst --identifier-prefix=Gst --pkg-export=gstreamer-gl-1.0 --cflags-begin -fvisibility=hidden -fno-strict-aliasing -DG_DISABLE_DEPRECATED -Wmissing-declarations -Wredundant-decls -Wundef -Wwrite-strings -Wformat -Wformat-nonliteral -Wformat-security -Winit-self -Wmissing-include-dirs -Waddress -Wno-multichar -Wvla -Wpointer-arith -Wmissing-prototypes -Wdeclaration-after-statement -I./. -I../. -I./gst-libs -I../gst-libs -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/gstreamer-1.0 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/glib-2.0 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib/glib-2.0/include -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/orc-0.4 -I/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/include/gobject-introspection-1.0 --cflags-end --add-include-path=/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/share/gir-1.0 --add-include-path=/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib --extra-library=gstvideo-1.0 --library gstgl-1.0 -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/gl -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/video -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib -L/home/hertz/sdb1/cerbero/build/sources/linux_x86_64/gst-plugins-base-1.0-1.19.0.1/_builddir/gst-libs/gst/allocators -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib -L/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib --extra-library=gstbase-1.0 --extra-library=gstreamer-1.0 --extra-library=gobject-2.0 --extra-library=glib-2.0 --extra-library=m --extra-library=orc-0.4 --extra-library=gmodule-2.0 -L/usr/lib/x86_64-linux-gnu --extra-library=GLESv2 --extra-library=GL --extra-library=EGL --extra-library=wayland-client --extra-library=wayland-cursor --extra-library=wayland-egl --extra-library=X11 --extra-library=X11-xcb --extra-library=xcb --extra-library=girepository-1.0
+exit
+ls
+cd sdb1/cerbero/
+ls
+fg
+./cerbero-uninstalled -v python,gi package gstreamer-1.0
+ls
+ls build/sources/
+ls build/sources/linux_x86_64/
+ls
+apt-file search /usr/lib/x86_64-linux-gnu/libwayland-client.so
+cat /usr/lib/x86_64-linux-gnu/libwayland-client.so | grep ffi_type_void@LIBFFI_BASE_7.0
+cat /usr/lib/x86_64-linux-gnu/libwayland-client.so | grep ffi_type_void
+ls
+./cerbero-uninstalled -v python,gi package gstreamer-1.0
+vim /home/hertz/sdb1/cerbero/build/logs/linux_x86_64/gst-plugins-base-1.0-compile.log
+git status
+git branch -a
+git tag -l
+ls
+fg
+ls
+git status
+git branch -a
+git checkout origin/1.18
+git branch -a
+history | grep cerbero-
+./cerbero-uninstalled wipe
+./cerbero-uninstalled bootstrap
+./cerbero-uninstalled wipe
+./cerbero-uninstalled -v python,gi package gstreamer-1.0
+ls
+git checkout master
+ls
+git pull -v
+ls
+./cerbero-uninstalled wipe
+./cerbero-uninstalled bootstrap
+./cerbero-uninstalled list
+./cerbero-uninstalled build gst-plugins-base-1.0
+./cerbero-uninstalled  package gstreamer-1.0
+ls
+find build/ | xargs grep -sn ffi_type_void@LIBFFI_BASE_7.0
+find build/ | xargs grep -sn ffi_type_void
+find /usr/lib/x86_64-linux-gnu/ | xargs grep -sn ffi_type_void@LIBFFI_BASE_7.0
+find build/sources/ | xargs grep -sn LIBFFI_BASE_7.0
+find build/dist/linux_x86_64/ | xargs grep -sn LIBFFI_BASE_7.0
+vim build/sources/linux_x86_64/libffi-3.2.9999/libffi.map.in
+gcc -v
+fg
+ls
+history | grep cd
+ls
+cd ../hbsmsz/
+git status
+git commit -a -m "update webrtc"
+git push origin master
+pwd
+history 
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/
+git status
+git commit -a -m "vrsmsz"
+ls
+git push origin master
+cd -
+pwd
+git push origin master
+fg
+exit
+ls
+cd sdb1/
+ls
+cd hbsmsz/
+ls
+vim gl_pipeline.txt 
+gst-launch-1.0 gltestsrc ! glupload ! gloverlay location=/usr/share/pixmaps/faces/leaf.jpg ! glimagesink
+gst-inspect-1.0 gltestsrc
+GST_DEBUG=gl*:4 gst-launch-1.0 gltestsrc ! glupload ! gloverlay location=/usr/share/pixmaps/faces/leaf.jpg ! glimagesink
+GST_DEBUG=gl*:4  gst-launch-1.0 gltestsrc ! glupload ! gloverlay location=/usr/share/pixmaps/faces/sky.jpg ! glimagesink
+gst-launch-1.0 gltestsrc ! glupload ! glimagesink
+GST_DEBUG=gl*:4  gst-launch-1.0 gltestsrc ! glupload ! glimagesink
+GST_DEBUG=gl*:4  GST_DEBUG=gl*:5 gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=720, height=360  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://127.0.0.1/live/tmp
+GST_DEBUG=gl*:4  GST_DEBUG=gl*:5 gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=720, height=360  ! glupload ! glimagesink
+GST_DEBUG=gl*:4 gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=720, height=360  ! glupload ! glimagesink
+GST_DEBUG=gl*:4 gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw, format=I420, width=720, height=360  ! glupload ! glimagesink
+GST_DEBUG=gl*:4 gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw, format=I420, width=720, height=360  ! ximagesink
+GST_DEBUG=gl*:4 gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! ximagesink
+GST_DEBUG=gl*:4 gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! ximagesink
+fg
+exit
+find ~/.cache/ -name "mpg123-1.26.3.tar.bz2"
+history 
+history | grep scp
+find ~/.cache/ -name "mpg123-1.26.3.tar.bz2"
+scp /home/hertz/.cache/cerbero-sources/mpg123-1.26.3/mpg123-1.26.3.tar.bz2 ubuntu@106.75.117.203:/tmp
+ls
+cd ../
+ls
+cd -
+exit
+ls
+cd _builddir/
+ninja -v -d keeprsp
+ninja 
+echo $CC
+echo $CPP
+gcc --version
+exit
+ls
+pwd
+meson configure
+ls
+vim meson_options.txt 
+cd _builddir/
+ninja --help
+ninja -j 1
+fg
+cd ../
+meson __builddir
+ls
+ninja -C __builddir/ 
+fg
+ls
+fg
+rm -rf __builddir/
+fg
+meson -Dglwinsys=x11,egl __builddir
+ninja -C __builddir/ 
+meson -Dglwinsys=x11 __builddir
+rm -rf __builddir/
+meson -Dglwinsys=x11 __builddir
+fg
+meson -Dgl_winsys=x11 __builddir
+rm -rf __builddir/
+meson -Dgl_winsys=x11 __builddir
+ninja -C __builddir/ 
+ls
+exit
+ls
+exit
+fg
+exit
+glxinfo -B
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+vim ../../../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-plugins-advanced/gst-plugins-vr/
+pwd
+. ~/sdb1/cerbero/running.sh 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload ! gloverlay location=./sky.jpg ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+history | grep Mem
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! video/x-raw\(memory:GLMemory\), width=720, height=576  ! glvideoconvert ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! video/x-raw\(memory:GLMemory\), width=720, height=576  ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! video/x-raw, width=720, height=576  ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert ! video/x-raw, width=720, height=576  ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! videoconvert !  video/x-raw\(memory:GLMemory\), width=720, height=576  ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! gldownload ! videoconvert !  video/x-raw\(memory:GLMemory\), width=720, height=576  ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! video/x-raw\(memory:GLMemory\), width=720, height=576  ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! queue ! video/x-raw\(memory:GLMemory\), width=720, height=576  ! glupload  ! glcolorconvert ! glimagesink
+nvidia-smi dmon
+/usr/local/nginx/sbin/nginx 
+cat ~/sdb1/hbsmsz/gl_pipeline.txt 
+GST_DEBUG=gl*:3 GST_PLUGIN_FEATURE_RANK=nvh264dec:259  gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=3840, height=1920  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259  gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! video/x-raw'(memory:GLMemory)', format=I420, width=3840, height=1920  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+cat ~/sdb1/hbsmsz/gl_pipeline.txt 
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259  gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! videoscale !  video/x-raw'(memory:GLMemory)', format=I420, width=480, height=240  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259  gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv ! videoscale !  video/x-raw, format=I420, width=480, height=240  ! glupload ! gloverlay location=/usr/share/pixmaps/faces/bicycle.jpg ! glcolorconvert !  gldownload ! queue  ! nvh264enc ! h264parse ! queue ! flvmux ! rtmp2sink location=rtmp://192.168.0.134/live/tmp
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! videoscale ! video/x-raw, width=720, height=576  ! videoconvert ! glupload  ! glcolorconvert ! glimagesink
+GST_DEBUG=gl*:4 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! videoscale ! video/x-raw, width=720, height=576  ! videoconvert ! glupload ! gloverlay location=./sky.jpg  ! glcolorconvert ! glimagesink
+GST_DEBUG=gloverlay:4=5 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! videoscale ! video/x-raw, width=720, height=576  ! videoconvert ! glupload ! gloverlay location=./sky.jpg  ! glcolorconvert ! glimagesink
+GST_DEBUG=gloverlay:4=5 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! videoscale ! video/x-raw, width=720, height=576  ! videoconvert ! textoverlay text="please" ! glupload ! gloverlay location=./sky.jpg  ! glcolorconvert ! glimagesink
+GST_DEBUG=gloverlay:4=5 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! videoscale ! video/x-raw, width=720, height=576                                              ! videoconvert ! textoverlay text="please <b>yes</b> <span>" ! glupload ! gloverlay location=./sky.jpg  ! glcolorconvert ! glimagesink
+GST_DEBUG=gloverlay:4=5 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! videoscale ! video/x-raw, width=720, height=576                                              ! videoconvert ! textoverlay text="please <b>yes</b>" ! glupload ! gloverlay location=./sky.jpg  ! glcolorconvert ! glimagesink
+GST_DEBUG=gloverlay:4=5 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=rtmp://106.75.37.158/live/lv  ! videoscale ! video/x-raw, width=720, height=576                                              ! videoconvert ! textoverlay text="please <b>yes</b> <span> nnnn </span>" ! glupload ! gloverlay location=./sky.jpg  ! glcolorconvert ! glimagesink
+python
+top
+ls
+vim ../../../../../../../gst/topic/compile+build/readme 
+vim ../../../../../../../Platforms/Linux/desktop.howto 
+vim ../../../../../../../Platforms/Linux/kernel-driver-ubuntu.howto 
+ls
+gcc -v
+ls
+pwd
+cd ~/sdb1/cerbero/
+ls
+glxinfo | grep vendor
+top
+glxinfo 
+glxinfo -B
+cat /tmp/txt
+gst-launch-1.0 -v  gltestsrc ! video/x-raw'(memory:GLMemory)',height=360,width=720  ! glcolorconvert ! gloverlay location=/usr/share/pixmaps/faces/leaf.jpg overlay-height=90 overlay-width=180 ! glimagesink
+history | grep cd
+rm -f ~/.cache/gstreamer-1.0/registry.x86_64.bin 
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/servo/
+./mach run https://broxxx.com
+./mach run https://www.bilibili.com/bangumi/play/ep327285?bsource=baidu_aladdin
+./mach run http://117.50.19.251/live/index.m3u8
+./mach run http://117.50.19.251:8080/live/index.m3u8
+./mach run http://117.50.19.251:8080/hls/index.m3u8
+./mach run http://117.50.19.251:8080/hls/ch0/index.m3u8
+./mach run https://www.bilibili.com/bangumi/play/ep327285?bsource=baidu_aladdin
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-build/
+ls
+meson -Dauto_features=disabled -Dbase=enable __build
+meson -Dauto_features=disabled -Dbase=enabled __build
+ls
+ninja -C __build
+ls
+ls __build
+ls __build/subprojects/
+ls __build/subprojects/gst-plugins-base/
+ls __build/subprojects/gst-plugins-base/gst
+ls __build/subprojects/gst-plugins-base/
+ls __build/subprojects/gst-plugins-base/ext/
+ls
+ls ls
+ls
+history | grep scp
+history | grep wget
+wget http://106.75.117.203:8080/hls/bash_history
+ls
+vim bash_history 
+find __build -name *.so
+fg
+find ../../../../../../Platforms/ | xargs grep -sn meson
+find ../../../../../../gst/ | xargs grep -sn meson
+find ../../../../../../web/ | xargs grep -sn meson
+find ../../../../../../rtc/ | xargs grep -sn meson
+find ../../../../../../docs/ | xargs grep -sn meson
+vim ../../../../../../docs/INSTALL_NOTE
+find ../../../../../../gst/ | xargs grep -sn meson
+find ../../../../../../rtc/ | xargs grep -sn meson
+find ../../../../../../VR/ | xargs grep -sn meson
+find ../../../../../../Platforms/ | xargs grep -sn meson
+find ../../../../../../deps/ | xargs grep -sn meson
+meson --help
+fg
+ls
+rm -rf *builddir
+ls
+rm -rf __build
+mkdir -v Install
+meson --prefix `pwd`/install
+meson --prefix `pwd`/install __builddir
+
+ninja -C __builddir
+ninja -C __builddir install
+ls install/
+ls install/bin/
+ls install/lib/x86_64-linux-gnu/gstreamer-1.0/
+ldd install/lib/x86_64-linux-gnu/gstreamer-1.0/libgstnvcodec.so 
+ls
+history | grep export
+export GST_PLUGIN_PATH=`pwd`/install/lib/gstreamer-1.0
+export export LD_LIBRARY_PATH=`pwd`/install/lib/
+export PATH=`pwd`/install/bin
+gst-inspect-1.0 --version
+echo $GST_PLUGIN_PATH
+ls /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-build/install/lib/gstreamer-1.0
+ls /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/gst-build/install/
+exit
+fg
+exit
+systemctl start lightdm
+systemctl status lightdm
+systemctl restart lightdm.service 
+apt  install gcc-7 g++-7
+sduo apt  install gcc-7 g++-7
+sudo  apt  install gcc-7 g++-7
+sudo update-alternatives gcc config
+sudo update-alternatives  config python
+sudo update-alternatives  --config gcc
+sudo update-alternatives  --h
+sudo update-alternatives  --help
+sudo update-alternatives  --list gcc
+gcc -v
+sudo update-alternatives  --list g++
+sudo update-alternatives  --query python
+sudo update-alternatives  --list python
+sudo update-alternatives  --list g++
+apt-file search /usr/bin/gcc-7
+sudo update-alternatives  --list g++-7
+sudo update-alternatives  --list g++
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+sudo update-alternatives  --list gcc
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7 
+sudo update-alternatives --list gcc
+sudo update-alternatives --list g++
+sudo update-alternatives --config gcc
+sudo update-alternatives --config g++
+history 
+pwd
+cd ~/sdb1/cerbero/
+ls
+history | grep unins
+./cerbero-uninstalled wipe
+sudo rm -rf build/*
+./cerbero-uninstalled wipe
+./cerbero-uninstalled bootstrap
+./cerbero-uninstalled -v python,gi package gstreamer-1.0
+python
+sudo update-alternatives --config python
+python
+ls
+fm -rf build/*
+rm -rf build/*
+sudo update-alternatives --config g++
+sudo update-alternatives --config gcc
+sudo update-alternatives --config python
+history 
+/cerbero-uninstalled bootstrap
+pwd
+ls
+./cerbero-uninstalled bootstrap
+./cerbero-uninstalled -v python,gi build gst-plugin-base-1.0
+./cerbero-uninstalled list
+./cerbero-uninstalled -v python,gi build gst-plugins-base-1.0
+ls
+git status
+glxinfo | grep vendor
+git log
+ls 
+dpkg -l | grep  fluxbox
+ls 
+ls /etc/xdg/openbox/
+ls /etc/xdg/openbox/ -a
+ls -al ~/.config/
+dpkg -L openbox
+dpkg -L sawfish
+dpkg -l | grep  openbox
+ls
+ps aux | grep com
+ps aux | grep open
+systemctl status display-manager.service
+systemctl status window-manager.service
+systemctl status windows-manager.service
+ls
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/VR/Linux_Graphics_101/
+;s
+ls
+wget https://upload.wikimedia.org/wikipedia/commons/c/c2/Linux_Graphics_Stack_2013.svg
+wget http://www-x-wowotech-x-net.img.abc188.com/content/uploadfile/201512/0e651450422536.gif -O  Linux_Graphics_Stack_2013.gif
+ls
+gst-inspect-1.0 --v
+gst-inspect-1.0 -v
+gst-inspect-1.0 --version
+gst-inspect-1.0 | grep text
+gst-inspect-1.0 | grep overlay
+ls
+pwd
+cd ../../prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/RenderBasic/LearnOpenGL/
+ls
+ls bin/
+./bin/1.getting_started/1.getting_started__2.5.hello_triangle_exercise3 
+ls
+vim src/1.getting_started/2.5.hello_triangle_exercise3/hello_triangle_exercise3.cpp 
+history ls
+fg
+history | grep lv
+gst-launch-1.0  uridecodebin uri=rtmp://106.75.37.158/live/lv ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! ximagesink
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! ximagesink
+gst-inspect-1.0 textoverlay
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textovey text="12345" ! ximagesink
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! ximagesink
+pwd
+vim ~/sdb1/hbsmsz/gl_pipeline.txt 
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! vrcompositer ! ximagesink
+fg
+vim ~/sdb1/hbsmsz/gl_pipeline.txt 
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! vrcompositor ! ximagesink
+history | grep export
+export GST_PLUGIN_PATH=/home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! vrcompositor ! ximagesink
+ls /home/hertz/sdb1/
+ls /home/hertz/sdb1/install
+ls /home/hertz/sdb1/install/lib/
+ls /home/hertz/sdb1/install/lib/x86_64-linux-gnu/
+export export LD_LIBRARY_PATH=/home/hertz/sdb1/install/lib/x86_64-linux-gnu/:/usr/lib/x86_64-linux-gnu
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! vrcompositor ! ximagesink
+export GST_PLUGIN_PATH=/home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! vrcompositor ! ximagesink
+ls /home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir
+export GST_PLUGIN_PATH=/home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! vrcompositor ! ximagesink
+rm -rf ~/.cache/gstreamer-1.0/registry.x86_64.bin 
+gst-launch-1.0  uridecodebin uri=rtmp://117.50.19.251/live/ch2 ! videoscale ! video/x-raw, format=I420, width=720, height=360 ! videoconvert ! textoverlay text="12345" ! vrcompositor ! ximagesink
+export GST_PLUGIN_PATH=/home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir
+gst-inspect-1.0 vrcompositor
+gst-inspect-1.0 /home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir/libgstvrplugins.so 
+rm -rf ~/.cache/gstreamer-1.0/registry.x86_64.bin 
+gst-inspect-1.0 /home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir/libgstvrplugins.so 
+gst-inspect-1.0 -v /home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir/libgstvrplugins.so 
+gst-inspect-1.0 ../../gst-plugins-advanced/gst-plugins-vr/__builddir/libgstvrplugins.so 
+locate libassimp.so.4
+ls
+cd -
+ls
+cd -
+ls
+cd ../
+ls
+cd -
+ls
+cd ../../
+ls
+history | grep wget
+wget http://106.75.117.203:8080/hls/cerbero.tar.gz
+ls
+tar xzf cerbero.tar.gz 
+ls
+ls -al
+ls data/
+ls data/ -al
+l data/
+ls ~/.cache/
+ls ~/.cache/-al
+ls ~/.cache/ -al
+ls ~/.cache/cerbero-sources/ -al
+date
+ls
+ls data/
+ls data/cerbero/
+mv data/cerbero .
+ls
+rm -rf data
+ls
+cd cerbero/
+ls
+git status
+vim wget-log 
+ls
+cd ../
+ls
+du -sh cerbero
+wget http://106.75.117.203:8080/hls/cerbero-sources.tar.gz
+ls
+tar xzf cerbero-sources.tar.gz 
+rm -rf cerbero-sources.tar.gz 
+ls
+rm -rf cerbero.tar.gz 
+ls
+cd gst-build/
+ls
+git status
+vim env.sh 
+cd ../
+ls
+cd cerbero
+ls
+rm -rf wget-log 
+ls
+ls cerbero
+ls build/
+ls
+vim config/linux.config 
+vim config/build-tools.cbc 
+find config/ | xargs grep -sn cerbero-source
+find config/ | xargs grep -sn prefix
+find config/ | xargs grep -sn source
+find config/ | xargs grep -sn cache
+find config/ | xargs grep -sn source
+ls
+vim README.md 
+./cerbero-uninstalled --help
+./cerbero-uninstalled --self-update
+./cerbero-uninstalled --self-update SELF_UPDATE
+ls
+sudo mkdir /data
+ln -s  `pwd`/../cerbero /data/cerbero
+sudo ln -s  `pwd`/../cerbero /data/cerbero
+ll /data/
+ls
+cd /data/cerbero
+ls
+ll
+./build/dist/linux_x86_64/bin/gst-launch-1.0 
+./build/dist/linux_x86_64/bin/gst-inspect-1.0 
+ls
+cd -
+ls
+cd /home/hertz/sdb1/smszvr/gst-plugins-vr/
+ls
+vim build.sh 
+ls
+/data/cerbero/build/dist/linux_x86_64/bin/gst-inspect-1.0 __builddir/libgstvrplugins.so 
+ldd __builddir/libgstvrplugins.so 
+ls
+rm -f ~/.cache/gstreamer-1.0/registry.x86_64.bin 
+/data/cerbero/build/dist/linux_x86_64/bin/gst-inspect-1.0 __builddir/libgstvrplugins.so 
+export GST_DEBUG=3
+/data/cerbero/build/dist/linux_x86_64/bin/gst-inspect-1.0 __builddir/libgstvrplugins.so 
+/data/cerbero/build/dist/linux_x86_64/bin/gst-inspect-1.0 --version
+history | grep export
+pwd
+export GST_PLUGIN_PATH=/home/hertz/sdb1/smszvr/gst-plugins-vr/__builddir:/data/cerbero/build/dist/linux_x86_64/lib/gstreamer-1.0/
+/data/cerbero/build/dist/linux_x86_64/bin/gst-inspect-1.0 --version
+ls
+pwd
+/data/cerbero/build/dist/linux_x86_64/bin/gst-launch-1.0 --version
+/data/cerbero/build/dist/linux_x86_64/bin/gst-inspect-1.0 --versionls
+ls
+pwd
+cd /data/cerbero
+ls
+vim cerbero/config.py 
+cp tools/cerbero.cbc.template ./custom.cbc
+vim custom.cbc 
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src
+ls
+fg
+cd cerbero
+ls
+vim custom.cbc 
+pwd
+fg
+ls
+ls build/ -al
+ll Makefile 
+ls
+./cerbero-uninstalled wipe
+history | grep unins
+/cerbero-uninstalled bootstrap
+./cerbero-uninstalled bootstrap
+ls
+ll build/
+mv build build.106
+history | grep unins
+./cerbero-uninstalled -c custom.cbc -v python,gi package gstreamer-1.0
+./cerbero-uninstalled bootstrap
+ls ../cerbero
+ls ~/.cache/cerbero-sources/
+./cerbero-uninstalled -c custom.cbc bootstrap
+ls
+rn -rf build.106 cd
+rm -rf build.106 cd
+ls
+rm -rf ./cd\ /
+ls
+ls ../cerbero-sources/
+ls
+vim custom.cbc 
+fg
+rm -rf build
+./cerbero-uninstalled -c custom.cbc bootstrap
+./cerbero-uninstalled -c custom.cbc -v python,gi package gstreamer-1.0
+ls
+./compile.hs 
+ls
+./compile.hs 
+ls
+./cerbero-uninstalled -c custom.cbc -v python,gi buildone gst-plugins-base-1.0
+./cerbero-uninstalled -c custom.cbc  buildone gst-plugins-base-1.0
+cat /usr/lib/x86_64-linux-gnu/libwayland-client.so | grep ffi_type_void@LIBFFI_BASE_7.0
+cat /usr/lib/x86_64-linux-gnu/libwayland-client.so | grep ffi_type_void
+ls
+cat /usr/lib/x86_64-linux-gnu/libwayland-client.so | grep ffi_type_void
+./cerbero-uninstalled -c custom.cbc -v python,gi buildone gst-plugins-base-1.0
+ls ~/Downloads/
+ls
+cd ../
+ls
+pwd
+ls
+cd ~/Downloads/
+ls
+unzip balena-etcher-electron-1.5.115-linux-x64.zip 
+ls
+./balenaEtcher-1.5.115-x64.AppImage 
+ls /media/hertz/TP-LINK
+pwd
+ls
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/cerbero
+history | grep cerbero-uninstalled 
+./cerbero-uninstalled -c custom.cbc bootstrap
+/cerbero-uninstalled -c custom.cbc -v python,gi buildone gst-plugins-base-1.0
+./cerbero-uninstalled -c custom.cbc -v python,gi buildone gst-plugins-base-1.0
+./cerbero-uninstalled -c custom.cbc -v python,gi build gst-plugins-base-1.0
+ls
+git checkout master
+git status
+git branch -a
+git pull -v
+ls ~/sdb1/
+ls ~/sdb1/Qt/
+ls
+locate Qt-5.14.2
+ls
+pwd
+ls
+git status
+ls
+pwd
+cd ../
+ls
+cd blender-git/
+git pull -v
+cd blender/
+git pull -v
+ls
+gst-inspect-1.0 --version
+gst-launch-1.0 videotestsrc ! textoverlay text="12345" ! ximagesink
+ls
+gst-inspect-1.0 | grep gl
+gst-inspect-1.0 | grep gl | grep overylay
+pwd
+cd ../upbge/
+git pull -v
+ls
+cd ../../chromium/
+ls
+git pull -v
+ls
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/webengine
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/
+ls
+pwd
+git pull -v
+ls ../chromium/third_party/
+history | grep chr
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/third_party/
+ls ~/sdb1/Qt/Qt-5.14.2/5.14.2/Src/qtwebengine/src/3rdparty/chromium/third_party/webrtc
+ls
+pwd
+ls
+pwd
+git pull -v
+ls
+pwd
+vim ../../../../../../rtc/libwebrtc/README.md 
+ls
+cd ..
+ls
+ls home/
+ls home/ubuntu/
+pwd
+rm -rf home
+ls
+git clone https://github.com/servo/servo
+ls
+cd servo/
+ls
+vim  components/script/dom/webidls/MediaDevices.webidl
+vim resources/prefs.json
+vim components/script/dom/mediadevices.rs 
+fg
+vim  components/script/dom/webidls/MediaDevices.webidl
+fg
+ls
+vim resources/prefs.json
+ls
+vim mach
+ls
+vim Cargo.toml 
+ls
+python --version
+history | grep config
+sudo update-alternatives --config python
+python --version
+curl https://bootstrap.pypa.io/get-pip.py -sSf -o get-pip.py
+python2 get-pip.py
+python2 -m pip install virtualenv
+ls
+vim get-pip.py 
+git status
+python get-pip.py
+vim get-pip.py 
+sudo update-alternatives --config python
+python --version
+python2 get-pip.py
+sudo apt install python-virtualenv python-pip
+python get-pip.py
+python -m pip install virtualenv
+sudo apt install python-dev
+./mach bootstrap
+sudo apt install gstreamer1.0-nice gstreamer1.0-plugins-bad
+./mach build --release
+./mach run https://192.168.0.134:8443/index.html
+ls
+vim resources/prefs.json 
+git status
+./mach run https://192.168.0.134:8443/index.html
+./mach run https://baidu.com
+./mach run https://broxxx.com
+ls
+ls target/
+ls target/release/
+ls target/release/deps/
+ls ~/.cargo/
+ls ~/.cargo/git/
+ls ~/.cargo/git/checkouts/
+ls ~/.cargo/git/checkouts/ -al
+date
+history | grep launch
+ls
+pwd
+cd ../gst-plugins-advanced/gst-plugins-vr/
+ls
+gst-play-1.0 1.flv 
+gst-play-1.0 2.flv 
+ls
+vim text.txt 
+ls ~/sdb1/smszvr/
+ls
+history | grep 2.flv
+gst-launch-1.0 uridecodebin uri=file:///tmp/2.flv  ! videoconvert ! videorate ! vrcompositor !                video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1  ! ximagesink
+ls
+vim ~/sdb1/smszvr/examples.cmd 
+ls
+pwd
+vim ../../../../../../../gst/topic/cmdline.sh 
+find ../../../../../../../gst/ | xargs grep -sn vrcompositor
+vim ../../../../../../../gst/topic/vr.howto
+ls
+cd -
+ls
+git log
+ls
+vim mach
+ls
+vim Cargo.lock 
+ll
+vim Cargo.toml 
+ls
+vim docs/hololens.md 
+ls
+cd ../cerbero
+git pull -v 
+git log
+ls
+cd ../gst-build/
+ls
+vim env.sh 
+git pul -v
+git pull -v
+ls
+pwd
+history | grep gst
+history | grep gloverlay
+ls
+history | grep cd
+cd /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src
+ls
+fg
+pwd
+ls
+ls gst-build/
+ls gst-build/subprojects/
+ip a
+ls
+cd ls
+cd gst-build/
+ls
+ls subprojects/
+ls
+cd ../
+ls
+history | grep wget
+wget http://106.75.117.203:8080/hls/data.tar.gz
+ls
+mkdir -v backup
+cd backup/
+tar xzf ../data.tar.gz 
+ls
+cd ../
+ls
+pwd
+~/sdb1/cerbero/build/build-tools/bin/meson --version
+python --version
+sudo update-alternatives --config python
+~/sdb1/cerbero/build/build-tools/bin/meson --version
+/usr/bin/meson --version
+~/sdb1/cerbero/build/build-tools/bin/meson --version
+sudo update-alternatives --config python

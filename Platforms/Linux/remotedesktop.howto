@@ -1,0 +1,9 @@
+https://www.c-nergy.be/products.html
+https://c-nergy.be/blog/?p=15978
+
+./xrdp-installer-1.2.2.sh -c -s     (this would perform a custom install and enable sound redirection)
+./xrdp-installer-1.2.2.sh -c -l     (this would perform a custom install and customize xrdp login screen)
+./xrdp-installer-1.2.2.sh -c -l -s  (this would perform a custom install, enable sound and customize login screen)
+
+./xrdp-installer-1.2.2.sh -r     (to remove the xrdp packages)
+./xrdp-installer-1.2.2.sh (default )
