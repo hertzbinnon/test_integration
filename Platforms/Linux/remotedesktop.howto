@@ -7,3 +7,11 @@ https://c-nergy.be/blog/?p=15978
 
 ./xrdp-installer-1.2.2.sh -r     (to remove the xrdp packages)
 ./xrdp-installer-1.2.2.sh (default )
+
+
+#or
+sudo apt-get update
+sudo apt-get install ubuntu-desktop
+sudo dpkg -i nomachine_7.3.2_1_amd64.deb 
+sudo /etc/NX/nxserver start
+sudo /etc/NX/nxserver --status

@@ -1,2 +1,4 @@
 1.文件属于哪个安装包
 apt-file search bin/makeinfo
+dpkg-deb -c  packageName.deb
+apt-file list packageName 

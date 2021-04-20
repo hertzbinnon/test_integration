@@ -36,6 +36,7 @@ gst-inspect-1.0 | grep nvdec
 #   edit recipes/gst-plugins-bad-1.0.recipe
 #   'opencv': 'enabled',
 export CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1"
+#   build sqlite3 and gst-plugins-bad-1.0
 #3 building with python support
 ./cerbero-uninstalled -v python,gi package gstreamer-1.0
 # 

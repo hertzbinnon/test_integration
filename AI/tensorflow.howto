@@ -1,0 +1,8 @@
+https://linuxize.com/post/how-to-install-tensorflow-on-ubuntu-18-04/
+mkdir tensorflow_GPU
+cd tensorflow_GPU/
+python3 -m venv venv
+source venv/bin/activate
+pip3 install --upgrade pip3
+#pip3 install --upgrade tensorflow
+pip3 install --upgrade tensorflow-gpu

@@ -13,4 +13,13 @@ gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/low.png ! \
     video/x-raw\(memory:GLMemory\), width=1920, height=1080, framerate=75/1 ! \
     hmdwarp ! glimagesink
 #https://stackoverflow.com/questions/55503366/gst-launch-and-multiple-lines-of-text
+
 gst-launch-1.0 videotestsrc pattern=0 horizontal-speed=0 is-live=1     ! textoverlay text="PLEASE <b>STAND</b> <span foreground=\"blue\" size=\"x-large\">\nBY</span>Next <u>under-line</u>" valignment=center halignment=center font-desc="Sans, 24" ! autovideosink
+GST_DEBUG=nvh264dec:5 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=file:///tmp/2.flv  ! queue ! videoconvert ! glupload ! glcolorconvert ! vrcompositor ! hmdwarp ! glimagesink
+GST_DEBUG=nvh264dec:5 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 uridecodebin uri=file:///tmp/2.flv  ! queue ! videoconvert ! glupload ! glcolorconvert ! vrcompositor ! glimagesink
+gst-launch-1.0 uridecodebin uri=file:///home/hertz/sdb1/png/1.png ! queue !    imagefreeze ! glupload ! glcolorconvert ! queue !  vrcompositor !     video/x-raw'(memory:GLMemory)', width=720, height=360, framerate=25/1 !  queue !   hmdwarp ! glimagesink
+
+
+#fov render need client 
+GST_DEBUG=1 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 -e uridecodebin uri=rtmp://117.50.19.251/live/ch2   ! queue !  videoconvert ! glupload ! glcolorconvert ! vrcompositor ! gldownload !  textoverlay text="12345" !  gdkpixbufoverlay location=/usr/share/pixmaps/faces/cat.jpg ! queue !  videoconvert ! nvh264enc ! h264parse ! queue ! mpegtsmux ! filesink location=/tmp/1.ts
+GST_DEBUG=1 GST_PLUGIN_FEATURE_RANK=nvh264dec:259 gst-launch-1.0 -e uridecodebin uri=rtmp://117.50.19.251/live/ch2   ! queue !  videoconvert ! glupload ! glcolorconvert ! vrcompositor ! gldownload !  textoverlay text="12345" !  gdkpixbufoverlay location=/usr/share/pixmaps/faces/cat.jpg ! tee name=teer ! queue !  videoconvert ! nvh264enc ! h264parse ! queue ! mpegtsmux ! filesink location=/tmp/1.ts  teer. ! glimagesink
