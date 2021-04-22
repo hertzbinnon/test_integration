@@ -44,3 +44,12 @@ chromium
 *.o
 cudatest
 gst-plugins-extenal
+cerbero
+cerbero-sources
+backup
+xrdesktop
+vlc-dev
+fstab
+#../../Documents/.~lock.c++面试题.docx#"
+../../Documents/.~lock.cloudArch.odg#
+RenderBasic/.*
