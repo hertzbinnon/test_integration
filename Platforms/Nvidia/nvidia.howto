@@ -1,3 +1,51 @@
 https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu1804/x86_64/
-https://developer.nvidia.com/cuda-10.0-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal
 https://www.nvidia.cn/Download/index.aspx?lang=cn
+https://developer.nvidia.com/cuda-toolkit-archive
+#https://askubuntu.com/questions/893922/ubuntu-16-04-gives-x-error-of-failed-request-badvalue-integer-parameter-out-o
+#Remove all Nvidia packages and reinstall xorg packages.
+
+#sudo apt-get purge nvidia*  
+#sudo apt-get install --reinstall xserver-xorg-video-intel libgl1-mesa-glx libgl1-mesa-dri xserver-xorg-core   
+#sudo dpkg-reconfigure xserver-xorg   
+#Install cuda8. You need to:
+#Press Crtl + Alt + F1 keys.
+#sudo service lightdm stop  
+#sudo init 3  
+#I use cuda8 .run file to install it, then installing it will prompt if you want to install nvidia card driver?.
+#Choose yes.
+#It will prompt if you want to install nvidia opengl?
+#Choose no, this is a crucial choice, if you say "yes" here it will cover "mesa*" libraries.
+#After this, choose the default.
+#After install, reboot.
+#sudo reboot
+
+Install nvidia driver and cuda
+1.clear Env
+sudo apt-get purge nvidia*  
+sudo apt-get install --reinstall xserver-xorg-video-intel libgl1-mesa-glx libgl1-mesa-dri xserver-xorg-core   
+sudo dpkg-reconfigure xserver-xorg
+####Press Crtl + Alt + F1 keys.
+sudo service lightdm stop  
+sudo init 3
+2.install driver
+https://www.nvidia.cn/Download/index.aspx?lang=cn
+3.install  cuda
+https://developer.nvidia.com/cuda-10.0-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal
+https://developer.nvidia.com/cuda-11.0-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal
+https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&=Ubuntu&target_version=20.04&target_type=runfile_local
+4.
+reboot
+
+### misc issue about nvidia on 
+nvidia-uninstall
+nvidia-settings
+nvidia-xconfig
+https://askubuntu.com/questions/893922/ubuntu-16-04-gives-x-error-of-failed-request-badvalue-integer-parameter-out-o ## error
+https://thebravestatistician.wordpress.com/2017/08/13/tweaking-your-nvidia-gpu-via-ssh-using-nvidia-settings/
+https://forums.developer.nvidia.com/t/tuning-nvidia-settings-over-ssh-error/60673
+https://forums.developer.nvidia.com/t/nvidia-settings-not-working-on-ubuntu-20-04-2/169315/2
+https://www.nvidia.com/en-us/geforce/forums/geforce-graphics-cards/5/402870/ubuntu-2004-lts-xorgconf-does-not-work-with-my-lg-/
+http://manpages.ubuntu.com/manpages/precise/man1/alt-nvidia-current-settings.1.html
+https://askubuntu.com/questions/571740/broken-opengl-wrong-glx-renderer-in-glxinfo-and-inxi-nvidia-instead-of-intel
+https://forums.developer.nvidia.com/t/driver-installed-but-wont-load-ubuntu-20-04-nvidia-tu104gl-quadro-rtx-4000/124839/3
+https://forums.developer.nvidia.com/t/dual-gpu-intel-nvidia-prime-render-offloading-ubuntu-20-04-does-not-offload/166864/4

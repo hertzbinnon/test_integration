@@ -1,0 +1,3266 @@
+<!DOCTYPE html>
+<html class='v2' dir='ltr' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+<link href='https://www.blogger.com/static/v1/widgets/115981500-css_bundle_v2.css' rel='stylesheet' type='text/css'/>
+<meta content='width=1100' name='viewport'/>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<meta content='blogger' name='generator'/>
+<link href='https://blog.wmspanel.com/favicon.ico' rel='icon' type='image/x-icon'/>
+<link href='https://blog.wmspanel.com/p/stress-testing-nvidia-gpu-transcoding.html' rel='canonical'/>
+<link rel="alternate" type="application/atom+xml" title="Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK - Atom" href="https://blog.wmspanel.com/feeds/posts/default" />
+<link rel="alternate" type="application/rss+xml" title="Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK - RSS" href="https://blog.wmspanel.com/feeds/posts/default?alt=rss" />
+<link rel="service.post" type="application/atom+xml" title="Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK - Atom" href="https://www.blogger.com/feeds/3391168021757249257/posts/default" />
+<!--[if IE]><script type="text/javascript" src="https://www.blogger.com/static/v1/jsbin/1277698886-ieretrofit.js"></script>
+<![endif]-->
+<meta content='https://blog.wmspanel.com/p/stress-testing-nvidia-gpu-transcoding.html' property='og:url'/>
+<meta content='Stress-testing NVidia GPU for live transcoding' property='og:title'/>
+<meta content='Softvelum team blog for Nimble Streamer, Live Transcoder, Advertizer, WMSPanel, Larix Broadcaster and more' property='og:description'/>
+<meta content='https://3.bp.blogspot.com/-9e5TSgCKo74/WKv83G9HgdI/AAAAAAAACqU/uDHkVbMhlAAK0QzLLzlUgW4VmsjUbVBbgCLcB/w1200-h630-p-k-no-nu/nvenc-01-scenario.png' property='og:image'/>
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+<title>Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK: Stress-testing NVidia GPU for live transcoding</title>
+<style id='page-skin-1' type='text/css'><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Simple
+Designer: Josh Peterson
+URL:      www.noaesthetic.com
+----------------------------------------------- */
+/* Variable definitions
+====================
+<Variable name="keycolor" description="Main Color" type="color" default="#66bbdd"/>
+<Group description="Page Text" selector="body">
+<Variable name="body.font" description="Font" type="font"
+default="normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="body.text.color" description="Text Color" type="color" default="#222222"/>
+</Group>
+<Group description="Backgrounds" selector=".body-fauxcolumns-outer">
+<Variable name="body.background.color" description="Outer Background" type="color" default="#66bbdd"/>
+<Variable name="content.background.color" description="Main Background" type="color" default="#ffffff"/>
+<Variable name="header.background.color" description="Header Background" type="color" default="transparent"/>
+</Group>
+<Group description="Links" selector=".main-outer">
+<Variable name="link.color" description="Link Color" type="color" default="#2288bb"/>
+<Variable name="link.visited.color" description="Visited Color" type="color" default="#888888"/>
+<Variable name="link.hover.color" description="Hover Color" type="color" default="#33aaff"/>
+</Group>
+<Group description="Blog Title" selector=".header h1">
+<Variable name="header.font" description="Font" type="font"
+default="normal normal 60px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="header.text.color" description="Title Color" type="color" default="#3399bb" />
+</Group>
+<Group description="Blog Description" selector=".header .description">
+<Variable name="description.text.color" description="Description Color" type="color"
+default="#777777" />
+</Group>
+<Group description="Tabs Text" selector=".tabs-inner .widget li a">
+<Variable name="tabs.font" description="Font" type="font"
+default="normal normal 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="tabs.text.color" description="Text Color" type="color" default="#999999"/>
+<Variable name="tabs.selected.text.color" description="Selected Color" type="color" default="#000000"/>
+</Group>
+<Group description="Tabs Background" selector=".tabs-outer .PageList">
+<Variable name="tabs.background.color" description="Background Color" type="color" default="#f5f5f5"/>
+<Variable name="tabs.selected.background.color" description="Selected Color" type="color" default="#eeeeee"/>
+</Group>
+<Group description="Post Title" selector="h3.post-title, .comments h4">
+<Variable name="post.title.font" description="Font" type="font"
+default="normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+</Group>
+<Group description="Date Header" selector=".date-header">
+<Variable name="date.header.color" description="Text Color" type="color"
+default="#222222"/>
+<Variable name="date.header.background.color" description="Background Color" type="color"
+default="transparent"/>
+</Group>
+<Group description="Post Footer" selector=".post-footer">
+<Variable name="post.footer.text.color" description="Text Color" type="color" default="#666666"/>
+<Variable name="post.footer.background.color" description="Background Color" type="color"
+default="#f9f9f9"/>
+<Variable name="post.footer.border.color" description="Shadow Color" type="color" default="#eeeeee"/>
+</Group>
+<Group description="Gadgets" selector="h2">
+<Variable name="widget.title.font" description="Title Font" type="font"
+default="normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="widget.title.text.color" description="Title Color" type="color" default="#000000"/>
+<Variable name="widget.alternate.text.color" description="Alternate Color" type="color" default="#999999"/>
+</Group>
+<Group description="Images" selector=".main-inner">
+<Variable name="image.background.color" description="Background Color" type="color" default="#ffffff"/>
+<Variable name="image.border.color" description="Border Color" type="color" default="#eeeeee"/>
+<Variable name="image.text.color" description="Caption Text Color" type="color" default="#222222"/>
+</Group>
+<Group description="Accents" selector=".content-inner">
+<Variable name="body.rule.color" description="Separator Line Color" type="color" default="#eeeeee"/>
+<Variable name="tabs.border.color" description="Tabs Border Color" type="color" default="#dddddd"/>
+</Group>
+<Variable name="body.background" description="Body Background" type="background"
+color="#ffffff" default="$(color) none repeat scroll top left"/>
+<Variable name="body.background.override" description="Body Background Override" type="string" default=""/>
+<Variable name="body.background.gradient.cap" description="Body Gradient Cap" type="url"
+default="url(//www.blogblog.com/1kt/simple/gradients_light.png)"/>
+<Variable name="body.background.gradient.tile" description="Body Gradient Tile" type="url"
+default="url(//www.blogblog.com/1kt/simple/body_gradient_tile_light.png)"/>
+<Variable name="content.background.color.selector" description="Content Background Color Selector" type="string" default=".content-inner"/>
+<Variable name="content.padding" description="Content Padding" type="length" default="10px"/>
+<Variable name="content.padding.horizontal" description="Content Horizontal Padding" type="length" default="0"/>
+<Variable name="content.shadow.spread" description="Content Shadow Spread" type="length" default="40px"/>
+<Variable name="content.shadow.spread.webkit" description="Content Shadow Spread (WebKit)" type="length" default="5px"/>
+<Variable name="content.shadow.spread.ie" description="Content Shadow Spread (IE)" type="length" default="10px"/>
+<Variable name="main.border.width" description="Main Border Width" type="length" default="0"/>
+<Variable name="header.background.gradient" description="Header Gradient" type="url" default="none"/>
+<Variable name="header.shadow.offset.left" description="Header Shadow Offset Left" type="length" default="-1px"/>
+<Variable name="header.shadow.offset.top" description="Header Shadow Offset Top" type="length" default="-1px"/>
+<Variable name="header.shadow.spread" description="Header Shadow Spread" type="length" default="1px"/>
+<Variable name="header.padding" description="Header Padding" type="length" default="30px"/>
+<Variable name="header.border.size" description="Header Border Size" type="length" default="1px"/>
+<Variable name="header.bottom.border.size" description="Header Bottom Border Size" type="length" default="0"/>
+<Variable name="header.border.horizontalsize" description="Header Horizontal Border Size" type="length" default="0"/>
+<Variable name="description.text.size" description="Description Text Size" type="string" default="140%"/>
+<Variable name="tabs.margin.top" description="Tabs Margin Top" type="length" default="0" />
+<Variable name="tabs.margin.side" description="Tabs Side Margin" type="length" default="30px" />
+<Variable name="tabs.background.gradient" description="Tabs Background Gradient" type="url"
+default="url(//www.blogblog.com/1kt/simple/gradients_light.png)"/>
+<Variable name="tabs.border.width" description="Tabs Border Width" type="length" default="1px"/>
+<Variable name="tabs.bevel.border.width" description="Tabs Bevel Border Width" type="length" default="1px"/>
+<Variable name="date.header.padding" description="Date Header Padding" type="string" default="inherit"/>
+<Variable name="date.header.letterspacing" description="Date Header Letter Spacing" type="string" default="inherit"/>
+<Variable name="date.header.margin" description="Date Header Margin" type="string" default="inherit"/>
+<Variable name="post.margin.bottom" description="Post Bottom Margin" type="length" default="25px"/>
+<Variable name="image.border.small.size" description="Image Border Small Size" type="length" default="2px"/>
+<Variable name="image.border.large.size" description="Image Border Large Size" type="length" default="5px"/>
+<Variable name="page.width.selector" description="Page Width Selector" type="string" default=".region-inner"/>
+<Variable name="page.width" description="Page Width" type="string" default="auto"/>
+<Variable name="main.section.margin" description="Main Section Margin" type="length" default="15px"/>
+<Variable name="main.padding" description="Main Padding" type="length" default="15px"/>
+<Variable name="main.padding.top" description="Main Padding Top" type="length" default="30px"/>
+<Variable name="main.padding.bottom" description="Main Padding Bottom" type="length" default="30px"/>
+<Variable name="paging.background"
+color="#ffffff"
+description="Background of blog paging area" type="background"
+default="transparent none no-repeat scroll top center"/>
+<Variable name="footer.bevel" description="Bevel border length of footer" type="length" default="0"/>
+<Variable name="mobile.background.overlay" description="Mobile Background Overlay" type="string"
+default="transparent none repeat scroll top left"/>
+<Variable name="mobile.background.size" description="Mobile Background Size" type="string" default="auto"/>
+<Variable name="mobile.button.color" description="Mobile Button Color" type="color" default="#ffffff" />
+<Variable name="startSide" description="Side where text starts in blog language" type="automatic" default="left"/>
+<Variable name="endSide" description="Side where text ends in blog language" type="automatic" default="right"/>
+*/
+/* Content
+----------------------------------------------- */
+body {
+font: normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #222222;
+background: #ffffff none no-repeat scroll center center;
+padding: 0 0 0 0;
+background-attachment: scroll;
+}
+html body .content-outer {
+min-width: 0;
+max-width: 100%;
+width: 100%;
+}
+a:link {
+text-decoration:none;
+color: #2288bb;
+}
+a:visited {
+text-decoration:none;
+color: #7c93a1;
+}
+a:hover {
+text-decoration:underline;
+color: #33aaff;
+}
+.body-fauxcolumn-outer .fauxcolumn-inner {
+background: transparent none repeat scroll top left;
+_background-image: none;
+}
+.body-fauxcolumn-outer .cap-top {
+position: absolute;
+z-index: 1;
+height: 400px;
+width: 100%;
+background: #ffffff none no-repeat scroll center center;
+background-attachment: scroll;
+}
+.body-fauxcolumn-outer .cap-top .cap-left {
+width: 100%;
+background: transparent none repeat-x scroll top left;
+_background-image: none;
+}
+.content-outer {
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 0 #333333;
+box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+margin-bottom: 1px;
+}
+.content-inner {
+padding: 0 0;
+}
+.main-outer, .footer-outer {
+background-color: #ffffff;
+}
+/* Header
+----------------------------------------------- */
+.header-outer {
+background: transparent none repeat-x scroll 0 -400px;
+_background-image: none;
+}
+.Header h1 {
+font: normal normal 42px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #3399bb;
+text-shadow: 0 0 0 rgba(0, 0, 0, .2);
+}
+.Header h1 a {
+color: #3399bb;
+}
+.Header .description {
+font-size: 200%;
+color: #444444;
+}
+.header-inner .Header .titlewrapper {
+padding: 22px 30px 0 30px;
+}
+.header-inner .Header .descriptionwrapper {
+padding: 0 30px;
+}
+/* Tabs
+----------------------------------------------- */
+.tabs-inner .section:first-child {
+border-top: 0 solid #dddddd;
+}
+.tabs-inner .section:first-child ul {
+margin-top: -0;
+border-top: 0 solid #dddddd;
+border-left: 0 solid #dddddd;
+border-right: 0 solid #dddddd;
+}
+.tabs-inner .widget ul {
+background: transparent none repeat-x scroll 0 -800px;
+_background-image: none;
+border-bottom: 0 solid #dddddd;
+margin-top: 0;
+margin-left: -0;
+margin-right: -0;
+}
+.tabs-inner .widget li a {
+display: inline-block;
+padding: .6em 1em;
+font: normal normal 20px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #3399bb;
+border-left: 0 solid #ffffff;
+border-right: 0 solid #dddddd;
+}
+.tabs-inner .widget li:first-child a {
+border-left: none;
+}
+.tabs-inner .widget li.selected a, .tabs-inner .widget li a:hover {
+color: #444444;
+background-color: transparent;
+text-decoration: none;
+}
+/* Columns
+----------------------------------------------- */
+.main-outer {
+border-top: 1px solid #dddddd;
+}
+.fauxcolumn-left-outer .fauxcolumn-inner {
+border-right: 1px solid #dddddd;
+}
+.fauxcolumn-right-outer .fauxcolumn-inner {
+border-left: 1px solid #dddddd;
+}
+/* Headings
+----------------------------------------------- */
+h2 {
+margin: 0 0 1em 0;
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #000000;
+text-transform: uppercase;
+}
+/* Widgets
+----------------------------------------------- */
+.widget .zippy {
+color: #999999;
+text-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
+}
+.widget .popular-posts ul {
+list-style: none;
+}
+/* Posts
+----------------------------------------------- */
+.date-header span {
+background-color: transparent;
+color: #222222;
+padding: inherit;
+letter-spacing: inherit;
+margin: inherit;
+}
+.main-inner {
+padding-top: 30px;
+padding-bottom: 30px;
+}
+.main-inner .column-center-inner {
+padding: 0 15px;
+}
+.main-inner .column-center-inner .section {
+margin: 0 15px;
+}
+.post {
+margin: 0 0 25px 0;
+}
+h3.post-title, .comments h4 {
+font: normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+margin: .75em 0 0;
+}
+.post-body {
+font-size: 110%;
+line-height: 1.4;
+position: relative;
+}
+.post-body img, .post-body .tr-caption-container, .Profile img, .Image img,
+.BlogList .item-thumbnail img {
+padding: 2px;
+background: #ffffff;
+border: 1px solid #eeeeee;
+-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+}
+.post-body img, .post-body .tr-caption-container {
+padding: 5px;
+}
+.post-body .tr-caption-container {
+color: #222222;
+}
+.post-body .tr-caption-container img {
+padding: 0;
+background: transparent;
+border: none;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+}
+.post-header {
+margin: 0 0 1.5em;
+line-height: 1.6;
+font-size: 90%;
+}
+.post-footer {
+margin: 20px -2px 0;
+padding: 5px 10px;
+color: #666666;
+background-color: #f9f9f9;
+border-bottom: 1px solid #eeeeee;
+line-height: 1.6;
+font-size: 90%;
+}
+#comments .comment-author {
+padding-top: 1.5em;
+border-top: 1px solid #dddddd;
+background-position: 0 1.5em;
+}
+#comments .comment-author:first-child {
+padding-top: 0;
+border-top: none;
+}
+.avatar-image-container {
+margin: .2em 0 0;
+}
+#comments .avatar-image-container img {
+border: 1px solid #eeeeee;
+}
+/* Comments
+----------------------------------------------- */
+.comments .comments-content .icon.blog-author {
+background-repeat: no-repeat;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9sLFwMeCjjhcOMAAAD+SURBVDjLtZSvTgNBEIe/WRRnm3U8RC1neQdsm1zSBIU9VVF1FkUguQQsD9ITmD7ECZIJSE4OZo9stoVjC/zc7ky+zH9hXwVwDpTAWWLrgS3QAe8AZgaAJI5zYAmc8r0G4AHYHQKVwII8PZrZFsBFkeRCABYiMh9BRUhnSkPTNCtVXYXURi1FpBDgArj8QU1eVXUzfnjv7yP7kwu1mYrkWlU33vs1QNu2qU8pwN0UpKoqokjWwCztrMuBhEhmh8bD5UDqur75asbcX0BGUB9/HAMB+r32hznJgXy2v0sGLBcyAJ1EK3LFcbo1s91JeLwAbwGYu7TP/3ZGfnXYPgAVNngtqatUNgAAAABJRU5ErkJggg==);
+}
+.comments .comments-content .loadmore a {
+border-top: 1px solid #999999;
+border-bottom: 1px solid #999999;
+}
+.comments .comment-thread.inline-thread {
+background-color: #f9f9f9;
+}
+.comments .continue {
+border-top: 2px solid #999999;
+}
+/* Accents
+---------------------------------------------- */
+.section-columns td.columns-cell {
+border-left: 1px solid #dddddd;
+}
+.blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.blog-pager-older-link, .home-link,
+.blog-pager-newer-link {
+background-color: #ffffff;
+padding: 5px;
+}
+.footer-outer {
+border-top: 0 dashed #bbbbbb;
+}
+/* Mobile
+----------------------------------------------- */
+body.mobile  {
+background-size: auto;
+}
+.mobile .body-fauxcolumn-outer {
+background: transparent none repeat scroll top left;
+}
+.mobile .body-fauxcolumn-outer .cap-top {
+background-size: 100% auto;
+}
+.mobile .content-outer {
+-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+padding: 0 0;
+}
+body.mobile .AdSense {
+margin: 0 -0;
+}
+.mobile .tabs-inner .widget ul {
+margin-left: 0;
+margin-right: 0;
+}
+.mobile .post {
+margin: 0;
+}
+.mobile .main-inner .column-center-inner .section {
+margin: 0;
+}
+.mobile .date-header span {
+padding: 0.1em 10px;
+margin: 0 -10px;
+}
+.mobile h3.post-title {
+margin: 0;
+}
+.mobile .blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.mobile .footer-outer {
+border-top: none;
+}
+.mobile .main-inner, .mobile .footer-inner {
+background-color: #ffffff;
+}
+.mobile-index-contents {
+color: #222222;
+}
+.mobile-link-button {
+background-color: #2288bb;
+}
+.mobile-link-button a:link, .mobile-link-button a:visited {
+color: #ffffff;
+}
+.mobile .tabs-inner .section:first-child {
+border-top: none;
+}
+.mobile .tabs-inner .PageList .widget-content {
+background-color: transparent;
+color: #444444;
+border-top: 0 solid #dddddd;
+border-bottom: 0 solid #dddddd;
+}
+.mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+border-left: 1px solid #dddddd;
+}
+
+--></style>
+<style id='template-skin-1' type='text/css'><!--
+body {
+min-width: 1090px;
+}
+.content-outer, .content-fauxcolumn-outer, .region-inner {
+min-width: 1090px;
+max-width: 1090px;
+_width: 1090px;
+}
+.main-inner .columns {
+padding-left: 0px;
+padding-right: 260px;
+}
+.main-inner .fauxcolumn-center-outer {
+left: 0px;
+right: 260px;
+/* IE6 does not respect left and right together */
+_width: expression(this.parentNode.offsetWidth -
+parseInt("0px") -
+parseInt("260px") + 'px');
+}
+.main-inner .fauxcolumn-left-outer {
+width: 0px;
+}
+.main-inner .fauxcolumn-right-outer {
+width: 260px;
+}
+.main-inner .column-left-outer {
+width: 0px;
+right: 100%;
+margin-left: -0px;
+}
+.main-inner .column-right-outer {
+width: 260px;
+margin-right: -260px;
+}
+#layout {
+min-width: 0;
+}
+#layout .content-outer {
+min-width: 0;
+width: 800px;
+}
+#layout .region-inner {
+min-width: 0;
+width: auto;
+}
+--></style>
+<script type='text/javascript'>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-24001884-4', 'auto', 'blogger');
+        ga('blogger.send', 'pageview');
+      </script>
+<meta content='5df6762bb6038020' name='yandex-verification'/>
+<link href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=3391168021757249257&amp;zx=05e22e2d-9e4f-4255-b5a7-ba9f7618ba3f' media='none' onload='if(media!=&#39;all&#39;)media=&#39;all&#39;' rel='stylesheet'/><noscript><link href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=3391168021757249257&amp;zx=05e22e2d-9e4f-4255-b5a7-ba9f7618ba3f' rel='stylesheet'/></noscript>
+
+</head>
+<body class='loading'>
+<!-- Yandex.Metrika counter --><script type='text/javascript'>(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter30931196 = new Ya.Metrika({id:30931196, trackLinks:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img alt='' src='//mc.yandex.ru/watch/30931196' style='position:absolute; left:-9999px;'/></div></noscript><!-- /Yandex.Metrika counter -->
+<div class='navbar no-items section' id='navbar' name='Navbar'>
+</div>
+<div class='body-fauxcolumns'>
+<div class='fauxcolumn-outer body-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content'>
+<div class='content-fauxcolumns'>
+<div class='fauxcolumn-outer content-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content-outer'>
+<div class='content-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left content-fauxborder-left'>
+<div class='fauxborder-right content-fauxborder-right'></div>
+<div class='content-inner'>
+<header>
+<div class='header-outer'>
+<div class='header-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left header-fauxborder-left'>
+<div class='fauxborder-right header-fauxborder-right'></div>
+<div class='region-inner header-inner'>
+<div class='header section' id='header' name='Header'><div class='widget Header' data-version='1' id='Header1'>
+<div id='header-inner'>
+<a href='https://blog.wmspanel.com/' style='display: block'>
+<img alt="Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK" height="40px; " id="Header1_headerimg" src="//3.bp.blogspot.com/-1Wq88M-G0BM/Urqpb-YjKQI/AAAAAAAABhs/nPC8LeEHRXo/s1600/1.png" style="display: block" width="110px; ">
+</a>
+<div class='descriptionwrapper'>
+<p class='description'><span>News, features and updates for Softvelum products</span></p>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='header-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</header>
+<div class='tabs-outer'>
+<div class='tabs-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left tabs-fauxborder-left'>
+<div class='fauxborder-right tabs-fauxborder-right'></div>
+<div class='region-inner tabs-inner'>
+<div class='tabs section' id='crosscol' name='Cross-Column'><div class='widget PageList' data-version='1' id='PageList1'>
+<h2>Pages</h2>
+<div class='widget-content'>
+<ul>
+<li>
+<a href='https://blog.wmspanel.com/'>Team blog</a>
+</li>
+<li>
+<a href='https://wmspanel.com/nimble'>Nimble Streamer</a>
+</li>
+<li>
+<a href='https://softvelum.com/transcoder/'>Live Transcoder</a>
+</li>
+<li>
+<a href='https://softvelum.com/larix/'>Larix Broadcaster</a>
+</li>
+<li>
+<a href='https://blog.wmspanel.com/2019/01/get-ready-flash-farewell-rtmp-decline.html'>Farewell Flash+RTMP</a>
+</li>
+<li>
+<a href='https://softvelum.com/srt/'>SRT technology</a>
+</li>
+<li>
+<a href='https://blog.wmspanel.com/2021/03/convert-ndi-apple-low-latency-hls.html'>Convert NDI to Apple LL HLS</a>
+</li>
+<li>
+<a href='https://blog.wmspanel.com/2021/03/q1-2021-news.html'>Q1 2021 news</a>
+</li>
+</ul>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("PageList1"));' rel='nofollow' target='configPageList1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+<div class='tabs no-items section' id='crosscol-overflow' name='Cross-Column 2'></div>
+</div>
+</div>
+<div class='tabs-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='main-outer'>
+<div class='main-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left main-fauxborder-left'>
+<div class='fauxborder-right main-fauxborder-right'></div>
+<div class='region-inner main-inner'>
+<div class='columns fauxcolumns'>
+<div class='fauxcolumn-outer fauxcolumn-center-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-left-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-right-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<!-- corrects IE6 width calculation -->
+<div class='columns-inner'>
+<div class='column-center-outer'>
+<div class='column-center-inner'>
+<div class='main section' id='main' name='Main'><div class='widget Blog' data-version='1' id='Blog1'>
+<div class='blog-posts hfeed'>
+
+          <div class="date-outer">
+        
+
+          <div class="date-posts">
+        
+<div class='post-outer'>
+<div class='post hentry' itemprop='blogPost' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+<meta content='https://3.bp.blogspot.com/-9e5TSgCKo74/WKv83G9HgdI/AAAAAAAACqU/uDHkVbMhlAAK0QzLLzlUgW4VmsjUbVBbgCLcB/s72-c/nvenc-01-scenario.png' itemprop='image_url'/>
+<meta content='3391168021757249257' itemprop='blogId'/>
+<meta content='1162447265058451688' itemprop='postId'/>
+<a name='1162447265058451688'></a>
+<h3 class='post-title entry-title' itemprop='name'>
+Stress-testing NVidia GPU for live transcoding
+</h3>
+<div class='post-header'>
+<div class='post-header-line-1'></div>
+</div>
+<div class='post-body entry-content' id='post-body-1162447265058451688' itemprop='description articleBody'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+During past several years our company was creating solutions for media streaming such as&nbsp;<a href="https://wmspanel.com/nimble">Nimble Streamer</a>&nbsp;media server,&nbsp;<a href="https://wmspanel.com/admin_panel">WMSPanel</a>&nbsp;cloud service and&nbsp;<a href="https://wmspanel.com/mobile_library">mobile broadcasting SDK</a>.<br />
+<br />
+<b>Nimble Streamer</b>&nbsp;is one of our flagship products. It's a server software which takes live streams and files as input and makes them available for huge amount of viewers. It's a native C++&nbsp;application which was ported to all popular OSes (Linux, Windows, MacOS) and platforms (x64, ARM). Low resources usage and high performance were key requirements from day one and we're&nbsp;<a href="http://blog.wmspanel.com/2014/08/utilize-all-bandwidth-with-nimble-streamer.html">showing good results</a>&nbsp;so far.<br />
+<br class="Apple-interchange-newline" />
+Last year we introduced&nbsp;<a href="https://wmspanel.com/transcoder"><b>Live Transcoder</b></a>, an add-on for Nimble Streamer. It allows taking live streams and files input in various formats and perform content transformations real-time. It allows decoding (both software and hardware-accelerated), changing media with various filters (re-scaling, overlay etc.) and encoding (also software and hardware).<br />
+<br />
+<div>
+The Transcoder is controlled via WMSPanel web service and transcoding scenarios are defined via drag-n-drop web UI. This allows visualizing the process and running various scenarios in a few clicks.&nbsp;<a href="https://www.youtube.com/playlist?list=PLRDQWjeuSAkM6itDPes-r8HrN95ub36ue">Check these videos</a>&nbsp;to see ho it looks like.</div>
+<div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><img border="0" height="318" src="https://3.bp.blogspot.com/-9e5TSgCKo74/WKv83G9HgdI/AAAAAAAACqU/uDHkVbMhlAAK0QzLLzlUgW4VmsjUbVBbgCLcB/s640/nvenc-01-scenario.png" style="margin-left: auto; margin-right: auto;" width="640" /></td></tr>
+<tr><td class="tr-caption" style="font-size: 12.8px;">Transcoding scenario example&nbsp;</td></tr>
+</tbody></table>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://3.bp.blogspot.com/-9e5TSgCKo74/WKv83G9HgdI/AAAAAAAACqU/uDHkVbMhlAAK0QzLLzlUgW4VmsjUbVBbgCLcB/s1600/nvenc-01-scenario.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"></a><br class="Apple-interchange-newline" /></div>
+<a href="https://3.bp.blogspot.com/-9e5TSgCKo74/WKv83G9HgdI/AAAAAAAACqU/uDHkVbMhlAAK0QzLLzlUgW4VmsjUbVBbgCLcB/s1600/nvenc-01-scenario.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"></a><br />
+<br />
+The decoding is done only once per each incoming stream before any further transformations. It allows saving resources on this high-consuming operation. You'll see the importance of this approach later during the tests.<br />
+<br />
+One of the content transformation technologies available in the Transcoder is the&nbsp;<b>hardware decoding and encoding</b>&nbsp;via&nbsp;<b>NVidia GPU</b>. Recent generations of their devices allow handling some typical streaming tasks to off-load the CPU.</div>
+<br />
+We've contacted NVidia representatives in order to arrange a combined stress-testing of Live Transcoder for Nimble Streamer and NVidia GPU. This would show us the economical effect of such tandem compared to CPU-only configuration. We would also like to see how GPU could be used in the most optimal way and would give some good recipes for our customers.<br />
+<br />
+So we needed to get proper hardware with latest GPU for this research. So cloud access would be the best solution. We saw that AWS doesn't have VMs with Maxwell generation GPU and Azure doesn't have it, they only plan introducing that.<br />
+<br />
+<br />
+<div>
+<h3 style="text-align: left;">
+1. NVidia GPU in Softlayer cloud, setting up Nimble Streamer</h3>
+<br />
+In cooperation with NVidia, the IBM company gave access to their&nbsp;<b>Bluemix Cloud Platform</b>&nbsp;(formerly known as&nbsp;<a href="http://www.softlayer.com/">Softlayer</a>). &nbsp;It's a big grid of data centers around the globe (about 50 at this moment), connected via private network providing decent number of cloud infrastructure services. All data centers are unified and they allow renting up to hundreds of virtual and hardware servers within a few hours, as well as balancers, storage systems, firewalls etc. to build reliable infrastructure.<br />
+<br />
+IBM provided us with full access to&nbsp;<a href="https://control.softlayer.com/">web portal</a>&nbsp;to control cloud services and to a server with required configuration which we used for further testing of our transcoding solution.<br />
+<br />
+<h4 style="text-align: left;">
+Hardware</h4>
+<br />
+First we were provided with bare-metal server with 128GB RAM and 2xGPU NVidia Tesla M60 with Ubuntu 14.04. All the servers details like credentials, SW versions, communications, hardware status etc. can be tracked right from the dashboard. There you can do all the manipulations which brings any tech support interactions to the minimum.<br />
+<br />
+Once we started testing we saw that we cannot utilize this configuration in the most optimal way due to context generation issues on GPU side - we'll describe them later in this article. So we came to decision to reduce the configuration. As we used cloud platform, we requested that from tech support. The entire operation took about 2 hours within proper support window in Amsterdam data center. This is pretty convenient for developers as they don't need to deal with HW configuration themselves.<br />
+<br />
+We came to the following server configuration:<br />
+<blockquote class="tr_bq">
+Dual Intel Xeon E5-2690 v3 (2.60GHz)<br />
+24 Cores<br />
+64GB RAM<br />
+1TB SATA</blockquote>
+So it's 2 CPUs with 12 cores each, and thanks for Hyper threading we got twice as much, i.e. 48 cores.<br />
+Also, we didn't use hypervisor in order to get maximum from the hardware resources.<br />
+<br />
+In the GPU scenarios we used graphic card based on GM204 - Tesla M60:<br />
+<blockquote class="tr_bq">
+NVIDIA Tesla M60<br />
+1xGPU: 2 x Maxwell GM204<br />
+Memory: 16GB GDDR5<br />
+Clock Speed: 2.5 GHz<br />
+NVIDIA CUDA Cores: 2 x 2048<br />
+Memory Bandwidth: 2 x 160GB/sec</blockquote>
+Please notice that there was no affinity, chip tuning, overclocking and all that magic applied, just out-of-the-box CPU and GPU. For GPU we used official driver from NVidia website.<br />
+<br />
+So we had the server. A brief overview of web UI, then SSH access and here we were in familiar Ubuntu command line, installing Nimble Streamer, registering new transcoder license and doing initial setup.<br />
+<br />
+<h4 style="text-align: left;">
+Nimble Streamer Transcoder</h4>
+<br />
+Nimble Streamer was set up for GPU contexts cache initialization. This is done due to GPU limitation for maximum of simultaneous decoding and encoding contexts&nbsp;being created, aong with significant creation time.<br />
+Please read more about this GPU problem in the section below and also&nbsp;<a href="http://blog.wmspanel.com/2016/12/nvenc-context-setup-live-transcoder.html">read this article</a>&nbsp;for more details on contexts in Nimble Streamer.<br />
+<div>
+<br /></div>
+Nimble Streamer contexts parameters were as follows (this is an example for first series of tests):<br />
+<blockquote class="tr_bq">
+nvenc_context_cache_enable = true<br />
+nvenc_context_create_lock = true<br />
+nvenc_context_cache_init = 0:30:15,1:30:15<br />
+nvenc_context_reuse_enable = true</blockquote>
+Before running each new series, we'd set the context parameters according to each task requirements.<br />
+<br />
+<h4 style="text-align: left;">
+Creating transcoding scenarios</h4>
+<br />
+Going forward we we using WMSPanel service where all transcoding is set up. As mentioned before, all the operations are performed via web interface which makes it easy and clear. We created a number of scenarios which use different variations of CPU and GPU transcoding, different renditions and encoding options (CPU/GPU, profile, bitrate etc.)<br />
+<br />
+Scenarios can be launched simultaneously in combined sets which allows involving various processing queues, increase load and change it according to test plan. We just check required scenarios and resume/pause them.<br />
+<br />
+Here's how a set of scenarios look like:<br />
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="https://2.bp.blogspot.com/-17NgEp84d20/WLLY5zvD0jI/AAAAAAAACqs/raGSW0P014YtQsv1ao6rM-j2b7q79QZZQCLcB/s1600/01-scenarios.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="264" src="https://2.bp.blogspot.com/-17NgEp84d20/WLLY5zvD0jI/AAAAAAAACqs/raGSW0P014YtQsv1ao6rM-j2b7q79QZZQCLcB/s640/01-scenarios.png" width="640" /></a></td></tr>
+<tr><td class="tr-caption" style="font-size: 12.8px;">List of scenarios ready to launch</td></tr>
+</tbody></table>
+Here's one of the typical scenarios:<br />
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="https://3.bp.blogspot.com/-o7CURnAFwsA/WLLY5q4V8kI/AAAAAAAACqo/3LqypFBJigozMcDqUxeSAv9u71jQmmNXQCEw/s1600/02-ready-scenario.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="326" src="https://3.bp.blogspot.com/-o7CURnAFwsA/WLLY5q4V8kI/AAAAAAAACqo/3LqypFBJigozMcDqUxeSAv9u71jQmmNXQCEw/s640/02-ready-scenario.png" width="640" /></a></td></tr>
+<tr><td class="tr-caption" style="font-size: 12.8px;">Typical scenario for one of the tests</td></tr>
+</tbody></table>
+GPU decoder looks like this:<br />
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="https://3.bp.blogspot.com/-vCnjsRnp4I0/WLLY5fGgsAI/AAAAAAAACqk/_31Lo1YSUT0YMQMWp0mEADyCyjWqSkz_ACEw/s1600/03-decoder.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="https://3.bp.blogspot.com/-vCnjsRnp4I0/WLLY5fGgsAI/AAAAAAAACqk/_31Lo1YSUT0YMQMWp0mEADyCyjWqSkz_ACEw/s320/03-decoder.png" width="277" /></a></td></tr>
+<tr><td class="tr-caption" style="font-size: 12.8px;">Decoding via GPU</td></tr>
+</tbody></table>
+Defining scaling filter:<br />
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="https://3.bp.blogspot.com/-XJlk0UU9-O0/WLLY6N9OnZI/AAAAAAAACqw/phmeuOvsFVESFD1We9JkGIc5Cl11ybKhQCEw/s1600/04-scale.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="320" src="https://3.bp.blogspot.com/-XJlk0UU9-O0/WLLY6N9OnZI/AAAAAAAACqw/phmeuOvsFVESFD1We9JkGIc5Cl11ybKhQCEw/s320/04-scale.png" width="301" /></a></td></tr>
+<tr><td class="tr-caption" style="font-size: 12.8px;">Scaling filter to make 480p rendition</td></tr>
+</tbody></table>
+Defining GPU encoder:<br />
+<br />
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="https://2.bp.blogspot.com/-bf6XOD0yF4M/WLLY6dBH-wI/AAAAAAAACq0/YllM_VLv6zcFhtN0ZQj85DElg-7jOWwtwCEw/s1600/05-encoder.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="400" src="https://2.bp.blogspot.com/-bf6XOD0yF4M/WLLY6dBH-wI/AAAAAAAACq0/YllM_VLv6zcFhtN0ZQj85DElg-7jOWwtwCEw/s400/05-encoder.png" width="246" /></a></td></tr>
+<tr><td class="tr-caption" style="font-size: 12.8px;">Encoding the stream via GPU</td></tr>
+</tbody></table>
+<br />
+You can see that&nbsp;<a href="https://www.youtube.com/playlist?list=PLRDQWjeuSAkM6itDPes-r8HrN95ub36ue">in action on these videos</a>.<br />
+<br />
+<br />
+<h3 style="text-align: left;">
+2. Transcoding FullHD 1080p streams</h3>
+<br />
+First we tried highest load scenarios to see the limit of our hardware. From practical point of view the "heaviest" use case in use by our customers is FullHD 1080p.<br />
+<br />
+To generate source streams we took a file with&nbsp;<b>FullHD</b>&nbsp;(1920*1080) high profile H.264 video. The content itself is a city tour with medium intensity of changing scenes, views, colors etc. so this wouldn't make transcoder job neither easy nor difficult. So it's a typical load.<br />
+<br />
+We used&nbsp;<b>36 equal input streams</b>&nbsp;in various scenarios.<br />
+<br />
+The transcoding scenario is typical: we take&nbsp;<b>1080p</b>&nbsp;<b>high</b>&nbsp;profile input then generate&nbsp;<b>720p, 480p, 360p main&nbsp;</b>profile and&nbsp;<b>240p, 160p baseline</b>&nbsp;profile. So it's 1 input and 5 output streams. Usually a pass-though stream is added in order to provide viewer with original 1080p stream. We didn't add it because it doesn't need transcoding as the data is passed from input to output. This case is highly optimized in Nimble Streamer and it doesn't consume significant resources - it'll make some RAM but not much.<br />
+<br />
+There is&nbsp;<b>no audio</b>&nbsp;in the output streams. Adding audio doesn't append any significant CPU load but we've excluded it for clarity purposes.<br />
+<br />
+<h4 style="text-align: left;">
+Testing with CPU, no GPU</h4>
+<br />
+First we tried to process the streams without GPU by setting software encoder and encoder.<br />
+<br />
+Only 16 input streams could be processed with 80 output streams total for all renditions.<br />
+<br />
+<b>CPU</b>&nbsp;load was&nbsp;<b>4600</b>%, i.e. it used ~46 cores.&nbsp;<b>RAM</b>&nbsp;consumption was about 15GB.<br />
+<br />
+<h4 style="text-align: left;">
+Testing with CPU and GPU</h4>
+<br />
+Context cache was set to "0:30:15,1:30:15" which means 30 encoding contexts and 15 decoding contexts for each GPU. Notice that we have 2 GPUs which allows running tasks in parallel.<br />
+<br />
+The maximum load was processed using the following configuration of streams scenarios.<br />
+<br />
+<ul style="text-align: left;">
+<li>GPU0 and GPU1 got 15 streams each as an&nbsp;<b>decoding</b>&nbsp;input. So we got 30 decoded streams ready for further transformations. Each stream is decoded just once, regardless of a number of scenarios it is used at.</li>
+</ul>
+<ul style="text-align: left;">
+<li>GPU0 and GPU1&nbsp;<b>encoders</b>&nbsp;got 15 input streams each, they produced 720p, which means it was 30 streams of 720p for output.</li>
+<li>GPU0 and GPU1 also got 15 input streams for 480p encoding, so it was also 30 streams of 480p for output.</li>
+</ul>
+<br />
+As we ran out of encoding contexts, all other renditions were moved to CPU software encoding:<br />
+<br />
+<ul style="text-align: left;">
+<li>30 streams of 360p</li>
+<li>30 streams of&nbsp;240p</li>
+<li>30 streams of&nbsp;160p</li>
+</ul>
+<br />
+<b>CPU</b>&nbsp;load was&nbsp;<b>2600%</b>, decoder was&nbsp;<b>75%</b>&nbsp;busy, encoder was at&nbsp;<b>32%</b>.<br />
+<br />
+After that we loaded CPU with 6 streams for decoding, each having 5 renditions, having 30 streams output.<br />
+<br />
+<b>Overall</b>&nbsp;we ended up with&nbsp;<b>36 streams input</b>&nbsp;with&nbsp;<b>180 streams output</b>.<br />
+Final&nbsp;<b>load</b>&nbsp;was&nbsp;<b>4400% CPU, 75% GPU decoders, 32% GPU encoder, 30GB RAM</b>.<br />
+<br />
+<h4 style="text-align: left;">
+A few details</h4>
+<br />
+We wanted to check the use case where we would process the "heaviest" tasks on GPU. That would be 1080p decoding with 720p and 480p encoding. The rest should went via CPU.<br />
+<br />
+First we checked the limits of decoder. Enabling 22 decoding contexts we got problem with contexts: they could not be created at all. Making it 21 allowed the creation but decoders were 100% loaded and we saw image artifacts. &nbsp;So we ended up with 20 streams: both decoding and 160p encoding were working normally.<br />
+<br />
+Moving forward we discovered that current graphic card with 16GB RAM could work with 47 contexts at most, regardless of whether it was encoding, decoding or both. Notice that we're talking about Tesla M60 GPU, other graphics cards may work differently. We assume that if the card would have 24GB RAM, this might help creating more contexts. However this needs to be tested.<br />
+<br />
+As a result we used "15 decoding contexts + 30 encoding contexts" formula which gives us 30 input streams with 2 output renditions. So we let upper renditions (720p and 480p) be processed on GPU while the rest (360p, 240p, 160p) we processed on CPU. As CPU was still far from being overloaded, we added more streams to process on it.<br />
+<br />
+<br />
+<h3 style="text-align: left;">
+3. Transcoding HD 720p streams</h3>
+<br />
+This is a scenario with typical load as long as the majority of content is still provided as HD.<br />
+<br />
+To generate source streams we took&nbsp;<b>HD (1280*720)</b>&nbsp;<b>high profile</b>&nbsp;content similar to the one we used in section 2.<br />
+<br />
+We used&nbsp;<b>70 equal input streams</b>&nbsp;in various scenarios.<br />
+<br />
+The transcoding scenario is as follows: the input is&nbsp;<b>720p high profile</b>, the outputs are&nbsp;<b>480p, 360p main&nbsp;</b>profile&nbsp;and&nbsp;<b>240p, 160p baseline</b>&nbsp;profile. So we have 1 input stream with 4 outputs. As in previous example we didn't do pass-through of source stream. There is also no audio output.<br />
+<br />
+<h4 style="text-align: left;">
+Testing with CPU, no GPU</h4>
+<div>
+<br /></div>
+As in previous section, first we tried to transcode with CPU only. Top result was&nbsp;<b>22 input</b>&nbsp;streams with&nbsp;<b>88 output</b>&nbsp;streams of all renditions. CPU load was&nbsp;<b>4700%</b>, i.e. 47 cores were used. 20 GB RAM we used overall.<br />
+<br />
+<h4 style="text-align: left;">
+Testing with CPU and GPU</h4>
+<br />
+Context cache formula was set to "0:23:23,1:23:23", i.e. 23 encoding and 23 decoding contexts for ach GPU.<br />
+<br />
+46 streams of 720p were decoded using both GPUs. We also encoded 46 streams to 480p there. After that we encoded&nbsp;<b>360p, 240p and 160p</b>&nbsp;on CPU, that was 46 streams of each rendition.<br />
+The load was: 2100% CPU, 61% decoder, 16% encoder.<br />
+<br />
+In addition we added 24 input streams to transcode on CPU, each having 4 rendition.<br />
+<br />
+<b>Overall</b>&nbsp;we ended up with&nbsp;<b>70 streams input</b>&nbsp;with&nbsp;<b>280 streams output</b>.<br />
+Final&nbsp;<b>load</b>&nbsp;was&nbsp;<b>4600% CPU, 61% GPU decoders, 16% GPU encoders, 30GB RAM</b>.<br />
+<div>
+<br /></div>
+As in previous case, we faced the contexts issue and more RAM on graphics card might probably help with the problem. But that also needs to be checked.<br />
+<br />
+<br />
+<h3 style="text-align: left;">
+4. NVidia GPU contexts creation issues</h3>
+<br />
+This section is obsolete as now Nimble Streamer Transcoder allows using NVENC context share mechanism which allows efficiently use contexts. Please <a href="https://blog.wmspanel.com/2018/03/nvenc-shared-context-transcoder.html">read this article for more details</a>.<br />
+<br />
+<span style="color: #999999;">A few words on the issue which didn't allow us to process more streams via GPU.</span><br />
+<span style="color: #999999;"><br /></span>
+<span style="color: #999999;">Last year we collaborated with NVidia team to run tests with multiple graphics cards. Using several cards at a time, we faced with server performance reduction. Each new encoding or decoding context took more time to create than previous one. It took ~300ms to create first context while each next added some time on top so after a couple of dozens of operations, it took 3-4 seconds each to be created. The transcoding scenario is defined by an end-user so it's assumed that it starts functioning with no delays, so this issue made Nimble Streamer un-usable in a high load usage, which means this eliminated all its advantages.</span><br />
+<span style="color: #999999;"><br /></span>
+<span style="color: #999999;">First we suspected Nimble Streamer but then we checked the reference ffmpeg package provided by NVidia and found out that the GPU itself was spending time on context creation.</span><br />
+<span style="color: #999999;"><br /></span>
+<span style="color: #999999;">The problem was reported to NVidia but it would take time to fix that on their side. So we implemented a context cache mechanism which allowed creating contexts on Nimble Streamer start. This solved the end-user problem but Nimble initial start-up may take some time.</span><br />
+<span style="color: #999999;"><br /></span>
+<span style="color: #999999;">Nimble Streamer contexts setup is&nbsp;<a href="http://blog.wmspanel.com/2016/12/nvenc-context-setup-live-transcoder.html">described in this article</a>.</span><br />
+<span style="color: #999999;"><br /></span>
+<span style="color: #999999;">Creating contexts is not the end of the story. If the amount of contexts is big enough, the NVENC API starts giving "The API call failed because it was unable to allocate enough memory to perform the requested operation." error when any related scenario is launched.</span><br />
+<span style="color: #999999;"><br /></span>
+<span style="color: #999999;">After running several tests we found that one GPU may effectively work with 47 simultaneous contexts. There is no difference whether it's encoding or decoding contexts. We assume this is related to graphics card RAM. We had 16GB RAM cards and we might probably get more if we had 24GB RAM graphic card, however this needs to be checked.</span><br />
+<span style="color: #999999;"><br /></span>
+<span style="color: #999999;">The results which we got are true for the particular card we had. Other cards must be tested separately.</span><br />
+<span style="color: #999999;">Contexts limitation is the main block for giving higher load on the GPU.</span><br />
+<br />
+<br />
+<h3 style="text-align: left;">
+5. Conclusions</h3>
+<br />
+The goal of our testing was to learn more about the GPU efficiency for live streaming transcoding and to make some recipes and best practices. What do we have as a result?<br />
+<br />
+<h4 style="text-align: left;">
+Economic effect</h4>
+<br />
+As we saw above there is a huge difference between the number of streams which can be processed using CPU alone and using CPU+GPU tandem. Let's see what this means from cost perspective. Let's take renting prices from Softlayer as a baseline.<br />
+<br />
+<br />
+<ul style="text-align: left;">
+<li>No-GPU configuration costs&nbsp;<b>$819 per month</b>. You can&nbsp;<a href="http://www.softlayer.com/bare-metal-search">select it here</a>.</li>
+<li>GPU&nbsp;configuration costs&nbsp;<b>$1729/m</b>&nbsp;for Amsterdam datacenter you can&nbsp;<a href="http://www.softlayer.com/gpu">check the prices here</a>. When GPU is used, the cost is higher as the form factor is 2U for this case. Economic effect may be higher in case of purchase but this need ТСО analysis of NVidia GPU&nbsp;products.</li>
+</ul>
+<br />
+Let's see the testing results.<br />
+<br />
+For FullHD 1080p:<br />
+<br />
+<ul style="text-align: left;">
+<li>CPU, no GPU: 16 input streams + 80 output</li>
+<li>CPU + GPU: 36 input streams&nbsp;+ 180 output</li>
+</ul>
+<br />
+Benefit ratio for GPU is 2.25x.<br />
+<br />
+<b>Price benefit</b>&nbsp;of GPU usage: $819*2,25 - $1729 =&nbsp;<b>$113/m</b>&nbsp;for renting 1 server with GPU.<br />
+<br />
+For HD 720p<br />
+<br />
+<ul style="text-align: left;">
+<li>CPU, no GPU: 22&nbsp;input streams&nbsp;+ 88 output</li>
+<li>CPU + GPU: 70&nbsp;input streams&nbsp;+ 280 output</li>
+</ul>
+<br />
+Benefit ratio for GPU is 3.18x.<br />
+<br />
+<b>Price benefit</b>&nbsp;of GPU usage: $819*3,18 - $1729 =&nbsp;<b>$875/m</b>&nbsp;for renting 1 server with GPU.<br />
+<br />
+You can see the total renting savings yourself. Please also consider bandwidth costs as they will add some additional costs.<br />
+<br />
+We didn't consider the purchase option as its TCO depends on various factors. However the preliminary calculations show the GPU-based solutions advantage.<br />
+<br />
+<h4 style="text-align: left;">
+Scaling</h4>
+<br />
+We found the single-card option more cost-efficient that two-cards option. If server had 1 graphic card then its resources will be used more productively.<br />
+The hardware decoder is always loaded more than the encoder because of the context creation problem. So if the second card is added, both cards cannot be fully loaded and most of the tasts will need to be completed on CPU.<br />
+<br />
+We tested 2 cards option with help of Softlayer and we haven't shown all details here due to lower ROI.<br />
+<br />
+So if you'd like to scale your transcoding you should add more servers with single GPU rather than adding more cards in existing servers.<br />
+<br />
+If the number of input and output streams is low for your streaming project - e.g. a dozen of HD streams with a few filters and renditions for output - then you may consider using no-GPU server and fully utilize the CPU. Also notice that RAM amount is not as important as computing power for transcoding so you can save more on RAM as well.<br />
+<br />
+Also, please check <a href="https://blog.wmspanel.com/2017/10/troubleshooting-live-transcoder.html">Troubleshooting Nimble Live Transcoder</a>&nbsp;article to check how you can improve NVENC user experience.<br />
+<br />
+<h4 style="text-align: left;">
+Summary</h4>
+<br />
+The described hardware solution of CPU with Tesla M60 GPU works pretty good for high load tasks. GPU does all the heavy duty like decoding and high renditions encoding while CPU handles the rest of low renditions perfectly.<br />
+<br />
+<h4 style="text-align: left;">
+Related documentation</h4>
+<br />
+<br />
+<ul style="text-align: left;">
+<li><a href="http://blog.wmspanel.com/2018/01/using-amazon-aws-ec2-hevc-transcoding.html">Using Amazon EC2 for HEVC transcoding</a>&nbsp;- analysis of EC2 instances for HEVC transcoding.</li>
+<li><a href="https://blog.wmspanel.com/2018/03/nvenc-shared-context-transcoder.html">NVENC context share</a> - improving context usage</li>
+<li><a href="https://blog.wmspanel.com/2018/03/nvenc-shared-context-transcoder.html">Troubleshooting Live Transcoder</a> - most frequent issue regarding Transcoder usage.</li>
+</ul>
+<br />
+<br />
+<a href="https://geektimes.ru/post/285892/">Стресс-тест GPU NVidia на транскодинге живых потоков</a><br />
+<br /></div>
+</div>
+<div style='clear: both;'></div>
+</div>
+<div class='post-footer'>
+<div class='post-footer-line post-footer-line-1'><span class='post-author vcard'>
+</span>
+<span class='post-timestamp'>
+</span>
+<span class='post-comment-link'>
+</span>
+<span class='post-icons'>
+<span class='item-control blog-admin pid-654951684'>
+<a href='https://www.blogger.com/page-edit.g?blogID=3391168021757249257&pageID=1162447265058451688&from=pencil' title='Edit Page'>
+<img alt='' class='icon-action' height='18' src='https://resources.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+</span>
+<div class='post-share-buttons goog-inline-block'>
+<a class='goog-inline-block share-button sb-email' href='https://www.blogger.com/share-post.g?blogID=3391168021757249257&pageID=1162447265058451688&target=email' target='_blank' title='Email This'><span class='share-button-link-text'>Email This</span></a><a class='goog-inline-block share-button sb-blog' href='https://www.blogger.com/share-post.g?blogID=3391168021757249257&pageID=1162447265058451688&target=blog' onclick='window.open(this.href, "_blank", "height=270,width=475"); return false;' target='_blank' title='BlogThis!'><span class='share-button-link-text'>BlogThis!</span></a><a class='goog-inline-block share-button sb-twitter' href='https://www.blogger.com/share-post.g?blogID=3391168021757249257&pageID=1162447265058451688&target=twitter' target='_blank' title='Share to Twitter'><span class='share-button-link-text'>Share to Twitter</span></a><a class='goog-inline-block share-button sb-facebook' href='https://www.blogger.com/share-post.g?blogID=3391168021757249257&pageID=1162447265058451688&target=facebook' onclick='window.open(this.href, "_blank", "height=430,width=640"); return false;' target='_blank' title='Share to Facebook'><span class='share-button-link-text'>Share to Facebook</span></a><a class='goog-inline-block share-button sb-pinterest' href='https://www.blogger.com/share-post.g?blogID=3391168021757249257&pageID=1162447265058451688&target=pinterest' target='_blank' title='Share to Pinterest'><span class='share-button-link-text'>Share to Pinterest</span></a>
+</div>
+</div>
+<div class='post-footer-line post-footer-line-2'><span class='post-labels'>
+</span>
+</div>
+<div class='post-footer-line post-footer-line-3'></div>
+</div>
+</div>
+<div class='comments' id='comments'>
+<a name='comments'></a>
+</div>
+</div>
+
+        </div></div>
+      
+</div>
+<div class='blog-pager' id='blog-pager'>
+<a class='home-link' href='https://blog.wmspanel.com/'>Home</a>
+</div>
+<div class='clear'></div>
+<div class='blog-feeds'>
+<div class='feed-links'>
+Subscribe to:
+<a class='feed-link' href='https://blog.wmspanel.com/feeds/posts/default' target='_blank' type='application/atom+xml'>Posts (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='column-left-outer'>
+<div class='column-left-inner'>
+<aside>
+</aside>
+</div>
+</div>
+<div class='column-right-outer'>
+<div class='column-right-inner'>
+<aside>
+<div class='sidebar section' id='sidebar-right-1'><div class='widget Text' data-version='1' id='Text1'>
+<h2 class='title'>Softvelum team</h2>
+<div class='widget-content'>
+This is a technical blog of Softvelum, the company behind <a href="https://wmspanel.com/nimble">Nimble Streamer</a> media server, <a href="https://wmspanel.com/admin_panel">WMSPanel</a> streaming control panel, <a href="https://softvelum.com/larix/">Larix Broadcaster</a> and other <a href="https://softvelum.com/">media streaming products</a>.
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("Text1"));' rel='nofollow' target='configText1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget LinkList' data-version='1' id='LinkList1'>
+<h2>Useful links</h2>
+<div class='widget-content'>
+<ul>
+<li><a href='https://wmspanel.com/nimble'>Nimble Streamer media server</a></li>
+<li><a href='https://softvelum.com/transcoder/'>Live Transcoder</a></li>
+<li><a href='https://qosifire.com/'>Qosifire quality monitoring</a></li>
+<li><a href='https://softvelum.com/larix/'>Larix Broadcaster</a></li>
+<li><a href="//www.youtube.com/WMSPanel">YouTube channel</a></li>
+<li><a href='https://t.me/softvelum'>Telegram channel</a></li>
+<li><a href='http://www.facebook.com/pages/WMSPanel/597085653637684'>Facebook page</a></li>
+<li><a href='https://twitter.com/Softvelum'>Team's Twitter</a></li>
+<li><a href='https://github.com/WMSPanel'>Team's github page</a></li>
+</ul>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("LinkList1"));' rel='nofollow' target='configLinkList1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div><div class='widget Subscribe' data-version='1' id='Subscribe1'>
+<div style='white-space:nowrap'>
+<h2 class='title'>Keep an eye on our news</h2>
+<div class='widget-content'>
+<div class='subscribe-wrapper subscribe-type-POST'>
+<div class='subscribe expanded subscribe-type-POST' id='SW_READER_LIST_Subscribe1POST' style='display:none;'>
+<div class='top'>
+<span class='inner' onclick='return(_SW_toggleReaderList(event, "Subscribe1POST"));'>
+<img class='subscribe-dropdown-arrow' src='https://resources.blogblog.com/img/widgets/arrow_dropdown.gif'/>
+<img align='absmiddle' alt='' border='0' class='feed-icon' src='https://resources.blogblog.com/img/icon_feed12.png'/>
+Posts
+</span>
+<div class='feed-reader-links'>
+<a class='feed-reader-link' href='https://www.netvibes.com/subscribe.php?url=https%3A%2F%2Fblog.wmspanel.com%2Ffeeds%2Fposts%2Fdefault' target='_blank'>
+<img src='https://resources.blogblog.com/img/widgets/subscribe-netvibes.png'/>
+</a>
+<a class='feed-reader-link' href='https://add.my.yahoo.com/content?url=https%3A%2F%2Fblog.wmspanel.com%2Ffeeds%2Fposts%2Fdefault' target='_blank'>
+<img src='https://resources.blogblog.com/img/widgets/subscribe-yahoo.png'/>
+</a>
+<a class='feed-reader-link' href='https://blog.wmspanel.com/feeds/posts/default' target='_blank'>
+<img align='absmiddle' class='feed-icon' src='https://resources.blogblog.com/img/icon_feed12.png'/>
+                  Atom
+                </a>
+</div>
+</div>
+<div class='bottom'></div>
+</div>
+<div class='subscribe' id='SW_READER_LIST_CLOSED_Subscribe1POST' onclick='return(_SW_toggleReaderList(event, "Subscribe1POST"));'>
+<div class='top'>
+<span class='inner'>
+<img class='subscribe-dropdown-arrow' src='https://resources.blogblog.com/img/widgets/arrow_dropdown.gif'/>
+<span onclick='return(_SW_toggleReaderList(event, "Subscribe1POST"));'>
+<img align='absmiddle' alt='' border='0' class='feed-icon' src='https://resources.blogblog.com/img/icon_feed12.png'/>
+Posts
+</span>
+</span>
+</div>
+<div class='bottom'></div>
+</div>
+</div>
+<div class='subscribe-wrapper subscribe-type-COMMENT'>
+<div class='subscribe expanded subscribe-type-COMMENT' id='SW_READER_LIST_Subscribe1COMMENT' style='display:none;'>
+<div class='top'>
+<span class='inner' onclick='return(_SW_toggleReaderList(event, "Subscribe1COMMENT"));'>
+<img class='subscribe-dropdown-arrow' src='https://resources.blogblog.com/img/widgets/arrow_dropdown.gif'/>
+<img align='absmiddle' alt='' border='0' class='feed-icon' src='https://resources.blogblog.com/img/icon_feed12.png'/>
+All Comments
+</span>
+<div class='feed-reader-links'>
+<a class='feed-reader-link' href='https://www.netvibes.com/subscribe.php?url=https%3A%2F%2Fblog.wmspanel.com%2Ffeeds%2Fcomments%2Fdefault' target='_blank'>
+<img src='https://resources.blogblog.com/img/widgets/subscribe-netvibes.png'/>
+</a>
+<a class='feed-reader-link' href='https://add.my.yahoo.com/content?url=https%3A%2F%2Fblog.wmspanel.com%2Ffeeds%2Fcomments%2Fdefault' target='_blank'>
+<img src='https://resources.blogblog.com/img/widgets/subscribe-yahoo.png'/>
+</a>
+<a class='feed-reader-link' href='https://blog.wmspanel.com/feeds/comments/default' target='_blank'>
+<img align='absmiddle' class='feed-icon' src='https://resources.blogblog.com/img/icon_feed12.png'/>
+                  Atom
+                </a>
+</div>
+</div>
+<div class='bottom'></div>
+</div>
+<div class='subscribe' id='SW_READER_LIST_CLOSED_Subscribe1COMMENT' onclick='return(_SW_toggleReaderList(event, "Subscribe1COMMENT"));'>
+<div class='top'>
+<span class='inner'>
+<img class='subscribe-dropdown-arrow' src='https://resources.blogblog.com/img/widgets/arrow_dropdown.gif'/>
+<span onclick='return(_SW_toggleReaderList(event, "Subscribe1COMMENT"));'>
+<img align='absmiddle' alt='' border='0' class='feed-icon' src='https://resources.blogblog.com/img/icon_feed12.png'/>
+All Comments
+</span>
+</span>
+</div>
+<div class='bottom'></div>
+</div>
+</div>
+<div style='clear:both'></div>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("Subscribe1"));' rel='nofollow' target='configSubscribe1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget BlogArchive' data-version='1' id='BlogArchive1'>
+<h2>Blog Archive</h2>
+<div class='widget-content'>
+<div id='ArchiveList'>
+<div id='BlogArchive1_ArchiveList'>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2021/'>
+2021
+</a>
+<span class='post-count' dir='ltr'>(9)</span>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2021/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+<ul class='posts'>
+<li><a href='https://blog.wmspanel.com/2021/03/q1-2021-news.html'>Q1 2021 news: Cloud backups, Advertizer, Talkback,...</a></li>
+<li><a href='https://blog.wmspanel.com/2021/03/ndi-srt-aws-elemental-mediaconnect.html'>NDI to SRT to AWS Elemental MediaConnect via Nimbl...</a></li>
+<li><a href='https://blog.wmspanel.com/2021/03/aws-elemental-mediaconnect-srt-larix.html'>Stream to AWS MediaConnect via SRT from Larix Broa...</a></li>
+<li><a href='https://blog.wmspanel.com/2021/03/sldp-mosaic-videowall.html'>Mosaic videowall with SLDP</a></li>
+<li><a href='https://blog.wmspanel.com/2021/03/convert-ndi-apple-low-latency-hls.html'>Converting NDI to Apple Low Latency HLS</a></li>
+<li><a href='https://blog.wmspanel.com/2021/03/nimble-cloud-backups.html'>Cloud backups of Nimble Streamer configuration</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2021/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2021/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/'>
+2020
+</a>
+<span class='post-count' dir='ltr'>(45)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2020/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/'>
+2019
+</a>
+<span class='post-count' dir='ltr'>(46)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2019/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/'>
+2018
+</a>
+<span class='post-count' dir='ltr'>(26)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2018/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/'>
+2017
+</a>
+<span class='post-count' dir='ltr'>(51)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2017/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/'>
+2016
+</a>
+<span class='post-count' dir='ltr'>(66)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(10)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(9)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2016/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/'>
+2015
+</a>
+<span class='post-count' dir='ltr'>(76)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(9)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(9)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2015/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/'>
+2014
+</a>
+<span class='post-count' dir='ltr'>(80)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(11)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(10)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2014/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/'>
+2013
+</a>
+<span class='post-count' dir='ltr'>(71)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2013/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/'>
+2012
+</a>
+<span class='post-count' dir='ltr'>(30)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2012/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/'>
+2011
+</a>
+<span class='post-count' dir='ltr'>(23)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://blog.wmspanel.com/2011/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive1"));' rel='nofollow' target='configBlogArchive1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div><div class='widget LinkList' data-version='1' id='LinkList2'>
+<h2>Search</h2>
+<div class='widget-content'>
+<ul>
+<li><a href='https://wmspanel.com/search'>Search through our pages and blog</a></li>
+</ul>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("LinkList2"));' rel='nofollow' target='configLinkList2' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+</aside>
+</div>
+</div>
+</div>
+<div style='clear: both'></div>
+<!-- columns -->
+</div>
+<!-- main -->
+</div>
+</div>
+<div class='main-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<footer>
+<div class='footer-outer'>
+<div class='footer-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left footer-fauxborder-left'>
+<div class='fauxborder-right footer-fauxborder-right'></div>
+<div class='region-inner footer-inner'>
+<div class='foot no-items section' id='footer-1'></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='foot no-items section' id='footer-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='foot no-items section' id='footer-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- outside of the include in order to lock Attribution widget -->
+<div class='foot section' id='footer-3' name='Footer'><div class='widget Attribution' data-version='1' id='Attribution1'>
+<div class='widget-content' style='text-align: center;'>
+Powered by <a href='https://www.blogger.com' target='_blank'>Blogger</a>.
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("Attribution1"));' rel='nofollow' target='configAttribution1' title='Edit'>
+<img alt='' height='18' src='https://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div></div>
+</div>
+</div>
+<div class='footer-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</footer>
+<!-- content -->
+</div>
+</div>
+<div class='content-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<script type='text/javascript'>
+    window.setTimeout(function() {
+        document.body.className = document.body.className.replace('loading', '');
+      }, 10);
+  </script>
+
+<script type="text/javascript" src="https://www.blogger.com/static/v1/widgets/53698643-widgets.js"></script>
+<script type='text/javascript'>
+window['__wavt'] = 'AOuZoY4tXTkqGglABDZz6P02T_1Gl4Z3Mw:1619331338311';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d3391168021757249257','//blog.wmspanel.com/p/stress-testing-nvidia-gpu-transcoding.html','3391168021757249257');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '3391168021757249257', 'title': 'Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK', 'url': 'https://blog.wmspanel.com/p/stress-testing-nvidia-gpu-transcoding.html', 'canonicalUrl': 'https://blog.wmspanel.com/p/stress-testing-nvidia-gpu-transcoding.html', 'homepageUrl': 'https://blog.wmspanel.com/', 'searchUrl': 'https://blog.wmspanel.com/search', 'canonicalHomepageUrl': 'https://blog.wmspanel.com/', 'blogspotFaviconUrl': 'https://blog.wmspanel.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': true, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': 'UA-24001884-4', 'encoding': 'UTF-8', 'locale': 'en', 'localeUnderscoreDelimited': 'en', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'isDynamicViewsAvailable': true, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK - Atom\x22 href\x3d\x22https://blog.wmspanel.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK - RSS\x22 href\x3d\x22https://blog.wmspanel.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/3391168021757249257/posts/default\x22 /\x3e\n', 'meTag': '', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'adsenseHasAds': false, 'adsenseAutoAds': false, 'ieCssRetrofitLinks': '\x3c!--[if IE]\x3e\x3cscript type\x3d\x22text/javascript\x22 src\x3d\x22https://www.blogger.com/static/v1/jsbin/1277698886-ieretrofit.js\x22\x3e\x3c/script\x3e\n\x3c![endif]--\x3e', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/69985539b35c5c92', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'disableGComments': true, 'sharing': {'platforms': [{'name': 'Get link', 'key': 'link', 'shareMessage': 'Get link', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': 'Share to Facebook', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': 'Share to Twitter', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': 'Share to Pinterest', 'target': 'pinterest'}, {'name': 'Email', 'key': 'email', 'shareMessage': 'Email', 'target': 'email'}], 'disableGooglePlus': true, 'googlePlusShareButtonWidth': 300, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27en\x27};\x3c/script\x3e'}, 'hasCustomJumpLinkMessage': false, 'jumpLinkMessage': 'Read more', 'pageType': 'static_page', 'pageId': '1162447265058451688', 'pageName': 'Stress-testing NVidia GPU for live transcoding', 'pageTitle': 'Softvelum blog: Nimble Streamer, WMSPanel, Larix SDK: Stress-testing NVidia GPU for live transcoding', 'metaDescription': ''}}, {'name': 'features', 'data': {'sharing_get_link_dialog': 'true', 'sharing_native': 'false'}}, {'name': 'messages', 'data': {'edit': 'Edit', 'linkCopiedToClipboard': 'Link copied to clipboard!', 'ok': 'Ok', 'postLink': 'Post Link'}}, {'name': 'template', 'data': {'name': 'custom', 'localizedName': 'Custom', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': true}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': 'Stress-testing NVidia GPU for live transcoding', 'description': 'Softvelum team blog for Nimble Streamer, Live Transcoder, Advertizer, WMSPanel, Larix Broadcaster and more', 'featuredImage': 'https://3.bp.blogspot.com/-9e5TSgCKo74/WKv83G9HgdI/AAAAAAAACqU/uDHkVbMhlAAK0QzLLzlUgW4VmsjUbVBbgCLcB/s640/nvenc-01-scenario.png', 'url': 'https://blog.wmspanel.com/p/stress-testing-nvidia-gpu-transcoding.html', 'type': 'item', 'isSingleItem': true, 'isMultipleItems': false, 'isError': false, 'isPage': true, 'isPost': false, 'isHomepage': false, 'isArchive': false, 'isLabelSearch': false, 'pageId': 1162447265058451688}}]);
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_PageListView', new _WidgetInfo('PageList1', 'crosscol', document.getElementById('PageList1'), {'title': 'Pages', 'links': [{'isCurrentPage': false, 'href': 'https://blog.wmspanel.com/', 'title': 'Team blog'}, {'isCurrentPage': false, 'href': 'https://wmspanel.com/nimble', 'title': 'Nimble Streamer'}, {'isCurrentPage': false, 'href': 'https://softvelum.com/transcoder/', 'title': 'Live Transcoder'}, {'isCurrentPage': false, 'href': 'https://softvelum.com/larix/', 'title': 'Larix Broadcaster'}, {'isCurrentPage': false, 'href': 'https://blog.wmspanel.com/2019/01/get-ready-flash-farewell-rtmp-decline.html', 'title': 'Farewell Flash+RTMP'}, {'isCurrentPage': false, 'href': 'https://softvelum.com/srt/', 'title': 'SRT technology'}, {'isCurrentPage': false, 'href': 'https://blog.wmspanel.com/2021/03/convert-ndi-apple-low-latency-hls.html', 'title': 'Convert NDI to Apple LL HLS'}, {'isCurrentPage': false, 'href': 'https://blog.wmspanel.com/2021/03/q1-2021-news.html', 'title': 'Q1 2021 news'}], 'mobile': false}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/3526137400-lbx.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/1050234869-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_TextView', new _WidgetInfo('Text1', 'sidebar-right-1', document.getElementById('Text1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList1', 'sidebar-right-1', document.getElementById('LinkList1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_SubscribeView', new _WidgetInfo('Subscribe1', 'sidebar-right-1', document.getElementById('Subscribe1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar-right-1', document.getElementById('BlogArchive1'), {'languageDirection': 'ltr', 'loadingMessage': 'Loading\x26hellip;'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList2', 'sidebar-right-1', document.getElementById('LinkList2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AttributionView', new _WidgetInfo('Attribution1', 'footer-3', document.getElementById('Attribution1'), {}, 'displayModeFull'));
+</script>
+</body>
+</html>

@@ -1,0 +1,739 @@
+ 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Linux graphic subsytem(1)_概述</title>
+<meta name="keywords" content="Linux 嵌入式 ARM RTOS Technology 享受 C语言,Linux,display,subsystem,GUI,Wayland,SurfaceFlinger,DRI" />
+<meta name="description" content="1. 前言 图形子系统是linux系统中比较复杂的子系统之一：对下，它要管理形态各异的、性能各异的显示相关的器件；对上，它要向应用程序提供易用的、友好的、功能强大的图形用户界面（..." />
+<meta name="generator" content="emlog" />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.wowotech.net/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.wowotech.net/wlwmanifest.xml" />
+<link rel="alternate" type="application/rss+xml" title="RSS"  href="http://www.wowotech.net/rss.php" />
+<link href="http://www.wowotech.net/content/templates/default/main.css" rel="stylesheet" type="text/css" />
+<link href="http://www.wowotech.net/admin/editor/plugins/code/prettify.css" rel="stylesheet" type="text/css" />
+<script src="http://www.wowotech.net/admin/editor/plugins/code/prettify.js" type="text/javascript"></script>
+<script src="http://www.wowotech.net/include/lib/js/common_tpl.js" type="text/javascript"></script>
+<!--[if IE 6]>
+<script src="http://www.wowotech.net/content/templates/default/iefix.js" type="text/javascript"></script>
+<![endif]-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?2ad61992fe96234e26ecafbcd2647630";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</head>
+<body>
+<div id="wrap">
+  <div id="header">
+    <h1><a href="http://www.wowotech.net/">蜗窝科技</a></h1>
+    <h3>慢下来，享受技术。</h3>
+  </div>
+    <div id="banner"><a href="http://www.wowotech.net/"><img src="http://www.wowotech.net/content/uploadfile/201401/top-1389777175.jpg" height="134" width="960" /></a></div>
+    <div id="nav">	<ul class="bar">
+			<li class="item common">
+			<a href="http://www.wowotech.net/" >博客</a>
+					</li>
+			<li class="item common">
+			<a href="http://www.wowotech.net/sort/project" >项目</a>
+			            <ul class="sub-nav">
+                <li><a href="http://www.wowotech.net/sort/x_project">X Project</a></li>			</ul>
+            		</li>
+			<li class="item common">
+			<a href="http://www.wowotech.net/forum" target="_blank">讨论区</a>
+					</li>
+			<li class="item common">
+			<a href="http://www.wowotech.net/about.html" >关于蜗窝</a>
+					</li>
+			<li class="item common">
+			<a href="http://www.wowotech.net/contact_us.html" >联系我们</a>
+					</li>
+			<li class="item common">
+			<a href="http://www.wowotech.net/support_us.html" >支持与合作</a>
+					</li>
+			<li class="item common">
+			<a href="http://www.wowotech.net/admin" >登录</a>
+					</li>
+		</ul>
+</div>﻿<div id="content">
+<div id="contentleft">
+	<h2>Linux graphic subsytem(1)_概述</h2>
+	<p class="date">作者：<a href="http://www.wowotech.net/author/2" title=" runangaozhong@163.com">wowo</a> 发布于：2015-12-17 22:21 
+			分类：<a href="http://www.wowotech.net/sort/graphic_subsystem">图形子系统</a>
+	 	</p>
+	<h4>
+	1. 前言
+</h4>
+<p>
+	图形子系统是linux系统中比较复杂的子系统之一：对下，它要管理形态各异的、性能各异的显示相关的器件；对上，它要向应用程序提供易用的、友好的、功能强大的图形用户界面（GUI）。因此，它是linux系统中少有的、和用户空间程序（甚至是用户）息息相关的一个子系统。
+</p>
+<p>
+	本文是图形子系统分析文章的第一篇，也是提纲挈领的一篇，将会从整体上，对linux显示子系统做一个简单的概述，进而罗列出显示子系统的软件构成，后续的文章将会围绕这些软件一一展开分析。
+</p>
+<p>
+	<span style="color:#0000ff;">注1：本文所有的描述将以原生linux系统为例（如Ubuntu、Debian等），对其它基于linux的系统（如Android），部分内容会不适用。</span> 
+</p>
+<p>
+	<span style="color:#0000ff;">注2：本文很多图片都是从网上搜集而来的（很多是从维基百科）。虽然蜗窝的宗旨是用自己的语言表述，尽量自己画图，但是linux图形子系统太复杂了，蜗蜗的理解有限，而老外的图画的实在太好，蜗蜗觉得，再怎么努力，也画不出更好的了，因此本着为读者负责的态度，就直接copy了。</span> 
+</p>
+<h4>
+	2. 概念介绍
+</h4>
+<h5>
+	2.1 GUI（Graphical User Interface，图形用户界面）
+</h5>
+<p>
+	linux图形子系统的本质，是提供图形化的人机交互（human-computer interaction）界面，也即常说的GUI（Graphical User Interface）。而人机交互的本质，是人脑通过人的输出设备（动作、声音等），控制电脑的输入设备，电脑经过一系列的处理后，经由电脑的输出设备将结果输出，人脑再通过人的输入设备接收电脑的输出，最终实现“人脑&lt;--&gt;电脑”之间的人机交互。下面一幅摘自维基百科的图片（可从<a href="https://upload.wikimedia.org/wikipedia/commons/a/a1/Linux_kernel_INPUT_OUPUT_evdev_gem_USB_framebuffer.svg">“这里”</a>查看比较清晰的SVG格式的原始图片），对上述过程做了很好的总结：
+</p>
+<p style="text-align:center;">
+	<a href="http://www.wowotech.net/content/uploadfile/201512/c1ebd100a79fcdf18a529713469ab15120151217141920.png"></a><a href="http://www.wowotech.net/content/uploadfile/201512/e8b11450422149.gif"><img src="http://www.wowotech.net/content/uploadfile/201512/e8b11450422149.gif" width="665" height="374" title="Linux_kernel_INPUT_OUPUT_evdev_gem_USB_framebuffer.svg" alt="Linux_kernel_INPUT_OUPUT_evdev_gem_USB_framebuffer.svg" /></a> 
+</p>
+<blockquote>
+	<p>
+		该图以一个非常前卫的应用场景----虚拟现实（VR，Virtual Reality）游戏，说明了以图形化为主的人机交互过程：
+	</p>
+	<p>
+		1）人脑通过动作、声音（对人脑而言，是output），控制电脑的输入设备，包括键盘、鼠标、操作杆、麦克风、游戏手柄（包含加速度计、陀螺仪等传感器）。
+	</p>
+	<p>
+		2）电脑通过输入设备，接收人脑的指令，这些指令经过kernel Input subsystem、Middleware Gesture/Speech recognition等软件的处理，转换成应用程序（Game）可以识别的、有意义的信息。
+	</p>
+	<p>
+		3）应用程序（Game）根据输入信息，做出相应的反馈，主要包括图像和声音。对VR游戏而言，可能需要3D rendering，这可以借助openGL及其相应的用户空间driver实现。
+	</p>
+	<p>
+		4）应用程序的反馈，经由kernel的Video subsystem（如DRM/KMS）、audio subsystem（如ALSA），输出到电脑的输出设备上，包括显示设备（2D/3D）、扬声器/耳机（3D Positional Audio）、游戏手柄（力的反馈）等。
+	</p>
+	<p>
+		5）输出到显示设备上时，可能会经过图形加速模块（Graphics accelerator）。
+	</p>
+	<p>
+		<span style="color:#0000ff;">注3：图中提到了VR场景的典型帧率（</span><a href="mailto:1280&times;800@95fps"><span style="color:#0000ff;">1280×800@95fps</span></a><span style="color:#0000ff;"> for VR），这是一个非常庞大的信息输出，要求图形子系统能10.5ms的时间内，生成并输出一帧，以RGBA的数据格式为例，每秒需要处理的数据量是1280x800x95x4x8=3.11296Gb，压力和挑战是相当大的（更不用提1080P了）。</span> 
+	</p>
+</blockquote>
+<p>
+	有关GUI更为详细的解释，请参考：<a title="https://en.wikipedia.org/wiki/Graphical_user_interface" href="https://en.wikipedia.org/wiki/Graphical_user_interface">https://en.wikipedia.org/wiki/Graphical_user_interface</a>。
+</p>
+<h5>
+	2.2 Windowing system（窗口系统）
+</h5>
+<p>
+	窗口系统，是GUI的一种（也是当前计算机设备、智能设备广泛使用的一种），以WIMP （windows、icons、menus、pointer) 的形式，提供人机交互接口。Linux系统中有很多窗口系统的实现，如X Window System、Wayland、Android SurfaceFlinger等，虽然形态各异，但思路大致相同，包含如下要点：
+</p>
+<blockquote>
+	<p>
+		<span style="background-color:#ffffff;"></span>1）一般都使用client-server架构，server（称作display server，或者windows server、compositor等等）管理所有输入设备，以及用于输出的显示设备。
+	</p>
+	<p>
+		2）应用程序作为display server的一个client，在自己窗口（window）中运行，并绘制自己的GUI。
+	</p>
+	<p>
+		3）client的绘图请求，都会提交给display server，display server响应并处理这些请求，以一定的规则混合、叠加，最终在有限的输出资源上（屏幕），显示多个应用程序的GUI。
+	</p>
+	<p>
+		3）display server和自己的client之间，通过某种类型的通信协议交互，该通信协议通常称作display server protocol。
+	</p>
+	<p>
+		4）display server protocol可以是基于网络的，甚至是网络透明的（<a href="https://en.wikipedia.org/wiki/Network_transparency">network transparent</a>），如X Window System所使用的。也可以是其它类型的，如Android SurfaceFlinger所使用的binder。
+	</p>
+</blockquote>
+<p>
+	有关Windowing system的详细解释，请参考：<a title="https://en.wikipedia.org/wiki/Windowing_system" href="https://en.wikipedia.org/wiki/Windowing_system">https://en.wikipedia.org/wiki/Windowing_system</a>。
+</p>
+<h5>
+	2.3 X Window System
+</h5>
+<p>
+	似乎终于要进入正题了。
+</p>
+<p>
+	X Window System是Windowing System一种实现，广泛使用于UNIX-like的操作系统上（当然也包括Linux系统），由MIT（Massachusetts Institute of Technology，麻省理工学院）在1984年发布。下图（可从<a href="https://upload.wikimedia.org/wikipedia/commons/0/03/X_client_server_example.svg">“这里”</a>查看比较清晰的SVG格式的原始图片）是它的典型架构：
+</p>
+<p style="text-align:center;">
+	<a href="http://www.wowotech.net/content/uploadfile/201512/30348d3c8c496ef98471f2b4bd6fda3020151217141925.png"><img src="http://www.wowotech.net/content/uploadfile/201512/76fa54a98d094de7f36e1181ea12caff20151217141926.png" width="273" height="460" title="X_client_server_example" alt="X_client_server_example" /></a> 
+</p>
+<blockquote>
+	<p>
+		1）X Window System简称X，或者X11，或者X-Windows。之所以称作X，是因为在字母表中X位于W之后，而W是MIT在X之前所使用的GUI系统。之所以称作X11，是因为在1987年的时候，X Window System已经进化到第11个版本了，后续所有的X，都是基于X11版本发展而来的（变动不是很大）。为了方便，后续我们都以X代指X Window System。
+	</p>
+	<p>
+		2）X最初是由X.org（XOrg Foundation）维护，后来基于X11R6发展出来了最初专门给Intel X86架构PC使用的X，称作XFree86（提供X服务，它是自由的，它是基于Intel的PC平台）。而后XFree86发展成为几乎适用于所有类UNIX操作系统的X Window系统，因此在相当长的一段时间里，XFree86也是X的代名词。再后来，从2004年的时候，XFree86不再遵从GPL许可证发行，导致许多发行套件不再使用XFree86，转而使用Xorg，再加上Xorg在X维护工作上又趋于活跃，现在Xorg由成为X的代名词（具体可参考“<a title="http://www.x.org/" href="http://www.x.org/">http://www.x.org/</a>”）。
+	</p>
+	<p>
+		3）X设计之初，制定了很多原则，其中一条----"It is as important to decide what a system is not as to decide what it is”，决定了X的“性格”，即：X只提供实现GUI环境的基本框架，如定义protocol、在显示设备上绘制基本的图形单元（点、线、面等等）、和鼠标键盘等输入设备交互、等等。它并没有实现UI设计所需的button、menu、window title-bar styles等元素，而是由第三方的应用程序提供。这就是Unix的哲学：只做我应该做、必须做的事情。这就是这么多年来，X能保持稳定的原因。也是Linux OS界面百花齐放（不统一）的原因，各有利弊吧，后续文章会展开讨论。
+	</p>
+	<p>
+		4）X包括X server和X client，它们之间通过X protocol通信。
+	</p>
+	<p>
+		5）X server接收X clients的显示请求，并输出到显示设备上，同时，会把输入设备的输入事件，转递给相应的X client。X server一般以daemon进程的形式存在。
+	</p>
+	<p>
+		6）X protocol是网络透明（network-transparently）的，也就是说，server和client可以位于同一台机器上的同一个操作系统中，也可以位于不同机器上的不同操作系统中（因此X是跨平台的）。这为远端GUI登录提供了便利，如上面图片所示的运行于remote computer 的terminal emulator，但它却可以被user computer的鼠标键盘控制，以及可以输出到user computer的显示器上。 <br />
+<span style="color:#0000ff;">注4：这种情况下，user computer充当server的角色，remote computer是client，有点别扭，需要仔细品味一下（管理输入设备和显示设备的是server）。</span> 
+	</p>
+	<p>
+		7）X将protocol封装为命令原语（X command primitives），以库的形式（xlib或者xcb）向client提供接口。X client（即应用程序）利用这些API，可以向X server发起2D（或3D，通过GLX等扩展，后面会介绍）的绘图请求。
+	</p>
+</blockquote>
+<p>
+	有关X更为详细的介绍，请参考：<a title="https://en.wikipedia.org/wiki/X_Window_System" href="https://en.wikipedia.org/wiki/X_Window_System">https://en.wikipedia.org/wiki/X_Window_System</a>，后续蜗蜗可能会在单独的文章中分析它。
+</p>
+<h5>
+	2.4 窗口管理器、GUI工具集、桌面环境及其它
+</h5>
+<p>
+	前面讲过，X作为Windowing system中的一种，只提供了实现GUI环境的基本框架，其它的UI设计所需的button、menu、window title-bar styles等基本元素，则是由第三方的应用程序提供。这些应用程序主要包括：窗口管理器（window manager）、GUI工具集（GUI widget toolkit）和桌面环境（desktop environment）。
+</p>
+<p>
+	窗口管理器负责控制应用程序窗口（application windows）的布局和外观，使每个应用程序窗口尽量以统一、一致的方式呈现给用户，如针对X的最简单的窗口管理程序--twm（<a href="https://en.wikipedia.org/wiki/Twm">Tab Window Manager</a>）。
+</p>
+<p>
+	GUI工具集是Windowing system之上的进一步的封装。还是以X为例，它通过xlib提供给应用程序的API，仅仅可以绘制基本的图形单元（点、线、面等等），这些基本的图形单元，要组合成复杂的应用程序，还有很多很多细碎、繁杂的任务要做。因此，一些特定的操作系统，会在X的基础上，封装出一些更为便利的GUI接口，方便应用程序使用，如Microwindows、GTK+、QT等等。
+</p>
+<p>
+	桌面环境是应用程序级别的封装，通过提供一系列界面一致、操作方式一致的应用程序，使系统以更为友好的方式向用户提供服务。Linux系统比较主流的桌面环境包括GNOME、KDE等等。
+</p>
+<h5>
+	2.5 3D渲染、硬件加速、OpenGL及其它
+</h5>
+<p>
+	渲染（Render）在电脑绘图中，是指：用软件从模型生成图像的过程。模型是用严格定义的语言或者数据结构对于三维物体的描述，它包括几何、视点、纹理以及照明信息。图像是数字图像或者位图图像。
+</p>
+<p>
+	上面的定义摘录自“<a href="http://baike.baidu.com/link?url=isLPUuJ_QLiecmU9BC_Xyh2vd8_4n9DDsRrDfvt3s9NHAmoZ5yxtG7RIOWdYCLJn862qIfigLdewFAvhEqpFI5HAm4nBP7fLRqg15v-7VqK">百度百科</a>”，它是着重提及“三维物体”，也就是我们常说的3D渲染。其实我们在GUI编程中习以为常的点、线、矩形等等的绘制，也是渲染的过程中，只不过是2D渲染。2D渲染面临的计算复杂度和性能问题没有3D厉害，因此渲染一般都是指3D渲染。
+</p>
+<p>
+	在计算机中，2D渲染一般是由CPU完成（也可以由专门的硬件模块完成）。3D渲染也可以由CPU完成，但面临性能问题，因此大多数平台都会使用单独硬件模块（GPU或者显卡）负责3D渲染。这种通过特定功能的硬件模块，来处理那些CPU不擅长的事务的方法，称作硬件加速（Hardware acceleration），相应的硬件模块，就是硬件加速模块。
+</p>
+<p>
+	众所周知，硬件设备是多种多样的，为了方便应用程序的开发，需要一个稳定的、最好是跨平台的API，定义渲染有关的行为和动作。OpenGL（Open Graphics Library）就是这类API的一种，也是最为广泛接纳的一种。
+</p>
+<p>
+	虽然OpenGL只是一个API，但由于3D绘图的复杂性，它也是相当的复杂的。不过，归根结底，它的目的有两个：
+</p>
+<blockquote>
+	<p>
+		<span style="background-color:#ffffff;"></span>1）对上，屏蔽硬件细节，为应用程序提供相对稳定的、平台无关的3D图像处理API（当然，也可以是2D）。
+	</p>
+	<p>
+		2）对下，指引硬件相关的驱动软件，实现3D图像处理相关的功能。
+	</p>
+</blockquote>
+<p>
+	另外，openGL的一个重要特性，是独立于操作系统和窗口系统而存在的，具体可以参考后面软件框架相关的章节。
+</p>
+<h4>
+	3. 软件框架
+</h4>
+<p>
+	通过第2章的介绍，linux系统中图形有关的软件层次已经呼之欲出，具体如下：
+</p>
+<p>
+	<a href="http://www.wowotech.net/content/uploadfile/201512/5b56a76a97467a71495cd5b764b3ed4720151217141926.gif"><img style="background-image:none;border-right-width:0px;padding-left:0px;padding-right:0px;display:block;float:none;border-top-width:0px;border-bottom-width:0px;margin-left:auto;border-left-width:0px;margin-right:auto;padding-top:0px;" title="display_software_layer" border="0" alt="display_software_layer" src="http://www.wowotech.net/content/uploadfile/201512/693b0f38e0eedfae1b233f276fb7aad120151217141926.gif" width="528" height="508" /></a> 
+</p>
+<p>
+	该层次图中大部分的内容，已经在第2章解释过了，这里再补充说明一下：
+</p>
+<blockquote>
+	<p>
+		1）该图片没有体现3D渲染、硬件加速等有关的内容，而这些内容却是当下移动互联、智能化等产品比较关注的地方，也是linux平台相对薄弱的环节。后续会在软件框架有关的内容中再着重说明。
+	</p>
+	<p>
+		2）从层次结构的角度看，linux图形子系统是比较清晰的，但牵涉到每个层次上的实现的时候，就比较复杂了，因为有太多的选择了，这可归因于“提供机制，而非策略”的Unix软件准则。该准则为类Unix平台软件的多样性、针对性做出了很大的贡献，但在今天这种各类平台趋于整合的大趋势下，过多的实现会导致用户体验的不一致、开发者开发精力分散等弊端，值得我们思考。
+	</p>
+	<p>
+		3）虽然图形子系统的层次比较多，但不同的人可能关注的内容不太一样。例如对Linux系统工程师（驱动&amp;中间件）而言，比较关注hardware、kernel和display server这三个层次。而对Application工程师来说，可能更比较关心GUI Toolkits。本文以及后续display subsystem的文章，主要以Linux系统工程师的视角，focus在hardware、kernel和display server（可能包括windows manager）上面。
+	</p>
+</blockquote>
+<p style="text-align:center;">
+	以X window为例，将hardware、kernel和display server展开如下（可从<a href="https://upload.wikimedia.org/wikipedia/commons/c/c2/Linux_Graphics_Stack_2013.svg">“这里”</a>查看比较清晰的SVG格式的原始图片）：<a href="http://www.wowotech.net/content/uploadfile/201512/cea0ba252d608b8b71d0a450c2f10c3a20151217141928.png"></a><a href="http://www.wowotech.net/content/uploadfile/201512/0e651450422536.gif"><img src="http://www.wowotech.net/content/uploadfile/201512/0e651450422536.gif" width="640" height="360" title="Linux_Graphics_Stack_2013.svg" alt="Linux_Graphics_Stack_2013.svg" /></a> 
+</p>
+<p>
+	From: <a title="https://upload.wikimedia.org/wikipedia/commons/c/c2/Linux_Graphics_Stack_2013.svg" href="https://upload.wikimedia.org/wikipedia/commons/c/c2/Linux_Graphics_Stack_2013.svg">https://upload.wikimedia.org/wikipedia/commons/c/c2/Linux_Graphics_Stack_2013.svg</a> 
+</p>
+<p>
+	对于软件架构而言，这张来自维基百科的图片并不是特别合适，因为它包含了太多的细节，从而显得有些杂乱。不过瑕不掩瑜，对本文的描述，也足够了。从向到下，图中包括如下的软件的软件模块：
+</p>
+<p>
+	1）3D-game engine、Applications和Toolkits，应用软件，其中3D-game engine是3D application的一个特例。
+</p>
+<p>
+	2）Display Server
+</p>
+<p>
+	图片给出了两个display server：Wayland compositor和X-Server（X.Org）。X-Server是linux系统在PC时代使用比较广泛的display server，而Wayland compositor则是新设计的，计划在移动时代取代X-Server的一个新的display server。
+</p>
+<p>
+	3）libX/libXCB和libwayland-client
+</p>
+<p>
+	display server提供给Application（或者GUI Toolkits）的、访问server所提供功能的API。libX/libXCB对应X-server，libwayland-client对已Wayland compositor。
+</p>
+<p>
+	4）libGL
+</p>
+<p>
+	libGL是openGL接口的实现，3D application（如这里的3D-game engine）可以直接调用libGL进行3D渲染。
+</p>
+<p>
+	libGL可以是各种不同类型的openGL实现，如openGL（for PC场景）、openGL|ES（for嵌入式场景）、openVG（for Flash、SVG矢量图）。
+</p>
+<p>
+	libGL的实现，既可以是基于软件的，也可以是基于硬件的。其中Mesa 3D是OpenGL的一个开源本的实现，支持3D硬件加速。
+</p>
+<p>
+	5）libDRM和kernel DRM
+</p>
+<p>
+	DRI（Direct Render Infrastructure）的kernel实现，及其library。X-server或者Mesa 3D，可以通过DRI的接口，直接访问底层的图形设备（如GPU等）。
+</p>
+<p>
+	6）KMS（Kernel Mode Set）
+</p>
+<p>
+	一个用于控制显示设备属性的内核driver，如显示分辨率等。直接由X-server控制。
+</p>
+<h4>
+	4. 后续工作
+</h4>
+<p>
+	本文有点像一个大杂烩，丢进去太多的东西，每个东西又不能细说。觉得说了很多，又觉得什么都没有说。后续蜗蜗将有针对性的，focus在某些点上面，更进一步的分析，思路如下：
+</p>
+<blockquote>
+	<p>
+		<span style="background-color:#ffffff;"></span>1）将会把显示框架限定到某个确定的实现上，初步计划是：Wayland client+Wayland compositor+Mesa+DRM+KMS，因为它们之中，除了Mesa之外，其它的都是linux系统中显示有关的比较前沿的技术。当然，最重要的，是比较适合移动端的技术。
+	</p>
+	<p>
+		2）通过单独的一篇文章，更详细的分析Wayland+Mesa+DRM+KMS的软件框架，着重分析图像送显、3D渲染、Direct render的过程，以此总结出DRM的功能和工作流程。
+	</p>
+	<p>
+		3）之后，把重心拉回kernel部分，主要包括DRM和KMS，当然，也会顺带介绍framebuffer。
+	</p>
+	<p>
+		4）kernel部分分析完毕后，回到Wayland，主要关心它的功能、使用方式等等。
+	</p>
+	<p>
+		5）其它的，边学、边写、边看吧。
+	</p>
+</blockquote>
+<p>
+	<em></em> 
+</p>
+<p>
+	<em>原创文章，转发请注明出处。蜗窝科技，<a href="http://www.wowotech.net/display_subsystem/graphic_subsystem_overview.html">www.wowotech.net</a>。</em> 
+</p>	<p class="tag">标签:	<a href="http://www.wowotech.net/tag/Linux">Linux</a>	<a href="http://www.wowotech.net/tag/display">display</a>	<a href="http://www.wowotech.net/tag/subsystem">subsystem</a>	<a href="http://www.wowotech.net/tag/GUI">GUI</a>	<a href="http://www.wowotech.net/tag/Wayland">Wayland</a>	<a href="http://www.wowotech.net/tag/SurfaceFlinger">SurfaceFlinger</a>	<a href="http://www.wowotech.net/tag/DRI">DRI</a></p>
+		<a href="http://www.wowotech.net/support_us.html" style="display:block;text-align:center;">
+		<img src="http://www.wowotech.net/content/uploadfile/201605/ef3e1463542768.png" align="middle" width="86" height="40"/>
+	</a>
+	<div class="nextlog">		&laquo; <a href="http://www.wowotech.net/memory_management/247.html">slub分配器</a>
+				|
+				 <a href="http://www.wowotech.net/kernel_synchronization/Why-Memory-Barriers.html">Why Memory Barriers？中文翻译（上）</a>&raquo;
+	</div>
+		<a name="comments"></a>
+	<p class="comment-header"><b>评论：</b></p>
+			<div class="comment" id="comment-8202">
+		<a name="8202"></a>
+				<div class="comment-info">
+			<b>maze </b><br /><span class="comment-time">2021-03-09 13:48</span>
+			<div class="comment-content">wayland-&gt;weston:drm-backend-&gt;libdrm+libgbm:ion-&gt;drm/kms:framebuffer:gem&amp;prime-&gt;xxx <br />期待wowo的精品</div>
+			<div class="comment-reply"><a href="#comment-8202" onclick="commentReply(8202,this)">回复</a></div>
+		</div>
+			</div>
+		<div class="comment" id="comment-8118">
+		<a name="8118"></a>
+				<div class="comment-info">
+			<b>BiaoWang </b><br /><span class="comment-time">2020-09-20 15:27</span>
+			<div class="comment-content">想看到专业的总结framebuffer的文章</div>
+			<div class="comment-reply"><a href="#comment-8118" onclick="commentReply(8118,this)">回复</a></div>
+		</div>
+			</div>
+		<div class="comment" id="comment-7760">
+		<a name="7760"></a>
+				<div class="comment-info">
+			<b>carolyn </b><br /><span class="comment-time">2019-11-22 16:31</span>
+			<div class="comment-content">这个板块凉了啊</div>
+			<div class="comment-reply"><a href="#comment-7760" onclick="commentReply(7760,this)">回复</a></div>
+		</div>
+			</div>
+		<div class="comment" id="comment-7674">
+		<a name="7674"></a>
+				<div class="comment-info">
+			<b>allen </b><br /><span class="comment-time">2019-09-29 11:46</span>
+			<div class="comment-content">大神，后续还有么</div>
+			<div class="comment-reply"><a href="#comment-7674" onclick="commentReply(7674,this)">回复</a></div>
+		</div>
+			</div>
+		<div class="comment" id="comment-7647">
+		<a name="7647"></a>
+				<div class="comment-info">
+			<b>escofield </b><br /><span class="comment-time">2019-09-09 17:27</span>
+			<div class="comment-content">大神，后续还有么</div>
+			<div class="comment-reply"><a href="#comment-7647" onclick="commentReply(7647,this)">回复</a></div>
+		</div>
+			</div>
+		<div class="comment" id="comment-7412">
+		<a name="7412"></a>
+				<div class="comment-info">
+			<b><a href="http://bzhao.xicp.net:9009" target="_blank">linuxdog</a> </b><br /><span class="comment-time">2019-05-12 11:13</span>
+			<div class="comment-content">简单地看完，　对名词了解一下！　KMS/DRM/DRI/Xlib...</div>
+			<div class="comment-reply"><a href="#comment-7412" onclick="commentReply(7412,this)">回复</a></div>
+		</div>
+			</div>
+		<div class="comment" id="comment-6459">
+		<a name="6459"></a>
+				<div class="comment-info">
+			<b>semilog </b><br /><span class="comment-time">2018-01-09 13:54</span>
+			<div class="comment-content">直接有X-server控制。 写的很好，有个错别字</div>
+			<div class="comment-reply"><a href="#comment-6459" onclick="commentReply(6459,this)">回复</a></div>
+		</div>
+			<div class="comment comment-children" id="comment-6475">
+		<a name="6475"></a>
+				<div class="comment-info">
+			<b><a href="http://www.wowotech.net/" target="_blank">wowo</a> </b><br /><span class="comment-time">2018-01-16 09:28</span>
+			<div class="comment-content">@semilog：多谢提醒，已修改~~</div>
+			<div class="comment-reply"><a href="#comment-6475" onclick="commentReply(6475,this)">回复</a></div>		</div>
+			</div>
+		</div>
+		<div class="comment" id="comment-6309">
+		<a name="6309"></a>
+				<div class="comment-info">
+			<b>wzyy2 </b><br /><span class="comment-time">2017-12-08 09:14</span>
+			<div class="comment-content">图形这块的文章太少了， 支持客户好痛苦 <br />:p 想要研究这块的可以买个rockchip的开发板来玩，我觉得我们是DRM/KMS这块做的最好的arm linux了（不过不知道terga是什么情况。。）<br />http://blog.iotwrt.com/media/2017/11/27/graphic/</div>
+			<div class="comment-reply"><a href="#comment-6309" onclick="commentReply(6309,this)">回复</a></div>
+		</div>
+			<div class="comment comment-children" id="comment-6310">
+		<a name="6310"></a>
+				<div class="comment-info">
+			<b><a href="http://www.wowotech.net/" target="_blank">wowo</a> </b><br /><span class="comment-time">2017-12-08 09:42</span>
+			<div class="comment-content">@wzyy2：是啊，我一直想把这块的文章整理一下，只是苦于没有时间:-(</div>
+			<div class="comment-reply"><a href="#comment-6310" onclick="commentReply(6310,this)">回复</a></div>		</div>
+			<div class="comment comment-children" id="comment-6427">
+		<a name="6427"></a>
+				<div class="comment-info">
+			<b>miroor </b><br /><span class="comment-time">2017-12-28 10:15</span>
+			<div class="comment-content">@wowo：博主有没有V4l2实现及适配相关的文章？</div>
+			<div class="comment-reply"><a href="#comment-6427" onclick="commentReply(6427,this)">回复</a></div>		</div>
+			<div class="comment comment-children" id="comment-6429">
+		<a name="6429"></a>
+				<div class="comment-info">
+			<b><a href="http://www.wowotech.net/" target="_blank">wowo</a> </b><br /><span class="comment-time">2017-12-29 09:15</span>
+			<div class="comment-content">@miroor：暂时没有写这一块的内容。</div>
+			<div class="comment-reply"><a href="#comment-6429" onclick="commentReply(6429,this)">回复</a></div>		</div>
+			<div class="comment comment-children" id="comment-6430">
+		<a name="6430"></a>
+				<div class="comment-info">
+			<b>miroor </b><br /><span class="comment-time">2017-12-29 10:42</span>
+			<div class="comment-content">@wowo：感觉这一块内容也很多，很多网上的很多都没说清楚，希望出一个系列！</div>
+			<div class="comment-reply"><a href="#comment-6430" onclick="commentReply(6430,this)">回复</a></div>		</div>
+			</div>
+		</div>
+		</div>
+		</div>
+		</div>
+		<div class="comment" id="comment-5184">
+		<a name="5184"></a>
+				<div class="comment-info">
+			<b>demon </b><br /><span class="comment-time">2017-01-24 16:39</span>
+			<div class="comment-content">wowo，<br />如果我想在android系统中实现数据的转换，比如将RGB数据变为RGBW之类的。<br />有什么好的建议么？</div>
+			<div class="comment-reply"><a href="#comment-5184" onclick="commentReply(5184,this)">回复</a></div>
+		</div>
+			<div class="comment comment-children" id="comment-5190">
+		<a name="5190"></a>
+				<div class="comment-info">
+			<b><a href="http://www.wowotech.net/" target="_blank">wowo</a> </b><br /><span class="comment-time">2017-01-25 09:15</span>
+			<div class="comment-content">@demon：openGL中有大把的颜色转换的实现，不过RGBW这种新东西，不知道有没有。</div>
+			<div class="comment-reply"><a href="#comment-5190" onclick="commentReply(5190,this)">回复</a></div>		</div>
+			</div>
+		<div class="comment comment-children" id="comment-5672">
+		<a name="5672"></a>
+				<div class="comment-info">
+			<b>whl </b><br /><span class="comment-time">2017-06-14 11:45</span>
+			<div class="comment-content">@demon：希望大神能多写些关于GPU的知识</div>
+			<div class="comment-reply"><a href="#comment-5672" onclick="commentReply(5672,this)">回复</a></div>		</div>
+			<div class="comment comment-children" id="comment-5675">
+		<a name="5675"></a>
+				<div class="comment-info">
+			<b><a href="http://www.wowotech.net/" target="_blank">wowo</a> </b><br /><span class="comment-time">2017-06-14 21:30</span>
+			<div class="comment-content">@whl：苦于没时间……</div>
+			<div class="comment-reply"><a href="#comment-5675" onclick="commentReply(5675,this)">回复</a></div>		</div>
+			</div>
+		</div>
+		</div>
+		<div class="comment" id="comment-4934">
+		<a name="4934"></a>
+				<div class="comment-info">
+			<b>motou </b><br /><span class="comment-time">2016-11-29 23:10</span>
+			<div class="comment-content">不错，2）后面就再没有新的了吗？</div>
+			<div class="comment-reply"><a href="#comment-4934" onclick="commentReply(4934,this)">回复</a></div>
+		</div>
+			<div class="comment comment-children" id="comment-4935">
+		<a name="4935"></a>
+				<div class="comment-info">
+			<b><a href="http://www.wowotech.net/" target="_blank">wowo</a> </b><br /><span class="comment-time">2016-11-30 08:44</span>
+			<div class="comment-content">@motou：多谢关注。由于太忙，要写的东西又比较杂，所以这一块一直没有机会更新。<br />我准备在x project做到显示的时候，再接着写这一系列的文章。</div>
+			<div class="comment-reply"><a href="#comment-4935" onclick="commentReply(4935,this)">回复</a></div>		</div>
+			</div>
+		</div>
+	    <div id="pagenavi">
+	     <span>1</span>  <a href="http://www.wowotech.net/graphic_subsystem/graphic_subsystem_overview.html/comment-page-2#comments">2</a>     </div>
+		<div id="comment-place">
+	<div class="comment-post" id="comment-post">
+		<div class="cancel-reply" id="cancel-reply" style="display:none"><a href="javascript:void(0);" onclick="cancelReply()">取消回复</a></div>
+		<p class="comment-header"><b>发表评论：</b><a name="respond"></a></p>
+		<form method="post" name="commentform" action="http://www.wowotech.net/index.php?action=addcom" id="commentform">
+			<input type="hidden" name="gid" value="246" />
+						<p>
+				<input type="text" name="comname" maxlength="49" value="" size="22" tabindex="1">
+				<label for="author"><small>昵称</small></label>
+			</p>
+			<p>
+				<input type="text" name="commail"  maxlength="128"  value="" size="22" tabindex="2">
+				<label for="email"><small>邮件地址 (选填)</small></label>
+			</p>
+			<p>
+				<input type="text" name="comurl" maxlength="128"  value="" size="22" tabindex="3">
+				<label for="url"><small>个人主页 (选填)</small></label>
+			</p>
+						<p><textarea name="comment" id="comment" rows="10" tabindex="4"></textarea></p>
+			<p><img src="http://www.wowotech.net/include/lib/checkcode.php" align="absmiddle" /><input name="imgcode" type="text" class="input" size="5" tabindex="5" /> <input type="submit" id="comment_submit" value="发表评论" tabindex="6" /></p>
+			<input type="hidden" name="pid" id="comment-pid" value="0" size="22" tabindex="1"/>
+		</form>
+	</div>
+	</div>
+		<div style="clear:both;"></div>
+</div><!--end #contentleft-->
+<ul id="sidebar">
+	<li>
+	<h3><span>站内搜索</span></h3>
+	<ul>
+	<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=16798210514584749375' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>	</ul>
+	</li>
+	<li>
+	<h3><span>功能</span></h3>
+	<ul>
+	<a href="http://www.wowotech.net/message_board.html">留言板<br></a>
+<a href="http://www.wowotech.net/?plugin=commentlist">评论列表<br></a>
+<a href="http://www.wowotech.net/support_list">支持者列表<br></a>	</ul>
+	</li>
+	<li>
+	<h3><span>最新评论</span></h3>
+	<ul id="newcomment">
+		<li id="comment">bang	<br /><a href="http://www.wowotech.net/process_management/448.html#8223">提一个小的严谨性问题哈，“新创建的进程惩罚的时间是多少”小节...</a></li>
+		<li id="comment">ccczh	<br /><a href="http://www.wowotech.net/pm_subsystem/cpuidle_menu_governor.html#8222">@wowo：在新版的内核代码，在la在新版的内核代码，在la...</a></li>
+		<li id="comment">明天	<br /><a href="http://www.wowotech.net/memory_management/memory_model.html#8221">为什么我看linux内核代码第一个PFN是PFN_UP(x)...</a></li>
+		<li id="comment">蜗牛	<br /><a href="http://www.wowotech.net/memory_management/441.html#8220">您好，窝窝
+
+请问arm平台有对kaslr机制的处理的，...</a></li>
+		<li id="comment">googol	<br /><a href="http://www.wowotech.net/memory_management/456.html#8219">@lamb0145：同问，内存屏障的例子里怎么保证core ...</a></li>
+		<li id="comment">StevenSun	<br /><a href="http://www.wowotech.net/process_management/447.html#8218">@tandf：事实上考虑的不只是寻找最小的元素. 还可以参考...</a></li>
+		</ul>
+	</li>
+	<li>
+	<h3><span>文章分类</span></h3>
+	<ul id="blogsort">
+		<li>
+	<a href="http://www.wowotech.net/sort/linux_kenrel">Linux内核分析(19)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=4"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<ul>
+				<li>
+			<a href="http://www.wowotech.net/sort/device_model">统一设备模型(15)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=12"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/pm_subsystem">电源管理子系统(42)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=13"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/irq_subsystem">中断子系统(15)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=14"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/process_management">进程管理(24)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=15"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/kernel_synchronization">内核同步机制(22)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=16"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/gpio_subsystem">GPIO子系统(5)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=17"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/timer_subsystem">时间子系统(14)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=18"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/comm">通信类协议(7)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=20"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/memory_management">内存管理(31)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=21"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/graphic_subsystem">图形子系统(1)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=23"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/filesystem">文件系统(5)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=26"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/tty_framework">TTY子系统(6)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=27"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				</ul>
+			<li>
+	<a href="http://www.wowotech.net/sort/u-boot">u-boot分析(3)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=25"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<li>
+	<a href="http://www.wowotech.net/sort/linux_application">Linux应用技巧(13)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=3"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<li>
+	<a href="http://www.wowotech.net/sort/soft">软件开发(6)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=1"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<li>
+	<a href="http://www.wowotech.net/sort/basic_tech">基础技术(13)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=6"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<ul>
+				<li>
+			<a href="http://www.wowotech.net/sort/bluetooth">蓝牙(16)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=10"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/armv8a_arch">ARMv8A Arch(13)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=19"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/display">显示(3)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=22"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				<li>
+			<a href="http://www.wowotech.net/sort/usb">USB(1)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=28"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				</ul>
+			<li>
+	<a href="http://www.wowotech.net/sort/basic_subject">基础学科(10)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=7"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<li>
+	<a href="http://www.wowotech.net/sort/tech_discuss">技术漫谈(12)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=8"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<li>
+	<a href="http://www.wowotech.net/sort/project">项目专区(0)</a>
+	<a href="http://www.wowotech.net/rss.php?sort=9"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+			<ul>
+				<li>
+			<a href="http://www.wowotech.net/sort/x_project">X Project(28)</a>
+			<a href="http://www.wowotech.net/rss.php?sort=24"><img src="http://www.wowotech.net/content/templates/default/images/rss.png" alt="订阅该分类"/></a>
+		</li>
+				</ul>
+			</ul>
+	</li>
+	<li>
+	<h3><span>随机文章</span></h3>
+	<ul id="randlog">
+		<li><a href="http://www.wowotech.net/180.html">kernel启动优化</a></li>
+		<li><a href="http://www.wowotech.net/tech_discuss/jymt1.html">教育漫谈(1)_《乌合之众》摘录</a></li>
+		<li><a href="http://www.wowotech.net/memory_management/oom.html">Linux vm运行参数之（二）：OOM相关的参数</a></li>
+		<li><a href="http://www.wowotech.net/irq_subsystem/cmwq-intro.html">Concurrency Managed Workqueue之（二）：CMWQ概述</a></li>
+		<li><a href="http://www.wowotech.net/tech_discuss/106.html">我眼中的可穿戴设备</a></li>
+		</ul>
+	</li>
+	<li>
+	<h3><span>文章存档</span></h3>
+	<ul id="record">
+		<li><a href="http://www.wowotech.net/record/202003">2020年3月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/202002">2020年2月(2)</a></li>
+		<li><a href="http://www.wowotech.net/record/202001">2020年1月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201912">2019年12月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201905">2019年5月(4)</a></li>
+		<li><a href="http://www.wowotech.net/record/201903">2019年3月(1)</a></li>
+		<li><a href="http://www.wowotech.net/record/201901">2019年1月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201812">2018年12月(2)</a></li>
+		<li><a href="http://www.wowotech.net/record/201811">2018年11月(1)</a></li>
+		<li><a href="http://www.wowotech.net/record/201810">2018年10月(2)</a></li>
+		<li><a href="http://www.wowotech.net/record/201808">2018年8月(1)</a></li>
+		<li><a href="http://www.wowotech.net/record/201806">2018年6月(1)</a></li>
+		<li><a href="http://www.wowotech.net/record/201805">2018年5月(1)</a></li>
+		<li><a href="http://www.wowotech.net/record/201804">2018年4月(7)</a></li>
+		<li><a href="http://www.wowotech.net/record/201802">2018年2月(4)</a></li>
+		<li><a href="http://www.wowotech.net/record/201801">2018年1月(5)</a></li>
+		<li><a href="http://www.wowotech.net/record/201712">2017年12月(2)</a></li>
+		<li><a href="http://www.wowotech.net/record/201711">2017年11月(2)</a></li>
+		<li><a href="http://www.wowotech.net/record/201710">2017年10月(1)</a></li>
+		<li><a href="http://www.wowotech.net/record/201709">2017年9月(5)</a></li>
+		<li><a href="http://www.wowotech.net/record/201708">2017年8月(4)</a></li>
+		<li><a href="http://www.wowotech.net/record/201707">2017年7月(4)</a></li>
+		<li><a href="http://www.wowotech.net/record/201706">2017年6月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201705">2017年5月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201704">2017年4月(1)</a></li>
+		<li><a href="http://www.wowotech.net/record/201703">2017年3月(8)</a></li>
+		<li><a href="http://www.wowotech.net/record/201702">2017年2月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201701">2017年1月(5)</a></li>
+		<li><a href="http://www.wowotech.net/record/201612">2016年12月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201611">2016年11月(11)</a></li>
+		<li><a href="http://www.wowotech.net/record/201610">2016年10月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201609">2016年9月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201608">2016年8月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201607">2016年7月(5)</a></li>
+		<li><a href="http://www.wowotech.net/record/201606">2016年6月(8)</a></li>
+		<li><a href="http://www.wowotech.net/record/201605">2016年5月(8)</a></li>
+		<li><a href="http://www.wowotech.net/record/201604">2016年4月(7)</a></li>
+		<li><a href="http://www.wowotech.net/record/201603">2016年3月(5)</a></li>
+		<li><a href="http://www.wowotech.net/record/201602">2016年2月(5)</a></li>
+		<li><a href="http://www.wowotech.net/record/201601">2016年1月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201512">2015年12月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201511">2015年11月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201510">2015年10月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201509">2015年9月(4)</a></li>
+		<li><a href="http://www.wowotech.net/record/201508">2015年8月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201507">2015年7月(7)</a></li>
+		<li><a href="http://www.wowotech.net/record/201506">2015年6月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201505">2015年5月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201504">2015年4月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201503">2015年3月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201502">2015年2月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201501">2015年1月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201412">2014年12月(17)</a></li>
+		<li><a href="http://www.wowotech.net/record/201411">2014年11月(8)</a></li>
+		<li><a href="http://www.wowotech.net/record/201410">2014年10月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201409">2014年9月(7)</a></li>
+		<li><a href="http://www.wowotech.net/record/201408">2014年8月(12)</a></li>
+		<li><a href="http://www.wowotech.net/record/201407">2014年7月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201406">2014年6月(6)</a></li>
+		<li><a href="http://www.wowotech.net/record/201405">2014年5月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201404">2014年4月(9)</a></li>
+		<li><a href="http://www.wowotech.net/record/201403">2014年3月(7)</a></li>
+		<li><a href="http://www.wowotech.net/record/201402">2014年2月(3)</a></li>
+		<li><a href="http://www.wowotech.net/record/201401">2014年1月(4)</a></li>
+		</ul>
+	</li>
+<div class="rss">
+<a href="http://www.wowotech.net/rss.php" title="RSS订阅"><img src="http://www.wowotech.net/content/templates/default/images/rss.gif" alt="订阅Rss"/></a>
+</div>
+</ul><!--end #siderbar-->
+</div><!--end #content-->
+<div style="clear:both;"></div>
+<div id="footerbar">
+	Copyright @ 2013-2015 <a href="http://www.wowotech.net" title="wowotech">蜗窝科技</a> All rights reserved.
+	Powered by <a href="http://www.emlog.net" title="采用emlog系统">emlog</a>
+	<a href="http://www.miibeian.gov.cn" target="_blank"></a> <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?9d3da49d9cb9a5eaca161fc2905551df";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>	</div><!--end #footerbar-->
+</div><!--end #wrap-->
+<script>prettyPrint();</script>
+</body>
+</html>
