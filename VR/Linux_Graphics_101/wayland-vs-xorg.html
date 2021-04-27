@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Wayland v/s Xorg : How Are They Similar &amp; How Are They Different</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css?v=1791f4b51c" />
+
+    <meta name="description" content="A closer look at Wayland and Xorg, the two most popular display servers in the wild. Join security analyst Shivam Sengar to learn about their differences." />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://www.secjuice.com/wayland-vs-xorg/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Secjuice" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Wayland v/s Xorg : How Are They Similar &amp; How Are They Different" />
+    <meta property="og:description" content="A closer look at Wayland and Xorg, the two most popular display servers in the wild. Join security analyst Shivam Sengar to learn about their differences." />
+    <meta property="og:url" content="https://www.secjuice.com/wayland-vs-xorg/" />
+    <meta property="og:image" content="https://www.secjuice.com/content/images/2018/06/linux.png" />
+    <meta property="article:published_time" content="2018-06-16T08:57:00.000Z" />
+    <meta property="article:modified_time" content="2018-08-22T11:16:47.000Z" />
+    <meta property="article:tag" content="INFOSEC" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/secjuice" />
+    <meta property="article:author" content="https://www.facebook.com/S3sngh" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Wayland v/s Xorg : How Are They Similar &amp; How Are They Different" />
+    <meta name="twitter:description" content="A closer look at Wayland &amp; Xorg, the two most popular display servers in the wild. Join security analyst Shivam Sengar to learn about their differences." />
+    <meta name="twitter:url" content="https://www.secjuice.com/wayland-vs-xorg/" />
+    <meta name="twitter:image" content="https://www.secjuice.com/content/images/2018/06/linux.png" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Shivam Singh Sengar" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="INFOSEC" />
+    <meta name="twitter:site" content="@secjuice" />
+    <meta name="twitter:creator" content="@shisen_404" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="600" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Secjuice",
+        "url": "https://www.secjuice.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.secjuice.com/content/images/2018/12/Logo-1.png"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Shivam Singh Sengar",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://www.secjuice.com/content/images/2018/06/cr2.jpeg",
+            "width": 2448,
+            "height": 2448
+        },
+        "url": "https://www.secjuice.com/author/shivam/",
+        "sameAs": [
+            "https://www.facebook.com/S3sngh",
+            "https://twitter.com/shisen_404"
+        ]
+    },
+    "headline": "Wayland v/s Xorg : How Are They Similar &amp; How Are They Different",
+    "url": "https://www.secjuice.com/wayland-vs-xorg/",
+    "datePublished": "2018-06-16T08:57:00.000Z",
+    "dateModified": "2018-08-22T11:16:47.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://www.secjuice.com/content/images/2018/06/linux.png",
+        "width": 800,
+        "height": 600
+    },
+    "keywords": "INFOSEC",
+    "description": "A closer look at Wayland and Xorg, the two most popular display servers in the wild. Join security analyst Shivam Sengar to learn about their differences.",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.secjuice.com/"
+    }
+}
+    </script>
+
+    <script defer src="https://unpkg.com/@tryghost/portal@~0.15.0/umd/portal.min.js" data-ghost="https://www.secjuice.com/"></script><style> .gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <meta name="generator" content="Ghost 3.42" />
+    <link rel="alternate" type="application/rss+xml" title="Secjuice" href="https://www.secjuice.com/rss/" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119868006-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-119868006-1');
+</script>
+
+<meta name="google-site-verification" content="lvcUQXMrKXC7eYXXwae5JdMWrn1K6t5o1YjP_4IYcKs" />
+<meta name="msvalidate.01" content="8B017FF6E735701B4A11D5540AC64494" />
+
+
+<style type="text/css">
+    body {
+    	font-family: 'Roboto', sans-serif; 
+    }
+    
+    ::selection {
+  		background: #763375;
+        color: white;
+	}
+    
+	::-moz-selection {
+  		background: #763375;
+        color: white;
+	}
+    
+    .post-full-content {
+    	font-family: 'Roboto', sans-serif;
+    }
+
+    .post-card-excerpt {
+    	font-family: 'Roboto', sans-serif;
+    }
+    
+    .site-logo {
+        max-height: 90px; /* where 45px is the current max height */
+		padding-bottom: 25px;
+    }
+
+	.post-full-content pre {
+        color: inherit;
+    }
+    
+	.post-content,
+    .post-content a {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+    }
+</style>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/theme/monokai.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/theme/neo.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/theme/night.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/theme/gruvbox-dark.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/shell/shell.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/php/php.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/lua/lua.min.js"></script>
+
+<style>
+.CodeMirror {
+	font-family: sans, monospace;
+	// font-size: 16px;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    margin-bottom:30px;
+}
+.CodeMirror-scroll {
+	overflow: auto;
+	height: 100%;
+	position: relative;
+	outline: none;
+}
+</style>
+
+<style>
+.kg-card.kg-bookmark-card {
+    border: solid grey 1px;
+    padding: 0.5em;
+}
+.kg-bookmark-content,
+.kg-bookmark-thumbnail {
+    display: inline-block !important;
+    vertical-align: top !important
+}
+.kg-bookmark-content {
+    width: 75% !important;
+    }
+.kg-bookmark-thumbnail {
+    width: 25% !important;
+    }
+.kg-bookmark-title,
+.kg-bookmark-description,
+.kg-bookmark-icon,
+.kg-bookmark-author,
+.kg-bookmark-publisher{
+    font-size: 12pt !important;
+    line-height: 1 !important;
+}
+.kg-bookmark-title {
+    font-weight: bold !important;
+}
+.kg-bookmark-icon {
+    max-width: 24px !important;
+    max-height: 24px !important;
+}
+.kg-bookmark-thumbnail img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+}
+.kg-bookmark-icon {
+    display: inline !important;
+}
+.kg-bookmark-author {
+    font-weight: bold !important;
+}
+.kg-bookmark-icon,
+.kg-bookmark-author,
+.kg-bookmark-publisher {
+    margin-right: 0.2em !important;
+    font-size: 10pt !important;
+}
+.kg-bookmark-container {
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+</style>
+
+</head>
+<body class="post-template tag-infosec">
+
+    <div class="site-wrapper">
+
+        
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+                <a class="site-nav-logo" href="https://www.secjuice.com"><img src="/content/images/2018/12/Logo-1.png" alt="Secjuice" /></a>
+            <ul class="nav">
+    <li class="nav-technical"><a href="https://www.secjuice.com/tag/technical/">Technical</a></li>
+    <li class="nav-osint"><a href="https://www.secjuice.com/tag/OSINT/">OSINT</a></li>
+    <li class="nav-unusual-journeys"><a href="https://www.secjuice.com/tag/unusual-journeys/">Unusual Journeys</a></li>
+    <li class="nav-hof"><a href="https://www.secjuice.com/secjuice-hall-of-fame/">HoF</a></li>
+    <li class="nav-write-with-us"><a href="https://www.secjuice.com/join-secjuice-writing-team/">Write With Us</a></li>
+    <li class="nav-hire-a-writer"><a href="https://www.secjuice.com/hire-infosec-cybersecurity-writer/">Hire A Writer</a></li>
+    <li class="nav-about-us"><a href="https://www.secjuice.com/about-us/">About Us</a></li>
+    <li class="nav-rankings"><a href="https://www.secjuice.com/secjuice-writers-ranking/">Rankings</a></li>
+</ul>
+
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+                <a class="social-link social-link-fb" href="https://www.facebook.com/secjuice" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+</a>
+                <a class="social-link social-link-tw" href="https://twitter.com/secjuice" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+</a>
+        </div>
+            <a class="rss-button" href="https://feedly.com/i/subscription/feed/https://www.secjuice.com/rss/" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+</a>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post tag-infosec ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="2018-06-16">16 June 2018</time>
+                        <span class="date-divider">/</span> <a href="/tag/infosec/">INFOSEC</a>
+                </section>
+                <h1 class="post-full-title">Wayland v/s Xorg : How Are They Similar &amp; How Are They Different</h1>
+            </header>
+
+            <figure class="post-full-image" style="background-image: url(https://www.secjuice.com/content/images/2018/06/linux.png)">
+            </figure>
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <!--kg-card-begin: markdown--><p>Earlier this year Ubuntu 18 LTS was fully released. When I first heard that Ubuntu 18 will be using <a href="https://blog.ubuntu.com/2018/01/26/bionic-beaver-18-04-lts-to-use-xorg-by-default">Xorg as default</a>, it came to me by surprise. Afterall Xorg has some security concerns, and choosing to continue with it was hard to swallow. When I started to dig into this, I realised why the community was going with Xorg instead of Wayland as default. In this article, I will explain the issues I found during my analysis.<br>
+Before going over the issue with the Xorg it is vital to understand the working mechanisms and architecture of both Xorg and Wayland. How they are similar and how are they different?</p>
+<h2 id="displayserverandstack">Display Server and Stack</h2>
+<p><a href="https://en.wikipedia.org/wiki/Display_server">Display Server</a> is the basic component of GUI which sits between the graphical interface and the kernel. Its primary task is to coordinate the input and output of its clients (programs and applications running GUI interface) to and from the rest of the OS, the hardware, and each other. It <a href="https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/">communicates</a> with its clients over the display server protocol which can be network-transparent and network capable. Commonly known display server communications protocols include X11, Wayland, Mir, etc.<br>
+X11 is the protocol implemented by X Windows System while Wayland is the protocol used by Wayland Compositor. In simple terms, X Windows System and Wayland determine how your program's display will appear depending on your actions. These actions include clicking on a checkbox, moving the windows, clicking a button, etc. The X Window System is a client/server network protocol that's been put into use for a while now. X.Org Server is the free and open source implementation of the display server for the X Window System stewarded by the X.Org Foundation. Wayland is a computer protocol that specifies the communication between a display server (called a Wayland compositor) and its clients.</p>
+<h3 id="xorg">Xorg</h3>
+<p><a href="https://en.wikipedia.org/wiki/X_Window_System">Xorg</a> is based on a client/server model and thus allows clients to run either locally or remotely on a different machine. Client applications use a protocol library such as libX11 for sending and receiving commands to the X server. X toolkit libraries are also used to draw and operate widgest like buttons and scroll bars. The X server receives graphics requests from the client programs to be displayed to the user, and it sends back user commands from input devices such as keyboards, mouse, touchscreens, etc.</p>
+<p><img src="https://www.secjuice.com/content/images/2018/06/x-architecture.png" alt="x-architecture"></p>
+<p>The numbers on the image show the flow of the events and data across different modules of the Xorg modules. To understand more about the workflow go through <a href="https://wayland.freedesktop.org/architecture.html">this</a> page.<br>
+As can be seen, the X Server doesn't have the info to decide which window should receive the event, nor can it transform the screen coordinates to window-local coordinates. And even though X has handed responsibility for the final painting of the screen to the compositing manager, X still controls the front buffer and modesetting. The X server acts as a middleman that introduces an extra step between applications and the compositor and an extra step between the compositor and the hardware.</p>
+<h3 id="wayland">Wayland</h3>
+<p>In Wayland, the compositor is the display server. We transfer the control of KMS and evdev to the compositor. The <strong>Wayland protocol lets the compositor send the input events directly to the clients and lets the client send the damage event directly to the compositor</strong>.</p>
+<p><img src="https://www.secjuice.com/content/images/2018/06/wayland-architecture.png" alt="wayland-architecture"></p>
+<p>The compositor looks through its scenegraph to determine which window should receive the event.<br>
+As in the X case, when the client receives the event it updates the UI in response. But, in the Wayland rendering happens in the client, and the client just sends a request to the compositor to indicate the region that was updated.<br>
+With direct rendering client and server share a video memory buffer. the client links to a rendering library such as OpenGL that knows to program hardware and renders directly into the buffer.</p>
+<h2 id="issueswiththexorg">Issues with the Xorg</h2>
+<p>As discussed above, the design of the Xorg doesn't allow the applications to have GUI-Level isolation. This implies that if the system has multiple GUI applications running, like Word Office, any of your favourite editor, or something else, then there is no isolation among them. It is easy to log keystrokes of all processes of the same user using the command xinput.<br>
+The command generates the log of all key-presses. Any kind of isolation is not possible, even using <a href="https://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> since any keystrokes passed to the X Server are available for any arbitrary program.<br>
+To see the issue in action you can use the <em>xinput</em> command available for systems running Xorg. First run the following command to list the devices on your system:</p>
+<blockquote>
+<p>xinput list</p>
+</blockquote>
+<p><img src="https://www.secjuice.com/content/images/2018/06/1.png" alt="1"><br>
+As can be seen in the above image the keyboard has the id of 14. Now run the following command to get the key presses:</p>
+<blockquote>
+<p>xinput test <em>id</em></p>
+</blockquote>
+<p>Replace the id with the id of the device, in our case it is 14. After running the command open another terminal and start typing commands there. You will be able to see the recorded key logs on the initial terminal, just like shown in the image below.<br>
+<img src="https://www.secjuice.com/content/images/2018/06/2.png" alt="2"><br>
+Try running the sudo command, loggin in as root using su, you will observe that the password you type is also shown.</p>
+<h2 id="whystillxorg">Why still Xorg?</h2>
+<p>Even though Wayland eliminates most of the design flaws of the Xorg it has its own issues. In order to communicate with the display server the programs, which act as clients, running on the system must know how to communicate with it. Xorg being older than Wayland is more developed and has better extensibility. This is the reason why some applicatons or programs might not run when using Wayland. This is why <a href="http://jonls.dk/redshift/">redshift</a> doesn't work in Wayland.</p>
+<p>Wayland is not very stable when compared with Xorg, as it is relatively new. Ubuntu 18 LTS's primary concern was of stability. Even though the Wayland project has been up for almost ten years things are not 100% stable. All this resulted in making Xorg as default in Ubuntu 18, but Wayland is installed allowing users to switch if desired.</p>
+<!--kg-card-end: markdown-->
+                </div>
+            </section>
+
+
+            <footer class="post-full-footer">
+
+
+                    
+<section class="author-card">
+        <img class="author-profile-image" src="https://www.secjuice.com/content/images/2018/06/cr2.jpeg" alt="Shivam Singh Sengar" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/author/shivam/">Shivam Singh Sengar</a></h4>
+            <p>Read <a href="/author/shivam/">more posts</a> by this author.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/author/shivam/">More articles by Shivam Singh Sengar</a>
+</div>
+
+
+            </footer>
+
+
+        </article>
+
+    </div>
+</main>
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+                <article class="read-next-card"
+                        style="background-image: url(https://www.secjuice.com/content/images/2018/05/secjuiceghostbkgrnd-15.png)"
+                >
+                    <header class="read-next-card-header">
+                        <small class="read-next-card-header-sitetitle">&mdash; Secjuice &mdash;</small>
+                        <h3 class="read-next-card-header-title"><a href="/tag/infosec/">INFOSEC</a></h3>
+                    </header>
+                    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                    <div class="read-next-card-content">
+                        <ul>
+                            <li><a href="/cybersecurity-for-startups/">Cybersecurity Advice For Startups</a></li>
+                            <li><a href="/secjuice-squeeze-62/">Secjuice Squeeze 62</a></li>
+                            <li><a href="/secjuice-squeeze-61/">Secjuice Squeeze 61</a></li>
+                        </ul>
+                    </div>
+                    <footer class="read-next-card-footer">
+                        <a href="/tag/infosec/">See all 236 posts →</a>
+                    </footer>
+                </article>
+
+                <article class="post-card post tag-cybersec">
+        <a class="post-card-image-link" href="/phishing-best-practices-for-smbs/">
+            <div class="post-card-image" style="background-image: url(https://www.secjuice.com/content/images/2018/06/pixie_book__crypto_crimes_dribbble-01.png)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/phishing-best-practices-for-smbs/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">CYBERSEC</span>
+                <h2 class="post-card-title">SMB Best Practices For Preventing Successful Email Phishing Attacks</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>In this article Security researcher Daria Levinshtein lays out some best practices for SMB's to avoid becoming the victim of a phishing attack.</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Daria
+                    </div>
+
+                        <a href="/author/daria/" class="static-avatar author-profile-image"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
+</a>
+                </li>
+            </ul>
+
+            <span class="reading-time">3 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+                <article class="post-card post tag-cybersec">
+        <a class="post-card-image-link" href="/password-manager-guide/">
+            <div class="post-card-image" style="background-image: url(https://www.secjuice.com/content/images/2018/06/password.gif)"></div>
+        </a>
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="/password-manager-guide/">
+            <header class="post-card-header">
+                    <span class="post-card-tags">CYBERSEC</span>
+                <h2 class="post-card-title">The Best Password Managers and Why You Should Use One</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Learn about the best password managers, what a password manager is, how they work & why you should be using one. LastPass, 1Password & KeePass make it simple.</p>
+            </section>
+        </a>
+        <footer class="post-card-meta">
+
+            <ul class="author-list">
+                <li class="author-list-item">
+
+                    <div class="author-name-tooltip">
+                        Taharka Beamon
+                    </div>
+
+                        <a href="/author/taharka/" class="static-avatar"><img class="author-profile-image" src="https://www.secjuice.com/content/images/2018/06/0015.jpg" alt="Taharka Beamon" /></a>
+                </li>
+            </ul>
+
+            <span class="reading-time">4 min read</span>
+
+        </footer>
+    </div>
+</article>
+
+        </div>
+    </div>
+</aside>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://www.secjuice.com">
+                <img src="/content/images/2018/05/secjuice_icon.png" alt="Secjuice icon" />
+            <span>Secjuice</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Wayland v/s Xorg : How Are They Similar &amp; How Are They Different</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Wayland%20v%2Fs%20Xorg%20%3A%20How%20Are%20They%20Similar%20%26%20How%20Are%20They%20Different&amp;url=https://www.secjuice.com/wayland-vs-xorg/"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://www.secjuice.com/wayland-vs-xorg/"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="https://www.secjuice.com">Secjuice</a> &copy; 2021</section>
+                <nav class="site-footer-nav">
+                    <a href="https://www.linkedin.com/company/secjuice" target="_blank" rel="noopener">Linkedin</a>
+                    <a href="https://www.facebook.com/secjuice" target="_blank" rel="noopener">Facebook</a>
+                    <a href="https://twitter.com/secjuice" target="_blank" rel="noopener">Twitter</a>
+                    <a href="https://webgap.io" target="_blank" rel="noopener">Remote Browser Isolation</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js?v=1791f4b51c"></script>
+
+
+    <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('#reading-progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+
+});
+</script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/plugins/line-numbers/prism-line-numbers.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-coy.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-csharp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-clike.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // comment out this for testing w/o codemirrror
+    /* if(location.href == '') {
+        return true;
+    }*/
+    
+    $('iframe').each(function() {
+    	console.log($(this).attr('src'));
+    });
+    
+    $(document).ready(function() {
+    	$('.post-full-content a').each(function() {
+            if(!/^\#/.test($(this).attr('href'))) {
+        		$(this).attr('target','_blank');
+        	}
+        });
+    });
+    
+    $('code[class]').each(function() {
+
+        // get code text and flush
+    	var $this = $(this), $code = $.trim($this.text());
+    	$this.empty();
+        
+        // parse language and theme
+        var mode = 'htmlmixed';
+        var theme = 'monokai';
+        var numLines = $code.split('\n').length;
+        var maxNumLinesShown = 50;
+        var lineHeight = 25;
+        var codeheight = (numLines > maxNumLinesShown ? maxNumLinesShown : numLines.length) * lineHeight;
+        if(/^language\-[^\-]+\-.+$/.test($.trim($(this).attr('class')))) {
+			langclass = /^language\-([^\-]+)\-(.+)$/.exec($.trim($(this).attr('class')));
+			mode = langclass[1];
+            if(/([^\_]+)\_([0-9]+)/.test(langclass[2])) {
+                themeheight = /([^\_]+)\_([0-9]+)/.exec(langclass[2]);
+				theme = themeheight[1];
+                codeheight = themeheight[2];
+            } else {
+            	theme = langclass[2];
+            }
+            
+            if(mode == 'c') { mode = 'text/x-csrc'; }
+            if(mode == 'cpp') { mode = 'text/x-c++src'; }
+
+            console.log('mode:'+mode+' theme:'+theme);
+        } else if(/^language\-[^\-]+$/.test($.trim($(this).attr('class')))) {
+			langclass = /^language\-([^\-]+)$/.exec($.trim($(this).attr('class')));
+			mode = langclass[1];
+			theme = 'default';
+            
+            if(mode == 'c') { mode = 'text/x-csrc'; }
+            if(mode == 'cpp') { mode = 'text/x-c++src'; }
+            
+            console.log('mode:'+mode+' default-theme:'+theme);            
+        } else {
+            mode = 'htmlmixed';
+            theme = 'default';
+        	console.log('code class not recognized: '+$(this).attr('class'));
+        }
+        
+        $(this).removeAttr('class');
+
+    	var myCodeMirror = CodeMirror(this, {
+        	value: $code,
+			mode: mode,
+			theme: theme,
+			indent: false,
+			lineNumbers: true,
+        	readOnly: true
+    	});
+        
+        myCodeMirror.setSize(null, codeheight);
+        $(this).focus();
+	});
+
+	$('pre').each(function() {
+        $(this).css('background-color','transparent');
+        $(this).css('border','none');
+        $(this).css('padding','0px');
+        $(this).css('padding-left','10px');
+        $(this).css('margin','0px');
+        $(this).removeAttr('class');
+    });
+    
+    /* $(".post-full-meta").css(
+		"font-family",
+        "secjuice-title"
+    );
+    
+    $(".post-full-title").css(
+		"font-family",
+        "secjuice-title"
+    );
+    
+    $(".post-full-content").css(
+		"font-family",
+        "secjuice-content"
+    );
+    
+    $(".author-card-content").css(
+		"font-family",
+        "secjuice-content"
+    );
+    
+    $(".floating-header").css(
+        {
+          "font-family":"secjuice-content",
+          "font-weight":"normal"
+        }
+    ); */
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+        beforeCoffee = "<section><h2>Help Support Our Non-Profit Mission</h2><p>If you enjoyed this article or found it helpful please consider buying us a coffee, Secjuice is a non-profit and volunteer-based publication powered by caffeine. We will use your coffee money to help cover our Ghost Pro <a href='https://ghost.org/pricing/'>hosting costs</a> and <b>keep Secjuice an advertisement and sponsor free zone</b>.</p>";
+        coffee = "<iframe style='width:100%;height:75px;margin:0;' srcdoc=\"<html><body style='text-align:center'><style>.bmc-button img{width: 27px !important;margin-bottom: 1px !important;box-shadow: none !important;border: none !important;vertical-align: middle !important;}.bmc-button{line-height: 36px !important;height:37px !important;text-decoration: none !important;display:inline-flex !important;color:#ffffff !important;background-color:#BB5794 !important;border-radius: 3px !important;border: 1px solid transparent !important;padding: 0px 9px !important;font-size: 17px !important;letter-spacing:-0.08px !important;box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;margin: 0 auto !important;font-family:'Lato', sans-serif !important;-webkit-box-sizing: border-box !important;box-sizing: border-box !important;-o-transition: 0.3s all linear !important;-webkit-transition: 0.3s all linear !important;-moz-transition: 0.3s all linear !important;-ms-transition: 0.3s all linear !important;transition: 0.3s all linear !important;}.bmc-button:hover, .bmc-button:active, .bmc-button:focus {-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;text-decoration: none !important;box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;opacity: 0.85 !important;color:#ffffff !important;}</style><link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet'><a class='bmc-button' target='_blank' href='https://www.buymeacoffee.com/secjuice'><img src='https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/BMC-btn-logo.svg' alt='Buy Secjuice A Coffee'><span style='margin-left:5px'>Buy Secjuice A Coffee</span></a></body></html>\"><a href='https://www.buymeacoffee.com/secjuice'>Buy Secjuice a Coffee</a></iframe>";
+        afterCoffee = "</section>";
+        document.getElementsByClassName('post-full')[0].innerHTML += beforeCoffee + coffee + afterCoffee;
+    })
+</script>
+
+</body>
+</html>

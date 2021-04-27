@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+<title>A brief introduction to the Linux graphics stack | Developer Log</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="https://blogs.igalia.com/itoral/wp-content/themes/simplex/style.css" />
+<link rel="pingback" href="https://blogs.igalia.com/itoral/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="https://blogs.igalia.com/itoral/wp-content/themes/simplex/js/html5.js" type="text/javascript"></script>
+<script src="https://blogs.igalia.com/itoral/wp-content/themes/simplex/js/css3-mediaqueries.js"></script>
+<![endif]-->
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Developer Log &raquo; Feed" href="https://blogs.igalia.com/itoral/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Developer Log &raquo; Comments Feed" href="https://blogs.igalia.com/itoral/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Developer Log &raquo; A brief introduction to the Linux graphics stack Comments Feed" href="https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blogs.igalia.com\/itoral\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.2.7"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56424,55356,57342,8205,55358,56605,8205,55357,56424,55356,57340],[55357,56424,55356,57342,8203,55358,56605,8203,55357,56424,55356,57340]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='https://blogs.igalia.com/itoral/wp-includes/css/dist/block-library/style.min.css?ver=5.2.7' type='text/css' media='all' />
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/jquery/jquery.js?ver=1.12.4-wp'></script>
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-content/themes/simplex/lib/js/jquery.fitvids.js?ver=5.2.7'></script>
+<link rel='https://api.w.org/' href='https://blogs.igalia.com/itoral/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://blogs.igalia.com/itoral/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://blogs.igalia.com/itoral/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='A tour around the world of Mesa and Linux graphics drivers' href='https://blogs.igalia.com/itoral/2014/07/18/a-tour-around-the-world-of-mesa-and-linux-graphics-drivers/' />
+<link rel='next' title='Diving into Mesa' href='https://blogs.igalia.com/itoral/2014/08/08/diving-into-mesa/' />
+<meta name="generator" content="WordPress 5.2.7" />
+<link rel="canonical" href="https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/" />
+<link rel='shortlink' href='https://blogs.igalia.com/itoral/?p=376' />
+<link rel="alternate" type="application/json+oembed" href="https://blogs.igalia.com/itoral/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblogs.igalia.com%2Fitoral%2F2014%2F07%2F29%2Fa-brief-introduction-to-the-linux-graphics-stack%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blogs.igalia.com/itoral/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblogs.igalia.com%2Fitoral%2F2014%2F07%2F29%2Fa-brief-introduction-to-the-linux-graphics-stack%2F&#038;format=xml" />
+
+<!-- Bad Behavior 2.2.24 run time: 0.967 ms -->
+
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			jQuery("#page").fitVids();	 
+		});
+	</script>		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		
+</head>
+
+<body lang="en" class="post-template-default single single-post postid-376 single-format-standard  single-author singular">
+<div id="page" class="hfeed">
+	<header id="branding" role="banner">
+		<hgroup>
+			<h1 id="site-title"><a href="https://blogs.igalia.com/itoral/" title="Developer Log" rel="home">Developer Log</a></h1>
+			<h2 id="site-description">&#8211; This is the weblog of Iago Toral &#8211;</h2>
+						
+							<form role="search" method="get" id="searchform" class="searchform" action="https://blogs.igalia.com/itoral/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>					</hgroup>
+		
+		<nav id="access" role="navigation">
+			<h2 class="assistive-text">Main menu</h2>
+			<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+			<div class="menu"><ul>
+<li ><a href="https://blogs.igalia.com/itoral/">Home</a></li><li class="page_item page-item-69"><a href="https://blogs.igalia.com/itoral/about/">About</a></li>
+</ul></div>
+
+		</nav><!-- #access -->
+		<div class="clear"></div>
+	</header><!-- #branding -->
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+			
+				
+				
+<article id="post-376" class="post-376 post type-post status-publish format-standard hentry category-graphics">
+	<header class="entry-header">
+				<h2 class="entry-title">A brief introduction to the Linux graphics stack</h2>
+		
+		<div class="entry-meta">
+			<a href="https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/" title="4:51 pm" rel="bookmark" class="entry-date"><time datetime="2014-07-29T16:51:41+02:00" pubdate>July 29, 2014</time></a>		</div><!-- .entry-meta -->
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+				<p>This post attempts to be a brief and simple introduction to the Linux graphics stack, and as such, it has an introductory nature. I will focus on giving enough context to understand the role that Mesa and 3D drivers in general play in the stack and leave it to follow up posts to dive deeper into the guts of Mesa in general and the Intel DRI driver specifically.</p>
+<p><strong>A bit of history</strong></p>
+<p>In order to understand some of the particularities of the current graphics stack it is important to understand how it had to adapt to new challenges throughout the years.</p>
+<p>You see, nowadays things are significantly more complex than they used to be, but in the early times there was only a single piece of software that had direct access to the graphics hardware: the X server. This approach made the graphics stack simpler because it didn&#8217;t need to synchronize access to the graphics hardware between multiple clients.</p>
+<p>In these early days applications would do all their drawing indirectly, through the X server. By using <a href="http://en.wikipedia.org/wiki/Xlib">Xlib</a> they would send rendering commands over the X11 protocol that the X server would receive, process and translate to actual hardware commands on the other side of a socket. Notice that this &#8220;translation&#8221; is the job of a driver: it takes a bunch of hardware agnostic rendering commands as its input and translates them into hardware commands as expected by the targeted GPU.</p>
+<p>Since the X server was the only piece of software that could talk to the graphics hardware by design, these drivers were written specifically for it,  became modules of the X server itself and an integral part of its architecture. These userspace drivers are called DDX drivers in X server argot and their role in the graphics stack is to support 2D operations as exported by Xlib and required by the X server implementation.</p>
+<div align="center">
+<a href="http://en.wikipedia.org/wiki/Direct_Rendering_Infrastructure"><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Linux_graphics_drivers_2D.svg/560px-Linux_graphics_drivers_2D.svg.png"></a><br />
+DDX drivers in the X server (image via wikipedia)
+</div>
+<p></p>
+<p>In my Ubuntu system, for example, the DDX driver for my Intel GPU comes via the xserver-xorg-video-intel package and there are similar packages for other GPU vendors.</p>
+<p><strong>3D graphics</strong></p>
+<p>The above covers 2D graphics as that is what the X server used to be all about. However, the arrival of 3D graphics hardware changed the scenario significantly, as we will see now.</p>
+<p>In Linux, 3D graphics is implemented via <a hre="http://www.opengl.org/">OpenGL</a>, so people expected an implementation of this standard that would take advantage of the fancy new 3D hardware, that is, a hardware accelerated <em>libGL.so</em>. However, in a system where only the X server was allowed to access the graphics hardware we could not have a <em>libGL.so</em> that talked directly to the 3D hardware. Instead, the solution was to provide an implementation of OpenGL that would send OpenGL commands to the X server through an extension of the X11 protocol and let the X server translate these into actual hardware commands as it had been doing for 2D commands before.</p>
+<p>We call this <em>Indirect Rendering</em>, since applications do not send rendering commands directly to the graphics hardware, and instead, render indirectly through the X server.</p>
+<div align="center">
+<a href="http://en.wikipedia.org/wiki/Direct_Rendering_Infrastructure"><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Linux_graphics_drivers_Utah_GLX.svg/560px-Linux_graphics_drivers_Utah_GLX.svg.png"></a><br />
+OpenGL with Indirect Rendering (image via wikipedia)
+</div>
+<p></p>
+<p>Unfortunately, developers would soon realize that this solution was not sufficient for intensive 3D applications, such as games, that required to render large amounts of 3D primitives while maintaining high frame rates. The problem was clear: wrapping OpenGL calls in the X11 protocol was not a valid solution.</p>
+<p>In order to achieve good performance in 3D applications we needed these to access the hardware directly and that would require to rethink a large chunk of the graphics stack.</p>
+<p><strong>Enter Direct Rendering Infrastructure (DRI)</strong></p>
+<p><a href="http://dri.freedesktop.org/wiki/">Direct Rendering Infrastructure</a> is the new architecture that allows X clients to talk to the graphics hardware directly. Implementing DRI required changes to various parts of the graphics stack including the X server, the kernel and various client libraries.</p>
+<p>Although the term DRI usually refers to the complete architecture, it is often also used to refer only to the specific part of it that involves the interaction of applications with the X server, so be aware of this dual meaning when you read about this stuff on the Internet.</p>
+<p>Another important part of DRI is the <a href="http://dri.freedesktop.org/wiki/DRM/">Direct Rendering Manager (DRM)</a>. This is the kernel side of the DRI architecture. Here, the kernel handles sensitive aspects like hardware locking, access synchronization, video memory and more. DRM also provides userspace with an API that it can use to submit commands and data in a format that is adequate for modern GPUs, which effectively allows userspace to communicate with the graphics hardware.</p>
+<p>Notice that many of these things have to be done specifically for the target hardware so there are different DRM drivers for each GPU. In my Ubuntu system the DRM module for my Intel GPU is provided via the libdrm-intel1:amd64 package.</p>
+<div align="center">
+<a href="http://en.wikipedia.org/wiki/Direct_Rendering_Infrastructure"><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Linux_graphics_drivers_DRI_current.svg/560px-Linux_graphics_drivers_DRI_current.svg.png"></a><br />
+OpenGL with Direct Rendering (image via wikipedia)
+</div>
+<p></p>
+<p>DRI/DRM provide the building blocks that enable userspace applications to access the graphics hardware directly in an efficient and safe manner, but in order to use OpenGL we need another piece of software that, using the infrastructure provided by DRI/DRM, implements the OpenGL API while respecting the X server requirements.</p>
+<p><strong>Enter Mesa</strong></p>
+<p><a href="http://www.mesa3d.org/">Mesa</a> is a free software implementation of the OpenGL specification, and as such, it provides a <em>libGL.so</em>, which OpenGL based programs can use to output 3D graphics in Linux. Mesa can provide accelerated 3D graphics by taking advantage of the DRI architecture to gain direct access to the underlying graphics hardware in its implementation of the OpenGL API.</p>
+<p>When our 3D application runs in an X11 environment it will output its graphics to a surface (window) allocated by the X server. Notice, however, that with DRI this will happen without intervention of the X server, so naturally there is some synchronization to do between the two, since the X server still owns the window Mesa is rendering to and is the one in charge of displaying its contents on the screen. This synchronization between the OpenGL application and the X server is part of DRI. Mesa&#8217;s implementation of <a href="http://www.opengl.org/sdk/docs/man2/xhtml/glXIntro.xml">GLX</a> (the extension of the OpenGL specification that addresses the X11 platform) uses DRI to talk to the X server and accomplish this.</p>
+<p>Mesa also has to use DRM for many things. Communication with the graphics hardware happens by sending commands (for example &#8220;draw a triangle&#8221;) and data (for example the vertex coordinates of the triangle, their color attributes, normals, etc). This process usually involves allocating a bunch of buffers in the graphics hardware where all these commands and data are copied so that the GPU can access them and do its work. This is enabled by the DRM driver, which is the one piece that takes care of managing video memory and which offers APIs to userspace (Mesa in this case) to do this for the specific target hardware. DRM is also required whenever we need to allocate and manage video memory in Mesa, so things like creating textures, uploading data to textures, allocating color, depth or stencil buffers, etc all require to use the DRM APIs for the target hardware.</p>
+<div align="center">
+<a href="http://en.wikipedia.org/wiki/Mesa_3D"><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Linux_kernel_and_OpenGL_video_games.svg/960px-Linux_kernel_and_OpenGL_video_games.svg.png" width="560"></a><br />
+OpenGL/Mesa in the context of 3D Linux games (image via wikipedia)
+</div>
+<p></p>
+<p><strong>What&#8217;s next?</strong></p>
+<p>Hopefully I have managed to explain what is the role of Mesa in the Linux graphics stack and how it works together with the Direct Rendering Infrastructure to enable efficient 3D graphics via OpenGL. In the next post we will cover Mesa in more detail, we will see that it is actually a framework where multiple OpenGL drivers live together, including both hardware and software variants, we will also have a look at its directory structure and identify its main modules, introduce the Gallium framework and more.</p>
+					</div><!-- .entry-content -->
+
+	<footer class="entry-meta">
+				Bookmark the <a href="https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/" title="Permalink to A brief introduction to the Linux graphics stack" rel="bookmark">permalink</a>.
+					</footer><!-- .entry-meta -->
+</article><!-- #post-376 -->
+
+					<nav id="nav-below">
+		<h2 class="assistive-text">Post navigation</h2>
+
+		
+					<div class="nav-previous"><a href="https://blogs.igalia.com/itoral/2014/07/18/a-tour-around-the-world-of-mesa-and-linux-graphics-drivers/" rel="prev"><span class="meta-nav">&larr;</span> A tour around the world of Mesa and Linux graphics drivers</a></div>			<div class="nav-next"><a href="https://blogs.igalia.com/itoral/2014/08/08/diving-into-mesa/" rel="next">Diving into Mesa <span class="meta-nav">&rarr;</span></a></div>						
+	
+	</nav><!-- #nav-below -->
+	
+						<div id="comments">
+	
+	
+			<h2 id="comments-title">
+			One comment		</h2>
+
+		
+		<ol class="commentlist">
+				<li class="comment even thread-even depth-1" id="li-comment-438">
+		<article id="comment-438" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='https://secure.gravatar.com/avatar/65d6b5fdb3b2929e0cda1eb6baa0054c?s=68&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/65d6b5fdb3b2929e0cda1eb6baa0054c?s=136&#038;d=mm&#038;r=g 2x' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">J.A.</span> <a href="https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/#comment-438"><time pubdate datetime="2014-07-31T08:41:20+02:00">July 31, 2014 at 8:41 am</time></a>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>A nice complementary introduction about X11 can be also found at <a href="http://magcius.github.io/xplain/article/" rel="nofollow">http://magcius.github.io/xplain/article/</a>, which contains real-time demo of how X server works.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+		</ol>
+
+		
+	
+	
+</div><!-- #comments -->
+
+			
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+			<div id="secondary" class="widget-area" role="complementary">
+			<aside id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="https://blogs.igalia.com/itoral/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Recent Posts</h3>		<ul>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2021/03/16/improving-performance-of-the-v3d-compiler-for-opengl-and-vulkan/">Improving performance of the V3D compiler for OpenGL and Vulkan</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/">V3DV + Zink</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/07/23/v3dv_vulkan_driver_update/">V3DV Vulkan driver update: VkQuake1-3 now working</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/01/17/raspberry-pi-4-v3d-driver-gets-opengl-es-3-1-conformance/">Raspberry Pi 4 V3D driver gets OpenGL ES 3.1 conformance</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/01/17/raspberry-pi-4-v3d-driver-gets-geometry-shaders/">Raspberry Pi 4 V3D driver gets Geometry Shaders</a>
+									</li>
+					</ul>
+		</aside><aside id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Iago Toral</span> on <a href="https://blogs.igalia.com/itoral/2021/03/16/improving-performance-of-the-v3d-compiler-for-opengl-and-vulkan/#comment-26273">Improving performance of the V3D compiler for OpenGL and Vulkan</a></li><li class="recentcomments"><span class="comment-author-link">Jan Claussen</span> on <a href="https://blogs.igalia.com/itoral/2021/03/16/improving-performance-of-the-v3d-compiler-for-opengl-and-vulkan/#comment-26271">Improving performance of the V3D compiler for OpenGL and Vulkan</a></li><li class="recentcomments"><span class="comment-author-link">Andrew Falcon</span> on <a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/#comment-26260">V3DV + Zink</a></li><li class="recentcomments"><span class="comment-author-link">Iago Toral</span> on <a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/#comment-26258">V3DV + Zink</a></li><li class="recentcomments"><span class="comment-author-link">Andrew Falcon</span> on <a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/#comment-26257">V3DV + Zink</a></li></ul></aside><aside id="archives-2" class="widget widget_archive"><h3 class="widget-title">Archives</h3>		<ul>
+				<li><a href='https://blogs.igalia.com/itoral/2021/03/'>March 2021</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2020/11/'>November 2020</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2020/07/'>July 2020</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2020/01/'>January 2020</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/12/'>December 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/05/'>May 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/04/'>April 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/03/'>March 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/02/'>February 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2017/10/'>October 2017</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2017/07/'>July 2017</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2017/01/'>January 2017</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/11/'>November 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/10/'>October 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/08/'>August 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/07/'>July 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/07/'>July 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/05/'>May 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/04/'>April 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/03/'>March 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/11/'>November 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/09/'>September 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/08/'>August 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/07/'>July 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/02/'>February 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/01/'>January 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2013/12/'>December 2013</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2013/06/'>June 2013</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2013/05/'>May 2013</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2011/06/'>June 2011</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2011/05/'>May 2011</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/08/'>August 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/06/'>June 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/05/'>May 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/04/'>April 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/03/'>March 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/02/'>February 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/10/'>October 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/07/'>July 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/06/'>June 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/03/'>March 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2008/06/'>June 2008</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2008/04/'>April 2008</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/10/'>October 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/07/'>July 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/06/'>June 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/05/'>May 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/03/'>March 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/02/'>February 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/11/'>November 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/10/'>October 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/09/'>September 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/08/'>August 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/07/'>July 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/06/'>June 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/03/'>March 2006</a></li>
+		</ul>
+			</aside><aside id="categories-2" class="widget widget_categories"><h3 class="widget-title">Categories</h3>		<ul>
+				<li class="cat-item cat-item-7"><a href="https://blogs.igalia.com/itoral/category/graphics/" title="Posts related to graphics">graphics</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="https://blogs.igalia.com/itoral/category/maemo/" title="Posts related to the Maemo platform">Maemo</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://blogs.igalia.com/itoral/category/uncategorized/">Uncategorized</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://blogs.igalia.com/itoral/category/webkit/" title="Posts related to WebKit">webkit</a>
+</li>
+		</ul>
+			</aside><aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Meta</h3>			<ul>
+						<li><a href="https://blogs.igalia.com/itoral/wp-login.php">Log in</a></li>
+			<li><a href="https://blogs.igalia.com/itoral/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://blogs.igalia.com/itoral/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.org</a></li>			</ul>
+			</aside>		</div><!-- #secondary .widget-area -->
+	
+	</div><!-- #main -->
+	
+	
+	<footer id="colophon" role="contentinfo">
+		<div id="site-generator">
+						<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform" rel="generator">Powered by WordPress</a> &amp;	<a href="http://wpshoppe.com/" title="Minimalist WordPress Themes" rel="generator">simpleX</a>.
+					
+		</div>
+	</footer><!-- #colophon -->
+	
+		
+</div><!-- #page -->
+
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/comment-reply.min.js?ver=5.2.7'></script>
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/wp-embed.min.js?ver=5.2.7'></script>
+
+</body>
+</html>

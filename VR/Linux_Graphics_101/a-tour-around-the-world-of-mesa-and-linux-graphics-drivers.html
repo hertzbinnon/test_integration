@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+<title>A tour around the world of Mesa and Linux graphics drivers | Developer Log</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="https://blogs.igalia.com/itoral/wp-content/themes/simplex/style.css" />
+<link rel="pingback" href="https://blogs.igalia.com/itoral/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="https://blogs.igalia.com/itoral/wp-content/themes/simplex/js/html5.js" type="text/javascript"></script>
+<script src="https://blogs.igalia.com/itoral/wp-content/themes/simplex/js/css3-mediaqueries.js"></script>
+<![endif]-->
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Developer Log &raquo; Feed" href="https://blogs.igalia.com/itoral/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Developer Log &raquo; Comments Feed" href="https://blogs.igalia.com/itoral/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/blogs.igalia.com\/itoral\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.2.7"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56424,55356,57342,8205,55358,56605,8205,55357,56424,55356,57340],[55357,56424,55356,57342,8203,55358,56605,8203,55357,56424,55356,57340]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='https://blogs.igalia.com/itoral/wp-includes/css/dist/block-library/style.min.css?ver=5.2.7' type='text/css' media='all' />
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/jquery/jquery.js?ver=1.12.4-wp'></script>
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-content/themes/simplex/lib/js/jquery.fitvids.js?ver=5.2.7'></script>
+<link rel='https://api.w.org/' href='https://blogs.igalia.com/itoral/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://blogs.igalia.com/itoral/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://blogs.igalia.com/itoral/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Epiphany + WebKitGTK/WebKit2 + Wayland + Accelerated Compositing' href='https://blogs.igalia.com/itoral/2014/02/28/epiphany-webkitgtkwebkit2-wayland-accelerated-compositing/' />
+<link rel='next' title='A brief introduction to the Linux graphics stack' href='https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/' />
+<meta name="generator" content="WordPress 5.2.7" />
+<link rel="canonical" href="https://blogs.igalia.com/itoral/2014/07/18/a-tour-around-the-world-of-mesa-and-linux-graphics-drivers/" />
+<link rel='shortlink' href='https://blogs.igalia.com/itoral/?p=359' />
+<link rel="alternate" type="application/json+oembed" href="https://blogs.igalia.com/itoral/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblogs.igalia.com%2Fitoral%2F2014%2F07%2F18%2Fa-tour-around-the-world-of-mesa-and-linux-graphics-drivers%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://blogs.igalia.com/itoral/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fblogs.igalia.com%2Fitoral%2F2014%2F07%2F18%2Fa-tour-around-the-world-of-mesa-and-linux-graphics-drivers%2F&#038;format=xml" />
+
+<!-- Bad Behavior 2.2.24 run time: 1.044 ms -->
+
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			jQuery("#page").fitVids();	 
+		});
+	</script>		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		
+</head>
+
+<body lang="en" class="post-template-default single single-post postid-359 single-format-standard  single-author singular">
+<div id="page" class="hfeed">
+	<header id="branding" role="banner">
+		<hgroup>
+			<h1 id="site-title"><a href="https://blogs.igalia.com/itoral/" title="Developer Log" rel="home">Developer Log</a></h1>
+			<h2 id="site-description">&#8211; This is the weblog of Iago Toral &#8211;</h2>
+						
+							<form role="search" method="get" id="searchform" class="searchform" action="https://blogs.igalia.com/itoral/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>					</hgroup>
+		
+		<nav id="access" role="navigation">
+			<h2 class="assistive-text">Main menu</h2>
+			<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+			<div class="menu"><ul>
+<li ><a href="https://blogs.igalia.com/itoral/">Home</a></li><li class="page_item page-item-69"><a href="https://blogs.igalia.com/itoral/about/">About</a></li>
+</ul></div>
+
+		</nav><!-- #access -->
+		<div class="clear"></div>
+	</header><!-- #branding -->
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+			
+				
+				
+<article id="post-359" class="post-359 post type-post status-publish format-standard hentry category-graphics">
+	<header class="entry-header">
+				<h2 class="entry-title">A tour around the world of Mesa and Linux graphics drivers</h2>
+		
+		<div class="entry-meta">
+			<a href="https://blogs.igalia.com/itoral/2014/07/18/a-tour-around-the-world-of-mesa-and-linux-graphics-drivers/" title="11:41 am" rel="bookmark" class="entry-date"><time datetime="2014-07-18T11:41:50+02:00" pubdate>July 18, 2014</time></a>		</div><!-- .entry-meta -->
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+				<p>For some time now I have decided to focus my work at Igalia on the graphics stack. As a result of this I had the chance to participate in a couple of very interesting projects like implementing Wayland support in WebKitGtk+ (a topic I have visited in this blog a number of times) and, lately, work on graphics drivers for Linux in the Mesa framework.</p>
+<p>The graphics stack in Linux is complex and it is not always easy to find information and technical documentation that can aid beginners in their firsts steps. This is usually a very demanding domain, the brave individuals who decide to put their energy into it usually have their hands full hacking on the code and they don&#8217;t have that much room for documenting what they do in a way that is particularly accessible to newcomers.</p>
+<p>As I mentioned above, I have been hacking on Mesa lately (particularly on the Intel i965 driver) and so far it as been a lot of fun, probably the most exciting work I have done at Igalia in all these years, but it is also certainly challenging, requiring me to learn a lot of new things and some times fairly complex stuff.</p>
+<p>Getting involved in this is no easy endeavor, the learning curve is steep because the kind of work you do here is probably unlike anything you have done before: for starters it requires a decent understanding of OpenGL and capacity to understand OpenGL specifications and what they mean in the context of the driver, you also need to have a general understanding of how modern 3D-capable GPUs work and finally, you have to dig deeper and understand how the specific GPU that your driver targets works and what is the role that the driver needs to play to make that hardware work as intended. And that&#8217;s not all of it, a driver may need to support multiple generations of GPUs which sometimes can be significantly different from each other, requiring driver developers to write and merge multiple code paths that handle these differences. You can imagine the maintenance burden and extra complexity that comes from this.</p>
+<p>Finally, we should also consider the fact that graphics drivers are among the most critical pieces of code you can probably have in a system, they need to be performant and stable for all supported hardware generations, which adds to the overall complexity.</p>
+<p>All this stuff can be a bit overwhelming in the beginning for those who attempt to give their first steps in this world but I believe that this initial steep learning curve can be smoothed out by introducing some of the most important concepts in a way that is oriented specifically to new developers. The rest will still not be an easy task, it requires hard work, some passion, be willing to learn and a lot of attention to detail, but I think anyone passionate enough should be able to get into it with enough dedication.</p>
+<p>I had to go through all this process myself lately, so I figured I am in a very good situation to try and address this problem myself, so that&#8217;s why I decided to write a series of posts to introduce people to the world of Mesa and 3D graphics drivers, with a focus on OpenGL and Intel GPUs, which is the area were I am currently developing my work. Although I&#8217;ll focus on Intel hardware I believe that many of the concepts that I will be introducing here are general enough so that they are useful  also to people interested in other GPUs. I&#8217;ll try to be clear about when I am introducing general concepts and when I am discussing Intel specific stuff.</p>
+<p>My next post, which will be the first in this series, will serve as an introduction to the Linux graphics stack and Linux graphics drivers. We will discuss what Mesa brings to the table exactly and what we mean when we talk about graphics drivers in Linux exactly. I think that should put us on the right track to start looking into the internals of Mesa.</p>
+<p>So that&#8217;s it, if you are interested in learning more about Linux graphics and specifically Mesa and 3D graphics drivers, stay tuned! I&#8217;ll try my best to post regularly and often.</p>
+					</div><!-- .entry-content -->
+
+	<footer class="entry-meta">
+				Bookmark the <a href="https://blogs.igalia.com/itoral/2014/07/18/a-tour-around-the-world-of-mesa-and-linux-graphics-drivers/" title="Permalink to A tour around the world of Mesa and Linux graphics drivers" rel="bookmark">permalink</a>.
+					</footer><!-- .entry-meta -->
+</article><!-- #post-359 -->
+
+					<nav id="nav-below">
+		<h2 class="assistive-text">Post navigation</h2>
+
+		
+					<div class="nav-previous"><a href="https://blogs.igalia.com/itoral/2014/02/28/epiphany-webkitgtkwebkit2-wayland-accelerated-compositing/" rel="prev"><span class="meta-nav">&larr;</span> Epiphany + WebKitGTK/WebKit2 + Wayland + Accelerated Compositing</a></div>			<div class="nav-next"><a href="https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/" rel="next">A brief introduction to the Linux graphics stack <span class="meta-nav">&rarr;</span></a></div>						
+	
+	</nav><!-- #nav-below -->
+	
+						<div id="comments">
+	
+	
+			<p class="nocomments">Comments are closed.</p>
+	
+	
+</div><!-- #comments -->
+
+			
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+			<div id="secondary" class="widget-area" role="complementary">
+			<aside id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="https://blogs.igalia.com/itoral/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Recent Posts</h3>		<ul>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2021/03/16/improving-performance-of-the-v3d-compiler-for-opengl-and-vulkan/">Improving performance of the V3D compiler for OpenGL and Vulkan</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/">V3DV + Zink</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/07/23/v3dv_vulkan_driver_update/">V3DV Vulkan driver update: VkQuake1-3 now working</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/01/17/raspberry-pi-4-v3d-driver-gets-opengl-es-3-1-conformance/">Raspberry Pi 4 V3D driver gets OpenGL ES 3.1 conformance</a>
+									</li>
+											<li>
+					<a href="https://blogs.igalia.com/itoral/2020/01/17/raspberry-pi-4-v3d-driver-gets-geometry-shaders/">Raspberry Pi 4 V3D driver gets Geometry Shaders</a>
+									</li>
+					</ul>
+		</aside><aside id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title">Recent Comments</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Iago Toral</span> on <a href="https://blogs.igalia.com/itoral/2021/03/16/improving-performance-of-the-v3d-compiler-for-opengl-and-vulkan/#comment-26273">Improving performance of the V3D compiler for OpenGL and Vulkan</a></li><li class="recentcomments"><span class="comment-author-link">Jan Claussen</span> on <a href="https://blogs.igalia.com/itoral/2021/03/16/improving-performance-of-the-v3d-compiler-for-opengl-and-vulkan/#comment-26271">Improving performance of the V3D compiler for OpenGL and Vulkan</a></li><li class="recentcomments"><span class="comment-author-link">Andrew Falcon</span> on <a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/#comment-26260">V3DV + Zink</a></li><li class="recentcomments"><span class="comment-author-link">Iago Toral</span> on <a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/#comment-26258">V3DV + Zink</a></li><li class="recentcomments"><span class="comment-author-link">Andrew Falcon</span> on <a href="https://blogs.igalia.com/itoral/2020/11/05/v3dv-zink/#comment-26257">V3DV + Zink</a></li></ul></aside><aside id="archives-2" class="widget widget_archive"><h3 class="widget-title">Archives</h3>		<ul>
+				<li><a href='https://blogs.igalia.com/itoral/2021/03/'>March 2021</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2020/11/'>November 2020</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2020/07/'>July 2020</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2020/01/'>January 2020</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/12/'>December 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/05/'>May 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/04/'>April 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/03/'>March 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2018/02/'>February 2018</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2017/10/'>October 2017</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2017/07/'>July 2017</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2017/01/'>January 2017</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/11/'>November 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/10/'>October 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/08/'>August 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2016/07/'>July 2016</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/07/'>July 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/05/'>May 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/04/'>April 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2015/03/'>March 2015</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/11/'>November 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/09/'>September 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/08/'>August 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/07/'>July 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/02/'>February 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2014/01/'>January 2014</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2013/12/'>December 2013</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2013/06/'>June 2013</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2013/05/'>May 2013</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2011/06/'>June 2011</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2011/05/'>May 2011</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/08/'>August 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/06/'>June 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/05/'>May 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/04/'>April 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/03/'>March 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2010/02/'>February 2010</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/10/'>October 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/07/'>July 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/06/'>June 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2009/03/'>March 2009</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2008/06/'>June 2008</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2008/04/'>April 2008</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/10/'>October 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/07/'>July 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/06/'>June 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/05/'>May 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/03/'>March 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2007/02/'>February 2007</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/11/'>November 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/10/'>October 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/09/'>September 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/08/'>August 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/07/'>July 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/06/'>June 2006</a></li>
+	<li><a href='https://blogs.igalia.com/itoral/2006/03/'>March 2006</a></li>
+		</ul>
+			</aside><aside id="categories-2" class="widget widget_categories"><h3 class="widget-title">Categories</h3>		<ul>
+				<li class="cat-item cat-item-7"><a href="https://blogs.igalia.com/itoral/category/graphics/" title="Posts related to graphics">graphics</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="https://blogs.igalia.com/itoral/category/maemo/" title="Posts related to the Maemo platform">Maemo</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://blogs.igalia.com/itoral/category/uncategorized/">Uncategorized</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://blogs.igalia.com/itoral/category/webkit/" title="Posts related to WebKit">webkit</a>
+</li>
+		</ul>
+			</aside><aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Meta</h3>			<ul>
+						<li><a href="https://blogs.igalia.com/itoral/wp-login.php">Log in</a></li>
+			<li><a href="https://blogs.igalia.com/itoral/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://blogs.igalia.com/itoral/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.org</a></li>			</ul>
+			</aside>		</div><!-- #secondary .widget-area -->
+	
+	</div><!-- #main -->
+	
+	
+	<footer id="colophon" role="contentinfo">
+		<div id="site-generator">
+						<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform" rel="generator">Powered by WordPress</a> &amp;	<a href="http://wpshoppe.com/" title="Minimalist WordPress Themes" rel="generator">simpleX</a>.
+					
+		</div>
+	</footer><!-- #colophon -->
+	
+		
+</div><!-- #page -->
+
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/comment-reply.min.js?ver=5.2.7'></script>
+<script type='text/javascript' src='https://blogs.igalia.com/itoral/wp-includes/js/wp-embed.min.js?ver=5.2.7'></script>
+
+</body>
+</html>
