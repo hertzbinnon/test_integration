@@ -1,3 +1,6 @@
+# 
+http://download.nvidia.com/XFree86/Linux-x86_64/
+#
 https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu1804/x86_64/
 https://www.nvidia.cn/Download/index.aspx?lang=cn
 https://developer.nvidia.com/cuda-toolkit-archive
@@ -54,13 +57,13 @@ https://forums.developer.nvidia.com/t/driver-installed-but-wont-load-ubuntu-20-0
 https://forums.developer.nvidia.com/t/dual-gpu-intel-nvidia-prime-render-offloading-ubuntu-20-04-does-not-offload/166864/4
 
 #18.04 /
-#https://forums.developer.nvidia.com/t/nvidia-smi-has-failed-because-it-couldnt-communicate-with-the-nvidia-driver-make-sure-that-the-latest-nvidia-driver-is-installed-and-running/111008/11
+https://forums.developer.nvidia.com/t/nvidia-smi-has-failed-because-it-couldnt-communicate-with-the-nvidia-driver-make-sure-that-the-latest-nvidia-driver-is-installed-and-running/111008/11
 sudo apt-get purge nvidia*
 sudo apt-get install --reinstall xserver-xorg-video-intel libgl1-mesa-glx libgl1-mesa-dri xserver-xorg-core mesa-utils
 #dpkg -L xserver-xorg-video-nvidia-460
 sudo add-apt-repository ppa:graphics-drivers/ppa
 sudo apt-get update
-sudo apt install libglvnd-dev
+sudo apt install libglvnd-dev # no libegl1-[dev]
 sudo apt install nvidia-driver-460
 sudo reboot
 #ssh 
@@ -69,6 +72,7 @@ DISPLAY=:0.0 XAUTHORITY=/run/user/127/gdm/Xauthority  glxinfo -B
 ### Remote GUI ###
 https://forums.developer.nvidia.com/t/cant-get-glxinfo-to-use-nvidia-gpu-over-ssh-ubuntu-18-04-5-lts-dual-rtx2080/163807
 https://c-nergy.be/blog/?p=12220
+https://blupa.info/books/short-linux-guides/page/x11vnc-systemd-service-xubuntu-1804-%28lightdm%29
 
 sudo apt-get install x11vnc -y
 sudo x11vnc -storepasswd /etc/x11vnc.pass
