@@ -37,6 +37,9 @@ https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&=
 reboot
 
 ### misc issue about nvidia on 
+#https://developer.nvidia.com/cuda-toolkit-archive
+wget https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda_11.3.0_465.19.01_linux.run
+wget https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_460.32.03_linux.run
 nvidia-uninstall
 nvidia-settings
 nvidia-xconfig
@@ -49,3 +52,59 @@ http://manpages.ubuntu.com/manpages/precise/man1/alt-nvidia-current-settings.1.h
 https://askubuntu.com/questions/571740/broken-opengl-wrong-glx-renderer-in-glxinfo-and-inxi-nvidia-instead-of-intel
 https://forums.developer.nvidia.com/t/driver-installed-but-wont-load-ubuntu-20-04-nvidia-tu104gl-quadro-rtx-4000/124839/3
 https://forums.developer.nvidia.com/t/dual-gpu-intel-nvidia-prime-render-offloading-ubuntu-20-04-does-not-offload/166864/4
+
+#18.04 /
+#https://forums.developer.nvidia.com/t/nvidia-smi-has-failed-because-it-couldnt-communicate-with-the-nvidia-driver-make-sure-that-the-latest-nvidia-driver-is-installed-and-running/111008/11
+sudo apt-get purge nvidia*
+sudo apt-get install --reinstall xserver-xorg-video-intel libgl1-mesa-glx libgl1-mesa-dri xserver-xorg-core mesa-utils
+#dpkg -L xserver-xorg-video-nvidia-460
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt-get update
+sudo apt install libglvnd-dev
+sudo apt install nvidia-driver-460
+sudo reboot
+#ssh 
+DISPLAY=:0.0 XAUTHORITY=/run/user/127/gdm/Xauthority  glxinfo -B
+
+### Remote GUI ###
+https://forums.developer.nvidia.com/t/cant-get-glxinfo-to-use-nvidia-gpu-over-ssh-ubuntu-18-04-5-lts-dual-rtx2080/163807
+https://c-nergy.be/blog/?p=12220
+
+sudo apt-get install x11vnc -y
+sudo x11vnc -storepasswd /etc/x11vnc.pass
+
+### gdm
+#edit /etc/gdm3/custom.conf add "WaylandEnable=False" to close wayland
+sudo gedit /lib/systemd/system/x11vnc.service
+#
+[Unit]
+Description=Start x11vnc at startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc -loop -forever -bg -rfbport 9999 -xkb -noxrecord -noxfixes -noxdamage -shared -norc -auth /run/user/120/gdm/Xauthority -rfbauth /etc/x11vnc.pass
+
+[Install] 
+WantedBy=multi-user.target
+#### lightdm
+sudo nano /etc/systemd/system/x11vnc.service
+[Unit]
+Description=x11vnc VNC Server for X11
+Requires=lightdm.service
+After=lightdm.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc -auth /var/run/lightdm/root/:0 -display WAIT:0 -forever -shared -rfbauth /etc/x11vnc.pass -rfbport 9999
+ExecStop=/usr/bin/killall x11vnc
+Restart=on-failure
+RestartSec=2
+SuccessExitStatus=3
+
+[Install]
+WantedBy=graphical.target
+#
+sudo systemctl enable x11vnc.service
+sudo systemctl daemon-reload
+sudo systemctl start x11vnc.service

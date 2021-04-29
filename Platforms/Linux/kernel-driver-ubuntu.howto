@@ -24,9 +24,10 @@ $ sudo lspci -nnk | grep -iA3 vga
 or
 $ sudo lspci | grep -i --color 'vga\|3d\|2d'
 sudo ubuntu-drivers devices
-sudo ubuntu-drivers autoinstall
-# or sudo apt install nvidia-driver-390
+sudo apt install nvidia-driver-390
+#sudo ubuntu-drivers autoinstall // some error for dkms
 cat /proc/driver/nvidia/version
+dkms status 
 
 #nvidia-smi指令报错：Failed to initialize NVML: Driver解决
 #https://zhuanlan.zhihu.com/p/94378201
