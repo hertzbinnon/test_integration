@@ -71,3 +71,4 @@ ffmpeg -i rtmp://10.9.91.51/live/ch6 -itsoffset 3 -i rtmp://10.9.91.51/live/ch6 
 
 # 0 track start from 5s and track 1 start from 10s
 ./ffmpeg -i rtmp://10.9.126.203/live/hong -map 0:0 -ss 5  -map 0:1 -ss 10  -c copy  -f flv rtmp://10.9.112.161/live/test
+ffmpeg  -i jiuselu.mp4  -i yidonghuoban.mp4  -map 0:0 -map 1:1 -c copy  -f mp4 -y test.mp4

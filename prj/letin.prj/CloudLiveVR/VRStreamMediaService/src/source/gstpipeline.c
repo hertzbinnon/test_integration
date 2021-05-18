@@ -2773,10 +2773,12 @@ gboolean vrsmsz_stream_delay(gpointer data){
 gboolean  vrsmsz_stream_volume(gpointer data){
   message_t* msg = data;
   vrchan_t* vca = NULL;
-  //return FALSE;
   gint audioid = atoi(msg->command.audio_id);
   vca = vrsmsz->streams+audioid;
   vrstream_t* vrv = &(vca->vs);
+  return FALSE;
+  if(msg->command.volume > 1.0)
+     msg->command.volume = 1.0;
   g_print("set audio %d vol to %f \n",audioid,msg->command.volume);
   g_object_set(vrv->audio_volume,"volume",msg->command.volume,NULL);
   return FALSE;
@@ -3519,7 +3521,9 @@ message_t* parse_json_msg(gchar* msg){
     //memcpy(message->command.video_id,ret,strlen(ret)+1);
     ret = json_object_get_string_member (obj,"audio_id");
     memcpy(message->command.audio_id,ret,strlen(ret)+1);
-    message->command.volume = json_object_get_double_member (obj,"vol");
+    int r = json_object_get_int_member (obj,"val");
+    message->command.volume = r/100.0;
+    g_print("set audio vol to %d %f \n",r,r/100.0);
   }else if(!strcmp(message->command.cmd, "publish_stop")){
 
   }else if(!strcmp(message->command.cmd, "stop_all")){
