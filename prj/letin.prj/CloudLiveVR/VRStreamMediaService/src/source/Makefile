@@ -23,7 +23,7 @@ NANO_LDFLAGS = $(shell pkg-config --libs libcsoap)
 GWEBRTC_LDFLAGS = $(shell pkg-config --libs gstreamer-webrtc-1.0) 
 GSDP_LDFLAGS = $(shell pkg-config --libs gstreamer-sdp-1.0)
 
-all: VRsmsz #addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe
+all: VRsmsz addstream #test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe crossfade 
 
 clean:
 	rm -f VRsmsz *.o addstream test-effect-switch doc-effect-switch switch-src-element crossfade comp-switch-dynamic interpipe 
@@ -47,8 +47,8 @@ vrsmsz.o : vrsmsz.c vrsmsz.h
 VRsmsz  : httpd.o main.o vrsmsz.o vrsync.o
 	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GLIB_JSON_LDFLAGS) $(NANO_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GSOUP_LDFLAGS) $(GWEBRTC_LDFLAGS) $(GSDP_LDFLAGS)
 
-#addstream : examples/addstream.c
-#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
+addstream : examples/addstream.c
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
 #test-effect-switch: examples/test-effect-switch.c
 #	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
@@ -59,8 +59,8 @@ VRsmsz  : httpd.o main.o vrsmsz.o vrsync.o
 #switch-src-element: examples/switch-src-element.c
 #	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS)
 
-#crossfade: examples/crossfade.c
-#	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
+crossfade: examples/crossfade.c
+	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)
 
 #comp-switch-dynamic: examples/comp-switch-dynamic.c
 #	$(CC) -o $@ $^ $(CFLAGS) $(GST_CFLAGS) $(GSOUP_LDFLAGS) $(LDFLAGS) $(GST_LDFLAGS) $(GST_CONTROLLER_CFLAGS) $(GST_CONTROLLER_LDFLAGS)

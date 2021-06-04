@@ -40,3 +40,29 @@ export CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1"
 #3 building with python support
 ./cerbero-uninstalled -v python,gi package gstreamer-1.0
 # 
+
+
+#############gst-build###########
+# Windows 
+# https://www.collabora.com/news-and-blog/blog/2021/03/18/build-and-run-gtk-4-applications-with-visual-studio
+# https://www.collabora.com/news-and-blog/blog/2021/04/29/build-your-own-application-with-gtk4-as-a-meson-subproject/
+1. Delete Strawberry enviroment vailable
+# Linux 
+sudo apt remove pango
+sudo apt remove pango-dev
+sudo apt remove libpango1.0-dev
+sudo apt remove libgirepository1.0-dev
+sudo apt remove gobject-introspection
+rustup update
+cargo install cargo-c
+
+meson --prefix `pwd`/x86_64-linux-gnu -Dpango=enabled -Dpython=enabled -Drs=enabled __builddir # will be failed
+rm -r __builddir
+meson --prefix `pwd`/x86_64-linux-gnu -Dauto_features=disabled  -Dcustom_subprojects=gobject-introspection __builddir
+
+ninja -C __builddir install
+export PKG_CONFIG_PATH=~/sdb1/gst-build/x86_64-linux-gnu/lib/x86_64-linux-gnu/pkgconfig/
+export PATH=~/.cargo/bin:/home/hertz/sdb1/gst-build/x86_64-linux-gnu/bin/:$PATH
+meson --prefix `pwd`/x86_64-linux-gnu  -Dpython=enabled -Drs=enabled -Dpygobject:tests=false builddir
+ninja -C builddir install
+

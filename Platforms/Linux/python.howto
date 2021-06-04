@@ -2,3 +2,6 @@
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 20
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 10
 sudo update-alternatives --config python
+
+pip3 install --target=/usr/bin --upgrade meson
+pip3 uninstall meson

@@ -3,9 +3,9 @@
 #VERSION=`echo $VERSION | cut -d \= -f2`
 #PACKAGENAME=director-$VERSION-setup.bin
 
-PACKAGENAME=Cloud-Director-1.0.5-setup.bin
+PACKAGENAME=Cloud-Director-1.2.0-setup.bin
 ARCHIVEFILE=director.tar.gz
-DIRECTORY=~/LetinCloudLive_ProgramDirectorServer/release/
+DIRECTORY=~/sdb1/LetinCloudLive_ProgramDirectorServer/release/
 . Expiration
 rm $PACKAGENAME
 cd  program
@@ -27,7 +27,7 @@ mv bin/_vrsmsz _vrsmsz
 cp $DIRECTORY/bin/_vrsmsz bin/
 cp $DIRECTORY/bin/fconv bin/
 mv lib lib.bak
-cp -rf  ~/LetinCloudLive_ProgramDirectorServer/release/lib lib
+cp -rf  $DIRECTORY/lib lib
 tar zcf $ARCHIVEFILE install.bin bin django-master nginx uploadmodule lib Python-3.7.5 #python-3.7.7
 cat pre-install.sh $ARCHIVEFILE  > $PACKAGENAME
 mv -f _vrsmsz bin/

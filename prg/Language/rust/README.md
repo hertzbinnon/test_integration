@@ -16,3 +16,5 @@ cargo check
 cargo doc --open
 
 rustup update
+cargo install cargo-c
+
