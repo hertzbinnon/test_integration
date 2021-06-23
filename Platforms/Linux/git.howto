@@ -180,3 +180,9 @@ git checkout master
 git pull -v
 git checkout subbranch
 git merge master 
+
+
+8. window set
+git config --global core.autocrlf input
+git config --global --list
+git config --list

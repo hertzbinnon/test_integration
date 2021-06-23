@@ -47,6 +47,7 @@ export CFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1"
 # https://www.collabora.com/news-and-blog/blog/2021/03/18/build-and-run-gtk-4-applications-with-visual-studio
 # https://www.collabora.com/news-and-blog/blog/2021/04/29/build-your-own-application-with-gtk4-as-a-meson-subproject/
 1. Delete Strawberry enviroment vailable
+2. git config -–global core.autocrlf false 
 # Linux 
 sudo apt remove pango
 sudo apt remove pango-dev

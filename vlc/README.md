@@ -7,3 +7,6 @@ https://code.videolan.org/videolan/vlmc
 # win10
 C:\Users\hertz\AppData\Roaming\vlc  # config
 C:\Users\hertz\AppData\Local\vlc\cache\qmlcache # ???
+
+# resources of vr and 360
+https://people.videolan.org/~jb/Builds/

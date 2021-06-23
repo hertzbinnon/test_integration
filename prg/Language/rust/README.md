@@ -17,4 +17,5 @@ cargo doc --open
 
 rustup update
 cargo install cargo-c
-
+# install to $HOME/.cargo/bin or  %USERPROFILE%\.cargo\bin
+cargo install --force --path .
