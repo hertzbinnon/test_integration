@@ -10,3 +10,5 @@ https://blog.wmspanel.com/p/stress-testing-nvidia-gpu-transcoding.html
 https://blog.wmspanel.com/2018/03/nvenc-shared-context-transcoder.html
 https://softvelum.com/transcoder/price/
 
+#DAIN
+https://www.jianshu.com/p/e4c3af965376

@@ -54,7 +54,7 @@ ffmpeg -list_devices true -f dshow -i dummy
 
 #set tbn
 ./ffmpeg -i daojishioutput1.mp4 -c:v h264_nvenc -b:v 10M -video_track_timescale 25 -c:a aac -ar 48k -ab 128k -f mp4 -movflags frag_keyframe+empty_moov -y daojishioutput2.mp4
-ffmpeg -f dshow -i video="screen-capture-recorder":audio="Stereo Mix (Realtek(R) Audio)" -c:v libx264 -r 25 -b:v 1M -bf 0 -s 3840x1920 -preset 0 -video_track_timescale 25  -c:a aac -ar 48k -ab 128k -y output.mp4
+ffmpeg -f dshow -i video="screen-capture-recorder":audio="Stereo Mix (Realtek(R) Audio)" -c:v libx264 -r 25 -b:v 1M -bf 0 -s 3840x1920 -preset 0 -video_track_timescale 25  -c:a aac -ar 48k -ab 128k -ac 2 -y output.mp4
 ffmpeg -f dshow -i video="screen-capture-recorder":audio="Stereo Mix (Realtek(R) Audio)" -c:v libx264 -r 25 -b:v 1M -s 3840x1920 -preset 0 -pix_fmt yuv420p  -bf 0 -video_track_timescale 25  -c:a aac -ar 48k -ab 128k  -f mp4 -movflags frag_keyframe+empty_moov  -y output.mp4
 
 #delay video
@@ -72,3 +72,10 @@ ffmpeg -i rtmp://10.9.91.51/live/ch6 -itsoffset 3 -i rtmp://10.9.91.51/live/ch6 
 # 0 track start from 5s and track 1 start from 10s
 ./ffmpeg -i rtmp://10.9.126.203/live/hong -map 0:0 -ss 5  -map 0:1 -ss 10  -c copy  -f flv rtmp://10.9.112.161/live/test
 ffmpeg  -i jiuselu.mp4  -i yidonghuoban.mp4  -map 0:0 -map 1:1 -c copy  -f mp4 -y test.mp4
+
+ffmpeg -threads 2  -re -fflags +genpts  -stream_loop -1 -i /data/XiangGeLiLa.mp4 -c:v copy -acodec copy -f flv rtmp://127.0.0.1/live/ch5
+
+
+/data/ffmpeg -i /tmp/alpha.png -q:v 4 -r 1 -s 3840x960 -update 1 output1.png
+/data/ffmpeg -i /tmp/output1.png -i /tmp/botum.png -filter_complex vstack bottom.png
+/data/ffmpeg -i /tmp/output1.png -i /tmp/botum.png -filter_complex hstack bottom.png

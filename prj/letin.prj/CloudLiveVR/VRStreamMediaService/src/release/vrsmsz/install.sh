@@ -8,7 +8,7 @@ VERSION=1.0.0-Ubuntu1804
 SYSVERSION="18.04"
 HDWVERSION="TeslaT4"
 
-sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 -y
+sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 libegl1 -y 
 SYS=`lsb_release -a 2> /dev/null | grep Release | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
 HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}' | sed s/[[:space:]]//g`
 if [ $SYS != $SYSVERSION ]; then
