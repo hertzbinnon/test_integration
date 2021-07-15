@@ -1,0 +1,38 @@
+#!/bin/bash
+if [ $# != 1 ];then
+	echo "director [start/stop]"
+fi
+
+case "$1" in
+   start)
+        _daemonpid=`cat /tmp/xxycc.pid`
+	kill -9 $_daemonpid > /dev/null 2>&1 
+        _daemon > /tmp/.xxycc 2>&1 &
+        echo $! > /tmp/xxycc.pid
+      ;;
+   stop)
+        _vrsmszpid=`cat /tmp/_vrsmsz.pid`
+        vrsmsdpid=`cat /tmp/vrsmsd.pid`
+        _daemonpid=`cat /tmp/xxycc.pid`
+        runserverpar=`cat /tmp/runserver.pid`
+        cacheid=`ps aux | grep cache.sh | grep -v grep | awk '{print $2}' | grep '[0-9]'`
+
+
+	kill -9 $_daemonpid > /dev/null 2>&1 
+	kill -9 $_vrsmszpid > /dev/null 2>&1
+	kill -9 $vrsmsdpid > /dev/null 2>&1
+	kill -9 $runserverpar > /dev/null 2>&1
+	/usr/local/nginx/sbin/nginx -s stop
+        rm -rf ~/.cache/gstreamer-1.0/registry.x86_64.bin
+        mv /tmp/vrsmsd.log  /tmp/vrsmsd.log.1 > /dev/null 2>&1 &
+        rm /tmp/upload.log > /dev/null 2>&1 &
+      ;;
+   start_nginx)
+      /usr/local/nginx/sbin/nginx -p /usr/local/nginx
+      ;;
+   stop_daemon)
+	kill -9 $_daemonpid  
+      ;;
+   *)
+     ;;
+esac

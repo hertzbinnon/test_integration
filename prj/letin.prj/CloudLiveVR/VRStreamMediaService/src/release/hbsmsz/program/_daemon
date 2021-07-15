@@ -1,0 +1,45 @@
+#!/bin/bash
+. /etc/vrsmsd.conf
+export GST_PLUGIN_PATH=/usr/local/lib64/plugins
+export LD_LIBRARY_PATH=/usr/local/lib64:/usr/local/lib
+sudo nvidia-smi -pm 1
+sudo nvidia-smi -ac 5003,1592
+ulimit -c 0
+
+while true
+do
+ lsof -i:5000 | grep LISTEN > /dev/null 2>&1 
+ if [ $? -eq 1 ];then
+	 echo "1 error"
+  _vrsmsz > /tmp/details.log 2>&1 &
+  echo $! > /tmp/_vrsmsz.pid
+ fi
+
+ lsof -i:$SERVER_PORT grep LISTEN > /dev/null 2>&1 
+ if [ $? -eq 1 ];then
+	 echo "2 error"
+  vrsmsd -p  $SERVER_PORT > /tmp/vrsmsd.log 2>&1 &
+  echo $! > /tmp/vrsmsd.pid
+ fi
+
+ lsof -i:$UPLOAD_PORT grep LISTEN > /dev/null 2>&1 
+ if [ $? -eq 1 ];then
+  cd /var/local/vrsmsz/env/uploadmodule
+  . ../bin/activate
+  python manage.py runserver 0.0.0.0:9999 > /tmp/upload.log 2>&1 &
+  echo $! > /tmp/runserver.pid
+  deactivate
+ fi
+ lsof -i:$HTTP_PORT grep LISTEN > /dev/null 2>&1 
+ if [ $? -eq 1 ];then
+ /usr/local/nginx/sbin/nginx -p /usr/local/nginx
+ fi
+ sleep 1
+ vrsync
+ if [ $? != 0 ]; then
+    echo "Authorization expired"
+    killall _vrsmsz
+ fi
+done
+
+exit 0

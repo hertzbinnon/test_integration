@@ -51,5 +51,14 @@ xrdesktop
 vlc-dev
 #../../Documents/.~lock.c++面试题.docx#"
 ../../Documents/.~lock.cloudArch.odg#
-RenderBasic/.*
 vr-ar-xr
+source/addstream
+source/crossfade
+release/hbsmsz
+Codec
+Gstreamer
+django-dev
+RenderBasic
+webrtc-dev
+rtmp-hls-dev
+gst-plugins-advanced
