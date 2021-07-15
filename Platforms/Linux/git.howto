@@ -181,8 +181,16 @@ git pull -v
 git checkout subbranch
 git merge master 
 
-
 8. window set
 git config --global core.autocrlf input
 git config --global --list
 git config --list
+
+9. clone project
+git clone --recursive <url>
+git submodule update --init --recursive
+git submodule update --recursive --remote
+or
+git submodule update --recursive
+or
+git pull --recurse-submodules
