@@ -10,3 +10,11 @@ C:\Users\hertz\AppData\Local\vlc\cache\qmlcache # ???
 
 # resources of vr and 360
 https://people.videolan.org/~jb/Builds/
+
+# people work
+https://people.videolan.org/~jb/
+
+#build
+https://gitlab.com/garfvl/denv.git
+https://gitlab.com/garfvl/denv/blob/master/doc/vlc.md
+https://forum.videolan.org/viewtopic.php?f=32&t=148962&p=489656&hilit=win32+compile#p489656

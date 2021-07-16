@@ -1,0 +1,6 @@
+
+# useradd test
+
+#passwd 123456
+
+#usermod -g root test

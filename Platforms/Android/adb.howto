@@ -58,3 +58,8 @@ adb pull /data/app/com.tencent.tbs-1/base.apk ~/Downloads
 1.≤È—Øcpuº‹ππ
 https://blog.csdn.net/zheng_weichao/article/details/89633835
 adb shell getprop|grep arm
+
+
+https://stackoverflow.com/questions/25274296/adb-install-fails-with-install-failed-test-only
+https://stackoverflow.com/questions/14460656/android-debug-bridge-adb-device-no-permissions
+https://askubuntu.com/questions/908306/adb-no-permissions-on-ubuntu-17-04
