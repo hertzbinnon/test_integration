@@ -27,11 +27,14 @@ case "$1" in
         mv /tmp/vrsmsd.log  /tmp/vrsmsd.log.1 > /dev/null 2>&1 &
         rm /tmp/upload.log > /dev/null 2>&1 &
       ;;
-   start_nginx)
+   start_rtmp)
       /usr/local/nginx/sbin/nginx -p /usr/local/nginx
       ;;
    stop_daemon)
 	kill -9 $_daemonpid  
+      ;;
+   stop_runserver)
+	kill -9 $runserverpar  
       ;;
    *)
      ;;

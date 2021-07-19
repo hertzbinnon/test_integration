@@ -15,14 +15,15 @@ do
   echo $! > /tmp/_vrsmsz.pid
  fi
 
- lsof -i:$SERVER_PORT grep LISTEN > /dev/null 2>&1 
+ lsof -i:$SERVER_PORT | grep LISTEN > /dev/null 2>&1 
  if [ $? -eq 1 ];then
 	 echo "2 error"
+	 killall vrsmsd
   vrsmsd -p  $SERVER_PORT > /tmp/vrsmsd.log 2>&1 &
   echo $! > /tmp/vrsmsd.pid
  fi
 
- lsof -i:$UPLOAD_PORT grep LISTEN > /dev/null 2>&1 
+ lsof -i:$UPLOAD_PORT | grep LISTEN > /dev/null 2>&1 
  if [ $? -eq 1 ];then
   cd /var/local/vrsmsz/env/uploadmodule
   . ../bin/activate
@@ -30,7 +31,7 @@ do
   echo $! > /tmp/runserver.pid
   deactivate
  fi
- lsof -i:$HTTP_PORT grep LISTEN > /dev/null 2>&1 
+ lsof -i:$HTTP_PORT | grep LISTEN > /dev/null 2>&1 
  if [ $? -eq 1 ];then
  /usr/local/nginx/sbin/nginx -p /usr/local/nginx
  fi
