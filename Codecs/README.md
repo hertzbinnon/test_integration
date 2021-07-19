@@ -12,3 +12,6 @@ https://softvelum.com/transcoder/price/
 
 #DAIN
 https://www.jianshu.com/p/e4c3af965376
+#
+https://blogs.igalia.com/vjaquez/2021/07/09/video-decoding-in-gstreamer-with-vulkan/
+https://github.com/nvpro-samples
