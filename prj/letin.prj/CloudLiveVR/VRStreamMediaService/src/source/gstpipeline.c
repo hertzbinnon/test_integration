@@ -1189,7 +1189,7 @@ gst_pipeline_handle_instant_rate (GstPipeline * pipeline, gdouble rate,
 #define NTP_SERVER_3 "114.118.7.163"   //ntp.ntsc.ac.cn
  
 #define YEAR 2021
-#define MONTH 5 
+#define MONTH 9 
 #define DAY 17
 
 struct tm exp_time={.tm_year=YEAR-1900,.tm_mon=MONTH-1,.tm_mday=DAY,.tm_hour=0,.tm_min=0,.tm_sec=0,.tm_isdst=0};
@@ -1550,7 +1550,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    vrstream_t* vs = NULL;
    vrchan_t* vc=NULL;
 
-   if(vrsmsz->stream_nbs > 16) {
+   if(vrsmsz->stream_nbs > 4) {
      g_print("sorry streams is full\n");
      return FALSE;
    }
@@ -2776,7 +2776,7 @@ gboolean  vrsmsz_stream_volume(gpointer data){
   gint audioid = atoi(msg->command.audio_id);
   vca = vrsmsz->streams+audioid;
   vrstream_t* vrv = &(vca->vs);
-  return FALSE;
+  //return FALSE;
   if(msg->command.volume > 1.0)
      msg->command.volume = 1.0;
   g_print("set audio %d vol to %f \n",audioid,msg->command.volume);
@@ -3535,6 +3535,21 @@ message_t* parse_json_msg(gchar* msg){
   g_object_unref(parser);
   return message;
 }
+static void
+quit (int sig)
+{
+  /* Exit cleanly on ^C in case we're valgrinding. */
+  vrchan_t* vc;
+  for(int i=0; i<MAX_CHANNEL; i++){
+     if( vrsmsz->streams_id[i] != -1 ){
+        vc = vrsmsz->streams + vrsmsz->streams_id[i];
+        stream_proxy_delete_channel(vc);
+     }
+  }
+  exit (0);
+}
+
+
 
 static void vrsmsz_run_command(gchar* command){
   message_t* msg = parse_json_msg(command);
@@ -3949,6 +3964,7 @@ void director_stream_init(drstream_t* ds){
 vrsmsz_t* vrsmsz_init(int argc, char **argv){
 
   signal(SIGCHLD, SIG_IGN);
+  signal (SIGINT, quit);
   if(!sync_time()){
     g_error("sync failed\n");
     return 1;
