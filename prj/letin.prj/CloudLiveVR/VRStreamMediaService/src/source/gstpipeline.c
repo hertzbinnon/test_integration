@@ -1469,6 +1469,13 @@ _pad_added_cb (GstElement * decodebin, GstPad * new_pad, gpointer data)
     } else {
       g_print ("Link succeeded (type '%s').\n", new_pad_type);
     }
+  gint width, height, rate_numerator, rate_denominator;
+  gst_structure_get_int (new_pad_struct, "width", &width);
+  gst_structure_get_int (new_pad_struct, "height", &height);
+  gst_structure_get_fraction (new_pad_struct, "framerate", &rate_numerator, &rate_denominator);
+  //g_print("------------>caps width %d\n", width);
+  //g_print("------------>caps height %d\n", height);
+  //g_print("------------>caps framerate %d/%d\n", rate_numerator, rate_denominator);
   }else{
     g_print ("It has type '%s' which is not supported. \n", new_pad_type);
   }
