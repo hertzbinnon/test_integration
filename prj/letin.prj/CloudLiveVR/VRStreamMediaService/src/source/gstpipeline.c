@@ -1550,8 +1550,9 @@ gboolean vrsmsz_add_stream(gpointer data){
    vrstream_t* vs = NULL;
    vrchan_t* vc=NULL;
 
-   if(vrsmsz->stream_nbs > 4) {
+   if(vrsmsz->stream_nbs > 3) {
      g_print("sorry streams is full\n");
+     msg->errcode = -1;
      return FALSE;
    }
    /**********************dispatch stream id ***********************/
@@ -3612,9 +3613,11 @@ static void build_response_message(message_t* msg){
    g_print("Start building resp ---> %s\n", msg->command.cmd);
    if(!strcmp(msg->command.cmd,"pull")){
      if(!msg->vc){
-	     g_print("vc = null\n");
-             g_object_unref( builder);
-	     return ;
+	g_print("vc = null\n");
+	if(!msg->errcode){
+          g_object_unref( builder);
+	  return ;
+	}
      }
      g_print("build pull response-->\n");
      json_builder_set_member_name(builder, "cmd");
@@ -3625,11 +3628,19 @@ static void build_response_message(message_t* msg){
 		   
      json_builder_set_member_name(builder, "stream_id");
      gchar tmp[1024];
-     sprintf(tmp,"%d",msg->vc->stream_id);
+     if(msg->errcode < 0){
+       sprintf(tmp,"%d","-1");
+     }else{
+       sprintf(tmp,"%d",msg->vc->stream_id);
+     }
      json_builder_add_string_value(builder, tmp);
 
      json_builder_set_member_name(builder, "url");
-     json_builder_add_string_value(builder,msg->vc->preview_url);
+     if(msg->errcode < 0){
+        json_builder_add_string_value(builder,"null");
+     }else{
+        json_builder_add_string_value(builder,msg->vc->preview_url);
+     }
 
      json_builder_set_member_name(builder, "encoder_params");
        json_builder_begin_object(builder);
