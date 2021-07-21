@@ -2001,7 +2001,7 @@ gboolean director_publish_create(gchar* url){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 10000, NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 16000, NULL);
      }else if(vrsmsz->mode==8){
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265enc", name); // nvh264enc have no avc
         //vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265device1enc", name); // nvh264enc have no avc
@@ -2779,7 +2779,7 @@ gboolean  vrsmsz_stream_volume(gpointer data){
   vrstream_t* vrv = &(vca->vs);
   //return FALSE;
   if(msg->command.volume > 1.0)
-     msg->command.volume = 1.0;
+     msg->command.volume *= 1.5;
   g_print("set audio %d vol to %f \n",audioid,msg->command.volume);
   g_object_set(vrv->audio_volume,"volume",msg->command.volume,NULL);
   return FALSE;
