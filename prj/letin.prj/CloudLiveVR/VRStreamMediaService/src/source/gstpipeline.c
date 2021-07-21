@@ -1557,7 +1557,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    vrstream_t* vs = NULL;
    vrchan_t* vc=NULL;
 
-   if(vrsmsz->stream_nbs > 3) {
+   if(vrsmsz->stream_nbs > 4) {
      g_print("sorry streams is full\n");
      msg->errcode = -1;
      return FALSE;
@@ -1636,7 +1636,7 @@ gboolean vrsmsz_add_stream(gpointer data){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vs->video_capsfilter), "caps",
-      "video/x-raw, width=1280, height=720");
+      "video/x-raw, width=960, height=480");
    }
 #if 0
    if(!vs->video_encoder){
@@ -2347,7 +2347,7 @@ gboolean director_preview_create(vrstream_t* vs){
       return FALSE;
     }
      gst_util_set_object_arg (G_OBJECT (vrsmsz->director.ds.pre_capsfilter), "caps",
-      "video/x-raw, width=1280, height=720");
+      "video/x-raw, width=960, height=480");
   }
 
   if(!vrsmsz->director.ds.pre_video_encoder){
