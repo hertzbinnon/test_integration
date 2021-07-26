@@ -4,3 +4,9 @@ https://www.secjuice.com/wayland-vs-xorg/
 https://wayland.freedesktop.org/architecture.html
 # important blog about graphics technical
 https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/
+
+# https://people.igalia.com/siglesias/talks/esLibre2021/#/8
+# https://blogs.igalia.com/siglesias/2018/04/30/ubucon-europe-2018-experience-and-talk-slides/
+wget https://people.igalia.com/siglesias/talks/esLibre2021/public/linux-graphics-stack-summary.png
+wget https://blogs.igalia.com/siglesias/assets/files/talks/ubucon-europe-2018-introduction-mesa.pdf
+

@@ -81,3 +81,7 @@ ffmpeg -threads 2  -re -fflags +genpts  -stream_loop -1 -i /data/XiangGeLiLa.mp4
 /data/ffmpeg -i /tmp/output1.png -i /tmp/botum.png -filter_complex hstack bottom.png
 
 ffmpeg -r 25 -start_number 0001 -i Image_%04d.JPG -s 3840x1920 -vcodec libx264 -b:v 10M -pix_fmt yuv420p video_out.mp4 #Image_0001.JPG, 0001 is the start number
+
+
+#Given a VFR recording screen.mkv with a maximum frame rate of 30 fps, you can convert it to CFR at 30 fps with the following command:
+ffmpeg -i screen.mkv -vsync cfr -r 30 screen_cfr.mkv

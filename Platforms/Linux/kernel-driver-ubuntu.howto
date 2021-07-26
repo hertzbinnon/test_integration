@@ -26,12 +26,12 @@ $ sudo lspci | grep -i --color 'vga\|3d\|2d'
 sudo ubuntu-drivers devices
 sudo apt install nvidia-driver-390
 #sudo ubuntu-drivers autoinstall // some error for dkms
-cat /proc/driver/nvidia/version
-dkms status 
 
 #nvidia-smi指令报错：Failed to initialize NVML: Driver解决
 #https://zhuanlan.zhihu.com/p/94378201
 #https://zhuanlan.zhihu.com/p/89714824
+cat /proc/driver/nvidia/version # nvidia kernel driver version
+dkms status  # system kernel driver version
 /usr/local/cuda/bin/nvcc -V 
 ls /usr/src | grep nvidia # verssion
 sudo apt install dkms

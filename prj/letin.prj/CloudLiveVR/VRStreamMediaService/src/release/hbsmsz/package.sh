@@ -3,7 +3,7 @@
 #VERSION=`echo $VERSION | cut -d \= -f2`
 #PACKAGENAME=director-$VERSION-setup.bin
 
-PACKAGENAME=Cloud-Director-1.2.1-setup.bin
+PACKAGENAME=Cloud-Director-2.0.0-setup.bin
 ARCHIVEFILE=director.tar.gz
 DIRECTORY=./linux_x86_64
 . Expiration
