@@ -1557,7 +1557,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    vrstream_t* vs = NULL;
    vrchan_t* vc=NULL;
 
-   if(vrsmsz->stream_nbs > 4) {
+   if(vrsmsz->stream_nbs > 5) {
      g_print("sorry streams is full\n");
      msg->errcode = -1;
      return FALSE;
@@ -1810,7 +1810,7 @@ gboolean vrsmsz_add_stream(gpointer data){
     now = gst_clock_get_time (vrsmsz->theclock);
     base_time = now - running_time;
 
-    gst_element_set_base_time (vs->bin, base_time);
+    //gst_element_set_base_time (vs->bin, base_time);
   }
 
 #if 1
@@ -2157,7 +2157,7 @@ gboolean director_publish_create(gchar* url){
                           vrsmsz->director.ds.pub_render1,vrsmsz->director.ds.pub_render1_queue,vrsmsz->director.ds.pub_render2,vrsmsz->director.ds.pub_render2_queue,
 #endif 
 		  vrsmsz->director.ds.pub_video_encoder,vrsmsz->director.ds.pub_video_encoder_queue,vrsmsz->director.ds.pub_video_encoder_parser,vrsmsz->director.ds.pub_aenc_tee_queue,vrsmsz->director.ds.pub_muxer,vrsmsz->director.ds.pub_outer, NULL);
-  gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pub_bin);
+  //gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pub_bin);
 
   if(!gst_element_link_many(vrsmsz->director.ds.pub_vdec_tee_queue, 
 #ifdef TEST_FADE
@@ -2177,6 +2177,7 @@ gboolean director_publish_create(gchar* url){
     return FALSE;
   }
  
+  gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pub_bin);
   return FALSE;
 }
 /*****************************************************************************************************/
@@ -2470,7 +2471,7 @@ gboolean director_preview_create(vrstream_t* vs){
 			  vrsmsz->director.ds.pre_render1,vrsmsz->director.ds.pre_render1_queue,vrsmsz->director.ds.pre_render2,vrsmsz->director.ds.pre_render2_queue,
 #endif
 		  vrsmsz->director.ds.pre_video_scale, vrsmsz->director.ds.pre_capsfilter, vrsmsz->director.ds.pre_video_encoder, vrsmsz->director.ds.pre_video_encoder_queue,vrsmsz->director.ds.pre_video_encoder_parser, vrsmsz->director.ds.pre_aenc_tee_queue, vrsmsz->director.ds.pre_muxer, vrsmsz->director.ds.pre_outer, NULL);
-  gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pre_bin);
+  //gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pre_bin);
 
   if(!gst_element_link_many(vrsmsz->director.ds.pre_vdec_tee_queue, 
 #ifdef TEST_RENDER 
@@ -2485,6 +2486,7 @@ gboolean director_preview_create(vrstream_t* vs){
      g_print("link director pre audio failed");
      return FALSE;
   }
+  gst_bin_add(GST_BIN(vrsmsz->pipeline),vrsmsz->director.pre_bin);
 
   return FALSE;
 }
