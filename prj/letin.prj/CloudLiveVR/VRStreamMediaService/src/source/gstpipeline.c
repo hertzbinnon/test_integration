@@ -1755,7 +1755,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    }
 
    gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_volume, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
-   gst_bin_add(GST_BIN(vrsmsz->pipeline),vs->bin);
+   //gst_bin_add(GST_BIN(vrsmsz->pipeline),vs->bin);
 
    if(!gst_element_link_many(vs->vdec_tee, vs->vdec_tee_queue, vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->video_encoder_queue,vs->video_encoder_parser, vs->muxer,vs->outer,NULL)){
       g_print("push link failed\n");
@@ -1767,21 +1767,64 @@ gboolean vrsmsz_add_stream(gpointer data){
       return FALSE;
    }
 
+   gst_bin_add(GST_BIN(vrsmsz->pipeline),vs->bin);
    (vrsmsz->stream_nbs)++;
-   vrsmsz_play();
+   //vrsmsz_play();
+
+   gboolean punch_in;
+   GstStateChangeReturn ret;
+   GstClockTime now, base_time, running_time;
+    now = gst_clock_get_time (vrsmsz->theclock);
+  base_time = gst_element_get_base_time (vs->bin);
+
+  running_time = now - base_time;
+   ret = gst_element_set_state (vs->bin, GST_STATE_PAUSED);
+
+  switch (ret) {
+    case GST_STATE_CHANGE_NO_PREROLL:
+      /* live source, timestamps are running_time of the pipeline clock. */
+      punch_in = FALSE;
+      g_print("live source \n");
+      break;
+    case GST_STATE_CHANGE_SUCCESS:
+      /* success, no async state changes, same as async, timestamps start
+       * from 0 */
+    case GST_STATE_CHANGE_ASYNC:
+      /* no live source, bin will preroll. We have to punch it in because in
+       * this situation timestamps start from 0.  */
+      punch_in = TRUE;
+      g_print("vod source \n");
+      break;
+    case GST_STATE_CHANGE_FAILURE:
+      /* fall through to return */
+    default:
+      g_print("status failure \n");
+      return;
+  }
+
+  if (punch_in) {
+    /* new bin has to be aligned with previous running_time. We do this by taking
+     * the current absolute clock time and calculating the base time that would
+     * give the previous running_time. We set this base_time on the bin before
+     * setting it to PLAYING. */
+    now = gst_clock_get_time (vrsmsz->theclock);
+    base_time = now - running_time;
+
+    gst_element_set_base_time (vs->bin, base_time);
+  }
 
 #if 1
-   GstClockTime now ;
-   now = gst_clock_get_time (vrsmsz->theclock);
+   //GstClockTime now ;
+   //now = gst_clock_get_time (vrsmsz->theclock);
 
-   gst_element_set_base_time (vs->uridecodebin, now);
+   //gst_element_set_base_time (vs->uridecodebin, now);
    //gst_element_set_base_time (vs->bin, now);
    g_print("\n++++++++++++++ base time %"GST_TIME_FORMAT"\n\n",GST_TIME_ARGS(now / GST_MSECOND));
 #endif
 
    //g_print("==>stream %d(%x) info: video_id %d, \naudio_id %d,\nsrc_url %s,\n pre_url %s,\ndis= %d,\nuridecodebin %x,\nvdec_tee %x,\nvdec_tee_queue %x,\nvideo_capsfilter %x,\nvideo_encoder %x,\naudio_encoder %x\n",vrsmsz->stream_nbs-1, vrsmsz->streams+(vrsmsz->stream_nbs-1),vs->video_id, vs->audio_id, vs->src_url, vs->pre_sink_url, vs->dis, vs->uridecodebin,vs->vdec_tee, vs->vdec_tee_queue,vs->video_capsfilter, vs->video_encoder, vs->audio_encoder);
   gst_element_set_state (vs->bin, GST_STATE_PLAYING);
-  gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
+  //gst_element_set_state (vrsmsz->pipeline, GST_STATE_PLAYING);
    
    msg->vc = vc;
    return FALSE;
