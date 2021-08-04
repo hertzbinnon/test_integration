@@ -13,3 +13,6 @@ https://cloud.tencent.com/developer/article/1551004
 https://github.com/alex000kim/nsfw_data_scraper
 https://scrolller.com/r/nsfw
 
+#lfai
+
+https://lfaidata.foundation/
