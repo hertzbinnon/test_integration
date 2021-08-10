@@ -1,0 +1,1 @@
+gst-launch-1.0 gltestsrc  ! gloverlay location=/home/hertz/.local/share/Steam/steamui/images/halftone_mask.png overlay-height=96 overlay-width=96 ! glimagesink

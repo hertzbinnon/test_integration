@@ -1,5 +1,8 @@
 # 
 http://download.nvidia.com/XFree86/Linux-x86_64/
+#examples
+wget -c https://download.nvidia.com/XFree86/Linux-x86_64/470.57.02/NVIDIA-Linux-x86_64-470.57.02.run
+wget -c https://us.download.nvidia.com/XFree86/Linux-x86_64/470.57.02/NVIDIA-Linux-x86_64-470.57.02.run # fast
 #
 https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu1804/x86_64/
 https://www.nvidia.cn/Download/index.aspx?lang=cn

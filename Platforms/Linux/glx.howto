@@ -1,3 +1,4 @@
 sudo apt-get install mesa-utils
-glxinfo
+glxinfo -B
+https://stackoverflow.com/questions/47151394/how-to-tell-which-version-of-opengl-my-graphics-card-supports-on-linux
 

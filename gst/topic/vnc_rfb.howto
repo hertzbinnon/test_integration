@@ -1,0 +1,4 @@
+# https://forum.qt.io/topic/98391/gstreamer-pipeline-to-connect-vnc-server-and-display-record-the-remote-gui/20
+gst-launch-1.0 rfbsrc host=192.168.1.45 port=9999 password=lantingvr.1234 view-only=true ! queue ! videoscale ! video/x-raw,width=960,height=480 ! ximagesink -e sync=false
+gst-launch-1.0 rfbsrc host=192.168.1.45 port=9999 password=lantingvr.1234 view-only=true ! queue ! videoscale ! video/x-raw,width=960,height=480 ! glimagesink -e sync=false
+
