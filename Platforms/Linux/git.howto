@@ -194,3 +194,9 @@ or
 git submodule update --recursive
 or
 git pull --recurse-submodules
+
+10 
+git fetch origin # update remote branch info
+git branch -a
+git checkout -b blender-v2.93-release  remotes/origin/blender-v2.93-release
+git pull -v  # update local branch 

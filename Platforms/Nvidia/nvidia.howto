@@ -59,6 +59,8 @@ https://askubuntu.com/questions/571740/broken-opengl-wrong-glx-renderer-in-glxin
 https://forums.developer.nvidia.com/t/driver-installed-but-wont-load-ubuntu-20-04-nvidia-tu104gl-quadro-rtx-4000/124839/3
 https://forums.developer.nvidia.com/t/dual-gpu-intel-nvidia-prime-render-offloading-ubuntu-20-04-does-not-offload/166864/4
 
+To uninstall the CUDA Toolkit, run cuda-uninstaller in /usr/local/cuda-11.4/bin
+To uninstall the NVIDIA Driver, run nvidia-uninstall
 #18.04 /
 https://forums.developer.nvidia.com/t/nvidia-smi-has-failed-because-it-couldnt-communicate-with-the-nvidia-driver-make-sure-that-the-latest-nvidia-driver-is-installed-and-running/111008/11
 sudo apt-get purge nvidia*
