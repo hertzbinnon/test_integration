@@ -182,6 +182,11 @@ git checkout subbranch
 git merge master 
 
 8. window set
+git config --global  --list
+git config --global https.proxy https://127.0.0.1:33103
+git config --global http.proxy http://127.0.0.1:33103
+git config --global --unset http.proxy
+git config --global --unset https.proxy
 git config --global core.autocrlf input
 git config --global --list
 git config --list
