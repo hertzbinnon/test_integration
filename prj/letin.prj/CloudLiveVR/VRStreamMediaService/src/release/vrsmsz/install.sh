@@ -9,6 +9,7 @@ SYSVERSION="18.04"
 HDWVERSION="TeslaT4"
 
 sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 libegl1 -y 
+sudo apt install ./libhwloc15_2.1.0+dfsg-4_amd64.deb libtcl8.6 libhwloc-dev -y
 SYS=`lsb_release -a 2> /dev/null | grep Release | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
 HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}' | sed s/[[:space:]]//g`
 if [ $SYS != $SYSVERSION ]; then
@@ -74,6 +75,9 @@ sudo cp -rf bin/* /usr/local/bin/
 sudo cp -rf lib/* /usr/local/lib64
 sudo cp -rf  nginx /usr/local/
 sudo chown -R $USER.$USER /usr/local/nginx
+tar xzf trafficserver.tar.gz
+sudo cp -rf  usr/local/* /usr/local/
+sudo chown -R $USER.$USER /usr/local/var
 rm -rf $INSTALL_PATH/
 rm -rf ~/.cache/gstreamer-1.0/registry.x86_64.bin
 exit 0;

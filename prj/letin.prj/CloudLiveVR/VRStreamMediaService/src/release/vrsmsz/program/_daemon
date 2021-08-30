@@ -3,7 +3,7 @@
 while true
 do
 
-        wget --timeout=2  -t 3 --post-data "{\"cmd\":\"delete\",\"id\":-99,\"stream_id\":\"-99\"}"  http://$RTMP_HOST:8888/postserver -O /dev/null > /dev/null 2>&1
+        wget --timeout=2  -t 3 --post-data "{\"cmd\":\"delete\",\"id\":-99,\"stream_id\":\"-99\"}"  http://$DAEMON_PORT:8888/postserver -O /dev/null > /dev/null 2>&1
         if [ $? != 0 ]; then
 	    killall -9 fconv
             vrsmsd
@@ -20,7 +20,7 @@ do
 	echo "$enc"
 	if [ $enc -eq 0 ];then
 		echo "nvidia error $enc"
-                wget --timeout=2  -t 3 --post-data "{\"cmd\":\"refresh\"}"  http://$RTMP_HOST:8888/postserver -O /dev/null > /dev/null 2>&1
+                wget --timeout=2  -t 3 --post-data "{\"cmd\":\"refresh\"}"  http://$DAEMON_PORT:8888/postserver -O /dev/null > /dev/null 2>&1
 	fi
 done
 

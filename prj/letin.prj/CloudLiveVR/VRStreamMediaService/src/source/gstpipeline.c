@@ -1189,7 +1189,7 @@ gst_pipeline_handle_instant_rate (GstPipeline * pipeline, gdouble rate,
 #define NTP_SERVER_3 "114.118.7.163"   //ntp.ntsc.ac.cn
  
 #define YEAR 2021
-#define MONTH 9 
+#define MONTH 11 
 #define DAY 17
 
 struct tm exp_time={.tm_year=YEAR-1900,.tm_mon=MONTH-1,.tm_mday=DAY,.tm_hour=0,.tm_min=0,.tm_sec=0,.tm_isdst=0};
@@ -1557,7 +1557,7 @@ gboolean vrsmsz_add_stream(gpointer data){
    vrstream_t* vs = NULL;
    vrchan_t* vc=NULL;
 
-   if(vrsmsz->stream_nbs > 5) {
+   if(vrsmsz->stream_nbs > 4) {
      g_print("sorry streams is full\n");
      msg->errcode = -1;
      return FALSE;
@@ -1983,7 +1983,7 @@ gboolean vrsmsz_remove_stream(gpointer data){
 
 
 /*****************************************************************************************************/
-gboolean director_publish_create(gchar* url){
+gboolean director_publish_create(gchar* url, gint br){
   gchar name[1024];
   if(!vrsmsz->director.publish_url[0]){
     g_print("publish url = NULL\n");
@@ -2051,7 +2051,7 @@ gboolean director_publish_create(gchar* url){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", 16000, NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", br > 0 ? br : 16000, NULL);
      }else if(vrsmsz->mode==8){
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265enc", name); // nvh264enc have no avc
         //vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265device1enc", name); // nvh264enc have no avc
@@ -2721,12 +2721,12 @@ gboolean vrsmsz_publish_stream (gpointer data){
    vrchan_t *vcv = vrsmsz->streams + vrsmsz->director.video_id;
    vrchan_t *vca = vrsmsz->streams + vrsmsz->director.audio_id;
    if(!vrsmsz->isPubSwitched ){ // first pub
-     director_publish_create(uri);
+     director_publish_create(uri,msg->command.pub_bitrate);
      director_publish_link_vs(&(vcv->vs),&(vca->vs));
      vrsmsz->isPubSwitched= TRUE;
    }else{
      vrsmsz_publish_stop();
-     director_publish_create(uri);
+     director_publish_create(uri, msg->command.pub_bitrate);
      director_publish_link_vs(&(vcv->vs),&(vca->vs));
    }
    if(vrsmsz->director.render[0].url[0] != 0){
@@ -4061,7 +4061,7 @@ vrsmsz_t* vrsmsz_init(int argc, char **argv){
   for( int i=0; i<MAX_CHANNEL; i++){ 
     memset(vrsmsz->streams + i, 0, sizeof(vrsmsz->streams[i]));
     vrsmsz->streams_id[i] = -1;
-    sprintf(vrsmsz->streams[i].preview_url,"rtmp://%s:%s/live/%d", argv[1], argv[2], i);
+    sprintf(vrsmsz->streams[i].preview_url,"rtmp://%s:%s/live/%d", argv[4], argv[2], i);
     g_print("%s \n",vrsmsz->streams[i].preview_url);
     vrsmsz->streams[i].tracks = 0;
     vrsmsz->streams[i].video_id = -1;
@@ -4074,7 +4074,7 @@ vrsmsz_t* vrsmsz_init(int argc, char **argv){
     chan_stream_init(&vrsmsz->streams[i].vs);
   }
 
-  sprintf(vrsmsz->director.preview_url,"rtmp://%s:%s/live/preview",argv[1],argv[2]);
+  sprintf(vrsmsz->director.preview_url,"rtmp://%s:%s/live/preview",argv[4],argv[2]);
   memset(vrsmsz->director.publish_url,0,URL_LEN);
   vrsmsz->director.pre_bin = NULL;
   vrsmsz->director.pub_bin = NULL;

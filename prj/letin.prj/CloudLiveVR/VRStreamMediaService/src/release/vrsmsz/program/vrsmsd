@@ -11,10 +11,11 @@ ulimit -c 0
 source /etc/vrsmsd.conf
 #$LD_LIBRARY_PATH/../nginx/sbin/nginx -s stop
 $ROOT_PATH/nginx/sbin/nginx -p $ROOT_PATH/nginx 
+$ROOT_PATH/bin/trafficserver start
 killall _vrsmsz > /dev/null 2>&1 
 cat /tmp/vrsmsd.log >> /tmp/vrsmsd.log.1
 sleep 3
-_vrsmsz $RTMP_HOST $RTMP_PORT $MODE > /tmp/vrsmsd.log 2>&1 &
+_vrsmsz $RTMP_HOST $RTMP_PORT $MODE $EXTERNAL_INTERFACE > /tmp/vrsmsd.log 2>&1 &
 cd /var/local/vrsmsz/env
 . ./bin/activate
 cd /var/local/vrsmsz/env/uploadmodule
