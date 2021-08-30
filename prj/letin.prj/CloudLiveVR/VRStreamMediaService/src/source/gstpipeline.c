@@ -1750,8 +1750,8 @@ gboolean vrsmsz_add_stream(gpointer data){
        g_print("error make\n");
        return FALSE;
      }
-     g_print("preview put uri = %s\n",vc->preview_url);
-     g_object_set (vs->outer, "location", vc->preview_url, NULL);
+     g_print("preview put uri = %s\n",vc->push_url);
+     g_object_set (vs->outer, "location", vc->push_url, NULL);
    }
 
    gst_bin_add_many(GST_BIN(vs->bin), vs->uridecodebin, vs->vdec_tee, vs->vdec_tee_queue,vs->video_scale, vs->video_capsfilter, vs->video_encoder,vs->video_encoder_queue,vs->video_encoder_parser, vs->audio_convert, vs->audio_volume, vs->audio_encoder, vs->aenc_tee, vs->aenc_tee_queue, vs->muxer,vs->outer,NULL);
@@ -2331,7 +2331,7 @@ gboolean director_publish_unlink_vs(vrstream_t* vrv,vrstream_t* vra){
 /*****************************************************************************************************/
 gboolean director_preview_create(vrstream_t* vs){
   gchar name[1024];
-  g_print("%s \n",vrsmsz->director.preview_url);
+  g_print("%s \n",vrsmsz->director.push_url);
 
   if(!vrsmsz->director.ds.pre_vdec_tee_queue){
      sprintf(name,"%s-pre_vdec_tee_queue","vrsmsz");
@@ -2463,7 +2463,7 @@ gboolean director_preview_create(vrstream_t* vs){
       g_print("error make\n");
       return FALSE;
     }
-    g_object_set (vrsmsz->director.ds.pre_outer, "location", vrsmsz->director.preview_url, NULL);
+    g_object_set (vrsmsz->director.ds.pre_outer, "location", vrsmsz->director.push_url, NULL);
   }
    vrsmsz->director.pre_bin = gst_bin_new("pre_bin");
   gst_bin_add_many(GST_BIN(vrsmsz->director.pre_bin), vrsmsz->director.ds.pre_vdec_tee_queue,
@@ -4062,7 +4062,9 @@ vrsmsz_t* vrsmsz_init(int argc, char **argv){
     memset(vrsmsz->streams + i, 0, sizeof(vrsmsz->streams[i]));
     vrsmsz->streams_id[i] = -1;
     sprintf(vrsmsz->streams[i].preview_url,"rtmp://%s:%s/live/%d", argv[4], argv[2], i);
+    sprintf(vrsmsz->streams[i].push_url,"rtmp://127.0.0.1:%s/live/%d", argv[2], i);
     g_print("%s \n",vrsmsz->streams[i].preview_url);
+    g_print("%s \n",vrsmsz->streams[i].push_url);
     vrsmsz->streams[i].tracks = 0;
     vrsmsz->streams[i].video_id = -1;
     vrsmsz->streams[i].audio_id = -1;
@@ -4075,6 +4077,7 @@ vrsmsz_t* vrsmsz_init(int argc, char **argv){
   }
 
   sprintf(vrsmsz->director.preview_url,"rtmp://%s:%s/live/preview",argv[4],argv[2]);
+  sprintf(vrsmsz->director.push_url,"rtmp://%s:%s/live/preview","127.0.0.1",argv[2]);
   memset(vrsmsz->director.publish_url,0,URL_LEN);
   vrsmsz->director.pre_bin = NULL;
   vrsmsz->director.pub_bin = NULL;

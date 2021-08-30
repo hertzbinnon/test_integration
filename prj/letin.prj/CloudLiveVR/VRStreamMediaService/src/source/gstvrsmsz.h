@@ -93,6 +93,7 @@ typedef struct {
   gchar   in_url[URL_LEN];
   gchar   output_url[URL_LEN];
   gchar   preview_url[URL_LEN];
+  gchar   push_url[URL_LEN];
   guint   resolution;
   vrstream_t vs;
 
@@ -190,6 +191,7 @@ typedef struct{
   gint    video_id;
   gint    audio_id;
   gchar   preview_url[URL_LEN];
+  gchar   push_url[URL_LEN];
   gchar   publish_url[URL_LEN];
   drstream_t ds;
 
