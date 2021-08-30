@@ -1,1 +1,4 @@
 https://www.middlewareinventory.com/blog/tcpdump-capture-http-get-post-requests-apache-weblogic-websphere/
+sudo tcpdump -i enp3s0 -s 0 -A 'tcp dst port 8081 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420 or tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504F5354 or tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x48545450 or tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x3C21444F and host 192.168.1.212'
+sudo tcpdump -i enp3s0 -s 0 -A 'tcp[((tcp[12:1] & 0xf0) >> 2):4]' = 0x504F5354
+sudo tcpdump -i enp3s0 -s 0 -A 'tcp dst port 8081 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420 or tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504F5354 or tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x48545450 or tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x7B22636D'
