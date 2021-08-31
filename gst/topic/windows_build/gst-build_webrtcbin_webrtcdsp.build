@@ -1,0 +1,50 @@
+meson build --reconfigure --prefix=d:\gtk4\gnome -Dtls=disabled -Ddevtools=disabled && ninja -C build install
+gst-inspect-1.0.exe webrtcbin
+cd ..\gnome\bin
+gst-inspect-1.0.exe webrtcbin
+gst-inspect-1.0.exe nvh264enc
+gst-play-1.0.exe rtmp://106.75.117.203/live/publish
+gtk4-demo.exe
+gtk4-demo.exe   --help
+gtk4-demo.exe   
+set GSK_RENDERER=cairo
+gtk4-demo.exe   
+cd ..\..\gtk
+git status
+git branch -a
+git tag -l
+cd ..\gnome\bin
+ls
+gst-inspect-1.0.exe wao
+gst-inspect-1.0.exe webrtc
+gst-inspect-1.0.exe audioprocess
+gst-inspect-1.0.exe webrtcaudioprocess
+gst-inspect-1.0.exe webrtcdsp
+cd ..\..\gstb
+meson build --reconfigure --prefix=d:\gtk4\gnome -Dtls=disabled -Ddevtools=disabled -Dgst-plugins-bad:webrtcdsp=enabled 
+ninja -C build install
+gst-inspect-1.0.exe webrtcdsp
+cd ..\gnome\bin
+gst-inspect-1.0.exe webrtcdsp
+cd ..\gstb
+cd ..\..\gstb
+ninja -C build 
+cd ..\gnome\bin
+gst-inspect-1.0.exe webrtcdsp
+cd ..\..\gstb
+meson build --reconfigure --prefix=d:\gtk4\gnome -Dtls=disabled -Ddevtools=disabled -Dgst-plugins-bad:webrtcdsp=enabled 
+ninja -C build 
+meson build --reconfigure --prefix=d:\gtk4\gnome -Dtls=disabled -Ddevtools=disabled -Dwebrtc-audio-processing=enabled -Dgst-plugins-bad:webrtcdsp=enabled 
+meson build --reconfigure --prefix=d:\gtk4\gnome -Dtls=disabled -Ddevtools=disabled  -Dbad=enabled  -Dgst-plugins-bad:webrtcdsp=enabled 
+gst-inspect-1.0 textoverlay
+cd ..\gnome\bin
+gst-inspect-1.0 textoverlay
+doskey /h > c:\gst-build_webrtcbin_webrtcdsp.build
+doskey /h > D:\gst-build_webrtcbin_webrtcdsp.build
+echo %PKG_CONFIG_PATH%
+set PKG_CONFIG_PATH=%PKG_CONFIG_PATH%;C:\MinGW\absl\lib\pkgconfig
+echo %PKG_CONFIG_PATH%
+doskey /h > D:\gst-build_webrtcbin_webrtcdsp.build
+cd ..\..\gstb
+meson build --reconfigure --prefix=d:\gtk4\gnome -Dtls=disabled -Ddevtools=disabled -Dgst-plugins-bad:webrtcdsp=enabled 
+doskey /h > D:\gst-build_webrtcbin_webrtcdsp.build
