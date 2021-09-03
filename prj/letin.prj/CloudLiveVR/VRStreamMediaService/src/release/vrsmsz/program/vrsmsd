@@ -19,6 +19,6 @@ _vrsmsz $RTMP_HOST $RTMP_PORT $MODE $EXTERNAL_INTERFACE > /tmp/vrsmsd.log 2>&1 &
 cd /var/local/vrsmsz/env
 . ./bin/activate
 cd /var/local/vrsmsz/env/uploadmodule
-python manage.py runserver 0.0.0.0:9999 > /tmp/upload.log 2>&1 &
+python manage.py runserver 127.0.0.1:9999 > /tmp/upload.log 2>&1 &
 deactivate
 #sudo chown $USER.$USER -r /tmp

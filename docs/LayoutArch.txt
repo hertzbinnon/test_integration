@@ -164,6 +164,8 @@ Project
                                         https://blog.csdn.net/abccc250110119/article/details/105075101
                                         https://blog.csdn.net/Asabc12345/article/details/107094066
                                         https://blog.csdn.net/stq054188/article/details/105089550
+    +nvidia-reverse-project
+                                        https://github.com/jantenhove/NvencSessionLimitBump.git
 TechTree for app
 
 	Qt+windows 
