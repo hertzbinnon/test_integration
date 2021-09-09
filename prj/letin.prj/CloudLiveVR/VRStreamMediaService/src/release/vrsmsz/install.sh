@@ -76,6 +76,7 @@ sudo cp -rf lib/* /usr/local/lib64
 sudo cp -rf  nginx /usr/local/
 sudo chown -R $USER.$USER /usr/local/nginx
 tar xzf trafficserver.tar.gz
+sudo rm -rf /usr/local/var/*
 sudo cp -rf  usr/local/* /usr/local/
 sudo chown -R $USER.$USER /usr/local/var
 rm -rf $INSTALL_PATH/
