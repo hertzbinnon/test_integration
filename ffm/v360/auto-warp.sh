@@ -1,8 +1,9 @@
 #!/bin/bash
 #https://stackoverflow.com/questions/43413445/how-to-add-a-2d-texture-to-an-equirectangular-image
+#https://trac.ffmpeg.org/ticket/9376?cversion=1
 #----------- Extract image section ------------
 # command  test-base.png .\ 10 10
-echo Centering image on desired point...
+echo Centering image on desired point...(which area are you want, top or bottom ?)
 ./ffmpeg -hide_banner  -i $2$1 -vf v360=e:e:yaw=-$3:pitch=-$4 -y $2test_equi_rotated-$1
 echo --
 
