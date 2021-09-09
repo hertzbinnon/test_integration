@@ -2050,7 +2050,7 @@ gboolean director_publish_create(gchar* url, gint br){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", br > 0 ? br : 16000, NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", br > 0 ? br * 1000 : 16000, NULL);
      }else if(vrsmsz->mode==8){
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265enc", name); // nvh264enc have no avc
         //vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265device1enc", name); // nvh264enc have no avc
