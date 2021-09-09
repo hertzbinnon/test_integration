@@ -46,6 +46,7 @@ ffmpeg -i video.mpg -ignore_loop 0 -i loop.gif -filter_complex  "[0:v][1:v]overl
 ffmpeg  -i  input  -vf  drawtext=fontfile=arial.ttf:text=welcome output
 #实现周期显示输入的文字水印
 ffmpeg -i input.mp4 -vf "drawtext=fontfile=/usr/share/fonts/truetype/freefont/FreeSerif.ttf:text='testtest':x=w-100:y=100:enable=lt(mod(t\,3)\,1):fontsize=24:fontcolor=yellow@0.5:shadowy=2" output.mp4
+ffmpeg -i input.jpg -vf "drawtext=text='Test Text':fontcolor=white:fontsize=75:x=1002:y=100:" output.jpg
 
 ffmpeg -itsoffset 1  -i rtmp://117.50.7.118/live/ch0  -f dshow -i audio="Microphone (Realtek(R) Audio)" -map 0:1 -map 1:0  -f flv rtmp://117.50.7.118/live/test
 ffmpeg  -i rtmp://117.50.7.118/live/ch0  -f dshow -itsoffset 3  -i audio="Microphone (Realtek(R) Audio)"  -c:a aac  -map 0:1 -map 1:0  -f flv rtmp://117.50.7.118/live/test
@@ -85,3 +86,4 @@ ffmpeg -r 25 -start_number 0001 -i Image_%04d.JPG -s 3840x1920 -vcodec libx264 -
 
 #Given a VFR recording screen.mkv with a maximum frame rate of 30 fps, you can convert it to CFR at 30 fps with the following command:
 ffmpeg -i screen.mkv -vsync cfr -r 30 screen_cfr.mkv
+
