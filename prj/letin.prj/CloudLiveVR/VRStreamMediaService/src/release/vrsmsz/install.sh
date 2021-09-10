@@ -79,6 +79,7 @@ tar xzf trafficserver.tar.gz
 sudo rm -rf /usr/local/var/*
 sudo cp -rf  usr/local/* /usr/local/
 sudo chown -R $USER.$USER /usr/local/var
+sudo chown -R $USER.$USER /usr/local/etc/trafficserver/
 rm -rf $INSTALL_PATH/
 rm -rf ~/.cache/gstreamer-1.0/registry.x86_64.bin
 exit 0;

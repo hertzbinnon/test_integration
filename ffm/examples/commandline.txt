@@ -93,7 +93,7 @@ ffmpeg.exe -y -f lavfi -i "color=color=white@0.0:size=3840x1920,format=rgba" -q:
 ffmpeg.exe -y -f lavfi -i "color=color=white@0.0:size=1920x1080,format=rgba,subtitles=test.ass:alpha=1" -c:v png -t "00:01:00.000" -threads 0 "video.mov" -stats
 #
 #./ffmpeg -y -f lavfi -i color=s=1920x1080:color=0xff0000 -r 1 -an -c:v png -update 1  -y alpha.png
-
+ 
 /data/ffmpeg -i /tmp/alpha.png -q:v 4 -r 1 -s 3840x960 -update 1 output1.png
 /data/ffmpeg -i /tmp/output1.png -i /tmp/botum.png -filter_complex vstack bottom.png
 /data/ffmpeg -i /tmp/output1.png -i /tmp/botum.png -filter_complex hstack bottom.png
@@ -103,4 +103,11 @@ ffmpeg -r 25 -start_number 0001 -i Image_%04d.JPG -s 3840x1920 -vcodec libx264 -
 
 #Given a VFR recording screen.mkv with a maximum frame rate of 30 fps, you can convert it to CFR at 30 fps with the following command:
 ffmpeg -i screen.mkv -vsync cfr -r 30 screen_cfr.mkv
+
+./ffmpeg -y -hide_banner  -i ./360-dual-fisheye.jpg -vf "crop=320:320:0:0" -y righteye.png
+./ffmpeg -y -hide_banner  -i ./360-dual-fisheye.jpg -vf "crop=320:320:320:0" -y lefteye.png
+./ffmpeg -r:v 30 -loop 1 -i righteye.png -c:v h264_nvenc  -pix_fmt yuv420p  -g 30  left.mp4
+./ffmpeg -r:v 30 -loop 1 -i lefteye.png -c:v h264_nvenc  -pix_fmt yuv420p  -g 30  right.mp4
+nohup /data/ffmpeg -threads 2  -report -re -fflags +genpts -stream_loop -1 -i right.mp4 -c:v copy -acodec copy -f flv rtmp://127.0.0.1/live/right > /dev/null 2>&1 &
+nohup /data/ffmpeg -threads 2  -report -re -fflags +genpts -stream_loop -1 -i left.mp4 -c:v copy -acodec copy -f flv rtmp://127.0.0.1/live/left > /dev/null 2>&1 &
 
