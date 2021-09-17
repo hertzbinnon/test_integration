@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en-US"
+	prefix="og: https://ogp.me/ns#" >
+<head>
+	<meta charset="UTF-8">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<title>使用Traffic Server组建高性能的CDN集群 | 香菇肥牛的博客</title>
+
+		<!-- All in One SEO 4.1.4.3 -->
+		<meta name="description" content="Traffic Server是高性能的双向代理与缓存程序。本文从映射规则、缓存设置、缓存分区、修改信头、配置SSL、状态监测、均衡负载、拥塞与惊群处理等多个方面介绍了如何使用Traffic Server搭建一个高性能高响应的CDN服务器集群。" />
+		<meta name="robots" content="max-image-preview:large" />
+		<meta name="keywords" content="traffic server,搭建cdn,反向代理,缓存,cdn集群,架设cdn,cdn缓存,均衡负载,apache traffic server,ats,cdn,dns,reverse proxy,惊群,正向代理,高可用,vps教程" />
+		<link rel="canonical" href="traffic-server-cdn-cluster.html" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:site_name" content="香菇肥牛的博客 | 主机教程，服务器教程，VPS教程，虚拟主机教程，Wordpress教程，服务器，测评" />
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="使用Traffic Server组建高性能的CDN集群 | 香菇肥牛的博客" />
+		<meta property="og:description" content="Traffic Server是高性能的双向代理与缓存程序。本文从映射规则、缓存设置、缓存分区、修改信头、配置SSL、状态监测、均衡负载、拥塞与惊群处理等多个方面介绍了如何使用Traffic Server搭建一个高性能高响应的CDN服务器集群。" />
+		<meta property="og:url" content="https://qing.su/article/traffic-server-cdn-cluster.html" />
+		<meta property="article:published_time" content="2020-07-17T21:28:35+00:00" />
+		<meta property="article:modified_time" content="2020-07-18T03:31:28+00:00" />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:domain" content="qing.su" />
+		<meta name="twitter:title" content="使用Traffic Server组建高性能的CDN集群 | 香菇肥牛的博客" />
+		<meta name="twitter:description" content="Traffic Server是高性能的双向代理与缓存程序。本文从映射规则、缓存设置、缓存分区、修改信头、配置SSL、状态监测、均衡负载、拥塞与惊群处理等多个方面介绍了如何使用Traffic Server搭建一个高性能高响应的CDN服务器集群。" />
+		<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"WebSite","@id":"https:\/\/qing.su\/#website","url":"https:\/\/qing.su\/","name":"\u9999\u83c7\u80a5\u725b\u7684\u535a\u5ba2","description":"\u4e3b\u673a\u6559\u7a0b\uff0c\u670d\u52a1\u5668\u6559\u7a0b\uff0cVPS\u6559\u7a0b\uff0c\u865a\u62df\u4e3b\u673a\u6559\u7a0b\uff0cWordpress\u6559\u7a0b\uff0c\u670d\u52a1\u5668\uff0c\u6d4b\u8bc4","inLanguage":"en-US","publisher":{"@id":"https:\/\/qing.su\/#organization"}},{"@type":"Organization","@id":"https:\/\/qing.su\/#organization","name":"\u9999\u83c7\u80a5\u725b\u7684\u535a\u5ba2","url":"https:\/\/qing.su\/"},{"@type":"BreadcrumbList","@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/qing.su\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/qing.su\/","name":"Home","description":"\u9999\u83c7\u80a5\u725b\u7684\u535a\u5ba2\uff0c\u4e13\u6ce8\u4e8e\u53d1\u5e03\u5404\u7c7b\u7cbe\u54c1\u539f\u521b\u4e3b\u673a\u6559\u7a0b\uff0c\u670d\u52a1\u5668\u6559\u7a0b\uff0cVPS\u6559\u7a0b\uff0c\u865a\u62df\u4e3b\u673a\u6559\u7a0b\uff0cWordPress\u6559\u7a0b\uff0c\u670d\u52a1\u5668\u4e0e\u6d4b\u8bc4\u4fe1\u606f\uff0c\u4e3b\u673a\u8d44\u8baf\uff0c\u4ee5\u53ca\u5404\u7c7b\u7f51\u7ad9\u6559\u7a0b\u3002","url":"https:\/\/qing.su\/"}}]},{"@type":"Person","@id":"https:\/\/qing.su\/article\/author\/shc#author","url":"https:\/\/qing.su\/article\/author\/shc","name":"\u9999\u83c7\u80a5\u725b","image":{"@type":"ImageObject","@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/a39f0fc0af428d4e629a8a4f3f7c8925?s=96&d=wavatar&r=x","width":96,"height":96,"caption":"\u9999\u83c7\u80a5\u725b"}},{"@type":"WebPage","@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#webpage","url":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html","name":"\u4f7f\u7528Traffic Server\u7ec4\u5efa\u9ad8\u6027\u80fd\u7684CDN\u96c6\u7fa4 | \u9999\u83c7\u80a5\u725b\u7684\u535a\u5ba2","description":"Traffic Server\u662f\u9ad8\u6027\u80fd\u7684\u53cc\u5411\u4ee3\u7406\u4e0e\u7f13\u5b58\u7a0b\u5e8f\u3002\u672c\u6587\u4ece\u6620\u5c04\u89c4\u5219\u3001\u7f13\u5b58\u8bbe\u7f6e\u3001\u7f13\u5b58\u5206\u533a\u3001\u4fee\u6539\u4fe1\u5934\u3001\u914d\u7f6eSSL\u3001\u72b6\u6001\u76d1\u6d4b\u3001\u5747\u8861\u8d1f\u8f7d\u3001\u62e5\u585e\u4e0e\u60ca\u7fa4\u5904\u7406\u7b49\u591a\u4e2a\u65b9\u9762\u4ecb\u7ecd\u4e86\u5982\u4f55\u4f7f\u7528Traffic Server\u642d\u5efa\u4e00\u4e2a\u9ad8\u6027\u80fd\u9ad8\u54cd\u5e94\u7684CDN\u670d\u52a1\u5668\u96c6\u7fa4\u3002","inLanguage":"en-US","isPartOf":{"@id":"https:\/\/qing.su\/#website"},"breadcrumb":{"@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#breadcrumblist"},"author":"https:\/\/qing.su\/article\/author\/shc#author","creator":"https:\/\/qing.su\/article\/author\/shc#author","image":{"@type":"ImageObject","@id":"https:\/\/qing.su\/#mainImage","url":"https:\/\/qing.su\/wp-content\/uploads\/2020\/07\/cdn-scheme-1-1-e1595021287621.png","width":300,"height":182},"primaryImageOfPage":{"@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#mainImage"},"datePublished":"2020-07-17T21:28:35-05:00","dateModified":"2020-07-18T03:31:28-05:00"},{"@type":"Article","@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#article","name":"\u4f7f\u7528Traffic Server\u7ec4\u5efa\u9ad8\u6027\u80fd\u7684CDN\u96c6\u7fa4 | \u9999\u83c7\u80a5\u725b\u7684\u535a\u5ba2","description":"Traffic Server\u662f\u9ad8\u6027\u80fd\u7684\u53cc\u5411\u4ee3\u7406\u4e0e\u7f13\u5b58\u7a0b\u5e8f\u3002\u672c\u6587\u4ece\u6620\u5c04\u89c4\u5219\u3001\u7f13\u5b58\u8bbe\u7f6e\u3001\u7f13\u5b58\u5206\u533a\u3001\u4fee\u6539\u4fe1\u5934\u3001\u914d\u7f6eSSL\u3001\u72b6\u6001\u76d1\u6d4b\u3001\u5747\u8861\u8d1f\u8f7d\u3001\u62e5\u585e\u4e0e\u60ca\u7fa4\u5904\u7406\u7b49\u591a\u4e2a\u65b9\u9762\u4ecb\u7ecd\u4e86\u5982\u4f55\u4f7f\u7528Traffic Server\u642d\u5efa\u4e00\u4e2a\u9ad8\u6027\u80fd\u9ad8\u54cd\u5e94\u7684CDN\u670d\u52a1\u5668\u96c6\u7fa4\u3002","inLanguage":"en-US","headline":"\u4f7f\u7528Traffic Server\u7ec4\u5efa\u9ad8\u6027\u80fd\u7684CDN\u96c6\u7fa4","author":{"@id":"https:\/\/qing.su\/article\/author\/shc#author"},"publisher":{"@id":"https:\/\/qing.su\/#organization"},"datePublished":"2020-07-17T21:28:35-05:00","dateModified":"2020-07-18T03:31:28-05:00","articleSection":"VPS\u6559\u7a0b, Apache Traffic Server, ATS, CDN, DNS, Reverse Proxy, Traffic Server, \u53cd\u5411\u4ee3\u7406, \u5747\u8861\u8d1f\u8f7d, \u60ca\u7fa4, \u6b63\u5411\u4ee3\u7406, \u7f13\u5b58, \u9ad8\u53ef\u7528","mainEntityOfPage":{"@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#webpage"},"isPartOf":{"@id":"https:\/\/qing.su\/article\/traffic-server-cdn-cluster.html#webpage"},"image":{"@type":"ImageObject","@id":"https:\/\/qing.su\/#articleImage","url":"https:\/\/qing.su\/wp-content\/uploads\/2020\/07\/cdn-scheme-1-1-e1595021287621.png","width":300,"height":182}}]}
+		</script>
+		<!-- All in One SEO -->
+
+<link rel='dns-prefetch' href='https://fonts.googleapis.com/' />
+<link rel='dns-prefetch' href='https://s.w.org/' />
+<link href='https://fonts.gstatic.com' crossorigin rel='preconnect' />
+<link rel="alternate" type="application/rss+xml" title="香菇肥牛的博客 &raquo; Feed" href="https://qing.su/feed" />
+<link rel="alternate" type="application/rss+xml" title="香菇肥牛的博客 &raquo; Comments Feed" href="https://qing.su/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="香菇肥牛的博客 &raquo; 使用Traffic Server组建高性能的CDN集群 Comments Feed" href="https://qing.su/article/traffic-server-cdn-cluster.html/feed" />
+		<script>
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/qing.su\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.8.1"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style>
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='generate-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:regular,italic,700' media='all' />
+<link rel='stylesheet' id='wp-block-library-css'  href='https://qing.su/wp-includes/css/dist/block-library/style.min.css?ver=5.8.1' media='all' />
+<link rel='stylesheet' id='quads-style-css-css'  href='https://qing.su/wp-content/plugins/quick-adsense-reloaded/includes/gutenberg/dist/blocks.style.build.css?ver=2.0.30' media='all' />
+<link rel='stylesheet' id='generate-style-css'  href='https://qing.su/wp-content/themes/generatepress/assets/css/all.min.css?ver=3.0.4' media='all' />
+<style id='generate-style-inline-css'>
+.no-featured-image-padding .featured-image {margin-left:-60px;margin-right:-60px;}.post-image-above-header .no-featured-image-padding .inside-article .featured-image {margin-top:-60px;}@media (max-width:768px){.no-featured-image-padding .featured-image {margin-left:-40px;margin-right:-40px;}.post-image-above-header .no-featured-image-padding .inside-article .featured-image {margin-top:-40px;}}
+body{background-color:#f4f4f4;color:#000000;}a{color:#1e73be;}a:hover, a:focus, a:active{color:#000000;}body .grid-container{max-width:1100px;}.wp-block-group__inner-container{max-width:1100px;margin-left:auto;margin-right:auto;}.site-header .header-image{width:350px;}.generate-back-to-top{font-size:20px;border-radius:3px;position:fixed;bottom:30px;right:30px;line-height:40px;width:40px;text-align:center;z-index:10;transition:opacity 300ms ease-in-out;}body, button, input, select, textarea{font-family:"Lora", serif;font-size:18px;}body{line-height:1.5;}.entry-content > [class*="wp-block-"]:not(:last-child){margin-bottom:1.5em;}.main-title{font-weight:100;font-size:45px;}.main-navigation .main-nav ul ul li a{font-size:14px;}.widget-title{text-transform:uppercase;}.sidebar .widget, .footer-widgets .widget{font-size:17px;}button:not(.menu-toggle),html input[type="button"],input[type="reset"],input[type="submit"],.button,.wp-block-button .wp-block-button__link{text-transform:uppercase;font-size:15px;}h1{font-weight:300;font-size:35px;}h2{font-weight:300;font-size:27px;}h3{font-size:24px;}h4{text-transform:uppercase;font-size:inherit;}h5{text-transform:uppercase;font-size:inherit;}.site-info{text-transform:uppercase;font-size:14px;}@media (max-width:768px){.main-title{font-size:30px;}h1{font-size:30px;}h2{font-size:25px;}}.top-bar{background-color:#636363;color:#ffffff;}.top-bar a{color:#ffffff;}.top-bar a:hover{color:#303030;}.site-header{background-color:#ffffff;color:#3a3a3a;}.site-header a{color:#3a3a3a;}.main-title a,.main-title a:hover{color:#000000;}.site-description{color:#757575;}.main-navigation,.main-navigation ul ul{background-color:#f9f9f9;}.main-navigation .main-nav ul li a,.menu-toggle, .main-navigation .menu-bar-items{color:#000000;}.main-navigation .main-nav ul li:hover > a,.main-navigation .main-nav ul li:focus > a, .main-navigation .main-nav ul li.sfHover > a, .main-navigation .menu-bar-item:hover > a, .main-navigation .menu-bar-item.sfHover > a{color:#1e73be;}button.menu-toggle:hover,button.menu-toggle:focus,.main-navigation .mobile-bar-items a,.main-navigation .mobile-bar-items a:hover,.main-navigation .mobile-bar-items a:focus{color:#000000;}.main-navigation .main-nav ul li[class*="current-menu-"] > a{color:#000000;background-color:#f9f9f9;}.main-navigation .main-nav ul li[class*="current-menu-"] > a:hover,.main-navigation .main-nav ul li[class*="current-menu-"].sfHover > a{color:#000000;background-color:#f9f9f9;}.navigation-search input[type="search"],.navigation-search input[type="search"]:active, .navigation-search input[type="search"]:focus, .main-navigation .main-nav ul li.search-item.active > a, .main-navigation .menu-bar-items .search-item.active > a{color:#1e73be;}.main-navigation ul ul{background-color:#ffffff;}.main-navigation .main-nav ul ul li a{color:#000000;}.main-navigation .main-nav ul ul li:hover > a,.main-navigation .main-nav ul ul li:focus > a,.main-navigation .main-nav ul ul li.sfHover > a{color:#1e73be;background-color:#fafafa;}.main-navigation .main-nav ul ul li[class*="current-menu-"] > a{color:#1e73be;background-color:#ffffff;}.main-navigation .main-nav ul ul li[class*="current-menu-"] > a:hover,.main-navigation .main-nav ul ul li[class*="current-menu-"].sfHover > a{color:#1e73be;background-color:#ffffff;}.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header{background-color:#ffffff;}.entry-title a{color:#000000;}.entry-title a:hover{color:#1e73be;}.entry-meta{color:#000000;}.entry-meta a{color:#333333;}.entry-meta a:hover{color:#1e73be;}.sidebar .widget{background-color:#f9f9f9;}.sidebar .widget .widget-title{color:#000000;}.footer-widgets{background-color:#f9f9f9;}.footer-widgets .widget-title{color:#000000;}.site-info{color:#000000;background-color:#ffffff;}.site-info a{color:#000000;}.site-info a:hover{color:#606060;}.footer-bar .widget_nav_menu .current-menu-item a{color:#606060;}input[type="text"],input[type="email"],input[type="url"],input[type="password"],input[type="search"],input[type="tel"],input[type="number"],textarea,select{color:#000000;background-color:#ffffff;border-color:#000000;}input[type="text"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="search"]:focus,input[type="tel"]:focus,input[type="number"]:focus,textarea:focus,select:focus{color:#666666;background-color:#ffffff;border-color:#bfbfbf;}button,html input[type="button"],input[type="reset"],input[type="submit"],a.button,a.wp-block-button__link:not(.has-background){color:#000000;background-color:#ffffff;}button:hover,html input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover,a.button:hover,button:focus,html input[type="button"]:focus,input[type="reset"]:focus,input[type="submit"]:focus,a.button:focus,a.wp-block-button__link:not(.has-background):active,a.wp-block-button__link:not(.has-background):focus,a.wp-block-button__link:not(.has-background):hover{color:#ffffff;background-color:#1e73be;}a.generate-back-to-top{background-color:rgba(255,255,255,0.75);color:#000000;}a.generate-back-to-top:hover,a.generate-back-to-top:focus{background-color:#ffffff;color:#1e73be;}@media (max-width: 768px){.main-navigation .menu-bar-item:hover > a, .main-navigation .menu-bar-item.sfHover > a{background:none;color:#000000;}}.inside-top-bar{padding:10px;}.inside-header{padding:60px;}.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .separate-containers .paging-navigation, .one-container .site-content, .inside-page-header{padding:60px;}.site-main .wp-block-group__inner-container{padding:60px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-60px;width:calc(100% + 120px);max-width:calc(100% + 120px);}.one-container.right-sidebar .site-main,.one-container.both-right .site-main{margin-right:60px;}.one-container.left-sidebar .site-main,.one-container.both-left .site-main{margin-left:60px;}.one-container.both-sidebars .site-main{margin:0px 60px 0px 60px;}.rtl .menu-item-has-children .dropdown-menu-toggle{padding-left:20px;}.rtl .main-navigation .main-nav ul li.menu-item-has-children > a{padding-right:20px;}.widget-area .widget{padding:30px;}.footer-widgets{padding:60px;}.site-info{padding:20px;}@media (max-width:768px){.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .separate-containers .paging-navigation, .one-container .site-content, .inside-page-header{padding:40px;}.site-main .wp-block-group__inner-container{padding:40px;}.site-info{padding-right:10px;padding-left:10px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-40px;width:calc(100% + 80px);max-width:calc(100% + 80px);}}/* End cached CSS */@media (max-width: 768px){.main-navigation .menu-toggle,.main-navigation .mobile-bar-items,.sidebar-nav-mobile:not(#sticky-placeholder){display:block;}.main-navigation ul,.gen-sidebar-nav{display:none;}[class*="nav-float-"] .site-header .inside-header > *{float:none;clear:both;}}
+.main-navigation .main-nav ul li a,.menu-toggle,.main-navigation .mobile-bar-items a{transition: line-height 300ms ease}.main-navigation.toggled .main-nav > ul{background-color: #f9f9f9}
+</style>
+<link rel='stylesheet' id='generate-sticky-css'  href='https://qing.su/wp-content/plugins/gp-premium/menu-plus/functions/css/sticky.min.css?ver=2.0.3' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='https://qing.su/wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.16' media='screen' />
+<style id='quads-styles-inline-css'>
+
+    .quads-location ins.adsbygoogle {
+        background: transparent !important;
+    }
+    
+    .quads-ad-label { font-size: 12px; text-align: center; color: #333;}
+</style>
+<script src='https://qing.su/wp-includes/js/jquery/jquery.min.js?ver=3.6.0' id='jquery-core-js'></script>
+<script src='https://qing.su/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<link rel="https://api.w.org/" href="https://qing.su/wp-json/" /><link rel="alternate" type="application/json" href="https://qing.su/wp-json/wp/v2/posts/2033" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://qing.su/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://qing.su/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 5.8.1" />
+<link rel='shortlink' href='https://qing.su/?p=2033' />
+<link rel="alternate" type="application/json+oembed" href="https://qing.su/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fqing.su%2Farticle%2Ftraffic-server-cdn-cluster.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://qing.su/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fqing.su%2Farticle%2Ftraffic-server-cdn-cluster.html&#038;format=xml" />
+<script type='text/javascript'>document.cookie = 'quads_browser_width='+screen.width;</script><link rel="pingback" href="https://qing.su/xmlrpc.php">
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="https://qing.su/wp-content/uploads/2020/07/cropped-favicon-1-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://qing.su/wp-content/uploads/2020/07/cropped-favicon-1-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://qing.su/wp-content/uploads/2020/07/cropped-favicon-1-180x180.png" />
+<meta name="msapplication-TileImage" content="https://qing.su/wp-content/uploads/2020/07/cropped-favicon-1-270x270.png" />
+		<style id="wp-custom-css">
+			/* GeneratePress Site CSS */ .main-navigation,
+.footer-widgets {
+	border-top: 1px solid rgba(0,0,0,0.1);
+	border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.entry-header,
+.entry-meta {
+	text-align: center;
+}
+
+.sidebar .widget {
+	border: 1px solid rgba(0,0,0,0.1);
+}
+
+.entry-content,
+.entry-summary,
+#comments {
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.post-image,
+.entry-content {
+	margin-top: 3em;
+}
+
+.post-image:hover {
+	opacity: 0.95;
+}
+
+footer.entry-meta > span {
+	display: inline-block;
+	margin: 0 10px;
+	text-transform: uppercase;
+	font-size: 85%;
+}
+
+.post-navigation {
+	text-transform: uppercase;
+	font-size: 85%;
+}
+
+div.entry-meta > span {
+	text-transform: uppercase;
+	font-size: 85%;
+}
+
+button, html input[type="button"], input[type="reset"], input[type="submit"], a.button, a.button:visited {
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+}
+
+.read-more-container,
+#comments {
+	text-align: center;
+}
+
+#comments .comment {
+	text-align: left;
+}
+
+.one-container .site-main > article:not(:last-child):after {
+    content: "";
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    display: block;
+    max-width: 400px;
+    margin: 0 auto 60px;
+}
+
+.one-container .inside-article {
+    padding: 0 0 60px;
+}
+
+.nf-form-cont {
+    text-align: center;
+}
+
+.nf-form-fields-required {
+    margin-bottom: 30px;
+}
+
+.main-navigation.toggled .main-nav li {
+    text-align: center !important;
+}
+
+.generate-back-to-top {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.post-image-above-header .inside-article .post-image, 
+.post-image-above-header .inside-article .featured-image {
+    margin-bottom: 60px;
+}
+
+.widget-title:after {
+    content: "";
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-color: inherit;
+    display: block;
+    width: 30px;
+    padding-top: 10px;
+}
+
+.nf-field-label {
+    margin: 0 auto;
+}
+
+.sticky-enabled .main-navigation.is_stuck {
+    box-shadow: 0 0 0;
+}
+
+@media (max-width: 768px) {
+	.main-navigation.toggled .main-nav li.social-icon {
+    	display: inline-block !important;
+	}
+}
+
+@media (min-width: 769px) {
+    .main-navigation .menu > .menu-item > a::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        left: 50%;
+        bottom: 15px;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+
+        display: block;
+        width: 0;
+        height: 1px;
+
+        background-color: currentColor;
+        transition: 0.3s width ease;
+    }
+    .main-navigation .menu > .menu-item.current-menu-item > a::after,
+    .main-navigation .menu > .menu-item > a:hover::after,
+		.main-navigation .menu > .menu-item.sfHover > a::after {
+        width: 50%;
+    }
+} /* End GeneratePress Site CSS */		</style>
+			<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Har-Kuun/sshsharer@1.0/sshsharer-player.css" />
+</head>
+
+<body class="post-template-default single single-post postid-2033 single-format-standard wp-embed-responsive post-image-above-header post-image-aligned-center sticky-menu-no-transition sticky-enabled both-sticky-menu no-sidebar nav-below-header one-container contained-header active-footer-widgets-1 nav-aligned-center header-aligned-center dropdown-hover featured-image-active" itemtype="https://schema.org/Blog" itemscope>
+	<a class="screen-reader-text skip-link" href="traffic-server-cdn-cluster.html#content" title="Skip to content">Skip to content</a>		<header id="masthead" class="site-header grid-container grid-parent" itemtype="https://schema.org/WPHeader" itemscope>
+			<div class="inside-header grid-container grid-parent">
+							<div class="header-widget">
+				<aside id="search-4" class="widget inner-padding widget_search"><form method="get" class="search-form" action="https://qing.su/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" title="Search for:">
+	</label>
+	<input type="submit" class="search-submit" value="Search"></form>
+</aside>			</div>
+			<div class="site-branding">
+						<p class="main-title" itemprop="headline">
+					<a href="https://qing.su/" rel="home">
+						香菇肥牛的博客
+					</a>
+				</p>
+						
+					</div>			</div>
+		</header>
+				<nav id="site-navigation" class="auto-hide-sticky main-navigation grid-container grid-parent sub-menu-right" itemtype="https://schema.org/SiteNavigationElement" itemscope>
+			<div class="inside-navigation grid-container grid-parent">
+								<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
+					<span class="gp-icon icon-menu-bars"><svg viewBox="0 0 512 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M0 96c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24z" />
+					</svg><svg viewBox="0 0 512 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M71.029 71.029c9.373-9.372 24.569-9.372 33.942 0L256 222.059l151.029-151.03c9.373-9.372 24.569-9.372 33.942 0 9.372 9.373 9.372 24.569 0 33.942L289.941 256l151.03 151.029c9.372 9.373 9.372 24.569 0 33.942-9.373 9.372-24.569 9.372-33.942 0L256 289.941l-151.029 151.03c-9.373 9.372-24.569 9.372-33.942 0-9.372-9.373-9.372-24.569 0-33.942L222.059 256 71.029 104.971c-9.372-9.373-9.372-24.569 0-33.942z" />
+					</svg></span><span class="mobile-menu">Menu</span>				</button>
+				<div id="primary-menu" class="main-nav"><ul id="menu-primary-menu" class=" menu sf-menu"><li id="menu-item-1682" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1682"><a href="https://qing.su">首页</a></li>
+<li id="menu-item-1683" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1683"><a href="traffic-server-cdn-cluster.html#">Linux新手教程<span role="presentation" class="dropdown-menu-toggle"><span class="gp-icon icon-arrow"><svg viewBox="0 0 330 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M305.913 197.085c0 2.266-1.133 4.815-2.833 6.514L171.087 335.593c-1.7 1.7-4.249 2.832-6.515 2.832s-4.815-1.133-6.515-2.832L26.064 203.599c-1.7-1.7-2.832-4.248-2.832-6.514s1.132-4.816 2.832-6.515l14.162-14.163c1.7-1.699 3.966-2.832 6.515-2.832 2.266 0 4.815 1.133 6.515 2.832l111.316 111.317 111.316-111.317c1.7-1.699 4.249-2.832 6.515-2.832s4.815 1.133 6.515 2.832l14.162 14.163c1.7 1.7 2.833 4.249 2.833 6.515z" fill-rule="nonzero"/>
+					</svg></span></span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1684" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1684"><a href="https://qing.su/how-to-set-hostname">[新手教程]为Linux服务器设置主机名</a></li>
+	<li id="menu-item-1685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1685"><a href="https://qing.su/change-ssh-port">[新手教程]Linux更改SSH登录端口</a></li>
+	<li id="menu-item-1686" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1686"><a href="https://qing.su/linux-enable-ssh-root-login">[新手教程]Linux设置允许root账户登录SSH</a></li>
+</ul>
+</li>
+<li id="menu-item-1688" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-1688"><a href="https://qing.su/category/%e7%8b%ac%e7%ab%8b%e6%9c%8d%e5%8a%a1%e5%99%a8%e6%95%99%e7%a8%8b">VPS/独服教程<span role="presentation" class="dropdown-menu-toggle"><span class="gp-icon icon-arrow"><svg viewBox="0 0 330 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M305.913 197.085c0 2.266-1.133 4.815-2.833 6.514L171.087 335.593c-1.7 1.7-4.249 2.832-6.515 2.832s-4.815-1.133-6.515-2.832L26.064 203.599c-1.7-1.7-2.832-4.248-2.832-6.514s1.132-4.816 2.832-6.515l14.162-14.163c1.7-1.699 3.966-2.832 6.515-2.832 2.266 0 4.815 1.133 6.515 2.832l111.316 111.317 111.316-111.317c1.7-1.699 4.249-2.832 6.515-2.832s4.815 1.133 6.515 2.832l14.162 14.163c1.7 1.7 2.833 4.249 2.833 6.515z" fill-rule="nonzero"/>
+					</svg></span></span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1715" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1715"><a href="https://qing.su/webservers-tutorial">Web服务器教程</a></li>
+	<li id="menu-item-1690" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1690"><a href="https://qing.su/tag/mxtutorial">邮件服务器教程</a></li>
+	<li id="menu-item-1691" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1691"><a href="https://qing.su/tag/controlpanel">主机控制面板教程</a></li>
+	<li id="menu-item-1991" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1991"><a href="https://qing.su/tag/%e6%8c%96%e7%9f%bf">挖矿教程</a></li>
+</ul>
+</li>
+<li id="menu-item-1752" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1752"><a href="https://qing.su/website-script">网站程序教程</a></li>
+<li id="menu-item-1758" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1758"><a href="https://qing.su/domains">域名出售</a></li>
+<li id="menu-item-2089" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-2089"><a href="https://github.com/Har-Kuun/">个人开源项目<span role="presentation" class="dropdown-menu-toggle"><span class="gp-icon icon-arrow"><svg viewBox="0 0 330 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M305.913 197.085c0 2.266-1.133 4.815-2.833 6.514L171.087 335.593c-1.7 1.7-4.249 2.832-6.515 2.832s-4.815-1.133-6.515-2.832L26.064 203.599c-1.7-1.7-2.832-4.248-2.832-6.514s1.132-4.816 2.832-6.515l14.162-14.163c1.7-1.699 3.966-2.832 6.515-2.832 2.266 0 4.815 1.133 6.515 2.832l111.316 111.317 111.316-111.317c1.7-1.699 4.249-2.832 6.515-2.832s4.815 1.133 6.515 2.832l14.162 14.163c1.7 1.7 2.833 4.249 2.833 6.515z" fill-rule="nonzero"/>
+					</svg></span></span></a>
+<ul class="sub-menu">
+	<li id="menu-item-2090" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-2090"><a href="https://qing.su/article/oneclick-cdn.html">一键搭建高性能的CDN节点服务器</a></li>
+	<li id="menu-item-2109" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-2109"><a href="https://qing.su/article/oneclick-desktop.html">一键安装可以使用浏览器访问的Linux桌面环境</a></li>
+	<li id="menu-item-2091" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-2091"><a href="https://qing.su/article/namebot.html">用C语言写的全自动国别域名扫描器</a></li>
+</ul>
+</li>
+<li id="menu-item-1835" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1835"><a href="traffic-server-cdn-cluster.html#">免费服务<span role="presentation" class="dropdown-menu-toggle"><span class="gp-icon icon-arrow"><svg viewBox="0 0 330 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M305.913 197.085c0 2.266-1.133 4.815-2.833 6.514L171.087 335.593c-1.7 1.7-4.249 2.832-6.515 2.832s-4.815-1.133-6.515-2.832L26.064 203.599c-1.7-1.7-2.832-4.248-2.832-6.514s1.132-4.816 2.832-6.515l14.162-14.163c1.7-1.699 3.966-2.832 6.515-2.832 2.266 0 4.815 1.133 6.515 2.832l111.316 111.317 111.316-111.317c1.7-1.699 4.249-2.832 6.515-2.832s4.815 1.133 6.515 2.832l14.162 14.163c1.7 1.7 2.833 4.249 2.833 6.515z" fill-rule="nonzero"/>
+					</svg></span></span></a>
+<ul class="sub-menu">
+	<li id="menu-item-1836" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1836"><a href="https://qing.su/shorturl">免费短网址服务器</a></li>
+	<li id="menu-item-1814" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1814"><a href="https://qing.su/game">在线玩游戏</a></li>
+</ul>
+</li>
+<li id="menu-item-1687" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1687"><a href="https://qing.su/aboutme">关于香菇肥牛</a></li>
+</ul></div>			</div>
+		</nav>
+		
+	<div id="page" class="site grid-container container hfeed grid-parent">
+				<div id="content" class="site-content">
+			
+	<div id="primary" class="content-area grid-parent mobile-grid-100 grid-100 tablet-grid-100">
+		<main id="main" class="site-main">
+			
+<article id="post-2033" class="post-2033 post type-post status-publish format-standard has-post-thumbnail hentry category-tutorial tag-apache-traffic-server tag-ats tag-cdn tag-dns tag-reverse-proxy tag-traffic-server tag-309 tag-312 tag-313 tag-311 tag-253 tag-314 no-featured-image-padding" itemtype="https://schema.org/CreativeWork" itemscope>
+	<div class="inside-article">
+					<header class="entry-header">
+				<h1 class="entry-title" itemprop="headline">使用Traffic Server组建高性能的CDN集群</h1>		<div class="entry-meta">
+			<span class="posted-on"><time class="updated" datetime="2020-07-17T22:31:28-05:00" itemprop="dateModified">07/17/2020</time><time class="entry-date published" datetime="2020-07-17T16:28:35-05:00" itemprop="datePublished">07/17/2020</time></span> <span class="byline">by <span class="author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope><a class="url fn n" href="https://qing.su/article/author/shc" title="View all posts by 香菇肥牛" rel="author" itemprop="url"><span class="author-name" itemprop="name">香菇肥牛</span></a></span></span> 		</div>
+					</header>
+			
+		<div class="entry-content" itemprop="text">
+			
+<!-- WP QUADS Content Ad Plugin v. 2.0.30 -->
+<div class="quads-location quads-ad1" id="quads-ad1" style="float:none;margin:0px;">
+<script data-ad-client="ca-pub-0438043471702815" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</div>
+<p><a href="https://qing.su/article/traffic-server-reverse-proxy.html" target="_blank" rel="noopener noreferrer">上一篇文章中</a>，我们介绍了使用Apache Traffic Server实现高性能反代网站。今天我们更进一步，使用Traffic Server搭建高性能的CDN网络。</p>
+<!-- WP QUADS Content Ad Plugin v. 2.0.30 -->
+<div class="quads-location quads-ad1" id="quads-ad1" style="float:none;margin:0px;">
+<script data-ad-client="ca-pub-0438043471702815" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</div>
+
+<p>本文作者为香菇肥牛，原文链接为<a href="traffic-server-cdn-cluster.html" target="_blank" rel="noopener noreferrer">https://qing.su/article/traffic-server-cdn-cluster.html</a>, 原创不易，转载需注明本文链接。谢谢!</p>
+<p>&nbsp;</p>
+<h2>1, CDN架构简介</h2>
+<p>CDN全称为Content Distribution Network, 内容分发网络。CDN可以极大地提升网站的访问速度，提升网站性能，给网站加速。</p>
+<p>在无CDN架构中，用户直接使用浏览器请求服务器上的资源。如果访客量大，服务器可能无法响应这么多的请求。同时，如果服务器在国外，那么国内用户访问起来就非常慢。</p>
+<p>CDN节点服务器部署在用户和网站服务器之间。用户访问的时候，可以直接从离自己距离最近、速度最快的服务器上请求网站资源。如果CDN服务器上已经缓存了用户请求的内容，就会直接从CDN服务器上把内容传递给访客；如果没有缓存或者缓存过期，才会再由CDN节点服务器从源站取回内容。这样，就能够提升访客的访问速度，且提升服务器响应性能。一个最简单的CDN网络可以用下图来表示。</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/cdn-scheme-1.png"><img loading="lazy" class="aligncenter size-large wp-image-2051" src="https://qing.su/wp-content/uploads/2020/07/cdn-scheme-1-1024x620.png" alt="" width="1024" height="620" srcset="https://qing.su/wp-content/uploads/2020/07/cdn-scheme-1-1024x620.png 1024w, https://qing.su/wp-content/uploads/2020/07/cdn-scheme-1-300x182.png 300w, https://qing.su/wp-content/uploads/2020/07/cdn-scheme-1-768x465.png 768w, https://qing.su/wp-content/uploads/2020/07/cdn-scheme-1.png 1403w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>本文将部署在Ubuntu 20.04 LTS 64bit操作系统中，其他操作系统的部署流程没有太大差异。本教程中，CDN节点服务器的测试环境为单核，1 GB内存的VPS (实测在512 MB内存的VPS上也可以完美运行).  本文假设源站域名为qing.su, 源站IP为88.88.88.88.  在开始部署CDN之前，请按照上一篇教程(<a href="https://qing.su/article/traffic-server-reverse-proxy.html" target="_blank" rel="noopener noreferrer">https://qing.su/article/traffic-server-reverse-proxy.html</a>)的第二部分内容安装好Traffic Server程序。下面的内容将直接从配置开始。</p>
+<p>接下来各部分中，<strong>第2, 3节是必须设置的</strong>；第4-9节是可选的；第10节CDN服务器上的DNS解析与第11节均衡负载，仅在源站有多个服务器的情况下才需要设置。</p>
+<p>现在，开始教程。</p>
+<p>&nbsp;</p>
+<h2>2, 设置映射规则</h2>
+<p>访客使用域名访问了CDN节点之后，如果CDN节点没有储存访客请求的内容，就需要从源站获取内容。因此，需要设置映射规则 (mapping rules)，使得CDN能够正确地与源站通讯。这里，我们有两个方案：正向代理与反向代理。尽管两者均可完美实现CDN功能，但是为了安全性考虑，如果您只用一层CDN, 那么可以只用反向代理。如果您使用多层CDN, <strong>那么外层（用户直接访问的节点）应该使用反向代理，内层（所有不和用户发生直接交互的节点）应该使用正向代理。</strong></p>
+<h3>(1) 使用正向代理 (Forward Proxy)</h3>
+<p>Apache Traffic Server是一个全功能的代理/缓存/CDN程序，支持正反双向代理与透明代理。因此，我们可以使用正向代理模式来配置CDN与源站交互（你可以把正向代理的CDN服务器理解为一台带缓存的Windows远程桌面，你登录到远程桌面上访问源站）。正向代理与反向代理均可以实现高速缓存，在性能上没有差异。</p>
+<p>配置<em><strong>records.config</strong></em>文件，设置下面几条记录的值：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.reverse_proxy.enabled INT <span style="color: #000000;">0</span><br />
+CONFIG proxy.config.url_remap.remap_required INT <span style="color: #000000;">0</span><br />
+CONFIG proxy.config.url_remap.pristine_host_hdr INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>这样，无需配置mapping rules，服务器即可通过正向代理的方式访问源站。设置为正向代理模式后，服务器目前还不知道我们源站的IP地址。这里有三种方法：1, 我们可以直接更改服务器本地的<em><strong>/etc/hosts</strong></em>文件指明源站IP (最简单且速度最快); 2, 可以按照本文第10节的方法指明源站IP; 3, 可以自己搭建DNS服务器，设置DNS记录。多个源站直接添加多条记录即可。如果您的一个源站有多台服务器，请参考本文第10节与第11节的设置。</p>
+<p>出于安全性的考虑，<strong>不要将正向代理节点部署在CDN架构的最外层节点</strong>。</p>
+<h3>(2) 使用反向代理 (Reverse Proxy)</h3>
+<p>CDN服务商的外层节点一般都使用反向代理的方式。</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/rproxy.jpg"><img loading="lazy" class="aligncenter size-large wp-image-2050" src="https://qing.su/wp-content/uploads/2020/07/rproxy-1024x399.jpg" alt="" width="1024" height="399" srcset="https://qing.su/wp-content/uploads/2020/07/rproxy-1024x399.jpg 1024w, https://qing.su/wp-content/uploads/2020/07/rproxy-300x117.jpg 300w, https://qing.su/wp-content/uploads/2020/07/rproxy-768x299.jpg 768w, https://qing.su/wp-content/uploads/2020/07/rproxy.jpg 1035w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>首先，编辑<em><strong>records.config</strong></em>文件，开启反代模式：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.reverse_proxy.enabled INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.url_remap.remap_required INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.url_remap.pristine_host_hdr INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>然后我们就可以配置映射规则了。这里我们需要再次强调一下，如果您的源站完全被CDN覆盖，<strong>那么不建议您在源站上开启SSL</strong>, 因为这完全没有必要，反而会额外增加源站负载。<strong>您只需要在CDN服务器上配置SSL即可。</strong></p>
+<p>编辑文件<em><strong>remap.config</strong></em>, 如果源站没有开启SSL, 添加下面的内容：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">redirect http:<span style="color: #000000; font-weight: bold;">//</span>qing.su<span style="color: #000000; font-weight: bold;">/</span> https:<span style="color: #000000; font-weight: bold;">//</span>qing.su<span style="color: #000000; font-weight: bold;">/</span><br />
+map https:<span style="color: #000000; font-weight: bold;">//</span>qing.su<span style="color: #000000; font-weight: bold;">/</span> http:<span style="color: #000000; font-weight: bold;">//</span>88.88.88.88:<span style="color: #000000;">80</span><span style="color: #000000; font-weight: bold;">/</span></div></td></tr></tbody></table></div>
+<p>如果源站开启了SSL, 则添加下面的内容：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">redirect http:<span style="color: #000000; font-weight: bold;">//</span>qing.su<span style="color: #000000; font-weight: bold;">/</span> https:<span style="color: #000000; font-weight: bold;">//</span>qing.su<span style="color: #000000; font-weight: bold;">/</span><br />
+map https:<span style="color: #000000; font-weight: bold;">//</span>qing.su<span style="color: #000000; font-weight: bold;">/</span> https:<span style="color: #000000; font-weight: bold;">//</span>88.88.88.88:<span style="color: #000000;">443</span><span style="color: #000000; font-weight: bold;">/</span></div></td></tr></tbody></table></div>
+<p>请注意，IP地址之后的端口号<strong>不可省略</strong>。多个源站则添加多条记录即可。</p>
+<p>如果您的一个源站有多台后端服务器，请参考本文第10节与第11节的设置。</p>
+<p>&nbsp;</p>
+<h2>3, 设置缓存规则</h2>
+<p>缓存了源站的文件，才能让访客的访问速度得到提升，否则如果只反代而不缓存，那么访客的每次请求都要回源，访问速度反而会下降。</p>
+<p>编辑文件<em><strong>records.config</strong></em>, 添加下面的内容：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.http.cache.http INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.http.cache.ignore_client_cc_max_age INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.http.normalize_ae_gzip INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.http.cache.cache_responses_to_cookies INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.http.cache.cache_urls_that_look_dynamic INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.http.cache.when_to_revalidate INT <span style="color: #000000;">0</span><br />
+CONFIG proxy.config.http.cache.required_headers INT <span style="color: #000000;">2</span><br />
+CONFIG proxy.config.http.cache.ignore_client_no_cache INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>这里我们设置了基本的缓存属性，比如忽略客户端no cache请求，开启gzip压缩，等等。接下来，对各文件类型设置缓存期限。编辑文件<em><strong>cache.config</strong></em>，添加下面的行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap"><span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=js ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=css ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=html ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=xml ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=ts ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=jpeg ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=mp4 ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=<span style="color: #c20cb9; font-weight: bold;">zip</span> ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=gif ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=jpg ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=swf ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">suffix</span>=m3u8 ttl-in-cache=5d<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">scheme</span>=https ttl-in-cache=1h<br />
+<span style="color: #007800;">url_regex</span>=.<span style="color: #000000; font-weight: bold;">*</span> <span style="color: #007800;">scheme</span>=http ttl-in-cache=1h</div></td></tr></tbody></table></div>
+<p>您可以按照自己的需求自行设置。</p>
+<p>对于频繁请求的小文件，可以将其储存于系统内存中，加快读取速度。编辑文件<em><strong>records.config</strong></em>, 设置下面的内容：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.cache.ram_cache.size INT 200M<br />
+CONFIG proxy.config.cache.ram_cache_cutoff INT <span style="color: #000000;">4194304</span><br />
+CONFIG proxy.config.cache.ram_cache.compress INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>上面三行中，我们在内存中设置了200MB空间用来存储文件大小在4MB以内的小文件，且启用了内存压缩。</p>
+<p>&nbsp;</p>
+<h2>4, 缓存储存空间及缓存分区</h2>
+<p>在上一节中，我们设置了缓存规则。这一节我们设置缓存大小，并开启缓存分区。</p>
+<p>编辑文件<em><strong>storage.config</strong></em>, 设置缓存大小。比如，我这里设置为2 GB:</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">var<span style="color: #000000; font-weight: bold;">/</span>trafficserver 2048M</div></td></tr></tbody></table></div>
+<p>接下来我们设置缓存分区。Traffic Server支持将储存空间划分为不同大小的分区，然后可以给不同的源站设置不同的缓存大小。同时，不同的缓存分区可以并行储存读取，加快缓存读取速度。</p>
+<p>编辑文件<em><strong>volume.config</strong></em>, 我们这里将缓存分为6个分区：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br />4<br />5<br />6<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap"><span style="color: #007800;">volume</span>=<span style="color: #000000;">1</span> <span style="color: #007800;">scheme</span>=http <span style="color: #007800;">size</span>=<span style="color: #000000;">5</span><span style="color: #000000; font-weight: bold;">%</span><br />
+<span style="color: #007800;">volume</span>=<span style="color: #000000;">2</span> <span style="color: #007800;">scheme</span>=http <span style="color: #007800;">size</span>=<span style="color: #000000;">5</span><span style="color: #000000; font-weight: bold;">%</span><br />
+<span style="color: #007800;">volume</span>=<span style="color: #000000;">3</span> <span style="color: #007800;">scheme</span>=http <span style="color: #007800;">size</span>=<span style="color: #000000;">15</span><span style="color: #000000; font-weight: bold;">%</span><br />
+<span style="color: #007800;">volume</span>=<span style="color: #000000;">4</span> <span style="color: #007800;">scheme</span>=http <span style="color: #007800;">size</span>=<span style="color: #000000;">15</span><span style="color: #000000; font-weight: bold;">%</span><br />
+<span style="color: #007800;">volume</span>=<span style="color: #000000;">5</span> <span style="color: #007800;">scheme</span>=http <span style="color: #007800;">size</span>=<span style="color: #000000;">25</span><span style="color: #000000; font-weight: bold;">%</span><br />
+<span style="color: #007800;">volume</span>=<span style="color: #000000;">6</span> <span style="color: #007800;">scheme</span>=http <span style="color: #007800;">size</span>=<span style="color: #000000;">35</span><span style="color: #000000; font-weight: bold;">%</span></div></td></tr></tbody></table></div>
+<p>然后编辑<em><strong>hosting.config</strong></em>文件，为域名指派不同的缓存分区：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap"><span style="color: #007800;">domain</span>=qing.su <span style="color: #007800;">volume</span>=<span style="color: #000000;">1</span>,<span style="color: #000000;">2</span>,<span style="color: #000000;">3</span>,<span style="color: #000000;">4</span>,<span style="color: #000000;">5</span>,<span style="color: #000000;">6</span><br />
+<span style="color: #007800;">domain</span>=hostloc.com <span style="color: #007800;">volume</span>=<span style="color: #000000;">1</span>,<span style="color: #000000;">2</span>,<span style="color: #000000;">3</span>,<span style="color: #000000;">4</span></div></td></tr></tbody></table></div>
+<p>&nbsp;</p>
+<h2>5, 安装SSL证书，开启OCSP装订与HTTP/2</h2>
+<p>访客直接与CDN服务器发生交互，因此我们需要在CDN服务器上安装SSL证书。</p>
+<p>首先，我们要开启SSL支持。编辑<em><strong>records.config</strong></em>, 找到含有server_ports的这一行，修改成如下：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.http.server_ports STRING <span style="color: #000000;">80</span> <span style="color: #000000;">443</span>:<span style="color: #007800;">proto</span>=http2;http:ssl</div></td></tr></tbody></table></div>
+<p>在这个设置中，我们开启了SSL, 并为https开启了HTTP/2传输。可以用浏览器查看是否启用成功，如下图绿框里的h2协议码。</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/http2.png"><img loading="lazy" class="aligncenter size-large wp-image-2052" src="https://qing.su/wp-content/uploads/2020/07/http2-1024x622.png" alt="" width="1024" height="622" srcset="https://qing.su/wp-content/uploads/2020/07/http2-1024x622.png 1024w, https://qing.su/wp-content/uploads/2020/07/http2-300x182.png 300w, https://qing.su/wp-content/uploads/2020/07/http2-768x466.png 768w, https://qing.su/wp-content/uploads/2020/07/http2.png 1064w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>如果您使用了最新版本的Traffic Server (10.0), 您还可以设置QUIC-HTTP/3.  由于本文仍然用的是老版本的Traffic Server, 无法设置QUIC-HTTP/3, 因此就不做过多介绍了，具体的设置方法请参考<a href="https://docs.trafficserver.apache.org/en/latest/admin-guide/files/records.config.en.html?highlight=quic#quic-configuration" target="_blank" rel="nofollow noopener noreferrer">官方文档</a>。</p>
+<p>指明SSL证书存放的文件夹：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.ssl.server.cert.path STRING <span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>trafficserver<span style="color: #000000; font-weight: bold;">/</span>ssl<span style="color: #000000; font-weight: bold;">/</span><br />
+CONFIG proxy.config.ssl.server.private_key.path STRING <span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>trafficserver<span style="color: #000000; font-weight: bold;">/</span>ssl<span style="color: #000000; font-weight: bold;">/</span></div></td></tr></tbody></table></div>
+<p>然后我们把证书存放在<em><strong>/etc/trafficserver/ssl/</strong></em>文件夹中。假设私钥文件为<strong>qing.su.key</strong>, 证书文件为<strong>qing.su.crt</strong>, CA中间链证书文件为<strong>qing.su.ca-certs.crt</strong>, 那么我们编辑<em><strong>ssl_multicert.config</strong></em>, 添加下面的行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap"><span style="color: #007800;">dest_ip</span>=88.88.88.88 <span style="color: #007800;">ssl_cert_name</span>=qing.su.crt <span style="color: #007800;">ssl_key_name</span>=qing.su.key <span style="color: #007800;">ssl_ca_name</span>=qing.su.ca-certs.crt</div></td></tr></tbody></table></div>
+<p>就设置好了SSL证书。</p>
+<p>如果您使用Let&#8217;s Encrypt证书，那么我建议您开启OCSP装订，原因是该证书CA的OCSP证书被墙了，会导致国内访问速度慢。开启OCSP装订很简单，编辑文件<em><strong>records.config</strong></em>, 设置如下的行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.ssl.ocsp.enabled INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>这样就开启了OCSP装订。OCSP缓存周期等参数可以保持默认。</p>
+<p>&nbsp;</p>
+<h2>6, 自定义HTTP Header</h2>
+<p>在Apache Traffic Server中，我们可以方便地更改响应的Headers.  这里需要用到header_rewrite插件。</p>
+<p>首先，编辑<em><strong>plugin.config</strong></em>文件，加载header_rewrite插件：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">header_rewrite.so <span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>trafficserver<span style="color: #000000; font-weight: bold;">/</span>header_rewrite.config</div></td></tr></tbody></table></div>
+<p>这里，我们定义了header_rewrite插件的配置文件名，<em><strong>header_rewrite.config</strong></em>.  编辑该文件，按您的个人需求来修改，比如：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">cond <span style="color: #000000; font-weight: bold;">%</span><span style="color: #7a0874; font-weight: bold;">&#123;</span>SEND_RESPONSE_HDR_HOOK<span style="color: #7a0874; font-weight: bold;">&#125;</span> <span style="color: #7a0874; font-weight: bold;">&#91;</span>AND<span style="color: #7a0874; font-weight: bold;">&#93;</span><br />
+cond <span style="color: #000000; font-weight: bold;">%</span><span style="color: #7a0874; font-weight: bold;">&#123;</span>HEADER:server<span style="color: #7a0874; font-weight: bold;">&#125;</span> =ATS<span style="color: #000000; font-weight: bold;">/</span>8.0.8<br />
+set-header server <span style="color: #ff0000;">&quot;shc-cdn-server&quot;</span></div></td></tr></tbody></table></div>
+<p>这里，我们将header中包含ATS/8.0.8字符串的server字段值修改为&#8221;shc-cdn-server&#8221;.  可以用浏览器查看修改的headers.</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/headers.png"><img loading="lazy" class="aligncenter size-large wp-image-2053" src="https://qing.su/wp-content/uploads/2020/07/headers-1024x569.png" alt="" width="1024" height="569" srcset="https://qing.su/wp-content/uploads/2020/07/headers-1024x569.png 1024w, https://qing.su/wp-content/uploads/2020/07/headers-300x167.png 300w, https://qing.su/wp-content/uploads/2020/07/headers-768x427.png 768w, https://qing.su/wp-content/uploads/2020/07/headers.png 1301w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>该插件具体的语法可以参考<a href="https://docs.trafficserver.apache.org/en/8.0.x/admin-guide/plugins/header_rewrite.en.html" target="_blank" rel="nofollow noopener noreferrer">官方文档</a>。</p>
+<p>&nbsp;</p>
+<h2>7, 配置VIA Header</h2>
+<p>Via Header是中间代理添加的信头标识，<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Via" target="_blank" rel="nofollow noopener noreferrer">具体介绍可以看这里</a>。Traffic Server支持via header, 如果我们开启了Via Header功能，则Traffic Server会在所有请求的应答中添加一个字符串，用来提供CDN服务器处理该请求时的状态信息，比如缓存是否命中等。通过解读Via信头，我们可以用来调试CDN服务器。</p>
+<p>开启Via信头很简单。编辑<em><strong>records.config</strong></em>, 修改下面的行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.http.insert_request_via_str INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.http.insert_response_via_str INT <span style="color: #000000;">2</span></div></td></tr></tbody></table></div>
+<p>如果将第二行的值设置为3，则会给出更详细的24位VIA信头；如果设置为2，则会给出6位信头。一般来说，默认的6位Via信头已经能够提供足够多的信息了。开启了Via信头之后，如何分析呢？我们举下面几个例子。请注意图中绿框框起来的部分。</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/headers_hit_via.png"><img loading="lazy" class="aligncenter size-large wp-image-2054" src="https://qing.su/wp-content/uploads/2020/07/headers_hit_via-1024x568.png" alt="" width="1024" height="568" srcset="https://qing.su/wp-content/uploads/2020/07/headers_hit_via-1024x568.png 1024w, https://qing.su/wp-content/uploads/2020/07/headers_hit_via-300x166.png 300w, https://qing.su/wp-content/uploads/2020/07/headers_hit_via-768x426.png 768w, https://qing.su/wp-content/uploads/2020/07/headers_hit_via.png 1300w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>如上图，绿框框起来的部分就是Via header值。图中的值为<em><strong>[cHs f ]</strong></em>.  Traffic Server包含了<em><strong>traffic_via</strong></em>命令行工具，可以帮助我们解码。执行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">traffic_via <span style="color: #ff0000;">'[cHs f ]'</span></div></td></tr></tbody></table></div>
+<p>即可看到解码后的含义：</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/via_1.png"><img loading="lazy" class="aligncenter size-full wp-image-2055" src="https://qing.su/wp-content/uploads/2020/07/via_1.png" alt="" width="705" height="103" srcset="https://qing.su/wp-content/uploads/2020/07/via_1.png 705w, https://qing.su/wp-content/uploads/2020/07/via_1-300x44.png 300w" sizes="(max-width: 705px) 100vw, 705px" /></a></p>
+<p>这里可以看到，<strong>该页面的请求命中了缓存</strong>，因此无需从源站获取内容。</p>
+<p>再来看这张图，</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/headers_not_hit_via.png"><img loading="lazy" class="aligncenter size-large wp-image-2056" src="https://qing.su/wp-content/uploads/2020/07/headers_not_hit_via-1024x570.png" alt="" width="1024" height="570" srcset="https://qing.su/wp-content/uploads/2020/07/headers_not_hit_via-1024x570.png 1024w, https://qing.su/wp-content/uploads/2020/07/headers_not_hit_via-300x167.png 300w, https://qing.su/wp-content/uploads/2020/07/headers_not_hit_via-768x428.png 768w, https://qing.su/wp-content/uploads/2020/07/headers_not_hit_via.png 1296w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>Via header值为<em><strong>[cMsSfW]</strong></em>, 解码后得到下图的解释：</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/via_2.png"><img loading="lazy" class="aligncenter size-full wp-image-2057" src="https://qing.su/wp-content/uploads/2020/07/via_2.png" alt="" width="707" height="99" srcset="https://qing.su/wp-content/uploads/2020/07/via_2.png 707w, https://qing.su/wp-content/uploads/2020/07/via_2-300x42.png 300w" sizes="(max-width: 707px) 100vw, 707px" /></a></p>
+<p>可以看到，<strong>该请求没有命中缓存</strong>，因此我们的CDN服务器从源站获取了请求的内容反馈给访客，并且<strong>将该内容写入了缓存</strong>。</p>
+<p>还有一种常见的情况，如下图：</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/headers_stale_via.png"><img loading="lazy" class="aligncenter size-large wp-image-2058" src="https://qing.su/wp-content/uploads/2020/07/headers_stale_via-1024x565.png" alt="" width="1024" height="565" srcset="https://qing.su/wp-content/uploads/2020/07/headers_stale_via-1024x565.png 1024w, https://qing.su/wp-content/uploads/2020/07/headers_stale_via-300x165.png 300w, https://qing.su/wp-content/uploads/2020/07/headers_stale_via-768x424.png 768w, https://qing.su/wp-content/uploads/2020/07/headers_stale_via.png 1302w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>Via header值为<em><strong>[cSsSfU]</strong></em>.  解码后得到下图的解释：</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/via_3.png"><img loading="lazy" class="aligncenter size-full wp-image-2059" src="https://qing.su/wp-content/uploads/2020/07/via_3.png" alt="" width="718" height="98" srcset="https://qing.su/wp-content/uploads/2020/07/via_3.png 718w, https://qing.su/wp-content/uploads/2020/07/via_3-300x41.png 300w" sizes="(max-width: 718px) 100vw, 718px" /></a></p>
+<p>可以看出，<strong>该请求命中了缓存，但是缓存已过期</strong>。因此，CDN服务器从源站获取了请求的内容，反馈给访客，并且<strong>更新了CDN服务器上的缓存</strong>。</p>
+<p>如果您开启了24位长Via信头，那么您需要使用这个在线工具来解码：<a href="http://trafficserver.apache.org/tools/via" target="_blank" rel="nofollow noopener noreferrer">http://trafficserver.apache.org/tools/via</a>.  系统中提供的traffic_via命令行工具在解码24位Via header时会报错。</p>
+<p>一般来说，Via header是在调试、配置CDN时使用的工具。当您的CDN服务器完全搭建好后，建议您关闭Via header功能。</p>
+<p>&nbsp;</p>
+<h2>8, 日志与状态监测</h2>
+<p>Traffic Server生成的日志在<em><strong>/usr/local/var/log/trafficserver</strong></em>目录。可以使用tail -f实施监测日志变化：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap"><span style="color: #c20cb9; font-weight: bold;">tail</span> <span style="color: #660033;">-f</span> <span style="color: #000000; font-weight: bold;">/</span>usr<span style="color: #000000; font-weight: bold;">/</span>local<span style="color: #000000; font-weight: bold;">/</span>var<span style="color: #000000; font-weight: bold;">/</span>log<span style="color: #000000; font-weight: bold;">/</span>trafficserver<span style="color: #000000; font-weight: bold;">/</span>manager.log<br />
+<span style="color: #c20cb9; font-weight: bold;">tail</span> <span style="color: #660033;">-f</span> <span style="color: #000000; font-weight: bold;">/</span>usr<span style="color: #000000; font-weight: bold;">/</span>local<span style="color: #000000; font-weight: bold;">/</span>var<span style="color: #000000; font-weight: bold;">/</span>log<span style="color: #000000; font-weight: bold;">/</span>trafficserver<span style="color: #000000; font-weight: bold;">/</span>diags.log<br />
+<span style="color: #c20cb9; font-weight: bold;">tail</span> <span style="color: #660033;">-f</span> <span style="color: #000000; font-weight: bold;">/</span>usr<span style="color: #000000; font-weight: bold;">/</span>local<span style="color: #000000; font-weight: bold;">/</span>var<span style="color: #000000; font-weight: bold;">/</span>log<span style="color: #000000; font-weight: bold;">/</span>trafficserver<span style="color: #000000; font-weight: bold;">/</span>error.log</div></td></tr></tbody></table></div>
+<p>Traffic Server提供了<em><strong>traffic_logstats</strong></em>工具，让我们更直观地了解CDN服务器的工作状态。比如我们源站的IP为88.88.88.88, 那么我们可以执行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">traffic_logstats <span style="color: #660033;">-o</span> 88.88.88.88:<span style="color: #000000;">443</span></div></td></tr></tbody></table></div>
+<p>命令执行的结果如下。系统会生成非常详细的日志报告，包含所有的服务器运行状态（命中情况，错误分析，DNS解析命中，等等……您可以自行尝试）。如下图。</p>
+<p>&nbsp;</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/traffic_logstats-1.png"><img loading="lazy" class="aligncenter size-full wp-image-2062" src="https://qing.su/wp-content/uploads/2020/07/traffic_logstats-1.png" alt="" width="642" height="486" srcset="https://qing.su/wp-content/uploads/2020/07/traffic_logstats-1.png 642w, https://qing.su/wp-content/uploads/2020/07/traffic_logstats-1-300x227.png 300w" sizes="(max-width: 642px) 100vw, 642px" /></a></p>
+<p>上图中，我们的CDN服务器收到的请求中有200多万次命中了，一千多次没有命中，还有900次错误（都是压力测试的时候产生的）。</p>
+<p>另外，也可以使用<em><strong>traffic_top</strong></em>命令，使用类似于Linux Top指令一样的界面查看CDN服务器运行状态。执行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">traffic_top</div></td></tr></tbody></table></div>
+<p>效果如下图所示：</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/traffic_top_new.png"><img loading="lazy" class="aligncenter size-full wp-image-2061" src="https://qing.su/wp-content/uploads/2020/07/traffic_top_new.png" alt="" width="644" height="390" srcset="https://qing.su/wp-content/uploads/2020/07/traffic_top_new.png 644w, https://qing.su/wp-content/uploads/2020/07/traffic_top_new-300x182.png 300w" sizes="(max-width: 644px) 100vw, 644px" /></a></p>
+<p>&nbsp;</p>
+<h2>9, 惊群效应与拥塞控制</h2>
+<p>做CDN一般都需要考虑避免惊群效应 (Thundering Herd Effect) 的出现，尤其是节点数较多的情况，否则很可能在某些时候给源站产生非常大的突发请求，导致源站宕机。</p>
+<p>Traffic Server提供的运作机制可以避免惊群的出现。编辑<em><strong>records.config</strong></em>文件，添加下面的行：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.cache.enable_read_while_writer INT <span style="color: #000000;">1</span><br />
+CONFIG proxy.config.http.background_fill_active_timeout INT <span style="color: #000000;">0</span><br />
+CONFIG proxy.config.http.background_fill_completed_threshold FLOAT <span style="color: #000000;">0.000000</span><br />
+CONFIG proxy.config.cache.max_doc_size INT <span style="color: #000000;">0</span><br />
+CONFIG proxy.config.cache.read_while_writer.max_retries INT <span style="color: #000000;">10</span><br />
+CONFIG proxy.config.cache.read_while_writer_retry.delay INT <span style="color: #000000;">50</span><br />
+CONFIG proxy.config.http.cache.max_open_read_retries INT <span style="color: #000000;">5</span><br />
+CONFIG proxy.config.http.cache.open_read_retry_time INT <span style="color: #000000;">10</span></div></td></tr></tbody></table></div>
+<p>还可以开启服务器的拥塞控制，更好地应对高流量并发：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.http.congestion_control.enabled INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>我们使用loader.io对一台1核1GB内存的轻量VPS搭建的CDN节点进行了压力测试，持续并发2000个访客并不间断地向服务器发送请求（一分钟之内共发送了38万个请求），全部成功。此时CDN节点服务器的负载仅在40%左右。由于达到了VPS服务商的网络带宽与iops限制，因此无法进一步提升并发量来测试了。（测试链接：<a href="https://bit.ly/32xD1nI" target="_blank" rel="nofollow noopener noreferrer">https://bit.ly/32xD1nI</a>）因此，使用这单个1核1GB VPS一天处理几万个UV还是很轻松的。</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/loadtest2000-1.png"><img loading="lazy" src="https://qing.su/wp-content/uploads/2020/07/loadtest2000-1-1024x657.png" alt="" width="1024" height="657" class="aligncenter size-large wp-image-2067" srcset="https://qing.su/wp-content/uploads/2020/07/loadtest2000-1-1024x657.png 1024w, https://qing.su/wp-content/uploads/2020/07/loadtest2000-1-300x193.png 300w, https://qing.su/wp-content/uploads/2020/07/loadtest2000-1-768x493.png 768w, https://qing.su/wp-content/uploads/2020/07/loadtest2000-1.png 1229w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>&nbsp;</p>
+<h2>10, CDN服务器上的DNS解析</h2>
+<p>Traffic Server提供了HostDB功能，我们可以将其理解为仅供Traffic Server使用的/etc/hosts文件。区别于/etc/hosts文件的地方是可以使用很多参数来控制HostDB, 实现服务器上的DNS缓存与解析。</p>
+<p>HostDB的主要作用是缓存源站域名的DNS请求。实际上，如果您的源站只有一台服务器，那么如果你按照我上面的配置来操作的话并不需要用域名的方式来请求源站，因此无需使用HostDB功能。仅当您的源站有多台服务器的时候，才需要使用HostDB功能。</p>
+<p>编辑<em><strong>records.config</strong></em>文件，指明一个hostdb文件的位置：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.hostdb.host_file.path STRING <span style="color: #000000; font-weight: bold;">/</span>etc<span style="color: #000000; font-weight: bold;">/</span>trafficserver<span style="color: #000000; font-weight: bold;">/</span>hostdb.conf</div></td></tr></tbody></table></div>
+<p>然后按照hosts文件的格式编辑<em><strong>hostdb.conf</strong></em>文件(IP hostname一行一条记录)。</p>
+<p>我们还可以设置轮询：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.hostdb.strict_round_robin INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>其他设置，比如TTL, 缓存更新频率，轮询频率等设置，请<a href="https://docs.trafficserver.apache.org/en/latest/admin-guide/files/records.config.en.html?highlight=hostdb#hostdb" target="_blank" rel="nofollow noopener noreferrer">参考官方文档</a>，这里不做过多介绍了。</p>
+<p>&nbsp;</p>
+<h2>11, 均衡负载</h2>
+<p>Traffic Server是功能全面的CDN程序，支持设置均衡负载(Load Balancing).  简而言之，如果您的源站本身就有多台服务器，那么可以通过配置CDN, 实现回源时均衡负载，这样不会给单一源站带来过大的压力。</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/cdn-scheme-2.png"><img loading="lazy" class="aligncenter size-large wp-image-2064" src="https://qing.su/wp-content/uploads/2020/07/cdn-scheme-2-1024x686.png" alt="" width="1024" height="686" srcset="https://qing.su/wp-content/uploads/2020/07/cdn-scheme-2-1024x686.png 1024w, https://qing.su/wp-content/uploads/2020/07/cdn-scheme-2-300x201.png 300w, https://qing.su/wp-content/uploads/2020/07/cdn-scheme-2-768x514.png 768w, https://qing.su/wp-content/uploads/2020/07/cdn-scheme-2.png 1401w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>配置均衡负载有三种方法: 1, 是使用Balancer插件; 2, 使用父级代理的方式; 3, 使用上一节介绍的HostDB。我们这里仅介绍使用第二种方法。使用插件的方法较简单，但是由于可以被父级代理的功能完全代替，该插件将在未来版本的Traffic Server中被淘汰，因此我这里就不做介绍了，如果感兴趣可以<a href="https://docs.trafficserver.apache.org/en/8.0.x/admin-guide/plugins/balancer.en.html" target="_blank" rel="nofollow noopener noreferrer">自行查看</a>。</p>
+<p>我们假设qing.su的源站有三个IP, 77.77.77.77, 88.88.88.88, 99.99.99.99.  为了实现均衡负载，在配置映射规则（第2节）时，我们需要用hostname而不是IP地址的方式指明源站地址。因此，在<em><strong>remap.config</strong></em>中，我们可以这样添加规则：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">map https:<span style="color: #000000; font-weight: bold;">//</span>qing.su https:<span style="color: #000000; font-weight: bold;">//</span>origin.qing.su</div></td></tr></tbody></table></div>
+<p>这里，origin.qing.su是一个不存在的，我们随便分配的子域名。然后，编辑<em><strong>records.config</strong></em>, 开启父级缓存：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap">CONFIG proxy.config.http.parent_proxy_routing_enable INT <span style="color: #000000;">1</span></div></td></tr></tbody></table></div>
+<p>最后，在<em><strong>parents.config</strong></em>文件中指明源站IP以及均衡负载的IP响应规则：</p>
+<div class="codecolorer-container bash geshi" style="overflow:auto;white-space:nowrap;"><table cellspacing="0" cellpadding="0"><tbody><tr><td class="line-numbers"><div>1<br /></div></td><td><div class="bash codecolorer" style="white-space:nowrap"><span style="color: #007800;">dest_domain</span>=origin.qing.su <span style="color: #007800;">parent</span>=<span style="color: #ff0000;">&quot;77.77.77.77:443|2.0, 88.88.88.88:443|3.0, 99.99.99.99:443|5.0&quot;</span> <span style="color: #007800;">parent_is_proxy</span>=<span style="color: #c20cb9; font-weight: bold;">false</span> <span style="color: #007800;">round_robin</span>=strict</div></td></tr></tbody></table></div>
+<p>在上面这个例子中，我们使用这三个IP地址开启了轮询均衡负载，并且分配了权重(20%, 30%, 50%)。其他的配置规则可以参考<a href="https://docs.trafficserver.apache.org/en/8.0.x/admin-guide/files/parent.config.en.html?highlight=parent" target="_blank" rel="nofollow noopener noreferrer">官方文档</a>。</p>
+<p>&nbsp;</p>
+<p>到这里，一台CDN服务器就基本设置完毕了。等您把所有节点全部设置完毕后，您需要设置域名的DNS解析。如果您不需要商用，则直接在DNS服务商处将您的域名按照线路解析到不同的CDN节点上即可，或者设置<strong>轮询</strong>(Round Robin)。若您需要商用，建议您自行搭建Geo DNS, 以便用户设置解析。以后我们也会介绍Geo DNS的部署。这里，我们直接使用现成的免费DNS服务器（国内推荐阿里云，国外推荐Route53）就可以了。</p>
+<p><a href="https://qing.su/wp-content/uploads/2020/07/alidns.png"><img loading="lazy" class="aligncenter size-full wp-image-2065" src="https://qing.su/wp-content/uploads/2020/07/alidns.png" alt="" width="896" height="422" srcset="https://qing.su/wp-content/uploads/2020/07/alidns.png 896w, https://qing.su/wp-content/uploads/2020/07/alidns-300x141.png 300w, https://qing.su/wp-content/uploads/2020/07/alidns-768x362.png 768w" sizes="(max-width: 896px) 100vw, 896px" /></a></p>
+<p>综上，我们使用Traffic Server搭建好了CDN网络。我们详细说明了映射规则与缓存规则的配置，并介绍了缓存分区、修改信头、配置SSL、状态检测、均衡负载、拥塞控制与处理惊群等具体细节。Traffic Server拥有完整详细的产品手册，如果您想了解更多，<strong><a href="https://docs.trafficserver.apache.org/en/latest/getting-started/index.en.html" target="_blank" rel="nofollow noopener noreferrer">请点击参考官方文档</a></strong>。</p>
+<p>其他的功能，比如CDN分层，众多插件的使用，Lua编程模块等等，这里就不做太多介绍了。另外，如果您需要商用Traffic Server CDN, <strong>你可以考虑安装开源免费的主控端<a href="https://traffic-control-cdn.readthedocs.io/en/latest/index.html" target="_blank" rel="nofollow noopener noreferrer">Traffic Control</a></strong>.  Traffic Control用于控制Traffic Server搭建的CDN服务器集群，拥有完整的图形界面，用户管理，DNS, 签发SSL, 均衡负载，等等一切你能想到的CDN服务商需要的功能，您可以自行研究。以后有空的时候我可能也会介绍。</p>
+<p>如果您对本篇文章的内容有任何其他疑问，欢迎您在这里留言，我将尽力解答。本文作者为香菇肥牛，原文链接为<a href="traffic-server-cdn-cluster.html" target="_blank" rel="noopener noreferrer">https://qing.su/article/traffic-server-cdn-cluster.html</a>, 原创不易，转载需注明本文链接。谢谢!
+<!-- WP QUADS Content Ad Plugin v. 2.0.30 -->
+<div class="quads-location quads-ad1" id="quads-ad1" style="float:none;margin:0px;">
+<script data-ad-client="ca-pub-0438043471702815" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</div>
+
+		</div>
+
+				<footer class="entry-meta">
+			<span class="cat-links"><span class="gp-icon icon-categories"><svg viewBox="0 0 512 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M0 112c0-26.51 21.49-48 48-48h110.014a48 48 0 0 1 43.592 27.907l12.349 26.791A16 16 0 0 0 228.486 128H464c26.51 0 48 21.49 48 48v224c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V112z" fill-rule="nonzero"/>
+					</svg></span><span class="screen-reader-text">Categories </span><a href="https://qing.su/category/tutorial" rel="category tag">VPS教程</a></span> <span class="tags-links"><span class="gp-icon icon-tags"><svg viewBox="0 0 512 512" aria-hidden="true" role="img" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em">
+						<path d="M20 39.5c-8.836 0-16 7.163-16 16v176c0 4.243 1.686 8.313 4.687 11.314l224 224c6.248 6.248 16.378 6.248 22.626 0l176-176c6.244-6.244 6.25-16.364.013-22.615l-223.5-224A15.999 15.999 0 0 0 196.5 39.5H20zm56 96c0-13.255 10.745-24 24-24s24 10.745 24 24-10.745 24-24 24-24-10.745-24-24z"/>
+						<path d="M259.515 43.015c4.686-4.687 12.284-4.687 16.97 0l228 228c4.686 4.686 4.686 12.284 0 16.97l-180 180c-4.686 4.687-12.284 4.687-16.97 0-4.686-4.686-4.686-12.284 0-16.97L479.029 279.5 259.515 59.985c-4.686-4.686-4.686-12.284 0-16.97z" fill-rule="nonzero"/>
+					</svg></span><span class="screen-reader-text">Tags </span><a href="https://qing.su/tag/apache-traffic-server" rel="tag">Apache Traffic Server</a>, <a href="https://qing.su/tag/ats" rel="tag">ATS</a>, <a href="https://qing.su/tag/cdn" rel="tag">CDN</a>, <a href="https://qing.su/tag/dns" rel="tag">DNS</a>, <a href="https://qing.su/tag/reverse-proxy" rel="tag">Reverse Proxy</a>, <a href="https://qing.su/tag/traffic-server" rel="tag">Traffic Server</a>, <a href="https://qing.su/tag/%e5%8f%8d%e5%90%91%e4%bb%a3%e7%90%86" rel="tag">反向代理</a>, <a href="https://qing.su/tag/%e5%9d%87%e8%a1%a1%e8%b4%9f%e8%bd%bd" rel="tag">均衡负载</a>, <a href="https://qing.su/tag/%e6%83%8a%e7%be%a4" rel="tag">惊群</a>, <a href="https://qing.su/tag/%e6%ad%a3%e5%90%91%e4%bb%a3%e7%90%86" rel="tag">正向代理</a>, <a href="https://qing.su/tag/%e7%bc%93%e5%ad%98" rel="tag">缓存</a>, <a href="https://qing.su/tag/%e9%ab%98%e5%8f%af%e7%94%a8" rel="tag">高可用</a></span> 		<nav id="nav-below" class="post-navigation">
+			<span class="screen-reader-text">Post navigation</span>
+
+			<div class="nav-previous"><span class="gp-icon icon-arrow-left"><svg viewBox="0 0 192 512" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414">
+						<path d="M178.425 138.212c0 2.265-1.133 4.813-2.832 6.512L64.276 256.001l111.317 111.277c1.7 1.7 2.832 4.247 2.832 6.513 0 2.265-1.133 4.813-2.832 6.512L161.43 394.46c-1.7 1.7-4.249 2.832-6.514 2.832-2.266 0-4.816-1.133-6.515-2.832L16.407 262.514c-1.699-1.7-2.832-4.248-2.832-6.513 0-2.265 1.133-4.813 2.832-6.512l131.994-131.947c1.7-1.699 4.249-2.831 6.515-2.831 2.265 0 4.815 1.132 6.514 2.831l14.163 14.157c1.7 1.7 2.832 3.965 2.832 6.513z" fill-rule="nonzero"/>
+					</svg></span><span class="prev" title="Previous"><a href="https://qing.su/article/traffic-server-reverse-proxy.html" rel="prev">使用Traffic Server实现高性能反向代理</a></span></div><div class="nav-next"><span class="gp-icon icon-arrow-right"><svg viewBox="0 0 192 512" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414">
+						<path d="M178.425 256.001c0 2.266-1.133 4.815-2.832 6.515L43.599 394.509c-1.7 1.7-4.248 2.833-6.514 2.833s-4.816-1.133-6.515-2.833l-14.163-14.162c-1.699-1.7-2.832-3.966-2.832-6.515 0-2.266 1.133-4.815 2.832-6.515l111.317-111.316L16.407 144.685c-1.699-1.7-2.832-4.249-2.832-6.515s1.133-4.815 2.832-6.515l14.163-14.162c1.7-1.7 4.249-2.833 6.515-2.833s4.815 1.133 6.514 2.833l131.994 131.993c1.7 1.7 2.832 4.249 2.832 6.515z" fill-rule="nonzero"/>
+					</svg></span><span class="next" title="Next"><a href="https://qing.su/article/oneclick-cdn.html" rel="next">【原创脚本】一键安装配置高性能的CDN节点</a></span></div>		</nav>
+				</footer>
+			</div>
+</article>
+
+			<div class="comments-area">
+				<div id="comments">
+
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="traffic-server-cdn-cluster.html#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://qing.su/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-form-comment"><label for="comment" class="screen-reader-text">Comment</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true" required></textarea></p><label for="author" class="screen-reader-text">Name</label><input placeholder="Name *" id="author" name="author" type="text" value="" size="30" />
+<label for="email" class="screen-reader-text">Email</label><input placeholder="Email *" id="email" name="email" type="email" value="" size="30" />
+<label for="url" class="screen-reader-text">Website</label><input placeholder="Website" id="url" name="url" type="url" value="" size="30" />
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='2033' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+			</div>
+
+					</main>
+	</div>
+
+	
+	</div>
+</div>
+
+
+<div class="site-footer grid-container grid-parent">
+				<div id="footer-widgets" class="site footer-widgets">
+				<div class="footer-widgets-container grid-container grid-parent">
+					<div class="inside-footer-widgets">
+							<div class="footer-widget-1 grid-parent grid-100 tablet-grid-50 mobile-grid-100">
+		<aside id="custom_html-5" class="widget_text widget inner-padding widget_custom_html"><h2 class="widget-title">朋友们的网站</h2><div class="textwidget custom-html-widget"><a href="http://www.kvm.la/" target="_blank" rel="noopener">kvm.la</a> | <a href="http://www.hhtjim.com/" target="_blank" rel="noopener">HHTjim'S 部落格</a> | <a href="http://www.wumao.org" target="_blank" rel="noopener">五毛的笔记本</a> | <a href="http://madlax.pw/" target="_blank" rel="noopener">Madlaxcb的杂物房</a> | <a href="https://eqblog.com/" target="_blank" rel="noopener">EQblog</a> | <a href="https://easonyang.com/" target="_blank" rel="noopener">Eason Yang's Blog</a> | <a href="https://liyuans.com/" target="_blank" rel="noopener">Leonn的博客</a> | <a href="https://www.aptx4869.org/" target="_blank" rel="noopener">阿七's Blog</a> | <a href="https://www.mrkevin.net/" target="_blank" rel="noopener">Mr. KevinH</a> | <a href="https://sunpma.com/" target="_blank" rel="noopener">SunPma'Blog</a> | <a href="https://kkp.disk.st" target="_blank" rel="noopener">Ryan's Blog</a> | <a href="https://fengli.su/" target="_blank" rel="noopener">凤梨酥</a> | <a href="https://zhujisou.com/" target="_blank" rel="noopener">主机搜</a> | <a href="https://www.kaifashuo.com/" target="_blank" rel="noopener">开发说</a> | <a href="https://www.xiaoz.me/" target="_blank" rel="noopener">小z博客</a> | <a href="https://inwao.com/" target="_blank" rel="noopener">inwao blog</a> | <a href="https://roov.org/" target="_blank" rel="noopener">reizhi</a> | <a href="https://tlanyan.me/" target="_blank" rel="noopener">tlanyan</a> | <a href="https://sugarless.top/" target="_blank" rel="noopener">无糖的小宇宙</a></div></aside>	</div>
+						</div>
+				</div>
+			</div>
+					<footer class="site-info" itemtype="https://schema.org/WPFooter" itemscope>
+			<div class="inside-site-info grid-container grid-parent">
+								<div class="copyright-bar">
+					© 2020 香菇肥牛的博客 <a href="https://icp.gov.moe" target="_blank">萌ICP备 </a><a href="https://icp.gov.moe/?keyword=202063130" target="_blank"> 202063130号</a>				</div>
+			</div>
+		</footer>
+		</div>
+
+<a title="Scroll back to top" aria-label="Scroll back to top" rel="nofollow" href="traffic-server-cdn-cluster.html#" class="generate-back-to-top" style="opacity:0;visibility:hidden;" data-scroll-speed="400" data-start-scroll="300">
+					<span class="gp-icon icon-arrow-up"><svg viewBox="0 0 330 512" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414">
+						<path d="M305.863 314.916c0 2.266-1.133 4.815-2.832 6.514l-14.157 14.163c-1.699 1.7-3.964 2.832-6.513 2.832-2.265 0-4.813-1.133-6.512-2.832L164.572 224.276 53.295 335.593c-1.699 1.7-4.247 2.832-6.512 2.832-2.265 0-4.814-1.133-6.513-2.832L26.113 321.43c-1.699-1.7-2.831-4.248-2.831-6.514s1.132-4.816 2.831-6.515L158.06 176.408c1.699-1.7 4.247-2.833 6.512-2.833 2.265 0 4.814 1.133 6.513 2.833L303.03 308.4c1.7 1.7 2.832 4.249 2.832 6.515z" fill-rule="nonzero"/>
+					</svg></span>
+				</a><!-- Matomo --><script  type="text/javascript">var _paq = window._paq || [];
+_paq.push(['trackPageView']);_paq.push(['enableLinkTracking']);_paq.push(['setTrackerUrl', "\/\/qing.su\/wp-content\/plugins\/matomo\/app\/matomo.php"]);_paq.push(['setSiteId', '1']);var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+g.type='text/javascript'; g.async=true; g.defer=true; g.src="\/\/qing.su\/wp-content\/uploads\/matomo\/matomo.js"; s.parentNode.insertBefore(g,s);</script><!-- End Matomo Code --><script src='https://qing.su/wp-content/plugins/gp-premium/menu-plus/functions/js/sticky.min.js?ver=2.0.3' id='generate-sticky-js'></script>
+<!--[if lte IE 11]>
+<script src='https://qing.su/wp-content/themes/generatepress/assets/js/classList.min.js?ver=3.0.4' id='generate-classlist-js'></script>
+<![endif]-->
+<script id='generate-main-js-extra'>
+var generatepressMenu = {"toggleOpenedSubMenus":"1","openSubMenuLabel":"Open Sub-Menu","closeSubMenuLabel":"Close Sub-Menu"};
+</script>
+<script src='https://qing.su/wp-content/themes/generatepress/assets/js/main.min.js?ver=3.0.4' id='generate-main-js'></script>
+<script src='https://qing.su/wp-content/themes/generatepress/assets/js/back-to-top.min.js?ver=3.0.4' id='generate-back-to-top-js'></script>
+<script src='https://qing.su/wp-includes/js/comment-reply.min.js?ver=5.8.1' id='comment-reply-js'></script>
+<script src='https://qing.su/wp-includes/js/wp-embed.min.js?ver=5.8.1' id='wp-embed-js'></script>
+<script src='https://qing.su/wp-content/plugins/quick-adsense-reloaded/assets/js/ads.js?ver=2.0.30' id='quads-admin-ads-js'></script>
+
+</body>
+</html>
+
+<!-- Page generated by LiteSpeed Cache 4.4.1 on 2021-09-16 20:50:50 -->

@@ -205,3 +205,7 @@ git fetch origin # update remote branch info
 git branch -a
 git checkout -b blender-v2.93-release  remotes/origin/blender-v2.93-release
 git pull -v  # update local branch 
+
+11 
+#https://git-scm.com/docs/git-archive
+git archive --format=tar --prefix=opencv-git-3.1.0/ 3.1.0 | gzip >opencv-git-3.1.0.tar.gz

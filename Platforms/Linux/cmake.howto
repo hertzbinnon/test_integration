@@ -1,0 +1,6 @@
+#list all option
+cmake ..
+cmake -LA | awk '{if(f)print} /-- Cache values/{f=1}'
+# or
+sudo apt-get install cmake-curses-gui
+ccmake ..
