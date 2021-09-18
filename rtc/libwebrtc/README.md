@@ -78,6 +78,7 @@ solutions = [
 target_os = [ 'android' ] #'windows','linux'
 
 3 执行同步
+cd webrtc
 gclient sync
 
 4.编译设置
@@ -124,7 +125,10 @@ src\third_party\yasm\run_yasm.py -->"	# Assemble.
 					deps = subprocess.check_output(new_argv[1:] + ['-M'])
 				    "
 5.编译
-gn gen out/Release "--args=is_debug=false"
+cd webrtc/src
+gn gen out/Release "--args=is_debug=false" # for linux 
+# gn gen out/Android-arm-Release --args='target_os="android" target_cpu="arm"'
+ninja -C out/Release
 
 
 			
