@@ -209,3 +209,6 @@ git pull -v  # update local branch
 11 
 #https://git-scm.com/docs/git-archive
 git archive --format=tar --prefix=opencv-git-3.1.0/ 3.1.0 | gzip >opencv-git-3.1.0.tar.gz
+
+12 check file name according to commit
+git rev-list --objects --all | grep 002b44b33094a4a98e6f202b4b238ede384a9c27

@@ -3,7 +3,7 @@
 #VERSION=`echo $VERSION | cut -d \= -f2`
 #PACKAGENAME=director-$VERSION-setup.bin
 
-PACKAGENAME=Cloud-Director-1.2.2-setup.bin
+PACKAGENAME=Cloud-Director-1.2.3-setup.bin
 ARCHIVEFILE=director.tar.gz
 DIRECTORY=~/sdb1/LetinCloudLive_ProgramDirectorServer/release/
 . Expiration
