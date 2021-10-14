@@ -117,3 +117,9 @@ WantedBy=graphical.target
 sudo systemctl enable x11vnc.service
 sudo systemctl daemon-reload
 sudo systemctl start x11vnc.service
+
+
+
+https://docs.nvidia.com/video-technologies/video-codec-sdk/read-me/
+https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html

@@ -2,3 +2,5 @@
 ACLOCAL_AMFLAGS='-I/home/vlc/vlc-ubuntu18/contrib/x86_64-linux-gnu/share/aclocal -I/home/vlc/vlc-ubuntu18/extras/tools/build/share/aclocal'
 
 https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
+
+https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/

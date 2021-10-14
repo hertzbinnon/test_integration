@@ -53,3 +53,19 @@ docker run \
 docker pull ubuntu:16.04
 docker exec -it android-vlc /bin/bash
 docker inspect container_name | grep Mounts -A 20 # 查看挂载目录
+
+docker  rm $(docker ps -a -q)
+nvidia-docker run -i -t  --hostname vrsmsz-nvidia-docker --name vrsmsz-nvidia -u root --restart always --gpus all --volume /:/opt/root 5a214d77f5d7 bash
+nvidia-docker run -i -t  --hostname vrsmsz-nvidia-docker --name vrsmsz-nvidia -u root --restart always --gpus 'all,"capabilities=all"' --volume /:/opt/root 5a214d77f5d7 bash
+
+
+sudo cp -rf /var/lib/docker /home/hertz/sdb1/Docker/docker-data-root
+sudo vim /lib/systemd/system/docker.service
+#
+#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --data-root=/home/hertz/sdb1/Docker/docker-data-root/ --exec-root=/home/hertz/sdb1/Docker/docker-exec-root
+#
+sudo systemctl daemon-reload
+sudo systemctl restart docker.service
+
+sudo usermod -aG sudo <username>
+sudo cat /etc/group | grep sudo
