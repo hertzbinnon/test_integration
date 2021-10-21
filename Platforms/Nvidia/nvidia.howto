@@ -119,7 +119,23 @@ sudo systemctl daemon-reload
 sudo systemctl start x11vnc.service
 
 
-
 https://docs.nvidia.com/video-technologies/video-codec-sdk/read-me/
 https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/
+### nvidia docker 
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html
+
+
+####
+https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
+
+
+####
+https://developer.download.nvidia.cn/compute/cuda/opensource/11.4.2/
+https://docs.nvidia.com/cuda/cuda-samples/index.html
+
+### gitlab.com user=github.username password=baiduNetDisk
+https://forums.developer.nvidia.com/t/video-codec-sdk-11-1-released/185050
+https://developer.nvidia.com/nvidia-video-codec-sdk
+https://developer.nvidia.com/video-codec-sdk-archive
+https://gitlab.com/nvidia/container-images/video-codec-sdk
+https://docs.nvidia.com/video-technologies/video-codec-sdk/nvdec-video-decoder-api-prog-guide/index.html
