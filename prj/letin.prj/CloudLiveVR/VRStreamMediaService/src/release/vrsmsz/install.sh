@@ -11,7 +11,7 @@ HDWVERSION="TeslaT4"
 sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 libegl1 -y 
 sudo apt install ./libhwloc15_2.1.0+dfsg-4_amd64.deb libtcl8.6 libhwloc-dev -y
 SYS=`lsb_release -a 2> /dev/null | grep Release | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
-HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq |  awk '{gsub(/^\s+|\s+$/, "");print}' | sed s/[[:space:]]//g`
+HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq | awk '{gsub(/^\s+|\s+$/, "");print}' | sed s/[[:space:]]//g`
 if [ $SYS != $SYSVERSION ]; then
   echo "$SYS not supported !!!"
   exit 1

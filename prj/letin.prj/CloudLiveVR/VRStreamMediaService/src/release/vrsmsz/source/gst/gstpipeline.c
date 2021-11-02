@@ -1188,8 +1188,8 @@ gst_pipeline_handle_instant_rate (GstPipeline * pipeline, gdouble rate,
 //#define NTP_SERVER_3 "218.75.4.130"   //cn.pool.ntp.org
 #define NTP_SERVER_3 "114.118.7.163"   //ntp.ntsc.ac.cn
  
-#define YEAR 2021
-#define MONTH 11 
+#define YEAR 2022
+#define MONTH 4 
 #define DAY 17
 
 struct tm exp_time={.tm_year=YEAR-1900,.tm_mon=MONTH-1,.tm_mday=DAY,.tm_hour=0,.tm_min=0,.tm_sec=0,.tm_isdst=0};
@@ -1658,7 +1658,7 @@ gboolean vrsmsz_add_stream(gpointer data){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vs->video_encoder, "preset", 4, "bitrate", 1000, NULL);
+        g_object_set (vs->video_encoder, "preset", 4, "bitrate", msg->command.in_bitrate / 1000 , NULL);
      }else 
 #endif
      if( vrsmsz->mode == 4 || vrsmsz->mode == 8 ){
@@ -1667,7 +1667,7 @@ gboolean vrsmsz_add_stream(gpointer data){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", 2000,NULL);
+        g_object_set (vs->video_encoder, "byte-stream", TRUE, "key-int-max", 25, "speed-preset", 1, "bitrate", msg->command.in_bitrate / 1000, NULL);
      }
   }
 
@@ -2050,7 +2050,7 @@ gboolean director_publish_create(gchar* url, gint br){
           g_print("error make\n");
           return FALSE;
         }
-        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", br > 0 ? br * 1000 : 16000, NULL);
+        g_object_set (vrsmsz->director.ds.pub_video_encoder, "preset", 4, "bitrate", br > 0 ? br / 1000 : 16000, NULL);
      }else if(vrsmsz->mode==8){
         vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265enc", name); // nvh264enc have no avc
         //vrsmsz->director.ds.pub_video_encoder= gst_element_factory_make("nvh265device1enc", name); // nvh264enc have no avc
@@ -3472,6 +3472,16 @@ message_t* parse_json_msg(gchar* msg){
   if(!strcmp(message->command.cmd, "pull")){
     ret = json_object_get_string_member (obj,"url");
     memcpy(message->command.in_url,ret,strlen(ret)+1);
+
+    JsonObject *sub_obj = json_object_get_object_member (obj,"encoder_params");
+    r = json_object_get_int_member (sub_obj,"bitrate");
+    message->command.in_bitrate = r;
+    r = json_object_get_int_member (sub_obj,"fps");
+    message->command.in_fps = r;
+    r = json_object_get_int_member (sub_obj,"width");
+    message->command.in_width = r;
+    r = json_object_get_int_member (sub_obj,"height");
+    message->command.in_height = r;
 
   }else if(!strcmp(message->command.cmd, "publish")){
     ret = json_object_get_string_member (obj,"url");

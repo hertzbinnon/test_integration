@@ -139,3 +139,9 @@ https://developer.nvidia.com/nvidia-video-codec-sdk
 https://developer.nvidia.com/video-codec-sdk-archive
 https://gitlab.com/nvidia/container-images/video-codec-sdk
 https://docs.nvidia.com/video-technologies/video-codec-sdk/nvdec-video-decoder-api-prog-guide/index.html
+
+
+#
+nvidia-smi -pm 1
+nvidia-smi --query-supported-clocks=mem,gr --format=csv 
+nvidia-smi -q -d SUPPORTED_CLOCKS

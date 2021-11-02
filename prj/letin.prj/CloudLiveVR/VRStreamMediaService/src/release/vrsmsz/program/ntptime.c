@@ -74,11 +74,11 @@ int get_ntp_time(int sockfd, struct sockaddr_in *server_addr, struct tm *net_tm)
  
 int main()
 {
-	int                  sockfd, i;
-	struct tm            *net_tm;
+	int    sockfd, i;
+	struct tm *net_tm;
 	struct sockaddr_in   addr;
-	char                 ip[4][16]= { { NTP_SERVER_3 } };
-	char                 date_buf[50];
+	char   ip[4][16]= { { NTP_SERVER_3 } };
+	char   date_buf[50];
 	time_t pt=0,cur=0,diff=0;
  
 	net_tm = (struct tm *)malloc(sizeof(struct tm));
@@ -103,14 +103,14 @@ int main()
 	}
 	//strftime(date_buf, sizeof(date_buf), "date -s \"%F %T\"", net_tm);
 	//system(date_buf);
-	cur=mktime(net_tm);
+	cur = mktime(net_tm);
 	pt = mktime(&exp_time);
-	diff=pt-cur;
+	diff = pt - cur;
 	//printf("==> %s\n",asctime(net_tm));
 	//printf("==> %ld\n",cur);
 	//printf("+==> %s\n",asctime(&exp_time));
 	//printf("==> %ld\n",pt);
-	printf("%ld\n",diff);
+	printf("%ld\n", diff);
         if( diff < 0 )
 		return 1;
 
