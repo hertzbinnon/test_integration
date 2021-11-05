@@ -1,0 +1,1806 @@
+https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>nvidia-smi: Control Your GPUs - Microway</title>
+<link async defer href="https://fonts.googleapis.com/css?family=Lato:300,700,900|Open+Sans:400,400i,700,700i&display=swap" rel="stylesheet">
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<script src='https://www.google.com/recaptcha/api.js' async defer></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.min.js"></script>
+<script type="text/javascript" src="https://www.microway.com/wp-content/themes/microway/css_browser_selector.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="https://www.microway.com/wp-content/themes/microway/style.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="pingback" href="https://www.microway.com/xmlrpc.php" />
+<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+	<!-- This site is optimized with the Yoast SEO plugin v17.3 - https://yoast.com/wordpress/plugins/seo/ -->
+	<link rel="canonical" href="https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="nvidia-smi: Control Your GPUs - Microway" />
+	<meta property="og:description" content="This post was last updated on 2018-11-05 Most users know how to check the status of their CPUs, see how much system memory is free, or find out how much disk space is free. In contrast, keeping tabs on the &hellip; Continue reading &rarr;" />
+	<meta property="og:url" content="https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/" />
+	<meta property="og:site_name" content="Microway" />
+	<meta property="article:published_time" content="2011-12-06T03:44:14+00:00" />
+	<meta property="article:modified_time" content="2018-11-05T20:58:47+00:00" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:creator" content="@MicrowayHPC" />
+	<meta name="twitter:site" content="@MicrowayHPC" />
+	<meta name="twitter:label1" content="Written by" />
+	<meta name="twitter:data1" content="Eliot Eshelman" />
+	<meta name="twitter:label2" content="Est. reading time" />
+	<meta name="twitter:data2" content="18 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.microway.com/#website","url":"https://www.microway.com/","name":"Microway","description":"Technology you can count on, since 1982","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.microway.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/#webpage","url":"https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/","name":"nvidia-smi: Control Your GPUs - Microway","isPartOf":{"@id":"https://www.microway.com/#website"},"datePublished":"2011-12-06T03:44:14+00:00","dateModified":"2018-11-05T20:58:47+00:00","author":{"@id":"https://www.microway.com/#/schema/person/d964bb4aba02c90585bd7b662b9bc6bd"},"breadcrumb":{"@id":"https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/"]}]},{"@type":"BreadcrumbList","@id":"https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.microway.com/"},{"@type":"ListItem","position":2,"name":"HPC Tech Tips","item":"https://www.microway.com/hpc-tech-tips/"},{"@type":"ListItem","position":3,"name":"nvidia-smi: Control Your GPUs"}]},{"@type":"Person","@id":"https://www.microway.com/#/schema/person/d964bb4aba02c90585bd7b662b9bc6bd","name":"Eliot Eshelman","image":{"@type":"ImageObject","@id":"https://www.microway.com/#personlogo","inLanguage":"en-US","url":"https://www.microway.com/wp-content/uploads/eliot-square.png","contentUrl":"https://www.microway.com/wp-content/uploads/eliot-square.png","caption":"Eliot Eshelman"},"description":"My interests span from astrophysics to bacteriophages; high-performance computers to small spherical magnets. I've been an avid Linux geek (with a focus on HPC) for more than a decade. I work as Microway's Vice President of Strategic Accounts and HPC Initiatives.","url":"https://www.microway.com/hpc-tech-tips/author/eliot/"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Microway &raquo; Feed" href="https://www.microway.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Microway &raquo; Comments Feed" href="https://www.microway.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Microway &raquo; nvidia-smi: Control Your GPUs Comments Feed" href="https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/feed/" />
+		<!-- This site uses the Google Analytics by MonsterInsights plugin v8.1.0 - Using Analytics tracking - https://www.monsterinsights.com/ -->
+							<script src="//www.googletagmanager.com/gtag/js?id=UA-2830423-1"  type="text/javascript" data-cfasync="false" async></script>
+			<script type="text/javascript" data-cfasync="false">
+				var mi_version = '8.1.0';
+				var mi_track_user = true;
+				var mi_no_track_reason = '';
+				
+								var disableStrs = [
+										'ga-disable-G-1GDP4R1N1T',
+															'ga-disable-UA-2830423-1',
+									];
+
+				/* Function to detect opted out users */
+				function __gtagTrackerIsOptedOut() {
+					for ( var index = 0; index < disableStrs.length; index++ ) {
+						if ( document.cookie.indexOf( disableStrs[ index ] + '=true' ) > -1 ) {
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				/* Disable tracking if the opt-out cookie exists. */
+				if ( __gtagTrackerIsOptedOut() ) {
+					for ( var index = 0; index < disableStrs.length; index++ ) {
+						window[ disableStrs[ index ] ] = true;
+					}
+				}
+
+				/* Opt-out function */
+				function __gtagTrackerOptout() {
+					for ( var index = 0; index < disableStrs.length; index++ ) {
+						document.cookie = disableStrs[ index ] + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+						window[ disableStrs[ index ] ] = true;
+					}
+				}
+
+				if ( 'undefined' === typeof gaOptout ) {
+					function gaOptout() {
+						__gtagTrackerOptout();
+					}
+				}
+								window.dataLayer = window.dataLayer || [];
+
+				window.MonsterInsightsDualTracker = {
+					helpers: {},
+					trackers: {},
+				};
+				if ( mi_track_user ) {
+					function __gtagDataLayer() {
+						dataLayer.push( arguments );
+					}
+
+					function __gtagTracker( type, name, parameters ) {
+						if ( type === 'event' ) {
+															parameters.send_to = monsterinsights_frontend.v4_id;
+								var hookName = name;
+								if ( typeof parameters[ 'event_category' ] !== 'undefined' ) {
+									hookName = parameters[ 'event_category' ] + ':' + name;
+								}
+
+								if ( typeof MonsterInsightsDualTracker.trackers[ hookName ] !== 'undefined' ) {
+									MonsterInsightsDualTracker.trackers[ hookName ]( parameters );
+								} else {
+									__gtagDataLayer( 'event', name, parameters );
+								}
+							
+															parameters.send_to = monsterinsights_frontend.ua;
+								__gtagDataLayer.apply( null, arguments );
+													} else {
+							__gtagDataLayer.apply( null, arguments );
+						}
+					}
+					__gtagTracker( 'js', new Date() );
+					__gtagTracker( 'set', {
+						'developer_id.dZGIzZG' : true,
+											} );
+										__gtagTracker( 'config', 'G-1GDP4R1N1T', {"forceSSL":"true"} );
+															__gtagTracker( 'config', 'UA-2830423-1', {"forceSSL":"true"} );
+										window.gtag = __gtagTracker;										(
+						function () {
+							/* https://developers.google.com/analytics/devguides/collection/analyticsjs/ */
+							/* ga and __gaTracker compatibility shim. */
+							var noopfn = function () {
+								return null;
+							};
+							var newtracker = function () {
+								return new Tracker();
+							};
+							var Tracker = function () {
+								return null;
+							};
+							var p = Tracker.prototype;
+							p.get = noopfn;
+							p.set = noopfn;
+							p.send = function (){
+								var args = Array.prototype.slice.call(arguments);
+								args.unshift( 'send' );
+								__gaTracker.apply(null, args);
+							};
+							var __gaTracker = function () {
+								var len = arguments.length;
+								if ( len === 0 ) {
+									return;
+								}
+								var f = arguments[len - 1];
+								if ( typeof f !== 'object' || f === null || typeof f.hitCallback !== 'function' ) {
+									if ( 'send' === arguments[0] ) {
+										var hitConverted, hitObject = false, action;
+										if ( 'event' === arguments[1] ) {
+											if ( 'undefined' !== typeof arguments[3] ) {
+												hitObject = {
+													'eventAction': arguments[3],
+													'eventCategory': arguments[2],
+													'eventLabel': arguments[4],
+													'value': arguments[5] ? arguments[5] : 1,
+												}
+											}
+										}
+										if ( 'pageview' === arguments[1] ) {
+											if ( 'undefined' !== typeof arguments[2] ) {
+												hitObject = {
+													'eventAction': 'page_view',
+													'page_path' : arguments[2],
+												}
+											}
+										}
+										if ( typeof arguments[2] === 'object' ) {
+											hitObject = arguments[2];
+										}
+										if ( typeof arguments[5] === 'object' ) {
+											Object.assign( hitObject, arguments[5] );
+										}
+										if ( 'undefined' !== typeof arguments[1].hitType ) {
+											hitObject = arguments[1];
+											if ( 'pageview' === hitObject.hitType ) {
+												hitObject.eventAction = 'page_view';
+											}
+										}
+										if ( hitObject ) {
+											action = 'timing' === arguments[1].hitType ? 'timing_complete' : hitObject.eventAction;
+											hitConverted = mapArgs( hitObject );
+											__gtagTracker( 'event', action, hitConverted );
+										}
+									}
+									return;
+								}
+
+								function mapArgs( args ) {
+									var arg, hit = {};
+									var gaMap = {
+										'eventCategory': 'event_category',
+										'eventAction': 'event_action',
+										'eventLabel': 'event_label',
+										'eventValue': 'event_value',
+										'nonInteraction': 'non_interaction',
+										'timingCategory': 'event_category',
+										'timingVar': 'name',
+										'timingValue': 'value',
+										'timingLabel': 'event_label',
+										'page' : 'page_path',
+										'location' : 'page_location',
+										'title' : 'page_title',
+									};
+									for ( arg in args ) {
+																				if ( ! ( ! args.hasOwnProperty(arg) || ! gaMap.hasOwnProperty(arg) ) ) {
+											hit[gaMap[arg]] = args[arg];
+										} else {
+											hit[arg] = args[arg];
+										}
+									}
+									return hit;
+								}
+
+								try {
+									f.hitCallback();
+								} catch ( ex ) {
+								}
+							};
+							__gaTracker.create = newtracker;
+							__gaTracker.getByName = newtracker;
+							__gaTracker.getAll = function () {
+								return [];
+							};
+							__gaTracker.remove = noopfn;
+							__gaTracker.loaded = true;
+							window['__gaTracker'] = __gaTracker;
+						}
+					)();
+									} else {
+										console.log( "" );
+					( function () {
+							function __gtagTracker() {
+								return null;
+							}
+							window['__gtagTracker'] = __gtagTracker;
+							window['gtag'] = __gtagTracker;
+					} )();
+									}
+			</script>
+				<!-- / Google Analytics by MonsterInsights -->
+			<script type="text/javascript" data-cfasync="false">
+	MonsterInsightsDualTracker.trackers[ 'form:impression' ] = function( parameters ) {
+		__gtagDataLayer( 'event', 'form_impression', {
+			form_id: parameters.event_label,
+			content_type: 'form',
+		} );
+	};
+
+	MonsterInsightsDualTracker.trackers[ 'form:conversion' ] = function( parameters ) {
+		__gtagDataLayer( 'event', 'generate_lead', {
+			form_id: parameters.event_label
+		});
+	};
+	</script>
+			<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/www.microway.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.8.1"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wpfb-css'  href='//www.microway.com/wp-content/plugins/wp-filebase-pro/wp-filebase.css?t=1600275849&#038;ver=3.4.32' type='text/css' media='all' />
+<link rel='stylesheet' id='contact-form-7-css'  href='https://www.microway.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=5.5.1' type='text/css' media='all' />
+<style id='contact-form-7-inline-css' type='text/css'>
+.wpcf7 .wpcf7-recaptcha iframe {margin-bottom: 0;}.wpcf7 .wpcf7-recaptcha[data-align="center"] > div {margin: 0 auto;}.wpcf7 .wpcf7-recaptcha[data-align="right"] > div {margin: 0 0 0 auto;}
+</style>
+<link rel='stylesheet' id='collapseomatic-css-css'  href='https://www.microway.com/wp-content/plugins/jquery-collapse-o-matic/light_style.css?ver=1.6' type='text/css' media='all' />
+<link rel='stylesheet' id='bootstrapstyle-css'  href='https://www.microway.com/wp-content/themes/microway/css/bootstrap.min.css?ver=5.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bootstrapthemestyle-css'  href='https://www.microway.com/wp-content/themes/microway/css/bootstrap-theme.min.css?ver=5.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='slb_core-css'  href='https://www.microway.com/wp-content/plugins/simple-lightbox/client/css/app.css?ver=2.8.1' type='text/css' media='all' />
+<link rel='stylesheet' id='ubermenu-css'  href='https://www.microway.com/wp-content/plugins/ubermenu/pro/assets/css/ubermenu.min.css?ver=3.7.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='ubermenu-clean-white-css'  href='https://www.microway.com/wp-content/plugins/ubermenu/pro/assets/css/skins/cleanwhite.css?ver=5.8.1' type='text/css' media='all' />
+<script type='text/javascript' src='https://www.microway.com/wp-includes/js/jquery/jquery.min.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' id='monsterinsights-frontend-script-js-extra'>
+/* <![CDATA[ */
+var monsterinsights_frontend = {"js_events_tracking":"true","download_extensions":"doc,docx,pdf,ppt,pptx,zip,xls,xlsx","inbound_paths":"[]","home_url":"https:\/\/www.microway.com","hash_tracking":"false","ua":"UA-2830423-1","v4_id":"G-1GDP4R1N1T"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/plugins/google-analytics-premium/assets/js/frontend-gtag.min.js?ver=8.1.0' id='monsterinsights-frontend-script-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/plugins/sticky-menu-or-anything-on-scroll/assets/js/jq-sticky-anything.min.js?ver=2.1.1' id='stickyAnythingLib-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/themes/microway/js/bootstrap.min.js?ver=1' id='bootstrap-script-js'></script>
+<link rel="https://api.w.org/" href="https://www.microway.com/wp-json/" /><link rel="alternate" type="application/json" href="https://www.microway.com/wp-json/wp/v2/posts/58" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.microway.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://www.microway.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 5.8.1" />
+<link rel='shortlink' href='https://www.microway.com/?p=58' />
+<link rel="alternate" type="application/json+oembed" href="https://www.microway.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.microway.com%2Fhpc-tech-tips%2Fnvidia-smi_control-your-gpus%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://www.microway.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.microway.com%2Fhpc-tech-tips%2Fnvidia-smi_control-your-gpus%2F&#038;format=xml" />
+<style id="ubermenu-custom-generated-css">
+/** Font Awesome 4 Compatibility **/
+.fa{font-style:normal;font-variant:normal;font-weight:normal;font-family:FontAwesome;}
+
+/** UberMenu Custom Menu Styles (Customizer) **/
+/* main */
+ .ubermenu-main .ubermenu-item .ubermenu-submenu-drop { -webkit-transition-duration:300ms; -ms-transition-duration:300ms; transition-duration:300ms; }
+ .ubermenu-main .ubermenu-item-level-0 > .ubermenu-target { font-size:14.5px; border:none; -webkit-box-shadow:inset 1px 0 0 0 rgba(255,255,255,0); -moz-box-shadow:inset 1px 0 0 0 rgba(255,255,255,0); -o-box-shadow:inset 1px 0 0 0 rgba(255,255,255,0); box-shadow:inset 1px 0 0 0 rgba(255,255,255,0); }
+ .ubermenu.ubermenu-main .ubermenu-item-level-0:hover > .ubermenu-target, .ubermenu-main .ubermenu-item-level-0.ubermenu-active > .ubermenu-target { color:#aa0000; }
+ .ubermenu-main .ubermenu-item-level-0.ubermenu-current-menu-item > .ubermenu-target, .ubermenu-main .ubermenu-item-level-0.ubermenu-current-menu-parent > .ubermenu-target, .ubermenu-main .ubermenu-item-level-0.ubermenu-current-menu-ancestor > .ubermenu-target { color:#666666; }
+ .ubermenu-main .ubermenu-submenu .ubermenu-item-header > .ubermenu-target, .ubermenu-main .ubermenu-tab > .ubermenu-target { font-size:14px; }
+ .ubermenu-main .ubermenu-submenu .ubermenu-item-header > .ubermenu-target:hover { color:#aa0000; }
+ .ubermenu-main .ubermenu-submenu .ubermenu-item-header.ubermenu-current-menu-item > .ubermenu-target { color:#aa0000; }
+ .ubermenu.ubermenu-main .ubermenu-item-normal > .ubermenu-target:hover, .ubermenu.ubermenu-main .ubermenu-item-normal.ubermenu-active > .ubermenu-target { color:#aa0000; }
+ .ubermenu-main .ubermenu-item-normal.ubermenu-current-menu-item > .ubermenu-target { color:#aa0000; }
+ .ubermenu-main .ubermenu-item-normal > .ubermenu-target { font-size:13px; }
+ .ubermenu-main .ubermenu-target > .ubermenu-target-description { font-size:11px; }
+ .ubermenu-main .ubermenu-target:hover > .ubermenu-target-description, .ubermenu-main .ubermenu-active > .ubermenu-target > .ubermenu-target-description, .ubermenu-main .ubermenu-submenu .ubermenu-target:hover > .ubermenu-target-description, .ubermenu-main .ubermenu-submenu .ubermenu-active > .ubermenu-target > .ubermenu-target-description { color:#727272; }
+
+
+/** UberMenu Custom Menu Item Styles (Menu Item Settings) **/
+/* 10451 */  .ubermenu .ubermenu-item.ubermenu-item-10451.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-item.ubermenu-item-10451:hover > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10451.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10451:hover > .ubermenu-target { color:#999999; }
+/* 10453 */  .ubermenu .ubermenu-item.ubermenu-item-10453.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-item.ubermenu-item-10453:hover > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10453.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10453:hover > .ubermenu-target { color:#999999; }
+/* 10454 */  .ubermenu .ubermenu-item.ubermenu-item-10454.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-item.ubermenu-item-10454:hover > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10454.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10454:hover > .ubermenu-target { color:#999999; }
+/* 10452 */  .ubermenu .ubermenu-item.ubermenu-item-10452.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-item.ubermenu-item-10452:hover > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10452.ubermenu-active > .ubermenu-target, .ubermenu .ubermenu-submenu .ubermenu-item.ubermenu-item-10452:hover > .ubermenu-target { color:#999999; }
+/* 12873 */  .ubermenu .ubermenu-row-id-12873 { padding:0px; }
+
+
+/** UberMenu Custom Tweaks (General Settings) **/
+.ubermenu-divider {
+    clear: both;
+    display: block;
+    padding: 5px 0!important;
+}
+
+/** UberMenu Sticky CSS **/
+ .ubermenu.ubermenu-sticky, .ubermenu-responsive-toggle.ubermenu-sticky{ z-index:1000; } .ubermenu-sticky.ubermenu-sticky-full-width{ left:0; width:100%; max-width:100%; }
+ .ubermenu-sticky-full-width.ubermenu-sticky .ubermenu-nav{ padding-left:1px; }
+@media screen and (max-width: 959px){ 
+   .ubermenu-responsive-toggle.ubermenu-sticky{ height:43px; left:0; width:100% !important; } 
+   .ubermenu.ubermenu-sticky{ margin-top:43px; left:0; width:100% !important; } 
+
+	 .ubermenu-responsive-toggle,  .ubermenu,  .ubermenu.ubermenu-sticky{position:relative !important; margin:0 !important; min-height:0 !important; }
+	 .ubermenu.ubermenu-is-mobile.ubermenu-sticky.ubermenu-responsive-collapse{ max-height:0;}  /* Mobile Sticky */
+   .ubermenu.ubermenu-is-mobile.ubermenu-sticky { min-height:400px; max-height:600px; overflow-y:auto !important; -webkit-overflow-scrolling:touch; }
+   .ubermenu.ubermenu-is-mobile.ubermenu-sticky > .ubermenu-nav{ height:100%; }
+   .ubermenu.ubermenu-is-mobile.ubermenu-sticky .ubermenu-active > .ubermenu-submenu-drop{ max-height:none; }
+}
+/* Special Classes */  .ubermenu .ubermenu-item.um-sticky-only{ display:none !important; }  .ubermenu.ubermenu-sticky .ubermenu-item-level-0.um-sticky-only{ display:inline-block !important; }  .ubermenu.ubermenu-sticky .ubermenu-submenu .ubermenu-item.um-sticky-only{ display:block !important; }  .ubermenu .ubermenu-item-level-0.um-unsticky-only{ display:inline-block !important; }  .ubermenu .ubermenu-submenu .ubermenu-item.um-unsticky-only{ display:block !important; }  .ubermenu.ubermenu-sticky .ubermenu-item.um-unsticky-only{ display:none !important; }
+@media screen and (min-width:783px){ .admin-bar  .ubermenu.ubermenu-sticky, .admin-bar  .ubermenu-responsive-toggle.ubermenu-sticky{ margin-top:32px; } }
+@media screen and (min-width:783px) and (max-width:959px){ .admin-bar  .ubermenu.ubermenu-sticky{ margin-top:78px; } }
+@media screen and (min-width:600px) and (max-width:782px){ .admin-bar  .ubermenu.ubermenu-sticky, .admin-bar  .ubermenu-responsive-toggle.ubermenu-sticky{ margin-top:46px; } .admin-bar  .ubermenu.ubermenu-sticky{ margin-top:89px; } }
+
+/* Status: Loaded from Transient */
+
+</style><script type="text/javascript">document.documentElement.className += " js";</script>
+<style type="text/css">.broken_link, a.broken_link {
+	text-decoration: line-through !important;
+}</style><style type="text/css">.removed_link, a.removed_link {
+	text-decoration: line-through !important;
+}</style>
+<!-- MonsterInsights Form Tracking -->
+<script type="text/javascript" data-cfasync="false">
+	function monsterinsights_forms_record_impression( event ) {
+		monsterinsights_add_bloom_forms_ids();
+		var monsterinsights_forms = document.getElementsByTagName("form");
+		var monsterinsights_forms_i;
+		for (monsterinsights_forms_i = 0; monsterinsights_forms_i < monsterinsights_forms.length; monsterinsights_forms_i++ ) {
+			var monsterinsights_form_id = monsterinsights_forms[monsterinsights_forms_i].getAttribute("id");
+			var skip_conversion = false;
+			/* Check to see if it's contact form 7 if the id isn't set */
+			if ( ! monsterinsights_form_id ) {
+				monsterinsights_form_id = monsterinsights_forms[monsterinsights_forms_i].parentElement.getAttribute("id");
+				if ( monsterinsights_form_id && monsterinsights_form_id.lastIndexOf('wpcf7-f', 0 ) === 0  ) {
+					/* If so, let's grab that and set it to be the form's ID*/
+					var tokens = monsterinsights_form_id.split('-').slice(0,2);
+					var result = tokens.join('-');
+					monsterinsights_forms[monsterinsights_forms_i].setAttribute("id", result);/* Now we can do just what we did above */
+					monsterinsights_form_id = monsterinsights_forms[monsterinsights_forms_i].getAttribute("id");
+				} else {
+					monsterinsights_form_id = false;
+				}
+			}
+
+			// Check if it's Ninja Forms & id isn't set.
+			if ( ! monsterinsights_form_id && monsterinsights_forms[monsterinsights_forms_i].parentElement.className.indexOf( 'nf-form-layout' ) >= 0 ) {
+				monsterinsights_form_id = monsterinsights_forms[monsterinsights_forms_i].parentElement.parentElement.parentElement.getAttribute( 'id' );
+				if ( monsterinsights_form_id && 0 === monsterinsights_form_id.lastIndexOf( 'nf-form-', 0 ) ) {
+					/* If so, let's grab that and set it to be the form's ID*/
+					tokens = monsterinsights_form_id.split( '-' ).slice( 0, 3 );
+					result = tokens.join( '-' );
+					monsterinsights_forms[monsterinsights_forms_i].setAttribute( 'id', result );
+					/* Now we can do just what we did above */
+					monsterinsights_form_id = monsterinsights_forms[monsterinsights_forms_i].getAttribute( 'id' );
+					skip_conversion = true;
+				}
+			}
+
+			if ( monsterinsights_form_id && monsterinsights_form_id !== 'commentform' && monsterinsights_form_id !== 'adminbar-search' ) {
+			                        __gtagTracker('event', 'impression', {
+                        event_category: 'form',
+                        event_label: monsterinsights_form_id,
+                        value: 1,
+                        non_interaction: true
+                    });
+                
+				/* If a WPForms Form, we can use custom tracking */
+				if ( monsterinsights_form_id && 0 === monsterinsights_form_id.lastIndexOf( 'wpforms-form-', 0 ) ) {
+					continue;
+				}
+
+				/* Formiddable Forms, use custom tracking */
+				if ( monsterinsights_forms_has_class( monsterinsights_forms[monsterinsights_forms_i], 'frm-show-form' ) ) {
+					continue;
+				}
+
+				/* If a Gravity Form, we can use custom tracking */
+				if ( monsterinsights_form_id && 0 === monsterinsights_form_id.lastIndexOf( 'gform_', 0 ) ) {
+					continue;
+				}
+
+				/* If Ninja forms, we use custom conversion tracking */
+				if ( skip_conversion ) {
+					continue;
+				}
+
+				var custom_conversion_mi_forms = false;
+				if ( custom_conversion_mi_forms ) {
+					continue;
+				}
+
+				var __gaFormsTrackerWindow    = window;
+				if ( __gaFormsTrackerWindow.addEventListener ) {
+					document.getElementById(monsterinsights_form_id).addEventListener( "submit", monsterinsights_forms_record_conversion, false );
+				} else {
+					if ( __gaFormsTrackerWindow.attachEvent ) {
+						document.getElementById(monsterinsights_form_id).attachEvent( "onsubmit", monsterinsights_forms_record_conversion );
+					}
+				}
+			} else {
+				continue;
+			}
+		}
+	}
+
+	function monsterinsights_forms_has_class(element, className) {
+	    return (' ' + element.className + ' ').indexOf(' ' + className+ ' ') > -1;
+	}
+
+	function monsterinsights_forms_record_conversion( event ) {
+		var monsterinsights_form_conversion_id = event.target.id;
+		var monsterinsights_form_action        = event.target.getAttribute("miforms-action");
+		if ( monsterinsights_form_conversion_id && ! monsterinsights_form_action ) {
+			document.getElementById(monsterinsights_form_conversion_id).setAttribute("miforms-action", "submitted");
+                            __gtagTracker('event', 'conversion', {
+                    event_category: 'form',
+                    event_label: monsterinsights_form_conversion_id,
+                    value: 1,
+                });
+					}
+	}
+
+	/* Attach the events to all clicks in the document after page and GA has loaded */
+	function monsterinsights_forms_load() {
+		if ( typeof(__gaTracker) !== 'undefined' && __gaTracker && __gaTracker.hasOwnProperty( "loaded" ) && __gaTracker.loaded == true ) {
+			var __gaFormsTrackerWindow    = window;
+			if ( __gaFormsTrackerWindow.addEventListener ) {
+				__gaFormsTrackerWindow.addEventListener( "load", monsterinsights_forms_record_impression, false );
+			} else {
+				if ( __gaFormsTrackerWindow.attachEvent ) {
+					__gaFormsTrackerWindow.attachEvent("onload", monsterinsights_forms_record_impression );
+				}
+			}
+		} else if ( typeof(__gtagTracker) !== 'undefined' && __gtagTracker ) {
+            var __gtagFormsTrackerWindow    = window;
+            if ( __gtagFormsTrackerWindow.addEventListener ) {
+                __gtagFormsTrackerWindow.addEventListener( "load", monsterinsights_forms_record_impression, false );
+            } else {
+                if ( __gtagFormsTrackerWindow.attachEvent ) {
+                    __gtagFormsTrackerWindow.attachEvent("onload", monsterinsights_forms_record_impression );
+                }
+            }
+        } else {
+			setTimeout(monsterinsights_forms_load, 200);
+		}
+	}
+	/* Custom Ninja Forms impression tracking */
+	if (window.jQuery) {
+		jQuery(document).on( 'nfFormReady', function( e, layoutView ) {
+			var label = layoutView.el;
+			label = label.substring(1, label.length);
+			label = label.split('-').slice(0,3).join('-');
+                            __gtagTracker('event', 'impression', {
+                    event_category: 'form',
+                    event_label: label,
+                    value: 1,
+                    non_interaction: true
+                });
+					});
+	}
+	/* Custom Bloom Form tracker */
+	function monsterinsights_add_bloom_forms_ids() {
+		var bloom_forms = document.querySelectorAll( '.et_bloom_form_content form' );
+		if ( bloom_forms.length > 0 ) {
+			for ( var i = 0; i < bloom_forms.length; i++ ) {
+				if ( '' === bloom_forms[i].id ) {
+					var form_parent_root = monsterinsights_find_parent_with_class( bloom_forms[i], 'et_bloom_optin' );
+					if ( form_parent_root ) {
+						var classes = form_parent_root.className.split( ' ' );
+						for ( var j = 0; j < classes.length; ++ j ) {
+							if ( 0 === classes[j].indexOf( 'et_bloom_optin' ) ) {
+								bloom_forms[i].id = classes[j];
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	function monsterinsights_find_parent_with_class( element, className ) {
+		if ( element.parentNode && '' !== className ) {
+			if ( element.parentNode.className.indexOf( className ) >= 0 ) {
+				return element.parentNode;
+			} else {
+				return monsterinsights_find_parent_with_class( element.parentNode, className );
+			}
+		}
+		return false;
+	}
+	monsterinsights_forms_load();
+</script>
+<!-- End MonsterInsights Form Tracking -->
+
+</head>
+
+<body class="post-template-default single single-post postid-58 single-format-standard">
+
+	<div id="header">
+		<div id="masthead">
+			<div id="branding">
+            <div id="topLinks">
+            <a href="mailto:sales@microway.com">sales@microway.com</a> | 508.746.7341<br />
+            <span class="redLinks"><a href="/">Home</a> <a href="/hpc-tech-tips/">Blog</a> <a href="/knowledge-center/">Knowledge Center</a> <a href="/contact/">Contact</a></span></div>
+			<a href="https://www.microway.com"><picture>
+  <source srcset="https://www.microway.com/wp-content/themes/microway/images/microway-logo.png.webp" type="image/webp">
+  <source srcset="https://www.microway.com/wp-content/themes/microway/images/microway-logo.png" type="image/png"> 
+<img src="https://www.microway.com/wp-content/themes/microway/images/microway-logo.png" width="297" height="53" alt="Microway">
+</picture>
+</a>
+			</div><!-- #branding -->
+
+			
+		</div><!-- #masthead -->
+        <div style="clear:both;"></div>
+	</div><!-- #header -->
+    <div id="access-wrapper">
+<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								
+<!-- UberMenu [Configuration:main] [Theme Loc:primary] [Integration:auto] -->
+<a class="ubermenu-responsive-toggle ubermenu-responsive-toggle-main ubermenu-skin-clean-white ubermenu-loc-primary ubermenu-responsive-toggle-content-align-left ubermenu-responsive-toggle-align-full " tabindex="0" data-ubermenu-target="ubermenu-main-195-primary-2"><i class="fas fa-bars" ></i>Menu</a><div id="ubermenu-main-195-primary-2" class="ubermenu ubermenu-nojs ubermenu-main ubermenu-menu-195 ubermenu-loc-primary ubermenu-responsive ubermenu-responsive-default ubermenu-responsive-collapse ubermenu-horizontal ubermenu-transition-shift ubermenu-trigger-hover_intent ubermenu-skin-clean-white  ubermenu-bar-align-full ubermenu-items-align-left ubermenu-bound ubermenu-disable-submenu-scroll ubermenu-sub-indicators ubermenu-retractors-responsive ubermenu-submenu-indicator-closes"><ul id="ubermenu-nav-main-195-primary" class="ubermenu-nav" data-title="Main Menu Ubermenu3"><li id="menu-item-10408" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-has-children ubermenu-item-10408 ubermenu-item-level-0 ubermenu-column ubermenu-column-auto ubermenu-has-submenu-drop ubermenu-has-submenu-mega" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/why-microway/" tabindex="0"><span class="ubermenu-target-title ubermenu-target-text">Why Microway</span><i class='ubermenu-sub-indicator fas fa-angle-down'></i></a><ul  class="ubermenu-submenu ubermenu-submenu-id-10408 ubermenu-submenu-type-auto ubermenu-submenu-type-mega ubermenu-submenu-drop ubermenu-submenu-align-full_width"  ><li id="menu-item-10409" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10409 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/why-microway/clients-and-testimonials/"><span class="ubermenu-target-title ubermenu-target-text">Clients and Testimonials</span></a></li><li id="menu-item-10410" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10410 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/why-microway/testing-process/"><span class="ubermenu-target-title ubermenu-target-text">Testing Process</span></a></li><li id="menu-item-10411" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10411 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/why-microway/awards/"><span class="ubermenu-target-title ubermenu-target-text">Awards</span></a></li><li class="ubermenu-retractor ubermenu-retractor-mobile"><i class="fas fa-times"></i> Close</li></ul></li><li id="menu-item-10412" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-has-children ubermenu-item-10412 ubermenu-item-level-0 ubermenu-column ubermenu-column-auto ubermenu-has-submenu-drop ubermenu-has-submenu-mega" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/" tabindex="0"><span class="ubermenu-target-title ubermenu-target-text">Markets Served</span><i class='ubermenu-sub-indicator fas fa-angle-down'></i></a><ul  class="ubermenu-submenu ubermenu-submenu-id-10412 ubermenu-submenu-type-auto ubermenu-submenu-type-mega ubermenu-submenu-drop ubermenu-submenu-align-full_width"  ><li id="menu-item-10414" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10414 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/university/"><span class="ubermenu-target-title ubermenu-target-text">University</span></a></li><li id="menu-item-10415" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10415 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/government-and-defense/"><span class="ubermenu-target-title ubermenu-target-text">Government &#038; Defense</span></a></li><li id="menu-item-10416" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10416 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/engineering-and-manufacturing/"><span class="ubermenu-target-title ubermenu-target-text">Engineering &#038; Manufacturing</span></a></li><li id="menu-item-10417" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10417 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/finance/"><span class="ubermenu-target-title ubermenu-target-text">Finance</span></a></li><li id="menu-item-10418" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10418 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/life-sciences/"><span class="ubermenu-target-title ubermenu-target-text">Life Sciences</span></a></li><li id="menu-item-10419" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10419 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/oil-gas-solar-wind/"><span class="ubermenu-target-title ubermenu-target-text">Energy</span></a></li><li id="menu-item-10420" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10420 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/media-and-entertainment/"><span class="ubermenu-target-title ubermenu-target-text">Media &#038; Entertainment</span></a></li><li id="menu-item-10421" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10421 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/markets-served/ocean-and-weather-modeling/"><span class="ubermenu-target-title ubermenu-target-text">Ocean &#038; Weather Modeling</span></a></li><li class="ubermenu-retractor ubermenu-retractor-mobile"><i class="fas fa-times"></i> Close</li></ul></li><li id="menu-item-10422" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-has-children ubermenu-advanced-sub ubermenu-item-10422 ubermenu-item-level-0 ubermenu-column ubermenu-column-auto ubermenu-has-submenu-drop ubermenu-has-submenu-mega" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/technologies/" tabindex="0"><span class="ubermenu-target-title ubermenu-target-text">Technologies</span><i class='ubermenu-sub-indicator fas fa-angle-down'></i></a><div  class="ubermenu-submenu ubermenu-submenu-id-10422 ubermenu-submenu-type-auto ubermenu-submenu-type-mega ubermenu-submenu-drop ubermenu-submenu-align-full_width ubermenu-autoclear ubermenu-submenu-grid"  ><ul class="ubermenu-row ubermenu-row-id-10422_auto_1 ubermenu-autoclear "><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12865 ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-12865"><ul  class="ubermenu-submenu ubermenu-submenu-id-12865 ubermenu-submenu-type-stack"  ><li id="menu-item-10451" class="ubermenu-item ubermenu-item-type-custom ubermenu-item-object-custom ubermenu-item-10451 ubermenu-item-normal ubermenu-item-level-3 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><span class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only"><span class="ubermenu-target-title ubermenu-target-text">Learn More About</span></span><div class="ubermenu-content-block ubermenu-custom-content ubermenu-custom-content-padded"><br><br><br><br><br><br><br></div></li></ul></li><li id="menu-item-13373" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-13373 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7" ><a class="ubermenu-target ubermenu-target-with-image ubermenu-item-layout-default ubermenu-item-layout-image_above" href="https://www.microway.com/technologies/nvidia-datacenter-gpu/"><img class="ubermenu-image ubermenu-image-size-full" src="https://www.microway.com/wp-content/uploads/dd-gpu.jpg" srcset="https://www.microway.com/wp-content/uploads/dd-gpu.jpg 140w, https://www.microway.com/wp-content/uploads/dd-gpu-94x71.jpg 94w" sizes="(max-width: 140px) 100vw, 140px" width="140" height="105" alt="NVIDIA Logo"  /><span class="ubermenu-target-title ubermenu-target-text">NVIDIA GPU</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">NVIDIA GPU solutions with massive parallelism to dramatically accelerate your HPC applications</span></a></li><li id="menu-item-11608" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-11608 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7" ><a class="ubermenu-target ubermenu-target-with-image ubermenu-item-layout-default ubermenu-item-layout-image_above" href="https://www.microway.com/technologies/dgx/"><img class="ubermenu-image ubermenu-image-size-full" src="https://www.microway.com/wp-content/uploads/dd-dgx-pod.jpg" srcset="https://www.microway.com/wp-content/uploads/dd-dgx-pod.jpg 140w, https://www.microway.com/wp-content/uploads/dd-dgx-pod-94x71.jpg 94w" sizes="(max-width: 140px) 100vw, 140px" width="140" height="105" alt="dd-dgx-pod"  /><span class="ubermenu-target-title ubermenu-target-text">DGX Solutions</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">AI Appliances that deliver world-record performance and ease of use for all types of users</span></a></li><li id="menu-item-10426" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10426 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7" ><a class="ubermenu-target ubermenu-target-with-image ubermenu-item-layout-default ubermenu-item-layout-image_above" href="https://www.microway.com/technologies/intel/"><img class="ubermenu-image ubermenu-image-size-full" src="https://www.microway.com/wp-content/uploads/dd-xeon.jpg" srcset="https://www.microway.com/wp-content/uploads/dd-xeon.jpg 140w, https://www.microway.com/wp-content/uploads/dd-xeon-94x71.jpg 94w" sizes="(max-width: 140px) 100vw, 140px" width="140" height="105" alt="dd-xeon"  /><span class="ubermenu-target-title ubermenu-target-text">Intel</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">Leading edge Xeon x86 CPU solutions for the most demanding HPC applications.</span></a></li><li id="menu-item-10427" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10427 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7" ><a class="ubermenu-target ubermenu-target-with-image ubermenu-item-layout-default ubermenu-item-layout-image_above" href="https://www.microway.com/technologies/amd/"><img class="ubermenu-image ubermenu-image-size-full" src="https://www.microway.com/wp-content/uploads/dd-amd.jpg" srcset="https://www.microway.com/wp-content/uploads/dd-amd.jpg 140w, https://www.microway.com/wp-content/uploads/dd-amd-94x70.jpg 94w" sizes="(max-width: 140px) 100vw, 140px" width="140" height="105" alt="dd-amd"  /><span class="ubermenu-target-title ubermenu-target-text">AMD</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">High core count &#038; memory bandwidth AMD EPYC CPU solutions with leadership performance.</span></a></li><li id="menu-item-12463" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-12463 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7" ><a class="ubermenu-target ubermenu-target-with-image ubermenu-item-layout-default ubermenu-item-layout-image_above" href="https://www.microway.com/technologies/ddn/"><img class="ubermenu-image ubermenu-image-size-full" src="https://www.microway.com/wp-content/uploads/dd-ddn.jpg" srcset="https://www.microway.com/wp-content/uploads/dd-ddn.jpg 140w, https://www.microway.com/wp-content/uploads/dd-ddn-94x71.jpg 94w" sizes="(max-width: 140px) 100vw, 140px" width="140" height="105" alt="dd-ddn"  /><span class="ubermenu-target-title ubermenu-target-text">DDN</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">Parallel &#038; block storage solutions that are the data plane for the world’s demanding workloads.</span></a></li><li id="menu-item-10428" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10428 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7" ><a class="ubermenu-target ubermenu-target-with-image ubermenu-item-layout-default ubermenu-item-layout-image_above" href="https://www.microway.com/technologies/software/"><img class="ubermenu-image ubermenu-image-size-full" src="https://www.microway.com/wp-content/uploads/dd-software.jpg" srcset="https://www.microway.com/wp-content/uploads/dd-software.jpg 140w, https://www.microway.com/wp-content/uploads/dd-software-94x71.jpg 94w" sizes="(max-width: 140px) 100vw, 140px" width="140" height="105" alt="dd-software"  /><span class="ubermenu-target-title ubermenu-target-text">Software</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">Software to ease HPC administration, validate hardware, &#038; generate high performance code</span></a></li></ul><ul class="ubermenu-row ubermenu-row-id-12873  "><li id="menu-item-10452" class="ubermenu-item ubermenu-item-type-custom ubermenu-item-object-custom ubermenu-item-10452 ubermenu-item-normal ubermenu-item-level-2 ubermenu-column ubermenu-column-1-7 ubermenu-hide-mobile" ><span class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only"><span class="ubermenu-target-title ubermenu-target-text">Jump Directly to</span></span></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12867 ubermenu-item-level-2 ubermenu-column ubermenu-column-6-7 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-12867"><ul  class="ubermenu-submenu ubermenu-submenu-id-12867 ubermenu-submenu-type-block"  ><li class="ubermenu-divider"><hr/></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12868 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-6 ubermenu-has-submenu-stack ubermenu-item-type-column ubermenu-column-id-12868"><ul  class="ubermenu-submenu ubermenu-submenu-id-12868 ubermenu-submenu-type-stack"  ><li id="menu-item-10461" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10461 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/nvidia-gpu-clusters/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA GPU Clusters</span></a></li><li id="menu-item-10460" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10460 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/tesla-gpu-servers/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA GPU Servers</span></a></li><li id="menu-item-10471" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-product ubermenu-item-10471 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/product/whisperstation-quadro/"><span class="ubermenu-target-title ubermenu-target-text">Quadro Workstations</span></a></li><li id="menu-item-12520" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-12520 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/technologies/remote-work-nvidia/"><span class="ubermenu-target-title ubermenu-target-text">Remote Work</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12870 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-6 ubermenu-has-submenu-stack ubermenu-item-type-column ubermenu-column-id-12870"><ul  class="ubermenu-submenu ubermenu-submenu-id-12870 ubermenu-submenu-type-stack"  ><li id="menu-item-13276" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-13276 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-station-a100/"><span class="ubermenu-target-title ubermenu-target-text">DGX Station A100</span></a></li><li id="menu-item-12577" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-12577 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-a100/"><span class="ubermenu-target-title ubermenu-target-text">DGX A100</span></a></li><li id="menu-item-11613" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-11613 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/dgx-pod/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA DGX POD&trade;</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12871 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-6 ubermenu-has-submenu-stack ubermenu-item-type-column ubermenu-column-id-12871"><ul  class="ubermenu-submenu ubermenu-submenu-id-12871 ubermenu-submenu-type-stack"  ><li id="menu-item-10473" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10473 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/high-performance-computing-with-intel-xeon-hpc-clusters/"><span class="ubermenu-target-title ubermenu-target-text">Xeon Clusters</span></a></li><li id="menu-item-10458" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10458 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/xeon-servers/"><span class="ubermenu-target-title ubermenu-target-text">Xeon Servers</span></a></li><li id="menu-item-10470" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-product ubermenu-item-10470 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/product/whisperstation-quiet-workstation/"><span class="ubermenu-target-title ubermenu-target-text">Xeon Workstations</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12872 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-6 ubermenu-has-submenu-stack ubermenu-item-type-column ubermenu-column-id-12872"><ul  class="ubermenu-submenu ubermenu-submenu-id-12872 ubermenu-submenu-type-stack"  ><li id="menu-item-10463" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10463 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/amd-epyc-clusters/"><span class="ubermenu-target-title ubermenu-target-text">AMD Clusters</span></a></li><li id="menu-item-10462" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10462 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/amd-epyc-servers/"><span class="ubermenu-target-title ubermenu-target-text">AMD Servers</span></a></li><li id="menu-item-10469" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-product ubermenu-item-10469 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/product/whisperstation-quiet-workstation/"><span class="ubermenu-target-title ubermenu-target-text">AMD Workstations</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12874 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-6 ubermenu-has-submenu-stack ubermenu-item-type-column ubermenu-column-id-12874"><ul  class="ubermenu-submenu ubermenu-submenu-id-12874 ubermenu-submenu-type-stack"  ><li id="menu-item-12464" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-12464 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/storage/ddn-exascaler/"><span class="ubermenu-target-title ubermenu-target-text">DDN EXAScaler</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12875 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-6 ubermenu-has-submenu-stack ubermenu-item-type-column ubermenu-column-id-12875"><ul  class="ubermenu-submenu ubermenu-submenu-id-12875 ubermenu-submenu-type-stack"  ><li id="menu-item-10680" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10680 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/technologies/software/microway-mcms/"><span class="ubermenu-target-title ubermenu-target-text">MCMS</span></a></li><li id="menu-item-12483" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-12483 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/technologies/software/microway-gpu-checker/"><span class="ubermenu-target-title ubermenu-target-text">GPU-Checker</span></a></li></ul></li></ul></li></ul><div class="ubermenu-retractor ubermenu-retractor-mobile"><i class="fas fa-times"></i> Close</div></div></li><li id="menu-item-10430" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-has-children ubermenu-advanced-sub ubermenu-item-10430 ubermenu-item-level-0 ubermenu-column ubermenu-column-auto ubermenu-has-submenu-drop ubermenu-has-submenu-mega" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/" tabindex="0"><span class="ubermenu-target-title ubermenu-target-text">Products</span><i class='ubermenu-sub-indicator fas fa-angle-down'></i></a><div  class="ubermenu-submenu ubermenu-submenu-id-10430 ubermenu-submenu-type-auto ubermenu-submenu-type-mega ubermenu-submenu-drop ubermenu-submenu-align-full_width ubermenu-submenu-grid"  ><ul class="ubermenu-row ubermenu-row-id-10430_auto_1  "><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12878 ubermenu-item-level-2 ubermenu-column ubermenu-column-1-6 ubermenu-has-submenu-stack ubermenu-item-type-column ubermenu-column-id-12878"><ul  class="ubermenu-submenu ubermenu-submenu-id-12878 ubermenu-submenu-type-stack"  ><li id="menu-item-10453" class="ubermenu-item ubermenu-item-type-custom ubermenu-item-object-custom ubermenu-item-10453 ubermenu-item-normal ubermenu-item-level-3 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><span class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only"><span class="ubermenu-target-title ubermenu-target-text">Learn More About Our</span></span><div class="ubermenu-content-block ubermenu-custom-content ubermenu-custom-content-padded"><br><br></div></li></ul></li><li id="menu-item-10436" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10436 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-6" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/workstations/"><span class="ubermenu-target-title ubermenu-target-text">Workstations</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">Workstations that are designed from the ground up for demanding workloads</span></a></li><li id="menu-item-10434" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10434 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-6" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/"><span class="ubermenu-target-title ubermenu-target-text">Rackmount Servers</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">High performance servers for the datacenter, thoroughly tested &#038; integrated</span></a></li><li id="menu-item-10432" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10432 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-6" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/"><span class="ubermenu-target-title ubermenu-target-text">HPC Clusters</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">Custom designed clusters architected for maximum HPC throughput</span></a></li><li id="menu-item-10435" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10435 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-6" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/storage/"><span class="ubermenu-target-title ubermenu-target-text">Storage</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">Storage with the throughput &#038; reliability to keep up with massive datasets</span></a></li><li id="menu-item-10437" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10437 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-2 ubermenu-column ubermenu-column-1-6" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/preconfiguredsystems/"><span class="ubermenu-target-title ubermenu-target-text">Pre-Configured Systems</span><span class="ubermenu-target-divider"> – </span><span class="ubermenu-target-description ubermenu-target-text">Tailor-made configurations for common HPC and AI applications</span></a></li></ul><ul class="ubermenu-row ubermenu-row-id-12877  "><li id="menu-item-10454" class="ubermenu-item ubermenu-item-type-custom ubermenu-item-object-custom ubermenu-item-10454 ubermenu-item-normal ubermenu-item-level-2 ubermenu-column ubermenu-column-1-6 ubermenu-hide-mobile" ><span class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only"><span class="ubermenu-target-title ubermenu-target-text">Jump Directly to</span></span></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12879 ubermenu-item-level-2 ubermenu-column ubermenu-column-5-6 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-12879"><ul  class="ubermenu-submenu ubermenu-submenu-id-12879 ubermenu-submenu-type-block"  ><li class="ubermenu-divider"><hr/></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-10495 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-5 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-10495"><ul  class="ubermenu-submenu ubermenu-submenu-id-10495 ubermenu-submenu-type-stack"  ><li id="menu-item-10475" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-product ubermenu-item-10475 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/product/whisperstation-quiet-workstation/"><span class="ubermenu-target-title ubermenu-target-text">WhisperStation</span></a></li><li id="menu-item-10477" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-10477 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/whisperstation-deep-learning/"><span class="ubermenu-target-title ubermenu-target-text">WhisperStation- Deep Learning</span></a></li><li id="menu-item-10478" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-product ubermenu-item-10478 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/product/whisperstation-quadro/"><span class="ubermenu-target-title ubermenu-target-text">WhisperStation &#8211; Quadro</span></a></li><li id="menu-item-12484" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-product ubermenu-item-12484 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/product/whisperstation-pro-cae-1p/"><span class="ubermenu-target-title ubermenu-target-text">WhisperStation Pro CAE</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-10496 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-5 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-10496"><ul  class="ubermenu-submenu ubermenu-submenu-id-10496 ubermenu-submenu-type-stack"  ><li id="menu-item-13395" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-13395 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/tesla-gpu-servers/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA GPU Servers</span></a></li><li id="menu-item-10481" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10481 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/ibm-power-servers/"><span class="ubermenu-target-title ubermenu-target-text">IBM POWER Servers</span></a></li><li id="menu-item-10482" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10482 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/xeon-servers/"><span class="ubermenu-target-title ubermenu-target-text">Intel Xeon Servers</span></a></li><li id="menu-item-10484" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10484 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/rackmount-servers/amd-epyc-servers/"><span class="ubermenu-target-title ubermenu-target-text">AMD EPYC Servers</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-10499 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-5 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-10499"><ul  class="ubermenu-submenu ubermenu-submenu-id-10499 ubermenu-submenu-type-stack"  ><li id="menu-item-10485" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10485 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/nvidia-gpu-clusters/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA GPU Clusters</span></a></li><li id="menu-item-10486" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10486 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto ubermenu-hide-mobile" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/ibm-power-clusters/"><span class="ubermenu-target-title ubermenu-target-text">IBM POWER Clusters</span></a></li><li id="menu-item-10488" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10488 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/high-performance-computing-with-intel-xeon-hpc-clusters/"><span class="ubermenu-target-title ubermenu-target-text">Intel Xeon Clusters</span></a></li><li id="menu-item-10489" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10489 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/products/hpc-clusters/amd-epyc-clusters/"><span class="ubermenu-target-title ubermenu-target-text">AMD EPYC Clusters</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-12880 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-5 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-12880"><ul  class="ubermenu-submenu ubermenu-submenu-id-12880 ubermenu-submenu-type-stack"  ><li id="menu-item-12456" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-12456 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/technologies/ddn/"><span class="ubermenu-target-title ubermenu-target-text">DDN</span></a></li><li id="menu-item-12457" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-12457 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/technologies/netapp/"><span class="ubermenu-target-title ubermenu-target-text">NetApp</span></a></li></ul></li><li class="  ubermenu-item ubermenu-item-type-custom ubermenu-item-object-ubermenu-custom ubermenu-item-has-children ubermenu-item-10498 ubermenu-item-level-3 ubermenu-column ubermenu-column-1-5 ubermenu-has-submenu-stack ubermenu-hide-mobile ubermenu-item-type-column ubermenu-column-id-10498"><ul  class="ubermenu-submenu ubermenu-submenu-id-10498 ubermenu-submenu-type-stack"  ><li id="menu-item-13277" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-13277 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-station-a100/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA DGX Station A100&trade;</span></a></li><li id="menu-item-12576" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-12576 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-a100/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA DGX A100&trade;</span></a></li><li id="menu-item-11609" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-11609 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/dgx-pod/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA DGX POD&trade;</span></a></li><li id="menu-item-10493" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-10493 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/gpu-accelerated-workstation-cst-studio-suite/"><span class="ubermenu-target-title ubermenu-target-text">GPU Workstation for CST</span></a></li><li id="menu-item-10494" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-10494 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/gpu-accelerated-server-large-electronic-simulations-cst-studio-suite/"><span class="ubermenu-target-title ubermenu-target-text">GPU Server for CST</span></a></li><li id="menu-item-11619" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-11619 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/whisperstation-for-comsol-multiphysics/"><span class="ubermenu-target-title ubermenu-target-text">WhisperStation for COMSOL</span></a></li><li id="menu-item-11249" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-preconfiguredsystems ubermenu-item-11249 ubermenu-item-auto ubermenu-item-normal ubermenu-item-level-4 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/preconfiguredsystems/data-science-whisperstation-nvidia-data-science-workstation/"><span class="ubermenu-target-title ubermenu-target-text">NVIDIA Data Science Workstation</span></a></li></ul></li></ul></li></ul><div class="ubermenu-retractor ubermenu-retractor-mobile"><i class="fas fa-times"></i> Close</div></div></li><li id="menu-item-10438" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-has-children ubermenu-item-10438 ubermenu-item-level-0 ubermenu-column ubermenu-column-auto ubermenu-has-submenu-drop ubermenu-has-submenu-mega" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/knowledge-center/" tabindex="0"><span class="ubermenu-target-title ubermenu-target-text">Knowledge Center</span><i class='ubermenu-sub-indicator fas fa-angle-down'></i></a><ul  class="ubermenu-submenu ubermenu-submenu-id-10438 ubermenu-submenu-type-auto ubermenu-submenu-type-mega ubermenu-submenu-drop ubermenu-submenu-align-full_width"  ><li id="menu-item-10455" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-current_page_parent ubermenu-item-10455 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/hpc-tech-tips/"><span class="ubermenu-target-title ubermenu-target-text">Technical Blog</span></a></li><li id="menu-item-10439" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10439 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/knowledge-center/resources/"><span class="ubermenu-target-title ubermenu-target-text">Technical Resources</span></a></li><li id="menu-item-10456" class="ubermenu-item ubermenu-item-type-taxonomy ubermenu-item-object-incsub_wiki_category ubermenu-item-10456 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/knowledge-center-articles/categories/performance/"><span class="ubermenu-target-title ubermenu-target-text">Hardware Specs and Comparisons</span></a></li><li class="ubermenu-retractor ubermenu-retractor-mobile"><i class="fas fa-times"></i> Close</li></ul></li><li id="menu-item-10441" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-has-children ubermenu-item-10441 ubermenu-item-level-0 ubermenu-column ubermenu-column-auto ubermenu-has-submenu-drop ubermenu-has-submenu-mega" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/" tabindex="0"><span class="ubermenu-target-title ubermenu-target-text">Company</span><i class='ubermenu-sub-indicator fas fa-angle-down'></i></a><ul  class="ubermenu-submenu ubermenu-submenu-id-10441 ubermenu-submenu-type-auto ubermenu-submenu-type-mega ubermenu-submenu-drop ubermenu-submenu-align-full_width"  ><li id="menu-item-10442" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10442 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/events/"><span class="ubermenu-target-title ubermenu-target-text">Events</span></a></li><li id="menu-item-10443" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10443 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/microway-hpc-newsletter/"><span class="ubermenu-target-title ubermenu-target-text">HPC Newsletter</span></a></li><li id="menu-item-10444" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10444 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/press-room/"><span class="ubermenu-target-title ubermenu-target-text">Press Room</span></a></li><li id="menu-item-10445" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10445 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/partners/"><span class="ubermenu-target-title ubermenu-target-text">Partners</span></a></li><li id="menu-item-10446" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10446 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/employment/"><span class="ubermenu-target-title ubermenu-target-text">Employment</span></a></li><li id="menu-item-10447" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10447 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/history/"><span class="ubermenu-target-title ubermenu-target-text">History</span></a></li><li id="menu-item-10448" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-10448 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/company/map-and-company-directory/"><span class="ubermenu-target-title ubermenu-target-text">Map and Company Directory</span></a></li><li class="ubermenu-retractor ubermenu-retractor-mobile"><i class="fas fa-times"></i> Close</li></ul></li><li id="menu-item-10440" class="ubermenu-item ubermenu-item-type-post_type ubermenu-item-object-page ubermenu-item-has-children ubermenu-item-10440 ubermenu-item-level-0 ubermenu-column ubermenu-column-auto ubermenu-has-submenu-drop ubermenu-has-submenu-mega" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/knowledge-center/support/" tabindex="0"><span class="ubermenu-target-title ubermenu-target-text">Support</span><i class='ubermenu-sub-indicator fas fa-angle-down'></i></a><ul  class="ubermenu-submenu ubermenu-submenu-id-10440 ubermenu-submenu-type-auto ubermenu-submenu-type-mega ubermenu-submenu-drop ubermenu-submenu-align-center"  ><li id="menu-item-10908" class="ubermenu-item ubermenu-item-type-custom ubermenu-item-object-custom ubermenu-item-10908 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/knowledge-center/support/?target=online-support-request"><span class="ubermenu-target-title ubermenu-target-text">Online Support</span></a></li><li id="menu-item-10909" class="ubermenu-item ubermenu-item-type-custom ubermenu-item-object-custom ubermenu-item-10909 ubermenu-item-auto ubermenu-item-header ubermenu-item-level-1 ubermenu-column ubermenu-column-auto" ><a class="ubermenu-target ubermenu-item-layout-default ubermenu-item-layout-text_only" href="https://www.microway.com/knowledge-center/support/?target=telephone-and-e-mail-support"><span class="ubermenu-target-title ubermenu-target-text">Phone Support</span></a></li><li class="ubermenu-retractor ubermenu-retractor-mobile"><i class="fas fa-times"></i> Close</li></ul></li></ul></div>
+<!-- End UberMenu -->
+                
+
+                
+                
+                 </div><!-- #access -->
+            <div style="clear:both;"></div>
+            </div><!-- #access-wrapper -->
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+<p id="breadcrumbs"><span><span><a href="https://www.microway.com/">Home</a> &gt; <span><a href="https://www.microway.com/hpc-tech-tips/">HPC Tech Tips</a> &gt; <span class="breadcrumb_last" aria-current="page">nvidia-smi: Control Your GPUs</span></span></span></span></p>				<div id="nav-above" class="navigation">
+					<div class="nav-previous"><a href="https://www.microway.com/hpc-tech-tips/monitoring-hard-drive-and-raid-health/" rel="prev"><span class="meta-nav">&larr;</span> Monitoring Hard Drive and RAID Health</a></div>
+					<div class="nav-next"><a href="https://www.microway.com/hpc-tech-tips/gpu-performance-without-gpu-coding/" rel="next">GPU Performance without GPU Coding <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-above -->
+
+				<div id="post-58" class="post-58 post type-post status-publish format-standard hentry category-administration category-hardware tag-gpu tag-tesla">
+
+                
+					<h1 class="entry-title">nvidia-smi: Control Your GPUs</h1>
+
+					<div class="entry-meta">
+						<span class="meta-prep meta-prep-author">Posted on</span> <a href="https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/" title="10:44 pm" rel="bookmark"><span class="entry-date">December 5, 2011</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="https://www.microway.com/hpc-tech-tips/author/eliot/" title="View all posts by Eliot Eshelman">Eliot Eshelman</a></span>					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p><em>This post was last updated on 2018-11-05</em></p>
+<p>Most users know how to check the status of their CPUs, see how much system memory is free, or find out how much disk space is free. In contrast, keeping tabs on the health and status of GPUs has historically been more difficult. If you don&#8217;t know where to look, it can even be difficult to determine the type and capabilities of the GPUs in a system. Thankfully, NVIDIA&#8217;s latest hardware and software tools have made good improvements in this respect.<br />
+<span id="more-58"></span><br />
+The tool is NVIDIA&#8217;s System Management Interface (<code>nvidia-smi</code>). Depending on the generation of your card, various levels of information can be gathered. Additionally, GPU configuration options (such as ECC memory capability) may be enabled and disabled.</p>
+<p>As an aside, if you find that you&#8217;re having trouble getting your NVIDIA GPUs to run GPGPU code, <code>nvidia-smi</code> can be handy. For example, on some systems the proper NVIDIA devices in <code>/dev</code> are not created at boot. Running a simple <code>nvidia-smi</code> query as root will initialize all the cards and create the proper devices in <code>/dev</code>. Other times, it&#8217;s just useful to make sure all the GPU cards are visible and communicating properly. Here&#8217;s the default output from a recent version with four Tesla V100 GPU cards:</p>
+<pre><strong>nvidia-smi</strong>
+ 
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 410.48                 Driver Version: 410.48                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla V100-PCIE...  Off  | 00000000:18:00.0 Off |                    0 |
+| N/A   40C    P0    55W / 250W |  31194MiB / 32480MiB |     44%      Default |
++-------------------------------+----------------------+----------------------+
+|   1  Tesla V100-PCIE...  Off  | 00000000:3B:00.0 Off |                    0 |
+| N/A   40C    P0    36W / 250W |  30884MiB / 32480MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   2  Tesla V100-PCIE...  Off  | 00000000:86:00.0 Off |                    0 |
+| N/A   41C    P0    39W / 250W |  30884MiB / 32480MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   3  Tesla V100-PCIE...  Off  | 00000000:AF:00.0 Off |                    0 |
+| N/A   39C    P0    37W / 250W |  30884MiB / 32480MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|    0    305892      C   /usr/bin/python                            31181MiB |
++-----------------------------------------------------------------------------+</pre>
+<h2>Persistence Mode</h2>
+<p>On Linux, you can set GPUs to persistence mode to keep the NVIDIA driver loaded even when no applications are accessing the cards. This is particularly useful when you have a series of short jobs running. Persistence mode uses a few more watts per idle GPU, but prevents the fairly long delays that occur each time a GPU application is started. It is also necessary if you&#8217;ve assigned specific clock speeds or power limits to the GPUs (as those changes are lost when the NVIDIA driver is unloaded). Enable persistence mode on all GPUS by running:<br />
+<code>nvidia-smi -pm 1</code></p>
+<p>On Windows, nvidia-smi is not able to set persistence mode. Instead, you need to set your computational GPUs to <em>TCC mode</em>. This should be done through NVIDIA&#8217;s graphical GPU device management panel.</p>
+<h2>GPUs supported by nvidia-smi</h2>
+<p>NVIDIA&#8217;s SMI tool supports essentially any NVIDIA GPU released since the year 2011. These include the Tesla, Quadro, and GeForce devices from Fermi and higher architecture families (Kepler, Maxwell, Pascal, Volta, etc).</p>
+<blockquote><p>Supported products include:<br />
+Tesla:  S1070, S2050, C1060, C2050/70, M2050/70/90, X2070/90, K10, K20, K20X, K40, K80, M40, P40, P100, V100<br />
+Quadro: 4000, 5000, 6000, 7000, M2070-Q, K-series, M-series, P-series, RTX-series<br />
+GeForce:  varying levels of support, <a href="http://www.microway.com/knowledge-center-articles/comparison-of-nvidia-geforce-gpus-and-nvidia-tesla-gpus/" title="Comparison of NVIDIA Tesla and NVIDIA GeForce GPUs" target="_blank">with fewer metrics available than on the Tesla and Quadro products</a></p></blockquote>
+<h2>Querying GPU Status</h2>
+<p>Microway&#8217;s <a href="http://www.microway.com/tesla/gputestdrive/" title="Register for Microway Test Drive Cluster Benchmarking">GPU Test Drive cluster</a>, which we provide as a benchmarking service to our customers, contains a group of NVIDIA&#8217;s latest Tesla GPUs. These are NVIDIA&#8217;s high-performance compute GPUs and provide a good deal of health and status information. The examples below are taken from this internal cluster.</p>
+<p>To list all available NVIDIA devices, run:</p>
+<pre><strong>nvidia-smi -L</strong>
+
+GPU 0: Tesla K40m (UUID: GPU-d0e093a0-c3b3-f458-5a55-6eb69fxxxxxx)
+GPU 1: Tesla K40m (UUID: GPU-d105b085-7239-3871-43ef-975ecaxxxxxx)</pre>
+<p>To list certain details about each GPU, try:</p>
+<pre><strong>nvidia-smi --query-gpu=index,name,uuid,serial --format=csv</strong>
+
+0, Tesla K40m, GPU-d0e093a0-c3b3-f458-5a55-6eb69fxxxxxx, 0323913xxxxxx
+1, Tesla K40m, GPU-d105b085-7239-3871-43ef-975ecaxxxxxx, 0324214xxxxxx</pre>
+<p>To monitor overall GPU usage with 1-second update intervals:</p>
+<pre><strong>nvidia-smi dmon</strong>
+
+# gpu   pwr gtemp mtemp    sm   mem   enc   dec  mclk  pclk
+# Idx     W     C     C     %     %     %     %   MHz   MHz
+    0    43    35     -     0     0     0     0  2505  1075
+    1    42    31     -    97     9     0     0  2505  1075
+<em>(in this example, one GPU is idle and one GPU has 97% of the CUDA sm "cores" in use)</em></pre>
+<p>To monitor per-process GPU usage with 1-second update intervals:</p>
+<pre><strong>nvidia-smi pmon</strong>
+
+# gpu        pid  type    sm   mem   enc   dec   command
+# Idx          #   C/G     %     %     %     %   name
+    0      14835     C    45    15     0     0   python         
+    1      14945     C    64    50     0     0   python
+<em>(in this case, two different python processes are running; one on each GPU)</em></pre>
+<h2>Monitoring and Managing GPU Boost</h2>
+<p>The <em>GPU Boost</em> feature which NVIDIA has included with more recent GPUs allows the GPU clocks to vary depending upon load (achieving maximum performance so long as power and thermal headroom are available). However, the amount of available headroom will vary by application (and even by input file!) so users and administrators should keep their eyes on the status of the GPUs.</p>
+<p>A listing of available clock speeds can be shown for each GPU (in this case, the Tesla V100):</p>
+<pre><strong>nvidia-smi -q -d SUPPORTED_CLOCKS</strong>
+
+GPU 00000000:18:00.0
+    Supported Clocks
+        Memory                      : 877 MHz
+            Graphics                : 1380 MHz
+            Graphics                : 1372 MHz
+            Graphics                : 1365 MHz
+            Graphics                : 1357 MHz
+            [...159 additional clock speeds omitted...]
+            Graphics                : 157 MHz
+            Graphics                : 150 MHz
+            Graphics                : 142 MHz
+            Graphics                : 135 MHz</pre>
+<p>As shown, the Tesla V100 GPU supports 167 different clock speeds (from 135 MHz to 1380 MHz). However, only one memory clock speed is supported (877 MHz). Some GPUs support two different memory clock speeds (one high speed and one power-saving speed). Typically, such GPUs only support a single GPU clock speed when the memory is in the power-saving speed (which is the idle GPU state). On all recent Tesla and Quadro GPUs, GPU Boost automatically manages these speeds and runs the clocks as fast as possible (within the thermal/power limits and any limits set by the administrator).</p>
+<p>To review the current GPU clock speed, default clock speed, and maximum possible clock speed, run:</p>
+<pre><strong>nvidia-smi -q -d CLOCK</strong>
+
+GPU 00000000:18:00.0
+    Clocks
+        Graphics                    : 1230 MHz
+        SM                          : 1230 MHz
+        Memory                      : 877 MHz
+        Video                       : 1110 MHz
+    Applications Clocks
+        Graphics                    : 1230 MHz
+        Memory                      : 877 MHz
+    Default Applications Clocks
+        Graphics                    : 1230 MHz
+        Memory                      : 877 MHz
+    Max Clocks
+        Graphics                    : 1380 MHz
+        SM                          : 1380 MHz
+        Memory                      : 877 MHz
+        Video                       : 1237 MHz
+    Max Customer Boost Clocks
+        Graphics                    : 1380 MHz
+    SM Clock Samples
+        Duration                    : 0.01 sec
+        Number of Samples           : 4
+        Max                         : 1230 MHz
+        Min                         : 135 MHz
+        Avg                         : 944 MHz
+    Memory Clock Samples
+        Duration                    : 0.01 sec
+        Number of Samples           : 4
+        Max                         : 877 MHz
+        Min                         : 877 MHz
+        Avg                         : 877 MHz
+    Clock Policy
+        Auto Boost                  : N/A
+        Auto Boost Default          : N/A</pre>
+<p>Ideally, you&#8217;d like all clocks to be running at the highest speed all the time. However, this will not be possible for all applications. To review the current state of each GPU and any reasons for clock slowdowns, use the PERFORMANCE flag:</p>
+<pre><strong>nvidia-smi -q -d PERFORMANCE</strong>
+
+GPU 00000000:18:00.0
+    Performance State               : P0
+    Clocks Throttle Reasons
+        Idle                        : Not Active
+        Applications Clocks Setting : Not Active
+        SW Power Cap                : Not Active
+        HW Slowdown                 : Not Active
+            HW Thermal Slowdown     : Not Active
+            HW Power Brake Slowdown : Not Active
+        Sync Boost                  : Not Active
+        SW Thermal Slowdown         : Not Active
+        Display Clock Setting       : Not Active</pre>
+<p>If any of the GPU clocks is running at a slower speed, one or more of the above <em>Clocks Throttle Reasons</em> will be marked as active. The most concerning condition would be if <em>HW Slowdown</em> was active, as this would most likely indicate a power or cooling issue. The remaining conditions typically indicate that the card is idle or has been manually set into a slower mode by a system administrator.</p>
+<h2>Reviewing System/GPU Topology and NVLink with nvidia-smi</h2>
+<p>To properly take advantage of more advanced NVIDIA GPU features (such as GPU Direct), it is vital that the system topology be properly configured. The topology refers to how the various system devices (GPUs, InfiniBand HCAs, storage controllers, etc.) connect to each other and to the system&#8217;s CPUs. Certain topology types will reduce performance or even cause certain features to be unavailable. To help tackle such questions, <code>nvidia-smi</code> supports system topology and connectivity queries:</p>
+<pre><strong>nvidia-smi topo --matrix</strong>
+
+        GPU0    GPU1    GPU2    GPU3    mlx4_0  CPU Affinity
+GPU0     X      PIX     PHB     PHB     PHB     0-11
+GPU1    PIX      X      PHB     PHB     PHB     0-11
+GPU2    PHB     PHB      X      PIX     PHB     0-11
+GPU3    PHB     PHB     PIX      X      PHB     0-11
+mlx4_0  PHB     PHB     PHB     PHB      X 
+
+Legend:
+
+  X   = Self
+  SOC = Path traverses a socket-level link (e.g. QPI)
+  PHB = Path traverses a PCIe host bridge
+  PXB = Path traverses multiple PCIe internal switches
+  PIX = Path traverses a PCIe internal switch</pre>
+<p>Reviewing this section will take some getting used to, but can be very valuable. The above configuration shows two Tesla K80 GPUs and one Mellanox FDR InfiniBand HCA (<code>mlx4_0</code>) all connected to the first CPU of a server. Because the CPUs are 12-core Xeons, the topology tool recommends that jobs be assigned to the first 12 CPU cores (although this will vary by application).</p>
+<p>Higher-complexity systems require additional care in examining their configuration and capabilities. Below is the output of nvidia-smi topology for the NVIDIA DGX-1 system, which includes two 20-core CPUs, eight NVLink-connected GPUs, and four Mellanox InfiniBand adapters:</p>
+<pre>	GPU0	GPU1	GPU2	GPU3	GPU4	GPU5	GPU6	GPU7	mlx5_0	mlx5_2	mlx5_1	mlx5_3	CPU Affinity
+GPU0	 X 	NV1	NV1	NV2	NV2	SYS	SYS	SYS	PIX	SYS	PHB	SYS	0-19,40-59
+GPU1	NV1	 X 	NV2	NV1	SYS	NV2	SYS	SYS	PIX	SYS	PHB	SYS	0-19,40-59
+GPU2	NV1	NV2	 X 	NV2	SYS	SYS	NV1	SYS	PHB	SYS	PIX	SYS	0-19,40-59
+GPU3	NV2	NV1	NV2	 X 	SYS	SYS	SYS	NV1	PHB	SYS	PIX	SYS	0-19,40-59
+GPU4	NV2	SYS	SYS	SYS	 X 	NV1	NV1	NV2	SYS	PIX	SYS	PHB	20-39,60-79
+GPU5	SYS	NV2	SYS	SYS	NV1	 X 	NV2	NV1	SYS	PIX	SYS	PHB	20-39,60-79
+GPU6	SYS	SYS	NV1	SYS	NV1	NV2	 X 	NV2	SYS	PHB	SYS	PIX	20-39,60-79
+GPU7	SYS	SYS	SYS	NV1	NV2	NV1	NV2	 X 	SYS	PHB	SYS	PIX	20-39,60-79
+mlx5_0	PIX	PIX	PHB	PHB	SYS	SYS	SYS	SYS	 X 	SYS	PHB	SYS	
+mlx5_2	SYS	SYS	SYS	SYS	PIX	PIX	PHB	PHB	SYS	 X 	SYS	PHB	
+mlx5_1	PHB	PHB	PIX	PIX	SYS	SYS	SYS	SYS	PHB	SYS	 X 	SYS	
+mlx5_3	SYS	SYS	SYS	SYS	PHB	PHB	PIX	PIX	SYS	PHB	SYS	 X 	
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe switches (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing a single PCIe switch
+  NV#  = Connection traversing a bonded set of # NVLinks</pre>
+<p>The NVLink connections themselves can also be queried to ensure status, capability, and health. Readers are encouraged to consult NVIDIA documentation to better understand the specifics. Short summaries from nvidia-smi on DGX-1 are shown below.</p>
+<pre><strong>nvidia-smi nvlink --status</strong>
+
+GPU 0: Tesla V100-SXM2-32GB
+	 Link 0: 25.781 GB/s
+	 Link 1: 25.781 GB/s
+	 Link 2: 25.781 GB/s
+	 Link 3: 25.781 GB/s
+	 Link 4: 25.781 GB/s
+	 Link 5: 25.781 GB/s
+
+         [snip]
+
+GPU 7: Tesla V100-SXM2-32GB
+	 Link 0: 25.781 GB/s
+	 Link 1: 25.781 GB/s
+	 Link 2: 25.781 GB/s
+	 Link 3: 25.781 GB/s
+	 Link 4: 25.781 GB/s
+	 Link 5: 25.781 GB/s</pre>
+<pre><strong>nvidia-smi nvlink --capabilities</strong>
+
+GPU 0: Tesla V100-SXM2-32GB
+	 Link 0, P2P is supported: true
+	 Link 0, Access to system memory supported: true
+	 Link 0, P2P atomics supported: true
+	 Link 0, System memory atomics supported: true
+	 Link 0, SLI is supported: false
+	 Link 0, Link is supported: false
+	 
+         [snip]
+
+	 Link 5, P2P is supported: true
+	 Link 5, Access to system memory supported: true
+	 Link 5, P2P atomics supported: true
+	 Link 5, System memory atomics supported: true
+	 Link 5, SLI is supported: false
+	 Link 5, Link is supported: false</pre>
+<p>Get in touch with one of our <a href="https://www.microway.com/contact/" rel="noopener" target="_blank">HPC GPU experts</a> if you have questions on these topics.</p>
+<h2>Printing all GPU Details</h2>
+<p>To list all available data on a particular GPU, specify the ID of the card with <code>-i</code>. Here&#8217;s the output from an older Tesla GPU card:</p>
+<pre><strong>nvidia-smi -i 0 -q</strong>
+
+==============NVSMI LOG==============
+
+Timestamp                       : Mon Dec  5 22:05:49 2011
+
+Driver Version                  : 270.41.19
+
+Attached GPUs                   : 2
+
+GPU 0:2:0
+    Product Name                : Tesla M2090
+    Display Mode                : Disabled
+    Persistence Mode            : Disabled
+    Driver Model
+        Current                 : N/A
+        Pending                 : N/A
+    Serial Number               : 032251100xxxx
+    GPU UUID                    : GPU-2b1486407f70xxxx-98bdxxxx-660cxxxx-1d6cxxxx-9fbd7e7cd9bf55a7cfb2xxxx
+    Inforom Version
+        OEM Object              : 1.1
+        ECC Object              : 2.0
+        Power Management Object : 4.0
+    PCI
+        Bus                     : 2
+        Device                  : 0
+        Domain                  : 0
+        Device Id               : 109110DE
+        Bus Id                  : 0:2:0
+    Fan Speed                   : N/A
+    Memory Usage
+        Total                   : 5375 Mb
+        Used                    : 9 Mb
+        Free                    : 5365 Mb
+    Compute Mode                : Default
+    Utilization
+        Gpu                     : 0 %
+        Memory                  : 0 %
+    Ecc Mode
+        Current                 : Enabled
+        Pending                 : Enabled
+    ECC Errors
+        Volatile
+            Single Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+            Double Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+        Aggregate
+            Single Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+            Double Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+    Temperature
+        Gpu                     : N/A
+    Power Readings
+        Power State             : P12
+        Power Management        : Supported
+        Power Draw              : 31.57 W
+        Power Limit             : 225 W
+    Clocks
+        Graphics                : 50 MHz
+        SM                      : 100 MHz
+        Memory                  : 135 MHz</pre>
+<p>The above example shows an idle card. Here is an excerpt for a card running GPU-accelerated AMBER:</p>
+<pre><strong>nvidia-smi -i 0 -q -d MEMORY,UTILIZATION,POWER,CLOCK,COMPUTE</strong>
+
+==============NVSMI LOG==============
+
+Timestamp                       : Mon Dec  5 22:32:00 2011
+
+Driver Version                  : 270.41.19
+
+Attached GPUs                   : 2
+
+GPU 0:2:0
+    Memory Usage
+        Total                   : 5375 Mb
+        Used                    : 1904 Mb
+        Free                    : 3470 Mb
+    Compute Mode                : Default
+    Utilization
+        Gpu                     : 67 %
+        Memory                  : 42 %
+    Power Readings
+        Power State             : P0
+        Power Management        : Supported
+        Power Draw              : 109.83 W
+        Power Limit             : 225 W
+    Clocks
+        Graphics                : 650 MHz
+        SM                      : 1301 MHz
+        Memory                  : 1848 MHz</pre>
+<p>You&#8217;ll notice that unfortunately the earlier M-series passively-cooled Tesla GPUs do not report temperatures to <code>nvidia-smi</code>. More recent Quadro and Tesla GPUs support a greater quantity of metrics data:</p>
+<pre>==============NVSMI LOG==============
+Timestamp                           : Mon Nov  5 14:50:59 2018
+Driver Version                      : 410.48
+
+Attached GPUs                       : 4
+GPU 00000000:18:00.0
+    Product Name                    : Tesla V100-PCIE-32GB
+    Product Brand                   : Tesla
+    Display Mode                    : Enabled
+    Display Active                  : Disabled
+    Persistence Mode                : Disabled
+    Accounting Mode                 : Disabled
+    Accounting Mode Buffer Size     : 4000
+    Driver Model
+        Current                     : N/A
+        Pending                     : N/A
+    Serial Number                   : 032161808xxxx
+    GPU UUID                        : GPU-4965xxxx-79e3-7941-12cb-1dfe9c53xxxx
+    Minor Number                    : 0
+    VBIOS Version                   : 88.00.48.00.02
+    MultiGPU Board                  : No
+    Board ID                        : 0x1800
+    GPU Part Number                 : 900-2G500-0010-000
+    Inforom Version
+        Image Version               : G500.0202.00.02
+        OEM Object                  : 1.1
+        ECC Object                  : 5.0
+        Power Management Object     : N/A
+    GPU Operation Mode
+        Current                     : N/A
+        Pending                     : N/A
+    GPU Virtualization Mode
+        Virtualization mode         : None
+    IBMNPU
+        Relaxed Ordering Mode       : N/A
+    PCI
+        Bus                         : 0x18
+        Device                      : 0x00
+        Domain                      : 0x0000
+        Device Id                   : 0x1DB610DE
+        Bus Id                      : 00000000:18:00.0
+        Sub System Id               : 0x124A10DE
+        GPU Link Info
+            PCIe Generation
+                Max                 : 3
+                Current             : 3
+            Link Width
+                Max                 : 16x
+                Current             : 16x
+        Bridge Chip
+            Type                    : N/A
+            Firmware                : N/A
+        Replays since reset         : 0
+        Tx Throughput               : 31000 KB/s
+        Rx Throughput               : 155000 KB/s
+    Fan Speed                       : N/A
+    Performance State               : P0
+    Clocks Throttle Reasons
+        Idle                        : Not Active
+        Applications Clocks Setting : Not Active
+        SW Power Cap                : Not Active
+        HW Slowdown                 : Not Active
+            HW Thermal Slowdown     : Not Active
+            HW Power Brake Slowdown : Not Active
+        Sync Boost                  : Not Active
+        SW Thermal Slowdown         : Not Active
+        Display Clock Setting       : Not Active
+    FB Memory Usage
+        Total                       : 32480 MiB
+        Used                        : 31194 MiB
+        Free                        : 1286 MiB
+    BAR1 Memory Usage
+        Total                       : 32768 MiB
+        Used                        : 8 MiB
+        Free                        : 32760 MiB
+    Compute Mode                    : Default
+    Utilization
+        Gpu                         : 44 %
+        Memory                      : 4 %
+        Encoder                     : 0 %
+        Decoder                     : 0 %
+    Encoder Stats
+        Active Sessions             : 0
+        Average FPS                 : 0
+        Average Latency             : 0
+    FBC Stats
+        Active Sessions             : 0
+        Average FPS                 : 0
+        Average Latency             : 0
+    Ecc Mode
+        Current                     : Enabled
+        Pending                     : Enabled
+    ECC Errors
+        Volatile
+            Single Bit            
+                Device Memory       : 0
+                Register File       : 0
+                L1 Cache            : 0
+                L2 Cache            : 0
+                Texture Memory      : N/A
+                Texture Shared      : N/A
+                CBU                 : N/A
+                Total               : 0
+            Double Bit            
+                Device Memory       : 0
+                Register File       : 0
+                L1 Cache            : 0
+                L2 Cache            : 0
+                Texture Memory      : N/A
+                Texture Shared      : N/A
+                CBU                 : 0
+                Total               : 0
+        Aggregate
+            Single Bit            
+                Device Memory       : 0
+                Register File       : 0
+                L1 Cache            : 0
+                L2 Cache            : 0
+                Texture Memory      : N/A
+                Texture Shared      : N/A
+                CBU                 : N/A
+                Total               : 0
+            Double Bit            
+                Device Memory       : 0
+                Register File       : 0
+                L1 Cache            : 0
+                L2 Cache            : 0
+                Texture Memory      : N/A
+                Texture Shared      : N/A
+                CBU                 : 0
+                Total               : 0
+    Retired Pages
+        Single Bit ECC              : 0
+        Double Bit ECC              : 0
+        Pending                     : No
+    Temperature
+        GPU Current Temp            : 40 C
+        GPU Shutdown Temp           : 90 C
+        GPU Slowdown Temp           : 87 C
+        GPU Max Operating Temp      : 83 C
+        Memory Current Temp         : 39 C
+        Memory Max Operating Temp   : 85 C
+    Power Readings
+        Power Management            : Supported
+        Power Draw                  : 58.81 W
+        Power Limit                 : 250.00 W
+        Default Power Limit         : 250.00 W
+        Enforced Power Limit        : 250.00 W
+        Min Power Limit             : 100.00 W
+        Max Power Limit             : 250.00 W
+    Clocks
+        Graphics                    : 1380 MHz
+        SM                          : 1380 MHz
+        Memory                      : 877 MHz
+        Video                       : 1237 MHz
+    Applications Clocks
+        Graphics                    : 1230 MHz
+        Memory                      : 877 MHz
+    Default Applications Clocks
+        Graphics                    : 1230 MHz
+        Memory                      : 877 MHz
+    Max Clocks
+        Graphics                    : 1380 MHz
+        SM                          : 1380 MHz
+        Memory                      : 877 MHz
+        Video                       : 1237 MHz
+    Max Customer Boost Clocks
+        Graphics                    : 1380 MHz
+    Clock Policy
+        Auto Boost                  : N/A
+        Auto Boost Default          : N/A
+    Processes
+        Process ID                  : 315406
+            Type                    : C
+            Name                    : /usr/bin/python
+            Used GPU Memory         : 31181 MiB</pre>
+<h2>Additional nvidia-smi options</h2>
+<p>Of course, we haven&#8217;t covered all the possible uses of the <code>nvidia-smi</code> tool. To read the full list of options, run <code>nvidia-smi -h</code> (it&#8217;s fairly lengthy). Some of the sub-commands have their own help section. If you need to change settings on your cards, you&#8217;ll want to look at the device modification section:</p>
+<pre>
+    -pm,  --persistence-mode=   Set persistence mode: 0/DISABLED, 1/ENABLED
+    -e,   --ecc-config=         Toggle ECC support: 0/DISABLED, 1/ENABLED
+    -p,   --reset-ecc-errors=   Reset ECC error counts: 0/VOLATILE, 1/AGGREGATE
+    -c,   --compute-mode=       Set MODE for compute applications:
+                                0/DEFAULT, 1/EXCLUSIVE_PROCESS,
+                                2/PROHIBITED
+          --gom=                Set GPU Operation Mode:
+                                    0/ALL_ON, 1/COMPUTE, 2/LOW_DP
+    -r    --gpu-reset           Trigger reset of the GPU.
+                                Can be used to reset the GPU HW state in situations
+                                that would otherwise require a machine reboot.
+                                Typically useful if a double bit ECC error has
+                                occurred.
+                                Reset operations are not guarenteed to work in
+                                all cases and should be used with caution.
+    -vm   --virt-mode=          Switch GPU Virtualization Mode:
+                                Sets GPU virtualization mode to 3/VGPU or 4/VSGA
+                                Virtualization mode of a GPU can only be set when
+                                it is running on a hypervisor.
+    -lgc  --lock-gpu-clocks=    Specifies <minGpuClock,maxGpuClock> clocks as a
+                                    pair (e.g. 1500,1500) that defines the range 
+                                    of desired locked GPU clock speed in MHz.
+                                    Setting this will supercede application clocks
+                                    and take effect regardless if an app is running.
+                                    Input can also be a singular desired clock value
+                                    (e.g. <GpuClockValue>).
+    -rgc  --reset-gpu-clocks
+                                Resets the Gpu clocks to the default values.
+    -ac   --applications-clocks= Specifies <memory,graphics> clocks as a
+                                    pair (e.g. 2000,800) that defines GPU's
+                                    speed in MHz while running applications on a GPU.
+    -rac  --reset-applications-clocks
+                                Resets the applications clocks to the default values.
+    -acp  --applications-clocks-permission=
+                                Toggles permission requirements for -ac and -rac commands:
+                                0/UNRESTRICTED, 1/RESTRICTED
+    -pl   --power-limit=        Specifies maximum power management limit in watts.
+    -am   --accounting-mode=    Enable or disable Accounting Mode: 0/DISABLED, 1/ENABLED
+    -caa  --clear-accounted-apps
+                                Clears all the accounted PIDs in the buffer.
+          --auto-boost-default= Set the default auto boost policy to 0/DISABLED
+                                or 1/ENABLED, enforcing the change only after the
+                                last boost client has exited.
+          --auto-boost-permission=
+                                Allow non-admin/root control over auto boost mode:
+                                0/UNRESTRICTED, 1/RESTRICTED</pre>
+<pre><strong>nvidia-smi dmon -h</strong>
+
+    GPU statistics are displayed in scrolling format with one line
+    per sampling interval. Metrics to be monitored can be adjusted
+    based on the width of terminal window. Monitoring is limited to
+    a maximum of 4 devices. If no devices are specified, then up to
+    first 4 supported devices under natural enumeration (starting
+    with GPU index 0) are used for monitoring purpose.
+    It is supported on Tesla, GRID, Quadro and limited GeForce products
+    for Kepler or newer GPUs under x64 and ppc64 bare metal Linux.
+
+    Usage: nvidia-smi dmon [options]
+
+    Options include:
+    [-i | --id]:          Comma separated Enumeration index, PCI bus ID or UUID
+    [-d | --delay]:       Collection delay/interval in seconds [default=1sec]
+    [-c | --count]:       Collect specified number of samples and exit
+    [-s | --select]:      One or more metrics [default=puc]
+                          Can be any of the following:
+                              p - Power Usage and Temperature
+                              u - Utilization
+                              c - Proc and Mem Clocks
+                              v - Power and Thermal Violations
+                              m - FB and Bar1 Memory
+                              e - ECC Errors and PCIe Replay errors
+                              t - PCIe Rx and Tx Throughput
+    [-o | --options]:     One or more from the following:
+                              D - Include Date (YYYYMMDD) in scrolling output
+                              T - Include Time (HH:MM:SS) in scrolling output
+    [-f | --filename]:    Log to a specified file, rather than to stdout</pre>
+<pre><strong>nvidia-smi topo -h</strong>
+
+    topo -- Display topological information about the system.
+
+    Usage: nvidia-smi topo [options]
+
+    Options include:
+    [-m | --matrix]: Display the GPUDirect communication matrix for the system.
+    [-mp | --matrix_pci]: Display the GPUDirect communication matrix for the system (PCI Only).
+    [-i | --id]: Enumeration index, PCI bus ID or UUID. Provide comma
+                 separated values for more than one device
+                 Must be used in conjuction with -n or -p.
+    [-c | --cpu]: CPU number for which to display all GPUs with an affinity.
+    [-n | --nearest_gpus]: Display the nearest GPUs for a given traversal path.
+                   0 = a single PCIe switch on a dual GPU board
+                   1 = a single PCIe switch
+                   2 = multiple PCIe switches
+                   3 = a PCIe host bridge
+                   4 = an on-CPU interconnect link between PCIe host bridges
+                   5 = an SMP interconnect link between NUMA nodes
+                 Used in conjunction with -i which must be a single device ID.
+    [-p | --gpu_path]: Display the most direct path traversal for a pair of GPUs.
+                 Used in conjunction with -i which must be a pair of device IDs.
+    [-p2p | --p2pstatus]:      Displays the p2p status between the GPUs of a given p2p capability
+                   r - p2p read capabiity
+                   w - p2p write capability
+                   n - p2p nvlink capability
+                   a - p2p atomics capability
+                   p - p2p prop capability</pre>
+<h2>Information on additional tools</h2>
+<p>With this tool, checking the status and health of NVIDIA GPUs is simple. If you&#8217;re looking to monitor the cards over time, then <code>nvidia-smi</code> might be more resource-intensive than you&#8217;d like. For that, have a look at the API available from <a href="http://developer.nvidia.com/nvidia-management-library-nvml" title="NVIDIA Management Library">NVIDIA&#8217;s GPU Management Library (NVML)</a>, which offers C, Perl and Python bindings.</p>
+<p>There are also tools purpose-built for larger-scale health monitoring and validation. When managing a group or cluster of GPU-accelerated systems, administrators should consider <a href="https://www.microway.com/hpc-tech-tips/nvidia-dcgm-for-gpu-management/" rel="noopener" target="_blank">NVIDIA Datacenter GPU Manager (DCGM)</a> and/or Bright Cluster Manager.</p>
+<p>Given the popularity of GPUs, most popular open-source tools also include support for monitoring GPUs. Examples include Ganglia, Telegraf, collectd, and Diamond.</p>
+<div style="clear:both;"></div>											</div><!-- .entry-content -->
+
+					<div id="entry-author-info">
+						<div id="author-avatar">
+							<img src="https://www.microway.com/wp-content/uploads/eliot-square-94x94.png" width="60" height="60" alt="Eliot Eshelman" class="avatar avatar-60 wp-user-avatar wp-user-avatar-60 alignnone photo" />						</div><!-- #author-avatar -->
+						<div id="author-description">
+							<h2>About Eliot Eshelman</h2>
+							My interests span from astrophysics to bacteriophages; high-performance computers to small spherical magnets. I've been an avid Linux geek (with a focus on HPC) for more than a decade. I work as Microway's Vice President of Strategic Accounts and HPC Initiatives.							<div id="author-link">
+								<a href="https://www.microway.com/hpc-tech-tips/author/eliot/" rel="author">
+									View all posts by Eliot Eshelman <span class="meta-nav">&rarr;</span>								</a>
+							</div><!-- #author-link	-->
+						</div><!-- #author-description -->
+					</div><!-- #entry-author-info -->
+
+					<div class="entry-utility">
+						This entry was posted in <a href="https://www.microway.com/hpc-tech-tips/category/administration/" rel="category tag">Administration</a>, <a href="https://www.microway.com/hpc-tech-tips/category/hardware/" rel="category tag">Hardware</a> and tagged <a href="https://www.microway.com/hpc-tech-tips/tag/gpu/" rel="tag">gpu</a>, <a href="https://www.microway.com/hpc-tech-tips/tag/tesla/" rel="tag">tesla</a>. Bookmark the <a href="https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/" title="Permalink to nvidia-smi: Control Your GPUs" rel="bookmark">permalink</a>.											</div><!-- .entry-utility -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="https://www.microway.com/hpc-tech-tips/monitoring-hard-drive-and-raid-health/" rel="prev"><span class="meta-nav">&larr;</span> Monitoring Hard Drive and RAID Health</a></div>
+					<div class="nav-next"><a href="https://www.microway.com/hpc-tech-tips/gpu-performance-without-gpu-coding/" rel="next">GPU Performance without GPU Coding <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-below -->
+
+				
+			<div id="comments">
+
+
+			<h3 id="comments-title">4 Responses to <em>nvidia-smi: Control Your GPUs</em></h3>
+
+
+			<ol class="commentlist">
+				</li><!-- #comment-## -->
+</li><!-- #comment-## -->
+<ul class="children">
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+			</ol>
+
+
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/hpc-tech-tips/nvidia-smi_control-your-gpus/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://www.microway.com/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" maxlength="100" aria-describedby="email-notes" required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='58' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="0ed1f2883f" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js" name="ak_js" value="213"/><script>document.getElementById( "ak_js" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="https://www.microway.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='https://www.microway.com/hpc-tech-tips/2020/06/'>June 2020</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2020/05/'>May 2020</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2020/03/'>March 2020</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2019/08/'>August 2019</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2019/06/'>June 2019</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2019/04/'>April 2019</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2019/03/'>March 2019</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2018/05/'>May 2018</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2018/04/'>April 2018</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2017/10/'>October 2017</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2017/09/'>September 2017</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2017/07/'>July 2017</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2017/04/'>April 2017</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2017/02/'>February 2017</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2017/01/'>January 2017</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/12/'>December 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/08/'>August 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/07/'>July 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/06/'>June 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/04/'>April 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/03/'>March 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/02/'>February 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2016/01/'>January 2016</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2015/10/'>October 2015</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2015/09/'>September 2015</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2015/07/'>July 2015</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2015/06/'>June 2015</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2015/05/'>May 2015</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2015/04/'>April 2015</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/11/'>November 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/10/'>October 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/09/'>September 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/06/'>June 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/05/'>May 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/04/'>April 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/03/'>March 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/02/'>February 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2014/01/'>January 2014</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/12/'>December 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/11/'>November 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/10/'>October 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/09/'>September 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/08/'>August 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/07/'>July 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/06/'>June 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/04/'>April 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/03/'>March 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/02/'>February 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2013/01/'>January 2013</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2012/09/'>September 2012</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2012/05/'>May 2012</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2012/04/'>April 2012</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2012/01/'>January 2012</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2011/12/'>December 2011</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2011/09/'>September 2011</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2011/08/'>August 2011</a></li>
+	<li><a href='https://www.microway.com/hpc-tech-tips/2011/07/'>July 2011</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a rel="nofollow" href="https://www.microway.com/mw_admin/">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+
+		<div id="secondary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+             				<li id="black-studio-tinymce-8" class="widget-container widget_black_studio_tinymce"><h3 class="widget-title">Talk to an Expert</h3><div class="textwidget"><a href="//www.microway.com/contact"><img class="alignnone size-full wp-image-453" src="//www.microway.com/wp-content/uploads/talk-to-an-expert1.gif" alt="talk-to-an-expert" width="280" height="124" /></a></div></li><li id="black-studio-tinymce-12" class="widget-container widget_black_studio_tinymce"><h3 class="widget-title">Take a Test Drive</h3><div class="textwidget"><p><a href="//www.microway.com/take-a-test-drive/"><img class="alignnone size-full wp-image-452" alt="Benchmark Server and Workstation" src="//www.microway.com/wp-content/uploads/test-drive.gif" width="280" height="124" /></a></p></div></li><li id="black-studio-tinymce-6" class="widget-container widget_black_studio_tinymce"><h3 class="widget-title">Configure Your Solution</h3><div class="textwidget"><a href="https://www.microway.com/configure-your-solution/"><img class="alignnone size-full wp-image-451" src="https://www.microway.com/wp-content/uploads/configure-your-solution1.jpg" alt="configure-your-solution" width="280" height="124" /></a></div></li><li id="black-studio-tinymce-15" class="widget-container widget_black_studio_tinymce"><h3 class="widget-title">Subscribe to Microway&#8217;s Technical Newsletter</h3><div class="textwidget"><strong><a title="Microway HPC Newsletter" href="http://www.microway.com/company/microway-hpc-newsletter/" target="_blank">Join our Bi-Monthly Newsletter</a></strong></div></li><li id="categories-2" class="widget-container widget_categories"><h3 class="widget-title">HPC-Tech-Tip Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-6"><a href="https://www.microway.com/hpc-tech-tips/category/administration/">Administration</a>
+</li>
+	<li class="cat-item cat-item-18"><a href="https://www.microway.com/hpc-tech-tips/category/benchmarking/">Benchmarking</a>
+</li>
+	<li class="cat-item cat-item-15"><a href="https://www.microway.com/hpc-tech-tips/category/development/">Development</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="https://www.microway.com/hpc-tech-tips/category/hardware/">Hardware</a>
+</li>
+	<li class="cat-item cat-item-189"><a href="https://www.microway.com/hpc-tech-tips/category/hpc-guidance/">HPC Guidance</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://www.microway.com/hpc-tech-tips/category/pitfalls/">Pitfalls</a>
+</li>
+	<li class="cat-item cat-item-16"><a href="https://www.microway.com/hpc-tech-tips/category/software/">Software</a>
+</li>
+	<li class="cat-item cat-item-88"><a href="https://www.microway.com/hpc-tech-tips/category/test-drive/">Test Drive</a>
+</li>
+			</ul>
+
+			</li><li id="tag_cloud-2" class="widget-container widget_tag_cloud"><h3 class="widget-title">HPC-Tech-Tip Tags</h3><div class="tagcloud"><a href="https://www.microway.com/hpc-tech-tips/tag/a100/" class="tag-cloud-link tag-link-209 tag-link-position-1" style="font-size: 9.9236641221374pt;" aria-label="A100 (2 items)">A100</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/amber/" class="tag-cloud-link tag-link-17 tag-link-position-2" style="font-size: 8pt;" aria-label="AMBER (1 item)">AMBER</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/benchmark/" class="tag-cloud-link tag-link-89 tag-link-position-3" style="font-size: 15.908396946565pt;" aria-label="benchmark (10 items)">benchmark</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/cloudera/" class="tag-cloud-link tag-link-21 tag-link-position-4" style="font-size: 8pt;" aria-label="Cloudera (1 item)">Cloudera</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/cluster/" class="tag-cloud-link tag-link-143 tag-link-position-5" style="font-size: 11.206106870229pt;" aria-label="cluster (3 items)">cluster</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/containerization/" class="tag-cloud-link tag-link-182 tag-link-position-6" style="font-size: 8pt;" aria-label="containerization (1 item)">containerization</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/coprocessor/" class="tag-cloud-link tag-link-19 tag-link-position-7" style="font-size: 13.87786259542pt;" aria-label="coprocessor (6 items)">coprocessor</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/cpu/" class="tag-cloud-link tag-link-79 tag-link-position-8" style="font-size: 15.480916030534pt;" aria-label="cpu (9 items)">cpu</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/cryoem/" class="tag-cloud-link tag-link-202 tag-link-position-9" style="font-size: 8pt;" aria-label="CryoEM (1 item)">CryoEM</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/cuda/" class="tag-cloud-link tag-link-46 tag-link-position-10" style="font-size: 17.404580152672pt;" aria-label="CUDA (14 items)">CUDA</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/data-analytics/" class="tag-cloud-link tag-link-207 tag-link-position-11" style="font-size: 8pt;" aria-label="data analytics (1 item)">data analytics</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/deep-learning/" class="tag-cloud-link tag-link-139 tag-link-position-12" style="font-size: 17.083969465649pt;" aria-label="deep learning (13 items)">deep learning</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/dgx/" class="tag-cloud-link tag-link-206 tag-link-position-13" style="font-size: 8pt;" aria-label="DGX (1 item)">DGX</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/education/" class="tag-cloud-link tag-link-208 tag-link-position-14" style="font-size: 8pt;" aria-label="education (1 item)">education</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/gk210/" class="tag-cloud-link tag-link-96 tag-link-position-15" style="font-size: 8pt;" aria-label="GK210 (1 item)">GK210</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/gpu/" class="tag-cloud-link tag-link-141 tag-link-position-16" style="font-size: 22pt;" aria-label="gpu (40 items)">gpu</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/gromacs/" class="tag-cloud-link tag-link-94 tag-link-position-17" style="font-size: 9.9236641221374pt;" aria-label="GROMACS (2 items)">GROMACS</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/grub/" class="tag-cloud-link tag-link-9 tag-link-position-18" style="font-size: 8pt;" aria-label="grub (1 item)">grub</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/guide/" class="tag-cloud-link tag-link-90 tag-link-position-19" style="font-size: 12.274809160305pt;" aria-label="guide (4 items)">guide</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/hadoop/" class="tag-cloud-link tag-link-22 tag-link-position-20" style="font-size: 8pt;" aria-label="Hadoop (1 item)">Hadoop</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/high-performance-computing/" class="tag-cloud-link tag-link-23 tag-link-position-21" style="font-size: 17.618320610687pt;" aria-label="High Performance Computing (15 items)">High Performance Computing</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/hoomd-blue/" class="tag-cloud-link tag-link-92 tag-link-position-22" style="font-size: 9.9236641221374pt;" aria-label="hoomd-blue (2 items)">hoomd-blue</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/hpc/" class="tag-cloud-link tag-link-24 tag-link-position-23" style="font-size: 13.87786259542pt;" aria-label="HPC (6 items)">HPC</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/k80/" class="tag-cloud-link tag-link-95 tag-link-position-24" style="font-size: 12.274809160305pt;" aria-label="K80 (4 items)">K80</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/linux-kernel/" class="tag-cloud-link tag-link-7 tag-link-position-25" style="font-size: 8pt;" aria-label="Linux kernel (1 item)">Linux kernel</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/m40/" class="tag-cloud-link tag-link-157 tag-link-position-26" style="font-size: 9.9236641221374pt;" aria-label="M40 (2 items)">M40</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/matlab/" class="tag-cloud-link tag-link-93 tag-link-position-27" style="font-size: 8pt;" aria-label="MATLAB (1 item)">MATLAB</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/mdadm/" class="tag-cloud-link tag-link-11 tag-link-position-28" style="font-size: 9.9236641221374pt;" aria-label="mdadm (2 items)">mdadm</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/memory/" class="tag-cloud-link tag-link-102 tag-link-position-29" style="font-size: 9.9236641221374pt;" aria-label="memory (2 items)">memory</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/namd/" class="tag-cloud-link tag-link-91 tag-link-position-30" style="font-size: 9.9236641221374pt;" aria-label="NAMD (2 items)">NAMD</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/nvidia-digits/" class="tag-cloud-link tag-link-140 tag-link-position-31" style="font-size: 8pt;" aria-label="NVIDIA DIGITS (1 item)">NVIDIA DIGITS</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/nvlink/" class="tag-cloud-link tag-link-174 tag-link-position-32" style="font-size: 11.206106870229pt;" aria-label="NVLink (3 items)">NVLink</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/openacc/" class="tag-cloud-link tag-link-156 tag-link-position-33" style="font-size: 9.9236641221374pt;" aria-label="OpenACC (2 items)">OpenACC</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/openmp/" class="tag-cloud-link tag-link-159 tag-link-position-34" style="font-size: 8pt;" aria-label="OpenMP (1 item)">OpenMP</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/openpower/" class="tag-cloud-link tag-link-160 tag-link-position-35" style="font-size: 9.9236641221374pt;" aria-label="OpenPOWER (2 items)">OpenPOWER</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/p40/" class="tag-cloud-link tag-link-180 tag-link-position-36" style="font-size: 8pt;" aria-label="P40 (1 item)">P40</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/p100/" class="tag-cloud-link tag-link-163 tag-link-position-37" style="font-size: 12.274809160305pt;" aria-label="P100 (4 items)">P100</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/phi/" class="tag-cloud-link tag-link-20 tag-link-position-38" style="font-size: 13.129770992366pt;" aria-label="Phi (5 items)">Phi</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/raid/" class="tag-cloud-link tag-link-12 tag-link-position-39" style="font-size: 11.206106870229pt;" aria-label="RAID (3 items)">RAID</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/sc-conference/" class="tag-cloud-link tag-link-81 tag-link-position-40" style="font-size: 8pt;" aria-label="SC Conference (1 item)">SC Conference</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/tesla/" class="tag-cloud-link tag-link-142 tag-link-position-41" style="font-size: 20.396946564885pt;" aria-label="tesla (28 items)">tesla</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/test-drive/" class="tag-cloud-link tag-link-158 tag-link-position-42" style="font-size: 8pt;" aria-label="Test Drive (1 item)">Test Drive</a>
+<a href="https://www.microway.com/hpc-tech-tips/tag/v100/" class="tag-cloud-link tag-link-185 tag-link-position-43" style="font-size: 8pt;" aria-label="v100 (1 item)">v100</a></div>
+</li><li id="black-studio-tinymce-13" class="widget-container widget_black_studio_tinymce"><h3 class="widget-title">Subscribe to Blog</h3><div class="textwidget"><a title="Subscribe to Microway's blog: HPC Tech Tips" href="https://www.microway.com/feed/"><img src="https://www.microway.com/wp-content/themes/microway/images/feed-icon-28x28.png" width=28 height=28 border=0 /></a></div></li>			</ul>
+		</div><!-- #secondary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+		<div class="footer-nav-menu"><h4><a href="/technologies">Technologies</a></h4><div class="menu-technologies-container"><ul id="menu-technologies" class="menu"><li id="menu-item-13372" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-13372"><a href="https://www.microway.com/technologies/nvidia-datacenter-gpu/">NVIDIA GPUs</a></li>
+<li id="menu-item-11616" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-11616"><a href="https://www.microway.com/technologies/dgx/">NVIDIA DGX</a></li>
+<li id="menu-item-172" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-172"><a href="https://www.microway.com/technologies/intel/">Intel</a></li>
+<li id="menu-item-170" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-170"><a href="https://www.microway.com/technologies/amd/">AMD</a></li>
+<li id="menu-item-12611" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12611"><a href="https://www.microway.com/technologies/ddn/">DDN</a></li>
+<li id="menu-item-174" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-174"><a href="https://www.microway.com/technologies/software/">Software</a></li>
+</ul></div></div>
+        <div class="footer-nav-menu"><h4><a href="/products">Products</a></h4><div class="menu-products-container"><ul id="menu-products" class="menu"><li id="menu-item-176" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-176"><a href="https://www.microway.com/products/hpc-clusters/">HPC Clusters</a></li>
+<li id="menu-item-178" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-178"><a href="https://www.microway.com/products/rackmount-servers/">Rackmount Servers</a></li>
+<li id="menu-item-179" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-179"><a href="https://www.microway.com/products/storage/">Storage</a></li>
+<li id="menu-item-180" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-180"><a href="https://www.microway.com/products/workstations/">Workstations</a></li>
+</ul></div></div>
+        <div class="footer-nav-menu"><h4><a href="/knowledge-center">Knowledge Center</a></h4><div class="menu-knowledge-center-container"><ul id="menu-knowledge-center" class="menu"><li id="menu-item-187" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-187"><a href="https://www.microway.com/knowledge-center/resources/">Resources</a></li>
+<li id="menu-item-188" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-188"><a href="https://www.microway.com/knowledge-center/support/">Support</a></li>
+</ul></div></div>
+        <div class="preconfigured-footer">
+        <h4><a href="/products/preconfiguredsystems">Pre-Configured Systems</a></h4>
+          <div class="preconfigured-footer-item">
+  <div class="preconfigured-footer-image-wrap">
+  <a href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-station-a100/" rel="bookmark" title="Permanent Link to NVIDIA DGX Station A100&trade;"><img width="94" height="71" src="https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-94x71.jpg" class="preconfigured-footer-image wp-post-image" alt="Photo of DGX A100 Open" loading="lazy" srcset="https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-94x71.jpg 94w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-140x105.jpg 140w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-680x512.jpg 680w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-768x579.jpg 768w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-1536x1157.jpg 1536w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-531x400.jpg 531w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-291x219.jpg 291w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-300x226.jpg 300w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-900x678.jpg 900w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-713x537.jpg 713w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-504x380.jpg 504w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open-346x261.jpg 346w, https://www.microway.com/wp-content/uploads/DGX-Station-A100-Open.jpg 2000w" sizes="(max-width: 94px) 100vw, 94px" /></a>
+        </div>
+    <h3><a href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-station-a100/" rel="bookmark" title="Permanent Link to NVIDIA DGX Station A100&trade;">NVIDIA DGX Station A100&trade;</a></h3>
+
+
+    <div style="clear:both;">&nbsp;</div>
+    </div>
+  <div class="preconfigured-footer-item">
+  <div class="preconfigured-footer-image-wrap">
+  <a href="https://www.microway.com/preconfiguredsystems/dgx-pod/" rel="bookmark" title="Permanent Link to NVIDIA DGX POD&trade;"><img width="94" height="70" src="https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-94x70.jpg" class="preconfigured-footer-image wp-post-image" alt="" loading="lazy" srcset="https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-94x70.jpg 94w, https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-140x104.jpg 140w, https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-537x400.jpg 537w, https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-294x219.jpg 294w, https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-300x224.jpg 300w, https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-510x380.jpg 510w, https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight-350x261.jpg 350w, https://www.microway.com/wp-content/uploads/DGXPOD-DGX-A100-2to1-ProductHighlight.jpg 667w" sizes="(max-width: 94px) 100vw, 94px" /></a>
+        </div>
+    <h3><a href="https://www.microway.com/preconfiguredsystems/dgx-pod/" rel="bookmark" title="Permanent Link to NVIDIA DGX POD&trade;">NVIDIA DGX POD&trade;</a></h3>
+
+
+    <div style="clear:both;">&nbsp;</div>
+    </div>
+  <div class="preconfigured-footer-item">
+  <div class="preconfigured-footer-image-wrap">
+  <a href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-a100/" rel="bookmark" title="Permanent Link to NVIDIA DGX A100&trade;"><img width="94" height="75" src="https://www.microway.com/wp-content/uploads/dgx-a100-hero-94x75.jpg" class="preconfigured-footer-image wp-post-image" alt="DGX A100 Hero Image" loading="lazy" srcset="https://www.microway.com/wp-content/uploads/dgx-a100-hero-94x75.jpg 94w, https://www.microway.com/wp-content/uploads/dgx-a100-hero-140x112.jpg 140w, https://www.microway.com/wp-content/uploads/dgx-a100-hero-768x616.jpg 768w, https://www.microway.com/wp-content/uploads/dgx-a100-hero-680x545.jpg 680w, https://www.microway.com/wp-content/uploads/dgx-a100-hero-499x400.jpg 499w, https://www.microway.com/wp-content/uploads/dgx-a100-hero-273x219.jpg 273w, https://www.microway.com/wp-content/uploads/dgx-a100-hero-300x240.jpg 300w, https://www.microway.com/wp-content/uploads/dgx-a100-hero-900x721.jpg 900w, https://www.microway.com/wp-content/uploads/dgx-a100-hero.jpg 998w" sizes="(max-width: 94px) 100vw, 94px" /></a>
+        </div>
+    <h3><a href="https://www.microway.com/preconfiguredsystems/nvidia-dgx-a100/" rel="bookmark" title="Permanent Link to NVIDIA DGX A100&trade;">NVIDIA DGX A100&trade;</a></h3>
+
+
+    <div style="clear:both;">&nbsp;</div>
+    </div>
+  <div class="preconfigured-footer-item">
+  <div class="preconfigured-footer-image-wrap">
+  <a href="https://www.microway.com/preconfiguredsystems/ai-anywhere-solution/" rel="bookmark" title="Permanent Link to AI Anywhere Solution"><img width="94" height="69" src="https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-94x69.jpg" class="preconfigured-footer-image wp-post-image" alt="" loading="lazy" srcset="https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-94x69.jpg 94w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-140x103.jpg 140w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-768x564.jpg 768w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-680x499.jpg 680w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-545x400.jpg 545w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-298x219.jpg 298w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-300x220.jpg 300w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution-900x660.jpg 900w, https://www.microway.com/wp-content/uploads/DDC-DGX-1Solution.jpg 1826w" sizes="(max-width: 94px) 100vw, 94px" /></a>
+        </div>
+    <h3><a href="https://www.microway.com/preconfiguredsystems/ai-anywhere-solution/" rel="bookmark" title="Permanent Link to AI Anywhere Solution">AI Anywhere Solution</a></h3>
+
+
+    <div style="clear:both;">&nbsp;</div>
+    </div>
+        </div>
+		<div id="fbottom">
+        <div id="fbottoml">
+          <p><img src="https://www.microway.com/wp-content/themes/microway/images/gsa-contract-schedule-gs-35f-0431n.gif" width="180" height="39" alt="Microway GSA Contract Schedule number GS-35F-0431N" /></p>
+          <p>© Copyright 2021 Microway. All Rights Reserved.  |  <a href="https://www.microway.com/site-map">Site Map</a> |  <a href="https://www.microway.com/terms-of-use">Terms of Use</a> |  <a href="https://www.microway.com/privacy-policy/">Privacy Policy</a></p>
+        </div>
+        <div id="fbottomr">
+
+
+
+        <p><a href="https://www.microway.com/products/preconfiguredsystems"><span style="color: #fff;">>></span> VIEW ALL PRE-CONFIGURED SYSTEMS</a></p>
+		<p class="connect">Connect with Microway: <a href="https://www.facebook.com/pages/Microway/250225379438" target="_blank"><img src="https://www.microway.com/wp-content/themes/microway/images/logo-facebook.gif" width="24" height="24" alt="facebook" /></a><a href="https://twitter.com/MicrowayHPC" target="_blank"><img src="https://www.microway.com/wp-content/themes/microway/images/logo-twitter.gif" width="24" height="24" alt="Twitter" /></a><a href="https://www.linkedin.com/company/microway-inc" target="_blank"><img src="https://www.microway.com/wp-content/themes/microway/images/logo-linked-in.gif" width="24" height="24" alt="LinkedIn" /></a></p>
+        </div>
+        </div>
+    	</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+
+<script src="https://www.microway.com/wp-content/themes/microway/fusion.min.js"></script>
+
+
+
+<script>
+		jQuery(window).load(function() {
+
+
+jQuery('#fusion1').show().fusion({
+				effect: 'vertical',
+				animSpeed: 300,
+				eventTrigger: 'hover',//click, hover, etc.
+				autoHeight: true,
+				bar: 'aside', //aside, top
+				showControls: true,
+				showPlay: true,
+				playInterval: 5000,
+				autoPlay: true,
+				keyboardNav: true
+			});
+
+		});
+	</script>
+
+<script type='text/javascript'>
+var colomatduration = 'fast';
+var colomatslideEffect = 'slideFade';
+var colomatpauseInit = '';
+var colomattouchstart = '';
+</script><script type="text/javascript">
+		/* MonsterInsights Scroll Tracking */
+			if ( typeof(jQuery) !== 'undefined' ) {
+				jQuery( document ).ready(function(){
+					function monsterinsights_scroll_tracking_load() {
+						if ( ( typeof(__gaTracker) !== 'undefined' && __gaTracker && __gaTracker.hasOwnProperty( "loaded" ) && __gaTracker.loaded == true ) || ( typeof(__gtagTracker) !== 'undefined' && __gtagTracker ) ) {
+							(function(factory) {
+								factory(jQuery);
+							}(function($) {
+
+								/* Scroll Depth */
+								"use strict";
+								var defaults = {
+									percentage: true
+								};
+
+								var $window = $(window),
+									cache = [],
+									scrollEventBound = false,
+									lastPixelDepth = 0;
+
+								/*
+								 * Plugin
+								 */
+
+								$.scrollDepth = function(options) {
+
+									var startTime = +new Date();
+
+									options = $.extend({}, defaults, options);
+
+									/*
+									 * Functions
+									 */
+
+									function sendEvent(action, label, scrollDistance, timing) {
+																				if ( 'undefined' === typeof MonsterInsightsObject || 'undefined' === typeof MonsterInsightsObject.sendEvent ) {
+												return;
+											}
+												var type        = 'event';
+	var eventName   = action;
+	var fieldsArray = {
+		event_category : 'Scroll Depth',
+		event_label    : label,
+		value          : 1,
+		non_interaction: true,
+		send_to: 'UA-2830423-1'
+	};
+
+	MonsterInsightsObject.sendEvent( type, eventName, fieldsArray );
+
+	if (arguments.length > 3) {
+		var type        = 'event';
+		var eventName   = 'timing_complete';
+		fieldsArray = {
+			event_category : 'Scroll Depth',
+			name           : action,
+			event_label    : label,
+			value          : timing,
+			non_interaction: 1,
+			send_to: 'UA-2830423-1'
+		};
+
+		MonsterInsightsObject.sendEvent( type, eventName, fieldsArray );
+	}
+		var paramName = action.toLowerCase();
+	var fieldsArray = {
+		send_to: 'G-1GDP4R1N1T'
+	};
+	fieldsArray[paramName] = label;
+
+	MonsterInsightsObject.sendEvent('event', 'scroll_depth', fieldsArray);
+
+	if (arguments.length > 3) {
+		fieldsArray.scroll_timing = timing
+		MonsterInsightsObject.sendEvent('event', 'scroll_depth', fieldsArray);
+	}
+																			}
+
+									function calculateMarks(docHeight) {
+										return {
+											'25%' : parseInt(docHeight * 0.25, 10),
+											'50%' : parseInt(docHeight * 0.50, 10),
+											'75%' : parseInt(docHeight * 0.75, 10),
+											/* Cushion to trigger 100% event in iOS */
+											'100%': docHeight - 5
+										};
+									}
+
+									function checkMarks(marks, scrollDistance, timing) {
+										/* Check each active mark */
+										$.each(marks, function(key, val) {
+											if ( $.inArray(key, cache) === -1 && scrollDistance >= val ) {
+												sendEvent('Percentage', key, scrollDistance, timing);
+												cache.push(key);
+											}
+										});
+									}
+
+									function rounded(scrollDistance) {
+										/* Returns String */
+										return (Math.floor(scrollDistance/250) * 250).toString();
+									}
+
+									function init() {
+										bindScrollDepth();
+									}
+
+									/*
+									 * Public Methods
+									 */
+
+									/* Reset Scroll Depth with the originally initialized options */
+									$.scrollDepth.reset = function() {
+										cache = [];
+										lastPixelDepth = 0;
+										$window.off('scroll.scrollDepth');
+										bindScrollDepth();
+									};
+
+									/* Add DOM elements to be tracked */
+									$.scrollDepth.addElements = function(elems) {
+
+										if (typeof elems == "undefined" || !$.isArray(elems)) {
+											return;
+										}
+
+										$.merge(options.elements, elems);
+
+										/* If scroll event has been unbound from window, rebind */
+										if (!scrollEventBound) {
+											bindScrollDepth();
+										}
+
+									};
+
+									/* Remove DOM elements currently tracked */
+									$.scrollDepth.removeElements = function(elems) {
+
+										if (typeof elems == "undefined" || !$.isArray(elems)) {
+											return;
+										}
+
+										$.each(elems, function(index, elem) {
+
+											var inElementsArray = $.inArray(elem, options.elements);
+											var inCacheArray = $.inArray(elem, cache);
+
+											if (inElementsArray != -1) {
+												options.elements.splice(inElementsArray, 1);
+											}
+
+											if (inCacheArray != -1) {
+												cache.splice(inCacheArray, 1);
+											}
+
+										});
+
+									};
+
+									/*
+									 * Throttle function borrowed from:
+									 * Underscore.js 1.5.2
+									 * http://underscorejs.org
+									 * (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+									 * Underscore may be freely distributed under the MIT license.
+									 */
+
+									function throttle(func, wait) {
+										var context, args, result;
+										var timeout = null;
+										var previous = 0;
+										var later = function() {
+											previous = new Date;
+											timeout = null;
+											result = func.apply(context, args);
+										};
+										return function() {
+											var now = new Date;
+											if (!previous) previous = now;
+											var remaining = wait - (now - previous);
+											context = this;
+											args = arguments;
+											if (remaining <= 0) {
+												clearTimeout(timeout);
+												timeout = null;
+												previous = now;
+												result = func.apply(context, args);
+											} else if (!timeout) {
+												timeout = setTimeout(later, remaining);
+											}
+											return result;
+										};
+									}
+
+									/*
+									 * Scroll Event
+									 */
+
+									function bindScrollDepth() {
+
+										scrollEventBound = true;
+
+										$window.on('scroll.scrollDepth', throttle(function() {
+											/*
+											 * We calculate document and window height on each scroll event to
+											 * account for dynamic DOM changes.
+											 */
+
+											var docHeight = $(document).height(),
+												winHeight = window.innerHeight ? window.innerHeight : $window.height(),
+												scrollDistance = $window.scrollTop() + winHeight,
+
+												/* Recalculate percentage marks */
+												marks = calculateMarks(docHeight),
+
+												/* Timing */
+												timing = +new Date - startTime;
+
+											checkMarks(marks, scrollDistance, timing);
+										}, 500));
+
+									}
+
+									init();
+								};
+
+								/* UMD export */
+								return $.scrollDepth;
+
+							}));
+
+							jQuery.scrollDepth();
+						} else {
+							setTimeout(monsterinsights_scroll_tracking_load, 200);
+						}
+					}
+					monsterinsights_scroll_tracking_load();
+				});
+			}
+		/* End MonsterInsights Scroll Tracking */
+		
+</script><script type='text/javascript' id='ubermenu-js-extra'>
+/* <![CDATA[ */
+var ubermenu_data = {"remove_conflicts":"on","reposition_on_load":"off","intent_delay":"400","intent_interval":"20","intent_threshold":"7","scrollto_offset":"50","scrollto_duration":"1000","responsive_breakpoint":"959","accessible":"on","retractor_display_strategy":"responsive","touch_off_close":"on","submenu_indicator_close_mobile":"on","collapse_after_scroll":"on","v":"3.7.0.1","configurations":["main"],"ajax_url":"https:\/\/www.microway.com\/wp-admin\/admin-ajax.php","plugin_url":"https:\/\/www.microway.com\/wp-content\/plugins\/ubermenu\/","disable_mobile":"off","prefix_boost":"","use_core_svgs":"off","aria_role_navigation":"on","aria_nav_label":"off","aria_expanded":"off","aria_hidden":"off","aria_controls":"","aria_responsive_toggle":"off","icon_tag":"i","esc_close_mobile":"on","theme_locations":{"primary":"Primary Navigation"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/plugins/ubermenu/assets/js/ubermenu.min.js?ver=3.7.0.1' id='ubermenu-js'></script>
+<script type='text/javascript' id='ubermenu-sticky-js-js-extra'>
+/* <![CDATA[ */
+var ubermenu_sticky_settings = {"main":{"full_width_menu_bar":"off","center_inner_width":"","offset":"","mobile":"off","sticky_offset":"","is_sticky":1,"permanent":0,"is_mobile":0}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/plugins/ubermenu-sticky/assets/ubermenu.sticky.min.js?ver=3.1.4' id='ubermenu-sticky-js-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-includes/js/comment-reply.min.js?ver=5.8.1' id='comment-reply-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-includes/js/dist/vendor/regenerator-runtime.min.js?ver=0.13.7' id='regenerator-runtime-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0' id='wp-polyfill-js'></script>
+<script type='text/javascript' id='contact-form-7-js-extra'>
+/* <![CDATA[ */
+var wpcf7 = {"api":{"root":"https:\/\/www.microway.com\/wp-json\/","namespace":"contact-form-7\/v1"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/plugins/contact-form-7/includes/js/index.js?ver=5.5.1' id='contact-form-7-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/plugins/jquery-collapse-o-matic/js/collapse.js?ver=1.6.23' id='collapseomatic-js-js'></script>
+<script type='text/javascript' id='stickThis-js-extra'>
+/* <![CDATA[ */
+var sticky_anything_engage = {"element":"#secondary","topspace":"0","minscreenwidth":"1024","maxscreenwidth":"999999","zindex":"1","legacymode":"","dynamicmode":"","debugmode":"","pushup":"#footer","adminbar":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.microway.com/wp-content/plugins/sticky-menu-or-anything-on-scroll/assets/js/stickThis.js?ver=2.1.1' id='stickThis-js'></script>
+<script type='text/javascript' src='https://www.microway.com/wp-includes/js/wp-embed.min.js?ver=5.8.1' id='wp-embed-js'></script>
+<script type="text/javascript" id="slb_context">/* <![CDATA[ */if ( !!window.jQuery ) {(function($){$(document).ready(function(){if ( !!window.SLB ) { {$.extend(SLB, {"context":["public","user_guest"]});} }})})(jQuery);}/* ]]> */</script>
+</body>
+</html>
