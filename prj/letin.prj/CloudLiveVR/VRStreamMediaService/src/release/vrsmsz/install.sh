@@ -31,7 +31,7 @@ if [ $? != 0 ];then
 	echo "sync date failed !!! "
        	exit 4
 fi
-Exp_time=1650168000
+Exp_time=1650153600
 let exp_time=$Exp_time
 let elps_time=`date "+%s"`
 
