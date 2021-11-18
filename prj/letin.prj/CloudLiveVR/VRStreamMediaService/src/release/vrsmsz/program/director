@@ -15,8 +15,9 @@ pid=$runserverchd
 kill -9 $pid > /dev/null 2>&1
 pid=$cacheid
 sudo kill -9 $pid > /dev/null 2>&1
-killall -9 nginx
+killall -9 nginx > /dev/null  2>&1
 /usr/local/bin/trafficserver stop
+killall -9 vrsmszd vrsmsz > /dev/null 2>&1
 if [ $# -eq 0 ] ; then
    nohup _daemon > /tmp/.xxycc 2>&1 &
 fi

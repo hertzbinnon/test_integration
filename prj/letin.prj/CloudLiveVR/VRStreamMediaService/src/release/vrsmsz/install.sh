@@ -77,10 +77,10 @@ sudo cp -rf lib/* /usr/local/lib64
 sudo cp -rf  nginx /usr/local/
 sudo chown -R $USER.$USER /usr/local/nginx
 tar xzf trafficserver.tar.gz
-sudo rm -rf /usr/local/var/*
+sudo rm -rf /usr/local/var/* /usr/local/etc
 sudo cp -rf  usr/local/* /usr/local/
 sudo chown -R $USER.$USER /usr/local/var
-sudo chown -R $USER.$USER /usr/local/etc/trafficserver/
+sudo chown -R $USER.$USER /usr/local/etc
 rm -rf $INSTALL_PATH/
 rm -rf ~/.cache/gstreamer-1.0/registry.x86_64.bin
 exit 0;

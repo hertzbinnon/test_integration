@@ -8,4 +8,4 @@ solutions = [
     "custom_vars": {},
   },
 ]
-target_os = [ 'ios' ]
+target_os = [ 'android' ]
