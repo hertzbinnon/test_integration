@@ -1,0 +1,948 @@
+#tree -L 3 -d
+.
+├── Blender
+│   ├── blender
+│   │   ├── build_files
+│   │   ├── doc
+│   │   ├── extern
+│   │   ├── intern
+│   │   ├── lib
+│   │   ├── release
+│   │   ├── source
+│   │   ├── src
+│   │   └── tests
+│   ├── blender-2.93.2-linux-x64
+│   │   ├── 2.93
+│   │   ├── lib
+│   │   └── license
+│   ├── build_linux.2.83
+│   │   ├── bin
+│   │   ├── CMakeFiles
+│   │   ├── extern
+│   │   ├── intern
+│   │   ├── lib
+│   │   ├── release
+│   │   ├── source
+│   │   └── tests
+│   ├── build_linux_debug
+│   │   ├── bin
+│   │   ├── CMakeFiles
+│   │   ├── extern
+│   │   ├── intern
+│   │   ├── lib
+│   │   ├── release
+│   │   ├── source
+│   │   └── tests
+│   ├── build_linux_debug.2.83
+│   │   ├── bin
+│   │   ├── CMakeFiles
+│   │   ├── extern
+│   │   ├── intern
+│   │   ├── lib
+│   │   ├── release
+│   │   ├── source
+│   │   └── tests
+│   ├── lib
+│   │   └── linux_centos7_x86_64
+│   └── lib.2.93.2
+│       └── linux_centos7_x86_64
+├── BookStore
+│   ├── atsinternals
+│   │   ├── CH01-EventSystem
+│   │   ├── CH02-IOCoreNET
+│   │   ├── CH03-IOCoreSSL
+│   │   ├── CH04-Session
+│   │   ├── CH05-StateMachine
+│   │   ├── CH06-IOCoreDNS
+│   │   ├── CH07-IOCoreMultiCache
+│   │   └── CH08-IOCoreHostDB
+│   ├── Books
+│   │   ├── EN
+│   │   ├── ES
+│   │   ├── img
+│   │   ├── PLC-eBooks
+│   │   └── WhitePapers
+│   ├── linux-insides
+│   │   ├── Assets
+│   │   ├── Booting
+│   │   ├── Cgroups
+│   │   ├── Concepts
+│   │   ├── DataStructures
+│   │   ├── Initialization
+│   │   ├── Interrupts
+│   │   ├── KernelStructures
+│   │   ├── Misc
+│   │   ├── MM
+│   │   ├── Scripts
+│   │   ├── SyncPrim
+│   │   ├── SysCall
+│   │   ├── Theory
+│   │   └── Timers
+│   ├── PanoStitcher
+│   │   ├── cs205-stitching.github.io
+│   │   ├── people.ee.ethz.ch
+│   │   └── ppwwyyxx.com
+│   └── qtguide
+│       ├── css
+│       ├── extradoc
+│       ├── images
+│       ├── inwin
+│       └── QtProjects
+├── Codec
+│   ├── DAIN
+│   │   ├── datasets
+│   │   ├── MegaDepth
+│   │   ├── MiddleBurySet
+│   │   ├── model_weights
+│   │   ├── my_package
+│   │   ├── networks
+│   │   ├── PWCNet
+│   │   ├── Resblock
+│   │   ├── results
+│   │   └── S2D_models
+│   ├── nv-codec-headers
+│   │   └── include
+│   ├── Super-SloMo
+│   │   ├── data
+│   │   └── misc
+│   ├── SVT-HEVC
+│   │   ├── Bin
+│   │   ├── Build
+│   │   ├── Config
+│   │   ├── Docs
+│   │   ├── ffmpeg_plugin
+│   │   ├── gstreamer-plugin
+│   │   ├── Source
+│   │   └── Tests
+│   └── vk_video_samples
+│       └── vk_video_decoder
+├── GitHub
+│   ├── awesome-diy-software
+│   │   ├── subprojects
+│   │   └── web
+│   ├── build-your-own-x
+│   │   └── subprojects
+│   ├── docker-ubuntu-vnc-desktop
+│   │   ├── flavors
+│   │   ├── hooks
+│   │   ├── rootfs
+│   │   ├── screenshots
+│   │   └── web
+│   ├── project-based-learning
+│   ├── Project-Based-Tutorials-in-C
+│   └── Projects-from-Scratch
+├── gst-plugins-advanced
+│   ├── ffmpeg-extensions
+│   │   ├── 3.3
+│   │   └── 4.4
+│   ├── gst-extensions
+│   │   ├── 1.17.01
+│   │   ├── 1.18.5
+│   │   └── 1.19.2
+│   ├── gst-fluendo-timeshift
+│   │   ├── examples
+│   │   └── src
+│   ├── gst-log-parser
+│   │   ├── examples
+│   │   ├── src
+│   │   └── test-logs
+│   ├── gst-plugin-ndi
+│   │   └── src
+│   ├── gst-plugins-vision
+│   │   ├── cmake
+│   │   ├── common
+│   │   ├── ext
+│   │   ├── gst
+│   │   ├── gst-libs
+│   │   └── sys
+│   ├── gst-plugins-vr
+│   │   ├── __builddir
+│   │   ├── common
+│   │   ├── doc
+│   │   ├── gpu
+│   │   ├── gst
+│   │   ├── gst-libs
+│   │   ├── html
+│   │   ├── scripts
+│   │   ├── sphvr
+│   │   ├── subprojects
+│   │   ├── tests
+│   │   ├── tools
+│   │   └── valgrind_helpers
+│   ├── kaldi-dev
+│   │   ├── kaldi
+│   │   └── kaldi-gstreamer-server
+│   ├── mozilla
+│   │   ├── DeepSpeech
+│   │   └── servo
+│   ├── nnstreamer
+│   │   ├── gst-instruments
+│   │   ├── nnshark
+│   │   ├── nnstreamer-example
+│   │   ├── nnstreamer.git
+│   │   ├── ssat
+│   │   ├── tensorflow.error
+│   │   └── tmp
+│   └── ridgerun
+│       ├── backend-bin
+│       ├── gst-crypto
+│       ├── gstd-1.x
+│       ├── gst-inference
+│       ├── gst-interpipe
+│       ├── gst-interpipe.git
+│       ├── gst-perf
+│       ├── gst-shark
+│       ├── r2inference
+│       └── tensorflow
+├── GStreamer
+│   ├── backup-106
+│   │   ├── cerbero
+│   │   └── gst-build
+│   ├── cerbero
+│   │   ├── build
+│   │   ├── cerbero
+│   │   ├── config
+│   │   ├── data
+│   │   ├── docs
+│   │   ├── packages
+│   │   ├── recipes
+│   │   ├── recipes-toolchain
+│   │   ├── test
+│   │   └── tools
+│   ├── cerbero-sources
+│   │   ├── a52dec-0.7.4
+│   │   ├── autoconf-2.69
+│   │   ├── automake-1.15.1
+│   │   ├── bash-completion-2.9
+│   │   ├── bzip2-1.0.6
+│   │   ├── cairo-1.14.12
+│   │   ├── cairo-1.17.4
+│   │   ├── cdparanoia-10.2
+│   │   ├── expat-2.2.7
+│   │   ├── ffmpeg-4.3.1
+│   │   ├── flac-1.3.3
+│   │   ├── fontconfig-2.12.6
+│   │   ├── fontconfig-2.13.93
+│   │   ├── freetype-2.10.4
+│   │   ├── fribidi-1.0.5
+│   │   ├── gdk-pixbuf-2.40.0
+│   │   ├── gettext-m4-0.20.1
+│   │   ├── glib-2.62.6
+│   │   ├── glib-networking-2.62.3
+│   │   ├── gobject-introspection-1.56.1
+│   │   ├── graphene-1.10.2
+│   │   ├── gst-devtools-1.0
+│   │   ├── gst-editing-services-1.0
+│   │   ├── gst-libav-1.0
+│   │   ├── gst-plugins-bad-1.0
+│   │   ├── gst-plugins-base-1.0
+│   │   ├── gst-plugins-good-1.0
+│   │   ├── gst-plugins-ugly-1.0
+│   │   ├── gstreamer-1.0
+│   │   ├── gst-rtsp-server-1.0
+│   │   ├── harfbuzz-2.6.7
+│   │   ├── intltool-m4-0.51.0
+│   │   ├── json-glib-1.4.4
+│   │   ├── ladspa-1.15
+│   │   ├── lame-3.100
+│   │   ├── libass-0.13.7
+│   │   ├── libcroco-0.6.13
+│   │   ├── libdca-0.0.5
+│   │   ├── libdv-1.0.0
+│   │   ├── libdvdnav-5.0.1
+│   │   ├── libdvdread-5.0.0
+│   │   ├── libffi
+│   │   ├── libjpeg-turbo-1.5.3
+│   │   ├── libkate-0.4.1
+│   │   ├── libmms-0.6.4
+│   │   ├── libnice-0.1.17
+│   │   ├── libogg-1.3.4
+│   │   ├── libpng-1.6.37
+│   │   ├── libpsl-0.21.0
+│   │   ├── librsvg-2.40.20
+│   │   ├── librtmp-2.4_p20200229
+│   │   ├── libsoup-2.68.3
+│   │   ├── libsrtp-2.3.0
+│   │   ├── libtheora-1.1.1
+│   │   ├── libtool-2.4.6
+│   │   ├── libunwind-1.3.1
+│   │   ├── libvisual-0.4.0
+│   │   ├── libvorbis-1.3.6
+│   │   ├── libvpx-v1.8.1
+│   │   ├── libxml2-2.9.9
+│   │   ├── m4-1.4.18
+│   │   ├── meson-0.54.0
+│   │   ├── meson-0.55.3
+│   │   ├── mpg123-1.26.3
+│   │   ├── ninja-1.10.0
+│   │   ├── opencore-amr-0.1.5
+│   │   ├── openh264-2.1.1
+│   │   ├── openjpeg-2.3.1
+│   │   ├── opus-1.3.1
+│   │   ├── orc-0.4.31
+│   │   ├── orc-tool-0.4.31
+│   │   ├── pango-1.42.4
+│   │   ├── pixman-0.40.0
+│   │   ├── pkg-config-0.29.2
+│   │   ├── sbc-1.3
+│   │   ├── soundtouch-2.1.0
+│   │   ├── spandsp-0.0.6
+│   │   ├── speex-1.2.0
+│   │   ├── sqlite3-3320300
+│   │   ├── srt-1.4.2
+│   │   ├── taglib-1.11.1
+│   │   ├── tiff-4.0.10
+│   │   ├── vo-aacenc-0.1.3
+│   │   ├── wavpack-5.1.0
+│   │   ├── webrtc-audio-processing-0.2
+│   │   ├── x264-20191217-2245
+│   │   ├── zbar-0.23
+│   │   └── zlib-1.2.11
+│   ├── gst-ci
+│   │   ├── docker
+│   │   ├── fuzzing
+│   │   ├── gitlab
+│   │   └── jenkins
+│   └── gst-language-bindings
+│       ├── gst-py
+│       └── gst-rust
+├── release
+│   ├── hbsmsz
+│   │   ├── 2071-7-12-data-tmp
+│   │   ├── bin
+│   │   ├── django-master -> ../vrsmsz/django-master
+│   │   ├── linux_x86_64
+│   │   ├── nginx -> ../vrsmsz/nginx
+│   │   ├── program
+│   │   ├── Python-3.7.5 -> ../vrsmsz/Python-3.7.5
+│   │   └── uploadmodule -> ../vrsmsz/uploadmodule
+│   └── vrsmsz
+│       ├── bin
+│       ├── director-html
+│       ├── django-master
+│       ├── lib
+│       ├── nginx
+│       ├── program
+│       ├── Python-3.7.5
+│       ├── sms
+│       ├── source
+│       ├── uploadmodule
+│       └── usr
+├── RenderBasic
+│   ├── aframe
+│   │   ├── dist
+│   │   ├── docs
+│   │   ├── examples
+│   │   ├── scripts
+│   │   ├── src
+│   │   ├── tests
+│   │   └── vendor
+│   ├── AR.js
+│   │   ├── aframe
+│   │   ├── data
+│   │   ├── test
+│   │   └── three.js
+│   ├── basics
+│   │   └── gltut
+│   ├── Equirec2Perspec
+│   │   └── src
+│   ├── EquirectangularPhotoToSphereMapper
+│   ├── equirectangular-toolbox
+│   │   └── images
+│   ├── gst-render-examples
+│   ├── LearnOpenGL
+│   │   ├── bin
+│   │   ├── __builddir
+│   │   ├── builddir
+│   │   ├── cmake
+│   │   ├── configuration
+│   │   ├── dlls
+│   │   ├── includes
+│   │   ├── lib
+│   │   ├── resources
+│   │   └── src
+│   ├── learn-opengl-rust
+│   │   ├── book-src
+│   │   ├── examples
+│   │   ├── src
+│   │   └── target
+│   ├── libglvnd
+│   │   ├── bin
+│   │   ├── include
+│   │   ├── m4
+│   │   ├── src
+│   │   └── tests
+│   ├── ogldev.git
+│   │   ├── Common
+│   │   ├── CommonVulkan
+│   │   ├── Content
+│   │   ├── deprecated_tutorial34
+│   │   ├── Include
+│   │   ├── Lib
+│   │   ├── samples
+│   │   ├── tutorial01
+│   │   ├── tutorial02
+│   │   ├── tutorial03
+│   │   ├── tutorial04
+│   │   ├── tutorial05
+│   │   ├── tutorial06
+│   │   ├── tutorial07
+│   │   ├── tutorial08
+│   │   ├── tutorial09
+│   │   ├── tutorial09_youtube
+│   │   ├── tutorial10
+│   │   ├── tutorial10_youtube
+│   │   ├── tutorial11
+│   │   ├── tutorial11_youtube
+│   │   ├── tutorial12
+│   │   ├── tutorial12_youtube
+│   │   ├── tutorial13
+│   │   ├── tutorial13_youtube
+│   │   ├── tutorial14
+│   │   ├── tutorial14_youtube
+│   │   ├── tutorial15
+│   │   ├── tutorial15_youtube
+│   │   ├── tutorial16
+│   │   ├── tutorial16_youtube
+│   │   ├── tutorial17
+│   │   ├── tutorial17_youtube
+│   │   ├── tutorial18
+│   │   ├── tutorial18_youtube
+│   │   ├── tutorial19
+│   │   ├── tutorial19_youtube
+│   │   ├── tutorial20
+│   │   ├── tutorial20_youtube
+│   │   ├── tutorial21
+│   │   ├── tutorial21_youtube
+│   │   ├── tutorial22
+│   │   ├── tutorial22_youtube
+│   │   ├── tutorial23
+│   │   ├── tutorial23_youtube
+│   │   ├── tutorial24
+│   │   ├── tutorial25
+│   │   ├── tutorial26
+│   │   ├── tutorial27
+│   │   ├── tutorial28
+│   │   ├── tutorial29
+│   │   ├── tutorial30
+│   │   ├── tutorial31
+│   │   ├── tutorial32
+│   │   ├── tutorial33
+│   │   ├── tutorial35
+│   │   ├── tutorial36
+│   │   ├── tutorial37
+│   │   ├── tutorial38
+│   │   ├── tutorial39
+│   │   ├── tutorial40
+│   │   ├── tutorial41
+│   │   ├── tutorial42
+│   │   ├── tutorial43
+│   │   ├── tutorial44
+│   │   ├── tutorial45
+│   │   ├── tutorial46
+│   │   ├── tutorial47
+│   │   ├── tutorial48
+│   │   ├── tutorial49
+│   │   ├── tutorial50
+│   │   ├── tutorial51
+│   │   ├── tutorial52
+│   │   ├── tutorial53
+│   │   ├── tutorial54
+│   │   ├── web
+│   │   └── Windows
+│   ├── opengl-2
+│   │   └── freeglut-3.2.1
+│   ├── opengl-redbook.com
+│   │   ├── bin
+│   │   ├── build
+│   │   ├── __builddir
+│   │   ├── include
+│   │   ├── lib
+│   │   ├── src
+│   │   ├── tools
+│   │   └── vermilion
+│   ├── opengl-tutorial.org
+│   │   ├── _builddir
+│   │   ├── common
+│   │   ├── distrib
+│   │   ├── external
+│   │   ├── misc01_math_cheatsheet
+│   │   ├── misc04_building_your_own_app
+│   │   ├── misc05_picking
+│   │   ├── playground
+│   │   ├── tutorial01_first_window
+│   │   ├── tutorial02_red_triangle
+│   │   ├── tutorial03_matrices
+│   │   ├── tutorial04_colored_cube
+│   │   ├── tutorial05_textured_cube
+│   │   ├── tutorial06_keyboard_and_mouse
+│   │   ├── tutorial07_model_loading
+│   │   ├── tutorial08_basic_shading
+│   │   ├── tutorial09_vbo_indexing
+│   │   ├── tutorial10_transparency
+│   │   ├── tutorial11_2d_fonts
+│   │   ├── tutorial12_extensions
+│   │   ├── tutorial13_normal_mapping
+│   │   ├── tutorial14_render_to_texture
+│   │   ├── tutorial15_lightmaps
+│   │   ├── tutorial16_shadowmaps
+│   │   ├── tutorial17_rotations
+│   │   └── tutorial18_billboards_and_particles
+│   ├── py360convert
+│   │   ├── assert
+│   │   └── py360convert
+│   ├── rs_pbrt
+│   │   ├── assets
+│   │   ├── docs
+│   │   ├── examples
+│   │   ├── profile
+│   │   ├── rs-pbrt-test-scenes
+│   │   ├── src
+│   │   ├── target
+│   │   └── wix
+│   ├── spatial-media
+│   │   ├── docs
+│   │   ├── spatial-audio
+│   │   └── spatialmedia
+│   ├── three.js
+│   │   ├── build
+│   │   ├── docs
+│   │   ├── editor
+│   │   ├── examples
+│   │   ├── files
+│   │   ├── src
+│   │   ├── test
+│   │   └── utils
+│   ├── transform360
+│   │   ├── Transform360
+│   │   └── Transform_V1
+│   ├── vrProjector
+│   │   ├── images
+│   │   └── vrProjector
+│   └── x11
+├── rtmp-hls-dev
+│   ├── HTTP-Live-Video-Stream-Segmenter-and-Distributor
+│   │   └── example-configs
+│   ├── Nginx-http-flv
+│   │   ├── nginx
+│   │   └── nginx-http-flv-module
+│   ├── Nginx-Rtmp
+│   │   ├── ffmpeg-hevc-rtmp.patch
+│   │   ├── nginx
+│   │   ├── nginx-client-module
+│   │   ├── nginx_mod_h264_streaming-2.2.7
+│   │   ├── nginx-multiport-module
+│   │   ├── nginx-rtmp-module
+│   │   └── nginx-toolkit-module
+│   ├── Nginx-rtmp-hevc
+│   │   ├── nginx-release-1.15.12
+│   │   └── Release
+│   └── srs
+│       └── trunk
+├── rust-version
+│   ├── Rocket
+│   │   ├── contrib
+│   │   ├── core
+│   │   ├── examples
+│   │   ├── scripts
+│   │   └── site
+│   ├── rustlings
+│   │   ├── exercises
+│   │   ├── src
+│   │   ├── target
+│   │   └── tests
+│   ├── tiny-http
+│   │   ├── benches
+│   │   ├── examples
+│   │   ├── src
+│   │   ├── target
+│   │   └── tests
+│   ├── trpl-zh-cn
+│   │   └── src
+│   └── vrsmsz
+│       ├── src
+│       ├── src.org
+│       └── target
+├── third-party
+│   ├── deps
+│   │   └── nvidia-settings
+│   ├── EasyDarwin -> /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/third-party/GoLang/src/github.com/EasyDarwin/EasyDarwin
+│   ├── FFmpeg
+│   │   ├── ffmpeg
+│   │   └── ffmpeg-hevc-rtmp.patch
+│   ├── GitHub
+│   │   ├── computer_book_list
+│   │   ├── faceswap
+│   │   ├── ffmpeg-python
+│   │   ├── latency-clock
+│   │   ├── st-load
+│   │   ├── webtorrent
+│   │   ├── webtorrent-cli
+│   │   ├── wifi-card
+│   │   ├── wifi-password
+│   │   └── youtube-dl
+│   ├── godot
+│   │   ├── bin
+│   │   ├── core
+│   │   ├── doc
+│   │   ├── drivers
+│   │   ├── editor
+│   │   ├── main
+│   │   ├── misc
+│   │   ├── modules
+│   │   ├── platform
+│   │   ├── __pycache__
+│   │   ├── scene
+│   │   ├── servers
+│   │   ├── tests
+│   │   └── thirdparty
+│   ├── GoLang
+│   │   ├── bin
+│   │   └── src
+│   ├── gstreamer-0.10
+│   │   ├── gst-ffmpeg-0.10.13
+│   │   ├── gst-plugins-base-0.10.34
+│   │   ├── gstreamer-0.10.34
+│   │   └── install
+│   ├── nginx-rtmp-hevc
+│   │   ├── nginx
+│   │   ├── nginx-client-module
+│   │   ├── nginx_mod_h264_streaming-2.2.7
+│   │   ├── nginx-multiport-module
+│   │   ├── nginx-rtmp-module
+│   │   └── nginx-toolkit-module
+│   ├── NvencSessionLimitBump
+│   │   ├── argagg
+│   │   └── NvencSessionLimitBump
+│   ├── nvidia-patch
+│   │   ├── tools
+│   │   └── win
+│   ├── obs-gstreamer
+│   │   ├── docker
+│   │   └── test
+│   ├── obs-studio
+│   │   ├── additional_install_files
+│   │   ├── builddir
+│   │   ├── CI
+│   │   ├── cmake
+│   │   ├── deps
+│   │   ├── docs
+│   │   ├── libobs
+│   │   ├── libobs-d3d11
+│   │   ├── libobs-opengl
+│   │   ├── libobs-winrt
+│   │   ├── plugins
+│   │   ├── test
+│   │   └── UI
+│   ├── opencv_base
+│   │   ├── opencv
+│   │   └── opencv_contrib
+│   ├── PanoTools
+│   │   ├── hugin-hugin
+│   │   ├── libpano13
+│   │   ├── OwlReality
+│   │   ├── PTLinux
+│   │   └── stitchEm
+│   └── UPbge
+│       ├── build_linux_debug
+│       ├── lib
+│       └── upbge
+├── tmp
+│   ├── bin
+│   ├── etc
+│   │   └── fonts
+│   ├── lib
+│   │   ├── girepository-1.0
+│   │   ├── gstreamer-1.0
+│   │   └── gst-validate-launcher
+│   ├── libexec
+│   │   └── gstreamer-1.0
+│   ├── libsoap-1.1.0
+│   │   ├── autom4te.cache
+│   │   ├── doc
+│   │   ├── examples
+│   │   ├── install
+│   │   ├── libcsoap
+│   │   ├── nanohttp
+│   │   ├── utils
+│   │   ├── win32
+│   │   ├── wsdl2c
+│   │   └── xsd2c
+│   ├── share
+│   │   ├── fontconfig
+│   │   ├── gstreamer
+│   │   ├── gstreamer-1.0
+│   │   └── locale
+│   ├── shc
+│   │   ├── autom4te.cache
+│   │   ├── config
+│   │   ├── src
+│   │   └── test
+│   ├── temp
+│   ├── transcode
+│   │   └── src
+│   └── wpewebkit-2.30.2
+│       ├── __builddir
+│       ├── Documentation
+│       ├── Source
+│       └── Tools
+├── vlc-dev
+│   ├── android-sdk
+│   │   ├── android-ndk-r21d
+│   │   ├── build-tools
+│   │   ├── emulator
+│   │   ├── licenses
+│   │   ├── ndk
+│   │   ├── patcher
+│   │   ├── platforms
+│   │   ├── platform-tools
+│   │   ├── skins
+│   │   ├── sources
+│   │   ├── system-images
+│   │   └── tools
+│   ├── contrib
+│   │   ├── bin
+│   │   ├── contrib-win64
+│   │   └── x86_64-w64-mingw32
+│   ├── contrib-4.0.0
+│   │   ├── bin
+│   │   ├── contrib-win64
+│   │   └── x86_64-w64-mingw32
+│   ├── denv
+│   │   ├── bin
+│   │   ├── completion
+│   │   ├── doc
+│   │   └── profiles
+│   ├── extras
+│   │   └── tools
+│   ├── vlc
+│   │   ├── autom4te.cache
+│   │   ├── autotools
+│   │   ├── bin
+│   │   ├── compat
+│   │   ├── contrib
+│   │   ├── doc
+│   │   ├── extras
+│   │   ├── include
+│   │   ├── lib
+│   │   ├── m4
+│   │   ├── modules
+│   │   ├── po
+│   │   ├── share
+│   │   ├── src
+│   │   └── test
+│   ├── vlc-android
+│   │   ├── application
+│   │   ├── build
+│   │   ├── buildsystem
+│   │   ├── extension-api
+│   │   ├── gradle
+│   │   ├── gradle-7.0.2
+│   │   ├── libvlc
+│   │   ├── medialibrary
+│   │   └── vlc
+│   ├── vlc-android-old-2021-01
+│   │   ├── application
+│   │   ├── build
+│   │   ├── buildsystem
+│   │   ├── extension-api
+│   │   ├── gradle
+│   │   ├── gradle-5.4.1
+│   │   ├── gradle-6.5
+│   │   ├── libvlc
+│   │   └── medialibrary
+│   ├── vlc-old-2019-12
+│   │   ├── autom4te.cache
+│   │   ├── autotools
+│   │   ├── bin
+│   │   ├── compat
+│   │   ├── contrib
+│   │   ├── doc
+│   │   ├── extras
+│   │   ├── include
+│   │   ├── lib
+│   │   ├── m4
+│   │   ├── modules
+│   │   ├── po
+│   │   ├── share
+│   │   ├── src
+│   │   ├── test
+│   │   └── win32
+│   ├── win64
+│   │   ├── bin
+│   │   ├── compat
+│   │   ├── doc
+│   │   ├── extras
+│   │   ├── include
+│   │   ├── lib
+│   │   ├── m4
+│   │   ├── modules
+│   │   ├── npapi-vlc
+│   │   ├── po
+│   │   ├── share
+│   │   ├── src
+│   │   ├── symbols-3.0.16
+│   │   ├── test
+│   │   ├── vlc-3.0.16
+│   │   ├── vlc-plugin-3.0.16
+│   │   └── _win32
+│   └── win64-4.0.0
+│       ├── bin
+│       ├── compat
+│       ├── doc
+│       ├── extras
+│       ├── include
+│       ├── lib
+│       ├── m4
+│       ├── modules
+│       ├── npapi-vlc
+│       ├── po
+│       ├── share
+│       ├── src
+│       ├── symbols-4.0.0-dev
+│       ├── test
+│       ├── vlc-4.0.0-dev
+│       └── _win32
+├── vr-ar-xr
+│   ├── alvr-org
+│   │   └── ALVR
+│   ├── monado
+│   │   ├── demos
+│   │   ├── monado
+│   │   ├── OpenXR-SDK
+│   │   └── OpenXR-SDK-Source
+│   ├── VRWorks_360_Video_2.1_Linux
+│   │   ├── external
+│   │   ├── footage
+│   │   ├── nvcalib
+│   │   ├── nvstitch
+│   │   ├── nvwarp360
+│   │   ├── samples
+│   │   └── utilities
+│   ├── wayland
+│   │   └── weston
+│   └── xrdesktop
+│       ├── deps
+│       ├── gulkan
+│       ├── gxr
+│       ├── libinputsynth
+│       ├── webpage
+│       └── xrdesktop
+├── Web
+│   ├── chromium
+│   │   ├── android_webview
+│   │   ├── apps
+│   │   ├── ash
+│   │   ├── base
+│   │   ├── build
+│   │   ├── build_overrides
+│   │   ├── buildtools
+│   │   ├── cc
+│   │   ├── chrome
+│   │   ├── chromecast
+│   │   ├── chromeos
+│   │   ├── cloud_print
+│   │   ├── codelabs
+│   │   ├── components
+│   │   ├── content
+│   │   ├── courgette
+│   │   ├── crypto
+│   │   ├── dbus
+│   │   ├── device
+│   │   ├── docs
+│   │   ├── extensions
+│   │   ├── fuchsia
+│   │   ├── gin
+│   │   ├── google_apis
+│   │   ├── google_update
+│   │   ├── gpu
+│   │   ├── headless
+│   │   ├── html
+│   │   ├── infra
+│   │   ├── ios
+│   │   ├── ipc
+│   │   ├── jingle
+│   │   ├── media
+│   │   ├── mojo
+│   │   ├── native_client_sdk
+│   │   ├── net
+│   │   ├── pdf
+│   │   ├── ppapi
+│   │   ├── printing
+│   │   ├── remoting
+│   │   ├── rlz
+│   │   ├── sandbox
+│   │   ├── services
+│   │   ├── skia
+│   │   ├── sql
+│   │   ├── storage
+│   │   ├── styleguide
+│   │   ├── testing
+│   │   ├── third_party
+│   │   ├── tools
+│   │   ├── ui
+│   │   ├── url
+│   │   └── weblayer
+│   ├── django-dev
+│   │   ├── django-master
+│   │   └── uploadmodule
+│   └── trafficserver
+│       ├── autom4te.cache
+│       ├── build
+│       ├── __builddir
+│       ├── builddir
+│       ├── ci
+│       ├── cmd
+│       ├── configs
+│       ├── contrib
+│       ├── doc
+│       ├── example
+│       ├── include
+│       ├── iocore
+│       ├── lib
+│       ├── mgmt
+│       ├── plugins
+│       ├── proxy
+│       ├── rc
+│       ├── src
+│       ├── tests
+│       └── tools
+└── webrtc-dev
+    ├── federated-sip
+    │   ├── files
+    │   └── templates
+    ├── gst-wpe-webrtc-demo
+    │   ├── janus-web-app
+    │   ├── src
+    │   └── wpe-graphics-overlays
+    ├── janus
+    │   ├── janus-gateway
+    │   ├── libwebsockets
+    │   └── rabbitmq-c
+    ├── knockplop
+    │   ├── app
+    │   ├── dist
+    │   ├── html
+    │   └── node_modules
+    ├── kurento
+    │   ├── doc-kurento
+    │   ├── kms-omni-build
+    │   ├── kurento-client-js
+    │   └── mediasoup-demos
+    ├── libwebrtc-cn
+    │   ├── depot_tools
+    │   ├── deps_os_ubuntu
+    │   └── webrtc
+    └── mediasoup
+        ├── libmediasoupclient
+        ├── mediasoup
+        ├── mediasoup-broadcaster-demo
+        ├── mediasoup-client
+        ├── mediasoup-client-aiortc
+        ├── mediasoup-client-android
+        ├── mediasoup-demo
+        ├── mediasoup-demo-android
+        ├── mediasoup-ios-client
+        └── mediasoup-website
+
+944 directories

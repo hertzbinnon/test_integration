@@ -114,3 +114,4 @@ nohup /data/ffmpeg -threads 2  -report -re -fflags +genpts -stream_loop -1 -i le
 #### ffmpeg 4.4
 ./ffmpeg  -hwaccel cuda -hwaccel_output_format cuda -c:v hevc_cuvid  -i /opt/root/tmp/4k.mp4 -r 30 -vf scale_npp=-1:720  -c:v hevc_nvenc  -minrate 7M -maxrate 7M -b:v 7M  -c:a copy -f mp4  -y /tmp/4k.mp4
 
+./ffmpeg -h encoder=hevc_nvenc

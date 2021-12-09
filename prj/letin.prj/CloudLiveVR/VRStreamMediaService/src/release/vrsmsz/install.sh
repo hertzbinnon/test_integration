@@ -6,8 +6,8 @@ fi
 INSTALL_PATH=$1
 VERSION=1.0.0-Ubuntu1804
 SYSVERSION="18.04"
-#HDWVERSION="TeslaT4"
-HDWVERSION="NVIDIAGeForceRTX3090"
+HDWVERSION="TeslaT4"
+#HDWVERSION="NVIDIAGeForceRTX3090"
 
 sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 libegl1 -y 
 sudo apt install ./libhwloc15_2.1.0+dfsg-4_amd64.deb libtcl8.6 libhwloc-dev -y

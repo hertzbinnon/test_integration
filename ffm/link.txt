@@ -1,2 +1,3 @@
 https://stackoverflow.com/questions/35092216/how-can-i-use-ffmpeg-to-change-360-video-projection
 https://kieran.coldron.com/posts/ffmeg-ndi/
+https://samples.ffmpeg.org/V-codecs/
