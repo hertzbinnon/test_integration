@@ -146,3 +146,116 @@ https://docs.nvidia.com/video-technologies/video-codec-sdk/nvdec-video-decoder-a
 nvidia-smi -pm 1
 nvidia-smi --query-supported-clocks=mem,gr --format=csv 
 nvidia-smi -q -d SUPPORTED_CLOCKS
+
+
+
+### x11vnc steps 
+ 1918  vim  /usr/share/X11/xorg.conf.d/10-nvidia.conf # included in xserver-xorg-video-nvidia-460
+#
+Section "OutputClass"
+    Identifier "nvidia"
+    MatchDriver "nvidia-drm"
+    Driver "nvidia"
+    Option "AllowEmptyInitialConfiguration"
+    ModulePath "/usr/lib/x86_64-linux-gnu/nvidia/xorg"
+    Option "PrimaryGPU" "yes"
+EndSection
+###
+
+ 1919  sudo apt-get install x11vnc -y
+ 1920  sudo apt-get install xserver-xorg -y
+ 1921  sudo apt-get install xserver-xorg xserver-xorg-core -y
+ 1922  vim  /usr/share/X11/xorg.conf.d/10-nvidia.conf
+ 1923  vim /lib/systemd/system/x11-common.service
+ 1924  sudo apt install lightdm -y
+ 1925  sudo x11vnc -storepasswd /etc/x11vnc.pass
+ 1926  sudo vim /etc/systemd/system/x11vnc.service
+ 1927  sudo systemctl daemon-reload
+ 1928  sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+ 1929  sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+ 1930  sudo update-initramfs -u
+ 1931  sudo systemctl enable lightdm.service
+ 1932  sudo ln -s /lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service
+ 1933  sudo vim /usr/share/X11/xorg.conf.d/10-nvidia.conf
+ 1934  sudo systemctl enable x11vnc.service
+ 1935  sudo reboot
+ 1936  sudo tail -f /var/log/lightdm/lightdm.log
+ 1937  sudo systemctl status x11vnc.service
+ 1938  lsof -i:5091
+ 1939  sudo lsof -i:5091
+ 1940  sudo lsof -i:5901
+ 1941  history | grep vim
+ 1942  sudo vim /etc/systemd/system/x11vnc.service
+ 1943  history
+ 1944  sudo systemctl restart x11vnc.service
+ 1945  systemctl daemon-reload
+ 1946  sudo systemctl daemon-reload
+ 1947  sudo systemctl restart x11vnc.service
+ 1948  sudo tail -f /var/log/lightdm/lightdm.log
+ 1949  sudo systemctl status x11vnc.service
+ 1950  history | grep pass
+ 1951  sudo x11vnc -storepasswd /etc/x11vnc.pass
+ 1952  sudo systemctl restart x11vnc.service
+ 1953  history | grep tail
+ 1954  sudo tail -f /var/log/lightdm/lightdm.log
+ 1955  dpkg-reconfigure lightdm
+ 1956  sudo dpkg-reconfigure lightdm
+ 1957  history | grep vim
+ 1958  sudo vim /usr/share/X11/xorg.conf.d/10-nvidia.conf
+ 1959  vim /usr/share/lightdm/lightdm.conf.d/50-xserver-command.conf
+ 1960  dpkg -L nvidia-prime
+ 1961  sudo apt install nvidia-prime -y
+ 1962  history | grep restart
+ 1963  history | grep light
+ 1964  sudo systemctl restart lightdm.service
+ 1965  sudo systemctl restart x11vnc.service
+ 1966  sudo tail -f /var/log/lightdm/lightdm.log
+ 1967  ls /usr/share/X11/xorg.conf.d/
+ 1968  top
+ 1969  ls /usr/share/X11/xorg.conf.d/
+ 1970  ls /usr/share/X11/xorg.conf.d/ -al
+ 1971  vim /usr/share/X11/xorg.conf.d/10-amdgpu.conf
+ 1972  sudo tail -f /var/log/lightdm/lightdm.log
+ 1973  vim ~/.dmrc
+ 1974  apt-file search /usr/share/10-nvidia.conf
+ 1975  dpkg -l | grep xserver-xorg-video-nvidia
+ 1976  dpkg -l | grep xserver-xorg
+ 1977  dpkg -L xserver-xorg-video-nvidia-470
+ 1978  dpkg -L xserver-xorg-video-nvidia
+ 1979  top
+ 1980  ls /usr/lib/x86_64-linux-gnu/nvidia/xorg/nvidia_drv.so
+ 1981  sudp apt install xserver-xorg-video-nvidia
+ 1982  sudo apt install xserver-xorg-video-nvidia
+ 1983  dpkg -l | grep nvi
+ 1984  nvidia-smi
+ 1985  sudo apt search  xserver-xorg-video-nvidia
+ 1986  sudo apt search  xserver-xorg-video-nvidia-460
+ 1987  sudo apt install  xserver-xorg-video-nvidia-460
+ 1988  ls /usr/share/X11/xorg.conf.d/ -al
+ 1989  dpkg -L  xserver-xorg-video-nvidia-460
+ 1990  ls /usr/share/X11/xorg.conf.d/
+ 1991  vim /usr/share/X11/xorg.conf.d/10-nvidia.conf
+ 1992  sudo vim /usr/share/X11/xorg.conf.d/10-nvidia.conf
+ 1993  sudo systemctl restart lightdm.service
+ 1994  sudo systemctl restart x11vnc.service
+ 1995  history | grpe sudo
+ 1996  history | grep sudo
+ 1997  sudo tail -f /var/log/lightdm/lightdm.log
+ 1998  sudo systemctl restart lightdm.service
+ 1999  sudo tail -f /var/log/lightdm/lightdm.log
+ 2000  sudo reboot
+ 2001  sudo lsof -i:8081
+ 2002  history | grep statu
+ 2003  sudo systemctl status x11vnc.service
+ 2004  sudo systemctl status lightdm.service
+ 2005  history
+ 2006  sudo tail -f /var/log/lightdm/lightdm.log
+ 2007  sudo vim /var/log/lightdm/lightdm.log
+ 2008  nvidia-smi
+ 2009  sudo vim /var/log/lightdm/x-0.log
+ 2010  vim /usr/share/X11/xorg.conf.d/10-nvidia.conf
+ 2011  ls /usr/lib/x86_64-linux-gnu/nvidia/xorg
+ 2012  fg
+ 2013  sudo vim /var/log/lightdm/x-0.log
+ 2014  sudo vim /var/log/Xorg.0.log
+

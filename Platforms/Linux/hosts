@@ -1,0 +1,16 @@
+https://www.ipaddress.com/ip-lookup
+在里面输入
+
+    github.com
+
+得到 ip地址为(2020-06-06)：140.82.113.4
+
+输入：
+
+    gist.github.com
+
+得到 ip 地址为(2020-06-06)：140.82.113.3
+
+最终，电脑中的 C:\Windows\System32\drivers\etc\hosts 文件为
+140.82.113.4 github.com
+140.82.113.3 gist.github.com

@@ -1,0 +1,23 @@
+https://unix.stackexchange.com/questions/292253/how-to-use-cat-command-on-find-commands-output
+
+You can do this with find alone using the -exec action:
+
+
+find /location -size 1033c -exec cat {} +
+
+{} will be replaced by the files found by find, and + will enable us to read as many arguments as possible per invocation of cat, as cat can take multiple arguments.
+
+If your find does not have the standard + extension, or you want to read the files one by one:
+
+find /location -size 1033c -exec cat {} \;
+
+If you want to use any options of cat, do:
+
+find /location -size 1033c -exec cat -n {} +
+find /location -size 1033c -exec cat -n {} \;
+
+Here I am using the -n option to get the line numbers.
+
+#
+
+sudo find . -type f  -name "config" -exec cat {} \; | grep "url = " > github.link
