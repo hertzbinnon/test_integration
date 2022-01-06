@@ -105,7 +105,7 @@ After=lightdm.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/x11vnc -auth /var/run/lightdm/root/:0 -display WAIT:0 -forever -shared -rfbauth /etc/x11vnc.pass -rfbport 9999
+ExecStart=/usr/bin/x11vnc -repeat -auth /var/run/lightdm/root/:0 -display WAIT:0 -forever -shared -rfbauth /etc/x11vnc.pass -rfbport 9999
 ExecStop=/usr/bin/killall x11vnc
 Restart=on-failure
 RestartSec=2

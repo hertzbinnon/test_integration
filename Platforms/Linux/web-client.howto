@@ -240,3 +240,7 @@ HTTP/1.1 200 OK
 echo cmd | at midninght
 这个at组件，通常和cron相提并论，不过at用于定时一次性任务，而cron定时周期性任务。
 at的参数比较人性化，可以使用tomorrow，next week之类的。
+
+
+#
+nohup wget -np -nH -r –span-hosts -c https://github.com/ant-media/Ant-Media-Server/wiki/ &

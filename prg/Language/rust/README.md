@@ -19,3 +19,7 @@ rustup update
 cargo install cargo-c
 # install to $HOME/.cargo/bin or  %USERPROFILE%\.cargo\bin
 cargo install --force --path .
+
+
+https://blog.csdn.net/Quner6/article/details/117763488
+CARGO_HTTP_MULTIPLEXING=false
