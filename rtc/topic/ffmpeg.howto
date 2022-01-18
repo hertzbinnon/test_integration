@@ -1,1 +1,26 @@
 https://blog.maxwellgale.com/2021/01/30/streaming-video-over-webrtc-using-ffmpeg/
+Streaming media. specifically video, is a fickle beast. This will be a short post, but it will cover everything you need to know to stream...
+media using FFmpeg to WebRTC clients. This technique has many applications, such as streaming synchronized videos to users. This post also covers some fundamental issues with FFmpeg that limits its utility for media streaming.
+
+Setting up the input
+
+Before inputting a file into FFmpeg, we need to pass a few flags:
+
+> ffmpeg \ -v info \ -fflags +genpts \ -protocol_whitelist pipe,tls,file,http,https,tcp,rtp \
+
+These flags set the log level to info, generate pts if they're missing, and sets up the protocols we can use. Next we need to provide the input to FFmpeg.
+
+-i in.mp4
+
+In this example, a file name in.mp4 is used, but a http(s) URL could also be used. This command starts playback at the beginning of the input file. If you want to start playback in the middle of the input file, then you can add the -ss flag before -i .
+
+Video arguments
+
+Now the video needs to be converted to an appropriate format for streaming. The format is specific to the application, but common codecs are H264, VP8, and VP9. This example uses H264 due to its ubiquitous support.
+
+-vf realtime,scale=w=min(iw\,1280):h=-2 \ -map 0:v:0 \ -c:v libx264 \ -threads 3 \ -profile:v baseline \ -level:v 3.1 \ -pix_fmt yuv420p \ -tune zerolatency \ -minrate 500K \ -maxrate 1.3M \ -bufsize 500K \ -force_key_frames expr:gte(t,n_forced*4) \ -bsv:v h264_metadata=level=3.1
+
+-vf specifies the video filters to apply. Here, two filters are applied. The first is realtime , which causes playback to happen in real time, which is necessary for streaming. This filter is similar to the -re flag, but works much better with the start time flag ( -ss ). The second filter scales the video width to a maximum of 1280 pixels while maintaining the aspect ratio. This is important to keep the bitrate appropriate for real time streaming.
+
+Another important parameter is the -threads 3 flag. FFmpeg will use many threads by the default. Normally, this is good because it produces the final result as fast as possible. For real time…
+Max Gale
