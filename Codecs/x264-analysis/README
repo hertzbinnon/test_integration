@@ -1,0 +1,76 @@
+https://www.programmersought.com/article/17285591469
+X264 source code framework analysis
+
+The function call relationship of the trunk part of the X264 encoder is shown in the figure below.
+
+
+As can be seen from the figure, the most complicated function of the x264 trunk part is x264_encoder_encode(), which completes the work of encoding one frame of YUV into H.264 code stream. In conjunction with this is the function x264_encoder_open() that turns on the encoder, the function x264_encoder_close() that turns off the encoder, and x264_encoder_headers() that outputs header information such as SPS/PPS/SEI. In fact, the x264_encoder_headers() function does not seem to be executed because param->b_repeat_headers is 1, that is, pps and sps are repeated before each GOP.
+
+X264_encoder_open() is used to open the encoder, which initializes the various variables needed for libx264 encoding. It calls the following function:
+       X264_validate_parameters(): Check input parameters (such as whether the width and height of the input image are positive).
+       X264_predict_16x16_init(): Initializes the Intra16x16 intra prediction assembly function.
+       X264_predict_4x4_init(): Initializes the Intra4x4 intra prediction assembly function.
+       X264_pixel_init(): Initializes the pixel value to calculate the associated assembly function (including SAD, SATD, SSD, etc.).
+       X264_dct_init(): Initializes the assembly function related to the DCT transform and the DCT inverse transform.
+       X264_mc_init(): Initializes the motion compensation related assembly function.
+       X264_quant_init(): Initializes the assembly function related to quantization and inverse quantization.
+       X264_deblock_init(): Initializes the assembly function associated with the deblocking filter.
+       X264_lookahead_init(): Initializes the variables associated with Lookahead.
+       X264_ratecontrol_new(): Initializes the variables associated with the rate control.
+X264_encoder_headers() outputs the header information of these H.264 streams of SPS/PPS/SEI. It calls the following function:
+x264_sps_write(): Output SPS
+x264_pps_write(): Output PPS
+x264_sei_version_write(): Output SEI
+
+X264_encoder_encode() encodes a frame of YUV as an H.264 stream. It calls the following function:
+x264_frame_pop_unused(): Get 1 x264_frame_t type structure fenc. If the frames.unused[] queue is not empty, call x264_frame_pop() to get one ready-made from the unused[] queue; otherwise, call x264_frame_new() to create a new one.
+x264_frame_copy_picture(): Copy the input image data to fenc.
+x264_lookahead_put_frame(): Put fenc in the lookahead.next.list[] queue and wait for the frame type to be determined.
+x264_lookahead_get_frames(): Analyze frame types by lookahead. This function calls functions such as x264_slicetype_decide(), x264_slicetype_analyse(), and x264_slicetype_frame_cost(). After some column analysis, the frame type information is finally determined, and the frame is placed in the frames.current[] queue.
+x264_frame_shift(): Take 1 frame from the frames.current[] queue for encoding.
+x264_reference_update(): Update the list of reference frames.
+x264_reference_reset(): If it is an IDR frame, call this function to clear the reference frame list.
+x264_reference_hierarchy_reset(): This function is called if it is an I (non-IDR frame), a P frame, or a B frame (which can be used as a reference frame).
+x264_reference_build_list(): Creates reference frame lists list0 and list1.
+x264_ratecontrol_start(): Turns on rate control.
+x264_slice_init(): Create a Slice Header.
+x264_slices_write(): Encode data (the most critical step). The call to x264_slice_write() completes the encoding work (note that the "x264_slices_write()" and "x264_slice_write()" names are a difference of "s").
+x264_encoder_frame_end(): Do some post-processing after encoding, such as logging some statistics. It calls x264_frame_push_unused() to put fenc back into the frames.unused[] queue and calls x264_ratecontrol_end() to turn off rate control.
+
+X264_encoder_close() is used to close the decoder and output some statistics. It calls the following function:
+       X264_lookahead_delete(): Releases the variables associated with Lookahead.
+       X264_ratecontrol_summary(): Summary code rate control information.
+       X264_ratecontrol_delete(): Turns off rate control.
+X264_encoder_close() is an API function of libx264. This function is used to turn off the encoder and output some statistics. The statistics output when the function is executed are shown below.
+
+ 
+
+ 
+
+Main() is the entry function for the x264 console program. It can be seen that the definition of main() is very simple. It mainly calls two functions: parse() and encode(). Main() first calls parse() to parse the input command line arguments, then calls encode() to encode.
+
+Parse() is used to parse the parameters of the command line input (stored in argv[]). The flow of parse() is roughly:
+(1) Call x264_param_default() to assign a default value to the structure x264_param_t of the storage parameter;
+(2) Call x264_param_default_preset() to assign a value to x264_param_t;
+(3) Call getopt_long() in a large loop to parse the input parameters one by one and handle them accordingly. Here are a few examples:
+a) "-h": Call help() to open the help menu.
+b) "-V" calls print_version_info() to print the version information.
+c) For long options, call x264_param_parse() for processing.
+(4) Call select_input() to parse the output file format (eg raw, flv, MP4...)
+(5) Call select_output() to parse the input file format (eg yuv, y4m...)
+
+The encode() code YUV is the H.264 code stream. The main flow is:
+
+(1) Call x264_encoder_open() to open the H.264 encoder;
+(2) Call x264_encoder_parameters() to get the current parameter set x264_param_t for some configuration in the subsequent steps;
+(3) Call the output format (H.264 bare stream, FLV, mp4, etc.) corresponding to the set_param() method of the cli_output_t structure to set parameters for the wrapper of the output format. The parameter is derived from the x264_param_t obtained in the previous step;
+(4) If SPS/PPS/SEI is not added in front of each keyframe, call x264_encoder_headers() to add SPS/PPS/SEI in front of the entire code stream;
+(5) Enter a loop to encode YUV to H.264 one frame at a time:
+a) Call the cli_vid_filter_t structure get_frame() method corresponding to the input format (YUV, Y4M, etc.) to obtain one frame of YUV data.
+b) Call encode_frame() to encode the frame YUV data as H.264 data and output it. The function internally calls x264_encoder_encode() to complete the encoding work, and calls the output format corresponding to the write_frame() of the cli_output_t structure to complete the output work.
+c) Call the cli_vid_filter_t structure release_frame() method corresponding to the input format (YUV, Y4M, etc.) to release the YUV data just acquired.
+d) Call print_status() to output some statistics.
+(6) When the encoding is about to end, enter another loop and output the video frame buffered in the encoder:
+a) No longer pass the new YUV data, directly call encode_frame(), and encode the remaining frames of data buffered in the encoder.
+b) Call print_status() to output some statistics.
+(7) Call x264_encoder_close() to turn off the H.264 encoder.
