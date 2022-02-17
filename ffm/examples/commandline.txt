@@ -115,3 +115,9 @@ nohup /data/ffmpeg -threads 2  -report -re -fflags +genpts -stream_loop -1 -i le
 ./ffmpeg  -hwaccel cuda -hwaccel_output_format cuda -c:v hevc_cuvid  -i /opt/root/tmp/4k.mp4 -r 30 -vf scale_npp=-1:720  -c:v hevc_nvenc  -minrate 7M -maxrate 7M -b:v 7M  -c:a copy -f mp4  -y /tmp/4k.mp4
 
 ./ffmpeg -h encoder=hevc_nvenc
+
+#https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss#:~:text=10-bit%2F12-bit%20HEVC%20to%208-bit%20HEVC%20ffmpeg%20-i%20input,value%20to%20provide%20the%20desired%20level%20of%20quality.
+# 10bit to 8bit
+./ffmpeg  -i P7-mc48.ts   -c:v hevc_nvenc -vf format=yuv420p -g 30  -preset fast  -profile:v main  -minrate 8M -maxrate 8M -b:v 8M -c:a libfdk_aac -b:a 128k p7.ts
+# 12bit to 10bit
+./ffmpeg  -i P7-mc48.ts   -c:v hevc_nvenc -vf format=yuv420p10le -g 30  -preset fast  -profile:v main  -minrate 8M -maxrate 8M -b:v 8M -c:a libfdk_aac -b:a 128k p7.ts

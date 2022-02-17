@@ -144,9 +144,21 @@ https://docs.nvidia.com/video-technologies/video-codec-sdk/nvdec-video-decoder-a
 
 #
 nvidia-smi -pm 1
+nvidia-smi -ac 5003,1592
 nvidia-smi --query-supported-clocks=mem,gr --format=csv 
 nvidia-smi -q -d SUPPORTED_CLOCKS
 
+nvidia-smi -a
+nvidia-smi -q -d CLOCK
+nvidia-smi -pm 1
+sudo nvidia-smi -lgc 2100
+nvidia-smi -q -d CLOCK
+
+nvidia-smi --help | grep lock
+sudo nvidia-smi -lmc 8100
+
+nvidia-smi dmon -h
+nvidia-smi dmon -s pucvmet
 
 
 ### x11vnc steps 

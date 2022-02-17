@@ -241,7 +241,7 @@ git rev-list --objects --all | grep 002b44b33094a4a98e6f202b4b238ede384a9c27
  git checkout -b main remotes/origin/main # create remote main branch to local branch(main)  
  git checkout origin/1.18 # create remote 1.18 branch to local branch(origin/1.18)
 
- git checkout -b origin/1.8 remotes/origin/1.18
+ git checkout -b origin/1.18 remotes/origin/1.18
  git pull origin 1.18
 
  git checkout master
