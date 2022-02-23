@@ -4,7 +4,10 @@ export GST_PLUGIN_PATH=/usr/local/lib64/plugins:/usr/local/lib64/x86_64-linux-gn
 export LD_LIBRARY_PATH=/usr/local/lib64/x86_64-linux-gnu/:/usr/local/lib64:/usr/local/lib
 ROOT_PATH=/usr/local
 sudo nvidia-smi -pm 1
-sudo nvidia-smi -ac 5003,1592 # 8001,2100
+sudo nvidia-smi -lgc 2100,2100
+sudo nvidia-smi -ac 8001,2100
+sudo nvidia-smi -lmc 8001
+#sudo nvidia-smi -ac 5003,1592 # t4
 #sudo killall cache.sh > /dev/null 2>&1 
 #sudo /usr/local/bin/cache.sh > /dev/null 2>&1 &
 ulimit -c 0

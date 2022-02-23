@@ -251,3 +251,9 @@ git rev-list --objects --all | grep 002b44b33094a4a98e6f202b4b238ede384a9c27
  git checkout 1.18
  git push origin 1.18
 
+14 fetch all branches
+
+#https://stackoverflow.com/questions/10312521/how-to-fetch-all-git-branches
+git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+git fetch --all
+git pull --all
