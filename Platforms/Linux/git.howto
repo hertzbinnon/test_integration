@@ -1,3 +1,7 @@
+0.靠靠
+https://ipaddress.com/website/github.com  #靠靠靠IP
+https://.232.69.194 github.global.ssl.fastly.net
+
 1.拉取远程仓库指定分支代码
 git pull <远程库名> <远程分支名>:<本地分支名>
 #将master分支代码拉取到本地分支

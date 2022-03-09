@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export GST_PLUGIN_PATH=/usr/local/lib64/plugins:/usr/local/lib64/x86_64-linux-gnu/gstreamer-1.0
-export LD_LIBRARY_PATH=/usr/local/lib64/x86_64-linux-gnu/:/usr/local/lib64:/usr/local/lib
+export LD_LIBRARY_PATH=/usr/local/lib64/x86_64-linux-gnu/:/usr/local/lib64:/usr/local/lib:/usr/local/cuda/lib64
 ROOT_PATH=/usr/local
 sudo nvidia-smi -pm 1
 sudo nvidia-smi -lgc 2100,2100

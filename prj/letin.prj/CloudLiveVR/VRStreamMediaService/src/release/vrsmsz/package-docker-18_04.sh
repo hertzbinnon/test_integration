@@ -29,6 +29,7 @@ cp $DIRECTORY/bin/* bin/
 mv bin/gst-launch-1.0 bin/fconv
 mv bin/gstd-1.0 bin/vrsmsz
 cp -rf  $DIRECTORY/lib lib
+cd lib/ && ln -s gstreamer-1.0 plugins && cd -
 rm -rf lib/*.a lib/*.la 
 tar czf trafficserver.tar.gz usr/local
 tar zcf $ARCHIVEFILE install.bin bin django-master nginx uploadmodule lib Python-3.7.5 trafficserver.tar.gz libhwloc15_2.1.0+dfsg-4_amd64.deb #python-3.7.7

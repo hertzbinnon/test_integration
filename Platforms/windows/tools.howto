@@ -8,3 +8,5 @@ runas /trustlevel:0x40000 .\Walterlv.Demo.exe
 
 #Ó²ÅÌÉ¨Ãè
 sfc /scannow
+# C:\Windows\System32\drivers\etc¿¿hosts¿¿¿¿¿¿¿¿¿
+ipconfig /flushdns 
