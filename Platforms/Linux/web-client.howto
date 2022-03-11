@@ -244,3 +244,4 @@ at的参数比较人性化，可以使用tomorrow，next week之类的。
 
 #
 nohup wget -np -nH -r –span-hosts -c https://github.com/ant-media/Ant-Media-Server/wiki/ &
+wget -r -p -np -k https://mhsiddiqui.github.io/

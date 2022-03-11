@@ -14,3 +14,17 @@ https://www.howtoforge.com/tutorial/how-to-install-django-on-ubuntu-1804/
 https://www.cnblogs.com/1995hxt/p/6107871.html  
 https://www.nginx.com/resources/wiki/modules/upload/ 
 https://www.cnblogs.com/zhanchenjin/p/5076466.html
+
+
+6. nginx+django+celery+redis+kafka+uwsgi+supervisor
+https://mhsiddiqui.github.io/2018/12/25/Part-2-Deploy-Django-using-Nginx-and-Gunicorn-uWSGI-Celery-Setup/
+https://stackoverflow.com/questions/58890516/consumer-cannot-connect-to-amqp-guest127-0-0-15672-errno-61-connect
+https://stackoverflow.com/questions/60367961/celery-redis-cannot-connect-to-amqp-guest127-0-0-15672-errno-111-c
+https://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
+https://developpaper.com/django-uwsgi-nginx-gevent-deployment/
+https://www.cnblogs.com/rgqancy/p/14588226.html
+
+https://stackabuse.com/asynchronous-tasks-in-django-with-redis-and-celery/
+
+7. web benchmark
+http://www.zh-noone.cn/2019/11/gunicorn-uwsgi%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94/

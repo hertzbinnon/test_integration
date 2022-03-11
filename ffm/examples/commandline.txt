@@ -132,3 +132,8 @@ for((;;)); do \
         -f flv -y rtmp://192.168.1.170/live/livestream; \
         sleep 1; \
 one
+
+
+# snapshot
+ffmpeg -ss 00:00:00  -i ../../../../4k/4K_Travel_Beijing_Tourism_360_2D_100M.mp4 -frames:v 1 -s 480x240 -f image2 -y output.jpg
+#time ffmpeg  -i ../../../../4k/4K_Travel_Beijing_Tourism_360_2D_100M.mp4 -ss 00:00:00 -frames:v 1 -f image2 -y output.jpg
