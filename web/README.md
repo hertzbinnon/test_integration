@@ -23,7 +23,6 @@ https://stackoverflow.com/questions/60367961/celery-redis-cannot-connect-to-amqp
 https://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
 https://developpaper.com/django-uwsgi-nginx-gevent-deployment/
 https://www.cnblogs.com/rgqancy/p/14588226.html
-
 https://stackabuse.com/asynchronous-tasks-in-django-with-redis-and-celery/
 
 7. web benchmark
