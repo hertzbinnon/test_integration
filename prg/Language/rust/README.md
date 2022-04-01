@@ -16,10 +16,13 @@ cargo check
 cargo doc --open
 
 rustup update
+rustup toolchain list
+rustup default
+
 cargo install cargo-c
 # install to $HOME/.cargo/bin or  %USERPROFILE%\.cargo\bin
 cargo install --force --path .
 
-
+# [6] Couldn't resolve host name (Could not resolve host: crates)
 https://blog.csdn.net/Quner6/article/details/117763488
 CARGO_HTTP_MULTIPLEXING=false

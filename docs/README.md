@@ -1,29 +1,11 @@
 # test_integration ScrapBook->BaiduDisk->Here
-2021
-Master Task:  Distribute Stream Media Server Arch based on GstDandATS
-Child Task1:  Switcher for source/filter/sink etc ... 
-Child Task2:  Distribute Cluster Proccess 
-Child Task3:  Render for OpenXR 
-Child Task4:  Srt/Quic/WebRtc/RIST Transport
-Child Task5:  Cuda/MSDK/AFX
-Child Task6:  Controller Dashboard for web
-Child Task7:  AI proccess for NNStreamer
-Child Task8:  AI processs for Kaldi
-Child Task9:  AI encoding for VVC
-Child Task10: CI
-
-Base&Tech&Tools: glib/gstreamer/gstd  
-                 js/html/css 
-                 vr/opengl/cg 
-                 xrdesktop/alvr/linux 
-                 webrtc/srt/quic/rist
-                 c/rust/python/shell
-2022
-Master Task: Blender on Linux/Windows OS Graphics system
-Child Task1: Operation
-Child Task2: ....
-Child Task3: Source Code
-Child Task4: Render engine with blender for VR
-Child Task5: player engine with blender for VR
-  
-
+1. Register a Workstation
+2. Deploy a Site
+3. Search project from yifang
+k8s -> spark -> ceph -> docker -> [cloud, bigdata]
+ats -> nginx -> uwsgi -> django -> celery ->  redis -> mysql
+srs -> ffmpeg -> rtc -> vlc webrtc janus mediasoup ant-media kurento -> [sms]
+electron -> chromium -> jquery/vue -> nodejs -> [web]
+blender -> [desktop]
+gst -> nns -> onnx -> PaddleOCR -> [AI]
+meilisearch -> elasticsearch 

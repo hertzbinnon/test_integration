@@ -1,3 +1,4 @@
+#https://blog.csdn.net/shaukon/article/details/89474115
 #https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
 #ubuntu 18.04
 ## gdb debug 
@@ -8,3 +9,8 @@
   Or
 :Termdebug <blender>
 
+### window layout range
+This layout can be set by configuring g:termdebug_wide in your .vimrc.
+
+let g:termdebug_wide=1
+See :help termdebug_wide for details.
