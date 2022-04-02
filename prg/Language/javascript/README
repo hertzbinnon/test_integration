@@ -4,3 +4,6 @@ sudo npm cache clean
 sudo npm install --global gulp
 # 只安装在当前目录
 # npm insall
+
+#
+https://stackoverflow.com/questions/487073/how-to-check-if-element-is-visible-after-scrolling
