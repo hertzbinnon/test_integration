@@ -46,48 +46,6 @@
 │   │   └── linux_centos7_x86_64
 │   └── lib.2.93.2
 │       └── linux_centos7_x86_64
-├── BookStore
-│   ├── atsinternals
-│   │   ├── CH01-EventSystem
-│   │   ├── CH02-IOCoreNET
-│   │   ├── CH03-IOCoreSSL
-│   │   ├── CH04-Session
-│   │   ├── CH05-StateMachine
-│   │   ├── CH06-IOCoreDNS
-│   │   ├── CH07-IOCoreMultiCache
-│   │   └── CH08-IOCoreHostDB
-│   ├── Books
-│   │   ├── EN
-│   │   ├── ES
-│   │   ├── img
-│   │   ├── PLC-eBooks
-│   │   └── WhitePapers
-│   ├── linux-insides
-│   │   ├── Assets
-│   │   ├── Booting
-│   │   ├── Cgroups
-│   │   ├── Concepts
-│   │   ├── DataStructures
-│   │   ├── Initialization
-│   │   ├── Interrupts
-│   │   ├── KernelStructures
-│   │   ├── Misc
-│   │   ├── MM
-│   │   ├── Scripts
-│   │   ├── SyncPrim
-│   │   ├── SysCall
-│   │   ├── Theory
-│   │   └── Timers
-│   ├── PanoStitcher
-│   │   ├── cs205-stitching.github.io
-│   │   ├── people.ee.ethz.ch
-│   │   └── ppwwyyxx.com
-│   └── qtguide
-│       ├── css
-│       ├── extradoc
-│       ├── images
-│       ├── inwin
-│       └── QtProjects
 ├── Codec
 │   ├── DAIN
 │   │   ├── datasets
@@ -100,6 +58,39 @@
 │   │   ├── Resblock
 │   │   ├── results
 │   │   └── S2D_models
+│   ├── digital_video_introduction
+│   │   ├── i
+│   │   ├── s
+│   │   └── v
+│   ├── fdk-aac
+│   │   ├── documentation
+│   │   ├── fuzzer
+│   │   ├── libAACdec
+│   │   ├── libAACenc
+│   │   ├── libArithCoding
+│   │   ├── libDRCdec
+│   │   ├── libFDK
+│   │   ├── libMpegTPDec
+│   │   ├── libMpegTPEnc
+│   │   ├── libPCMutils
+│   │   ├── libSACdec
+│   │   ├── libSACenc
+│   │   ├── libSBRdec
+│   │   ├── libSBRenc
+│   │   ├── libSYS
+│   │   ├── m4
+│   │   └── win32
+│   ├── kvazaar
+│   │   ├── bin
+│   │   ├── build
+│   │   ├── doc
+│   │   ├── examples
+│   │   ├── greatest
+│   │   ├── m4
+│   │   ├── rdcost-weight-tool
+│   │   ├── src
+│   │   ├── tests
+│   │   └── tools
 │   ├── nv-codec-headers
 │   │   └── include
 │   ├── Super-SloMo
@@ -120,80 +111,242 @@
 │   ├── awesome-diy-software
 │   │   ├── subprojects
 │   │   └── web
-│   ├── build-your-own-x
-│   │   └── subprojects
+│   ├── BookStore
+│   │   ├── atsinternals
+│   │   ├── Books
+│   │   ├── build-your-own-x
+│   │   ├── coding-interview-university
+│   │   ├── computer_book_list
+│   │   ├── free-programming-books-zh_CN
+│   │   ├── Learn-Vim
+│   │   ├── linux-insides
+│   │   ├── PanoStitcher
+│   │   ├── project-based-learning
+│   │   ├── Project-Based-Tutorials-in-C
+│   │   ├── Projects-from-Scratch
+│   │   ├── qtguide
+│   │   └── UniversityCourseList
+│   ├── celery
+│   │   ├── celery
+│   │   ├── docker
+│   │   ├── docs
+│   │   ├── examples
+│   │   ├── extra
+│   │   ├── requirements
+│   │   └── t
+│   ├── ceph
+│   │   ├── admin
+│   │   ├── bin
+│   │   ├── ceph-erasure-code-corpus
+│   │   ├── ceph-menv
+│   │   ├── ceph-object-corpus
+│   │   ├── cmake
+│   │   ├── debian
+│   │   ├── doc
+│   │   ├── etc
+│   │   ├── examples
+│   │   ├── fusetrace
+│   │   ├── keys
+│   │   ├── man
+│   │   ├── mirroring
+│   │   ├── monitoring
+│   │   ├── qa
+│   │   ├── selinux
+│   │   ├── share
+│   │   ├── src
+│   │   ├── sudoers.d
+│   │   ├── systemd
+│   │   └── udev
 │   ├── docker-ubuntu-vnc-desktop
 │   │   ├── flavors
 │   │   ├── hooks
 │   │   ├── rootfs
 │   │   ├── screenshots
 │   │   └── web
-│   ├── project-based-learning
-│   ├── Project-Based-Tutorials-in-C
-│   └── Projects-from-Scratch
-├── gst-plugins-advanced
-│   ├── ffmpeg-extensions
-│   │   ├── 3.3
-│   │   └── 4.4
-│   ├── gst-extensions
-│   │   ├── 1.17.01
-│   │   ├── 1.18.5
-│   │   └── 1.19.2
-│   ├── gst-fluendo-timeshift
-│   │   ├── examples
-│   │   └── src
-│   ├── gst-log-parser
-│   │   ├── examples
-│   │   ├── src
-│   │   └── test-logs
-│   ├── gst-plugin-ndi
-│   │   └── src
-│   ├── gst-plugins-vision
-│   │   ├── cmake
-│   │   ├── common
-│   │   ├── ext
-│   │   ├── gst
-│   │   ├── gst-libs
-│   │   └── sys
-│   ├── gst-plugins-vr
-│   │   ├── __builddir
-│   │   ├── common
-│   │   ├── doc
-│   │   ├── gpu
-│   │   ├── gst
-│   │   ├── gst-libs
-│   │   ├── html
+│   ├── elasticsearch
+│   │   ├── benchmarks
+│   │   ├── build-conventions
+│   │   ├── build-tools
+│   │   ├── build-tools-internal
+│   │   ├── ccr
+│   │   ├── client
+│   │   ├── dev-tools
+│   │   ├── distribution
+│   │   ├── docs
+│   │   ├── gradle
+│   │   ├── libs
+│   │   ├── licenses
+│   │   ├── modules
+│   │   ├── plugins
+│   │   ├── qa
+│   │   ├── rest-api-spec
+│   │   ├── server
+│   │   ├── test
+│   │   └── x-pack
+│   ├── faceswap
+│   │   ├── config
+│   │   ├── docs
+│   │   ├── lib
+│   │   ├── locales
+│   │   ├── plugins
 │   │   ├── scripts
-│   │   ├── sphvr
-│   │   ├── subprojects
 │   │   ├── tests
 │   │   ├── tools
-│   │   └── valgrind_helpers
-│   ├── kaldi-dev
-│   │   ├── kaldi
-│   │   └── kaldi-gstreamer-server
-│   ├── mozilla
-│   │   ├── DeepSpeech
-│   │   └── servo
-│   ├── nnstreamer
-│   │   ├── gst-instruments
-│   │   ├── nnshark
-│   │   ├── nnstreamer-example
-│   │   ├── nnstreamer.git
-│   │   ├── ssat
-│   │   ├── tensorflow.error
-│   │   └── tmp
-│   └── ridgerun
-│       ├── backend-bin
-│       ├── gst-crypto
-│       ├── gstd-1.x
-│       ├── gst-inference
-│       ├── gst-interpipe
-│       ├── gst-interpipe.git
-│       ├── gst-perf
-│       ├── gst-shark
-│       ├── r2inference
-│       └── tensorflow
+│   │   └── _travis
+│   ├── ffmpeg-python
+│   │   ├── doc
+│   │   ├── examples
+│   │   └── ffmpeg
+│   ├── flv.js
+│   │   ├── assets
+│   │   ├── demo
+│   │   ├── dist
+│   │   └── docs
+│   ├── godot
+│   │   ├── bin
+│   │   ├── core
+│   │   ├── doc
+│   │   ├── drivers
+│   │   ├── editor
+│   │   ├── main
+│   │   ├── misc
+│   │   ├── modules
+│   │   ├── platform
+│   │   ├── __pycache__
+│   │   ├── scene
+│   │   ├── servers
+│   │   ├── tests
+│   │   └── thirdparty
+│   ├── kubernetes
+│   │   ├── api
+│   │   ├── build
+│   │   ├── CHANGELOG
+│   │   ├── cluster
+│   │   ├── cmd
+│   │   ├── docs
+│   │   ├── hack
+│   │   ├── LICENSES
+│   │   ├── logo
+│   │   ├── pkg
+│   │   ├── plugin
+│   │   ├── staging
+│   │   ├── test
+│   │   ├── third_party
+│   │   └── vendor
+│   ├── meilisearch
+│   │   ├── assets
+│   │   ├── meilisearch-auth
+│   │   ├── meilisearch-error
+│   │   ├── meilisearch-http
+│   │   └── meilisearch-lib
+│   ├── MuseScore
+│   │   ├── assets
+│   │   ├── build
+│   │   ├── demos
+│   │   ├── doc
+│   │   ├── fonts
+│   │   ├── hooks
+│   │   ├── mtest
+│   │   ├── rdoc
+│   │   ├── sandbox
+│   │   ├── share
+│   │   ├── src
+│   │   ├── test
+│   │   ├── thirdparty
+│   │   ├── tools
+│   │   └── vtest
+│   ├── onnxruntime
+│   │   ├── cgmanifests
+│   │   ├── cmake
+│   │   ├── csharp
+│   │   ├── dockerfiles
+│   │   ├── docs
+│   │   ├── include
+│   │   ├── java
+│   │   ├── js
+│   │   ├── objectivec
+│   │   ├── onnxruntime
+│   │   ├── orttraining
+│   │   ├── package
+│   │   ├── samples
+│   │   ├── server
+│   │   ├── tools
+│   │   └── winml
+│   ├── PaddleOCR
+│   │   ├── benchmark
+│   │   ├── configs
+│   │   ├── deploy
+│   │   ├── doc
+│   │   ├── ppocr
+│   │   ├── PPOCRLabel
+│   │   ├── ppstructure
+│   │   ├── StyleText
+│   │   ├── test_tipc
+│   │   └── tools
+│   ├── spark
+│   │   ├── assembly
+│   │   ├── bin
+│   │   ├── binder
+│   │   ├── build
+│   │   ├── common
+│   │   ├── conf
+│   │   ├── core
+│   │   ├── data
+│   │   ├── dev
+│   │   ├── docs
+│   │   ├── examples
+│   │   ├── external
+│   │   ├── graphx
+│   │   ├── hadoop-cloud
+│   │   ├── launcher
+│   │   ├── licenses
+│   │   ├── licenses-binary
+│   │   ├── mllib
+│   │   ├── mllib-local
+│   │   ├── project
+│   │   ├── python
+│   │   ├── R
+│   │   ├── repl
+│   │   ├── resource-managers
+│   │   ├── sbin
+│   │   ├── sql
+│   │   ├── streaming
+│   │   ├── target
+│   │   └── tools
+│   ├── st-load
+│   │   ├── 3rdparty
+│   │   ├── auto
+│   │   ├── doc
+│   │   └── src
+│   ├── UPbge
+│   │   ├── build_linux_debug
+│   │   ├── lib
+│   │   └── upbge
+│   ├── video-stream-analytics
+│   │   ├── sample-video
+│   │   ├── video-stream-collector
+│   │   └── video-stream-processor
+│   ├── webtorrent
+│   │   ├── docs
+│   │   ├── lib
+│   │   ├── scripts
+│   │   └── test
+│   ├── webtorrent-cli
+│   │   ├── bin
+│   │   ├── test
+│   │   └── tools
+│   ├── wifi-card
+│   │   ├── public
+│   │   └── src
+│   ├── wifi-password
+│   │   ├── images
+│   │   └── wifi_password
+│   └── youtube-dl
+│       ├── bin
+│       ├── devscripts
+│       ├── docs
+│       ├── test
+│       └── youtube_dl
 ├── GStreamer
 │   ├── backup-106
 │   │   ├── cerbero
@@ -303,9 +456,76 @@
 │   │   ├── fuzzing
 │   │   ├── gitlab
 │   │   └── jenkins
-│   └── gst-language-bindings
-│       ├── gst-py
-│       └── gst-rust
+│   ├── gst-language-bindings
+│   │   ├── gst-py
+│   │   └── gst-rust
+│   └── gst-plugins-advanced
+│       ├── centricular
+│       ├── ffmpeg-extensions
+│       ├── gst-extensions
+│       ├── gst-fluendo-timeshift
+│       ├── gst-log-parser
+│       ├── gst-plugin-ndi
+│       ├── gst-plugins-vision
+│       ├── gst-plugins-vr
+│       ├── GStreamerLatencyPlotter
+│       ├── gst-rtmpsrv
+│       ├── kaldi-dev
+│       ├── latency-clock
+│       ├── mozilla
+│       ├── nnstreamer
+│       └── ridgerun
+├── Project
+│   ├── java-backend
+│   │   ├── jar
+│   │   └── magic-api
+│   ├── mediagateway
+│   │   ├── etc
+│   │   └── transcode
+│   ├── mysite
+│   │   ├── cms
+│   │   ├── docker
+│   │   ├── mysite
+│   │   ├── script
+│   │   └── test
+│   ├── nginx
+│   │   ├── auto
+│   │   ├── conf
+│   │   ├── contrib
+│   │   ├── docs
+│   │   ├── misc
+│   │   ├── objs
+│   │   ├── objs.debug
+│   │   └── src
+│   ├── nginx-rtmp-module
+│   │   ├── dash
+│   │   ├── doc
+│   │   ├── hls
+│   │   └── test
+│   ├── nginx-upload-module
+│   │   └── t
+│   ├── pcre-8.40
+│   │   ├── cmake
+│   │   ├── doc
+│   │   ├── m4
+│   │   ├── sljit
+│   │   └── testdata
+│   ├── release
+│   │   ├── bin
+│   │   ├── etc
+│   │   ├── html
+│   │   ├── include
+│   │   ├── lib
+│   │   ├── lib64
+│   │   ├── libexec
+│   │   ├── man
+│   │   ├── nginx
+│   │   ├── share
+│   │   ├── usr
+│   │   └── var
+│   ├── srs
+│   │   └── trunk
+│   └── vrsmszd -> mediagateway
 ├── release
 │   ├── hbsmsz
 │   │   ├── 2071-7-12-data-tmp
@@ -320,7 +540,6 @@
 │       ├── bin
 │       ├── director-html
 │       ├── django-master
-│       ├── lib
 │       ├── nginx
 │       ├── program
 │       ├── Python-3.7.5
@@ -379,6 +598,7 @@
 │   │   ├── deprecated_tutorial34
 │   │   ├── Include
 │   │   ├── Lib
+│   │   ├── opengl_qna
 │   │   ├── samples
 │   │   ├── tutorial01
 │   │   ├── tutorial02
@@ -419,7 +639,9 @@
 │   │   ├── tutorial23
 │   │   ├── tutorial23_youtube
 │   │   ├── tutorial24
+│   │   ├── tutorial24_youtube
 │   │   ├── tutorial25
+│   │   ├── tutorial25_youtube
 │   │   ├── tutorial26
 │   │   ├── tutorial27
 │   │   ├── tutorial28
@@ -510,6 +732,7 @@
 │   │   ├── editor
 │   │   ├── examples
 │   │   ├── files
+│   │   ├── manual
 │   │   ├── src
 │   │   ├── test
 │   │   └── utils
@@ -538,6 +761,7 @@
 │   │   ├── nginx-release-1.15.12
 │   │   └── Release
 │   └── srs
+│       ├── srs.develop
 │       └── trunk
 ├── rust-version
 │   ├── Rocket
@@ -565,37 +789,10 @@
 │       └── target
 ├── third-party
 │   ├── deps
-│   │   └── nvidia-settings
 │   ├── EasyDarwin -> /home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/third-party/GoLang/src/github.com/EasyDarwin/EasyDarwin
 │   ├── FFmpeg
 │   │   ├── ffmpeg
 │   │   └── ffmpeg-hevc-rtmp.patch
-│   ├── GitHub
-│   │   ├── computer_book_list
-│   │   ├── faceswap
-│   │   ├── ffmpeg-python
-│   │   ├── latency-clock
-│   │   ├── st-load
-│   │   ├── webtorrent
-│   │   ├── webtorrent-cli
-│   │   ├── wifi-card
-│   │   ├── wifi-password
-│   │   └── youtube-dl
-│   ├── godot
-│   │   ├── bin
-│   │   ├── core
-│   │   ├── doc
-│   │   ├── drivers
-│   │   ├── editor
-│   │   ├── main
-│   │   ├── misc
-│   │   ├── modules
-│   │   ├── platform
-│   │   ├── __pycache__
-│   │   ├── scene
-│   │   ├── servers
-│   │   ├── tests
-│   │   └── thirdparty
 │   ├── GoLang
 │   │   ├── bin
 │   │   └── src
@@ -617,7 +814,12 @@
 │   ├── nvidia-patch
 │   │   ├── tools
 │   │   └── win
+│   ├── nvidia-settings
+│   │   ├── doc
+│   │   ├── samples
+│   │   └── src
 │   ├── obs-gstreamer
+│   │   ├── builddir
 │   │   ├── docker
 │   │   └── test
 │   ├── obs-studio
@@ -637,16 +839,12 @@
 │   ├── opencv_base
 │   │   ├── opencv
 │   │   └── opencv_contrib
-│   ├── PanoTools
-│   │   ├── hugin-hugin
-│   │   ├── libpano13
-│   │   ├── OwlReality
-│   │   ├── PTLinux
-│   │   └── stitchEm
-│   └── UPbge
-│       ├── build_linux_debug
-│       ├── lib
-│       └── upbge
+│   └── PanoTools
+│       ├── hugin-hugin
+│       ├── libpano13
+│       ├── OwlReality
+│       ├── PTLinux
+│       └── stitchEm
 ├── tmp
 │   ├── bin
 │   ├── etc
@@ -811,6 +1009,9 @@
 │   │   ├── monado
 │   │   ├── OpenXR-SDK
 │   │   └── OpenXR-SDK-Source
+│   ├── OpenXR-Samples
+│   │   ├── basic_info
+│   │   └── glutCube
 │   ├── VRWorks_360_Video_2.1_Linux
 │   │   ├── external
 │   │   ├── footage
@@ -933,6 +1134,9 @@
     │   ├── depot_tools
     │   ├── deps_os_ubuntu
     │   └── webrtc
+    ├── libwebrtc-cn-docker
+    │   ├── depot_tools
+    │   └── webrtc
     └── mediasoup
         ├── libmediasoupclient
         ├── mediasoup
@@ -945,3 +1149,4 @@
         ├── mediasoup-ios-client
         └── mediasoup-website
 
+1148 directories
