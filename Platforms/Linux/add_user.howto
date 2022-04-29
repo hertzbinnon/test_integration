@@ -4,3 +4,6 @@
 #passwd 123456
 
 #usermod -g root test
+
+# vim /etc/sudoers
+ubuntu  ALL=(ALL:ALL) ALL

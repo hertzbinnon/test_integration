@@ -8,9 +8,9 @@ VERSION=1.0.0-Ubuntu1804
 SYSVERSION="18.04"
 #HDWVERSION="TeslaT4"
 #HDWVERSION="NVIDIAGeForceRTX3090"
-HDWVERSION="NVIDIARTXA5000"
+HDWVERSION="NVIDIARTXA6000"
 
-sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 libegl1 -y 
+sudo apt install ntpdate lsb-release libx11-xcb1 libjbig0 libegl1 libjansson4 libdaemon0 libgudev-1.0-0 -y 
 sudo apt install ./libhwloc15_2.1.0+dfsg-4_amd64.deb libtcl8.6 libhwloc-dev -y
 SYS=`lsb_release -a 2> /dev/null | grep Release | cut -d : -f2 | awk '{gsub(/^\s+|\s+$/, "");print}'`
 HDW=`nvidia-smi -q | grep "Product Name" | cut -d : -f2 | uniq | awk '{gsub(/^\s+|\s+$/, "");print}' | sed s/[[:space:]]//g`
@@ -32,7 +32,7 @@ if [ $? != 0 ];then
 	echo "sync date failed !!! "
        	exit 4
 fi
-Exp_time=1650153600
+Exp_time=1658016000
 let exp_time=$Exp_time
 let elps_time=`date "+%s"`
 
