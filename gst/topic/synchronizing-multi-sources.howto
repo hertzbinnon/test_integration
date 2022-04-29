@@ -1,0 +1,6 @@
+https://stackoverflow.com/questions/57103018/how-to-get-timestamps-from-gstreamer-using-system-clock
+
+gst pipeline |  grep -oP "(?<=dts: )(\d+:){2}\d+.\d+"
+
+
+https://gstreamer-devel.narkive.com/FzvPz2kG/transmit-absolute-time
