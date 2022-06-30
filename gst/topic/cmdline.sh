@@ -10,3 +10,17 @@ gst-launch-1.0 videotestsrc ! x264enc ! rtspclientsink location=rtsp://127.0.0.1
 ./test-rtsp-launch "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
 #./test-rtsp-launch "( appsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
 gst-launch-1.0 videotestsrc ! video/x-raw ! glupload ! gloverlay location=/usr/share/pixmaps/faces/sky.jpg ! glimagesink
+
+#  v360 in gstavdeinterlace
+## cuda memory
+gst-launch-1.0 -v -e rtmpsrc location=rtmp://192.168.1.211:19350/live/ch3 ! flvdemux name=demuxer ! queue name=demux ! h265parse ! queue name=parse1 ! nvh265dec ! queue name=decoder ! cudaconvert ! cudadownload ! video/x-raw,format=I420 ! queue ! avdeinterlace  mode=1 ! cudaupload ! cudaconvert ! video/x-raw'(memory:CUDAMemory)',format=NV12  ! queue name=converter ! nvh265enc preset=3 bitrate=7000 gop-size=30 ! queue name=encoder ! h265parse ! queue name=parse2 ! flvmux latency=1000000000 streamable=true name=muxer ! rtmp2sink location=rtmp://127.0.0.1/live/pub sync=false demuxer. ! aacparse ! queue ! avdec_aac ! audioconvert  ! voaacenc ! muxer.
+
+## memory
+gst-launch-1.0 -v -e rtmpsrc location=rtmp://192.168.1.211:19350/live/ch3 ! flvdemux name=demuxer ! queue name=demux ! h265parse ! queue name=parse1 ! nvh265dec ! queue name=decoder ! videoconvert ! video/x-raw,format=I420  ! queue name=v360 ! avdeinterlace  mode=1 ! queue name=conv ! videoconvert ! video/x-raw,format=NV12  ! queue name=converter ! nvh265enc preset=3 bitrate=7000 gop-size=30 ! queue name=encoder ! h265parse ! queue name=parse2 ! flvmux latency=1000000000 streamable=true name=muxer ! rtmp2sink location=rtmp://127.0.0.1/live/pub sync=false demuxer. ! aacparse ! queue ! avdec_aac ! audioconvert  ! voaacenc ! muxer.
+
+##  memory
+gst-launch-1.0 -v -e rtmpsrc location=rtmp://192.168.1.211:19350/live/ch3 ! flvdemux name=demuxer ! queue name=demux ! h265parse ! queue name=parse1 ! nvh265dec ! queue name=decoder ! videoconvert ! avdeinterlace  mode=1 ! queue name=en ! nvh265enc preset=3 bitrate=7000 gop-size=30 ! queue name=encoder ! h265parse ! queue name=parse2 ! flvmux latency=1000000000 streamable=true name=muxer ! rtmp2sink location=rtmp://127.0.0.1/live/pub sync=false demuxer. ! aacparse ! queue ! avdec_aac ! audioconvert  ! voaacenc ! muxer.
+
+## opengl memory
+
+gst-launch-1.0 -v -e rtmpsrc location=rtmp://192.168.1.211:19350/live/ch3 ! flvdemux name=demuxer ! queue name=demux ! h265parse ! queue name=parse1 ! nvh265dec ! queue name=decoder ! glupload ! glcolorconvert ! queue name=gl ! gldownload ! avdeinterlace  mode=1 !  queue name=en ! nvh265enc preset=3 bitrate=7000 gop-size=30 ! queue name=encoder ! h265parse ! queue name=parse2 ! flvmux latency=1000000000 streamable=true name=muxer ! rtmp2sink location=rtmp://127.0.0.1/live/pub sync=false demuxer. ! aacparse ! queue ! avdec_aac ! audioconvert  ! voaacenc ! muxer.

@@ -1,0 +1,4 @@
+# delete first colum
+awk '{$1="";print $0}'
+## eg
+history | awk '{$1="";print $0}' |   grep install | grep -v  history > requests.txt

@@ -261,3 +261,13 @@ git rev-list --objects --all | grep 002b44b33094a4a98e6f202b4b238ede384a9c27
 git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
 git fetch --all
 git pull --all
+
+
+15 Github gh 
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+sudo apt-add-repository https://cli.github.com/packages
+sudo apt update
+sudo apt install gh
+
+# set access token
+gh auth login
