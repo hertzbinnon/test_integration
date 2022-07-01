@@ -1,4 +1,4 @@
-#tree -L 3 -d
+#tree -L 3 -d > README
 .
 ├── Blender
 │   ├── blender
@@ -63,6 +63,7 @@
 │   │   ├── s
 │   │   └── v
 │   ├── fdk-aac
+│   │   ├── __builddir
 │   │   ├── documentation
 │   │   ├── fuzzer
 │   │   ├── libAACdec
@@ -93,6 +94,9 @@
 │   │   └── tools
 │   ├── nv-codec-headers
 │   │   └── include
+│   ├── Real-SR
+│   │   ├── codes
+│   │   └── figures
 │   ├── Super-SloMo
 │   │   ├── data
 │   │   └── misc
@@ -105,8 +109,23 @@
 │   │   ├── gstreamer-plugin
 │   │   ├── Source
 │   │   └── Tests
-│   └── vk_video_samples
-│       └── vk_video_decoder
+│   ├── uvg266
+│   │   ├── bin
+│   │   ├── build
+│   │   ├── doc
+│   │   ├── examples
+│   │   ├── greatest
+│   │   ├── rdcost-weight-tool
+│   │   ├── src
+│   │   ├── tests
+│   │   └── tools
+│   ├── vk_video_samples
+│   │   └── vk_video_decoder
+│   └── Waifu2x-Extension-GUI
+│       ├── Release
+│       ├── Samples
+│       ├── Screenshot
+│       └── SRC_v3.41.01-beta
 ├── GitHub
 │   ├── awesome-diy-software
 │   │   ├── subprojects
@@ -290,6 +309,7 @@
 │   │   ├── build
 │   │   ├── common
 │   │   ├── conf
+│   │   ├── connector
 │   │   ├── core
 │   │   ├── data
 │   │   ├── dev
@@ -599,7 +619,9 @@
 │   │   ├── Include
 │   │   ├── Lib
 │   │   ├── opengl_qna
+│   │   ├── orca
 │   │   ├── samples
+│   │   ├── tools
 │   │   ├── tutorial01
 │   │   ├── tutorial02
 │   │   ├── tutorial03
@@ -643,11 +665,17 @@
 │   │   ├── tutorial25
 │   │   ├── tutorial25_youtube
 │   │   ├── tutorial26
+│   │   ├── tutorial26_youtube
 │   │   ├── tutorial27
+│   │   ├── tutorial27_youtube
 │   │   ├── tutorial28
+│   │   ├── tutorial28_youtube
 │   │   ├── tutorial29
+│   │   ├── tutorial29_youtube
 │   │   ├── tutorial30
+│   │   ├── tutorial30_youtube
 │   │   ├── tutorial31
+│   │   ├── tutorial31_youtube
 │   │   ├── tutorial32
 │   │   ├── tutorial33
 │   │   ├── tutorial35
@@ -836,6 +864,13 @@
 │   │   ├── plugins
 │   │   ├── test
 │   │   └── UI
+│   ├── obs-virtual-cam
+│   │   ├── cmake
+│   │   ├── dshowdeps
+│   │   ├── installer
+│   │   ├── locale
+│   │   ├── src
+│   │   └── util
 │   ├── opencv_base
 │   │   ├── opencv
 │   │   └── opencv_contrib
@@ -844,7 +879,8 @@
 │       ├── libpano13
 │       ├── OwlReality
 │       ├── PTLinux
-│       └── stitchEm
+│       ├── stitchEm
+│       └── video-stitcher
 ├── tmp
 │   ├── bin
 │   ├── etc
@@ -928,7 +964,8 @@
 │   │   ├── po
 │   │   ├── share
 │   │   ├── src
-│   │   └── test
+│   │   ├── test
+│   │   └── win32
 │   ├── vlc-android
 │   │   ├── application
 │   │   ├── build
@@ -949,7 +986,7 @@
 │   │   ├── gradle-6.5
 │   │   ├── libvlc
 │   │   └── medialibrary
-│   ├── vlc-old-2019-12
+│   ├── vlc-current
 │   │   ├── autom4te.cache
 │   │   ├── autotools
 │   │   ├── bin
@@ -964,8 +1001,7 @@
 │   │   ├── po
 │   │   ├── share
 │   │   ├── src
-│   │   ├── test
-│   │   └── win32
+│   │   └── test
 │   ├── win64
 │   │   ├── bin
 │   │   ├── compat
@@ -1006,9 +1042,13 @@
 │   │   └── ALVR
 │   ├── monado
 │   │   ├── demos
+│   │   ├── draft-openxr-android-broker-impl
 │   │   ├── monado
+│   │   ├── monado-basalt
+│   │   ├── monado-ORB_SLAM3
 │   │   ├── OpenXR-SDK
-│   │   └── OpenXR-SDK-Source
+│   │   ├── OpenXR-SDK-Source
+│   │   └── ORB_SLAM3
 │   ├── OpenXR-Samples
 │   │   ├── basic_info
 │   │   └── glutCube
@@ -1042,7 +1082,6 @@
 │   │   ├── chrome
 │   │   ├── chromecast
 │   │   ├── chromeos
-│   │   ├── cloud_print
 │   │   ├── codelabs
 │   │   ├── components
 │   │   ├── content
@@ -1062,7 +1101,6 @@
 │   │   ├── infra
 │   │   ├── ios
 │   │   ├── ipc
-│   │   ├── jingle
 │   │   ├── media
 │   │   ├── mojo
 │   │   ├── native_client_sdk
@@ -1149,4 +1187,4 @@
         ├── mediasoup-ios-client
         └── mediasoup-website
 
-1148 directories
+1186 directories
