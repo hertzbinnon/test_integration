@@ -4,3 +4,82 @@ ACLOCAL_AMFLAGS='-I/home/vlc/vlc-ubuntu18/contrib/x86_64-linux-gnu/share/aclocal
 https://trac.ffmpeg.org/wiki/CompilationGuide/Centos
 
 https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/
+
+# gdb degug build ffmpeg >= 3.3
+PATH=$PATH:/usr/local/cuda/bin PKG_CONFIG_PATH="/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib/pkgconfig/:/home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/vlc-dev/vlc/contrib/x86_64-linux-gnu/lib/pkgconfig/" CFLAGS="-I/usr/local/cuda/include" LDFLAGS="-L/usr/local/cuda/lib64" ../configure --enable-libnpp --enable-nonfree --enable-cuda --enable-libx264  --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes --disable-libxcb-shape --disable-vaapi --enable-gpl --enable-libfdk-aac  --enable-libass --enable-shared --enable-debug=3 --disable-optimizations --disable-asm --disable-stripping --prefix=/home/ubuntu/sdb1/install
+
+# install on ubuntu 20.04
+https://linuxhint.com/install_ffmpeg_ubuntu_20-04/
+
+## Installing FFmpeg from Ubuntu Repo
+$ sudo apt install ffmpeg
+$ ffmpeg -v
+$ ffmpeg -encoders
+$ ffmpeg -decoders
+
+## Installing FFmpeg from snap
+$ sudo apt update && sudo apt install snapd -y
+$ sudo snap install core core20 && sudo systemctl restart snapd
+$ sudo snap install ffmpeg
+$ ffmpeg -version
+
+## Installing FFmpeg from the Source Code
+$ sudo apt install \
+$ autoconf \
+$ automake \
+$ build-essential \
+$ cmake \
+$ git-core \
+$ libass-dev \
+$ libfreetype6-dev \
+$ libgnutls28-dev \
+$ libsdl2-dev \
+$ libtool \
+$ libva-dev \
+$ libvdpau-dev \
+$ libvorbis-dev \
+$ libxcb1-dev \
+$ libxcb-shm0-dev \
+$ libxcb-xfixes0-dev \
+$ pkg-config \
+$ texinfo \
+$ wget \
+$ yasm \
+$ zlib1g-dev \
+$ libunistring-dev
+$ mkdir -pv ~/ffmpeg_source ~/bin
+$ sudo apt install nasm libx264-dev libx265-dev libnuma-dev libvpx-dev libfdk-aac-dev libmp3lame-dev libopus-dev libaom-dev 
+$ cd ~/ffmpeg_source
+$ wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+$ tar -xvf ffmpeg-snapshot.tar.bz2
+
+$ PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
+$ --prefix="$HOME/ffmpeg_build" \
+$ --pkg-config-flags="--static" \
+$ --extra-cflags="-I$HOME/ffmpeg_build/include" \
+$ --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
+$ --extra-libs="-lpthread -lm" \
+$ --bindir="$HOME/bin" \
+$ --enable-gpl \
+$ --enable-gnutls \
+$ --enable-libaom \
+$ --enable-libass \
+$ --enable-libfdk-aac \
+$ --enable-libfreetype \
+$ --enable-libmp3lame \
+$ --enable-libopus \
+$ --enable-libvorbis \
+$ --enable-libvpx \
+$ --enable-libx264 \
+$ --enable-libx265 \
+$ --enable-nonfree  
+$
+### Debug
+$ --enable-shared --enable-debug=3 --disable-optimizations --disable-asm 
+$ PATH="$HOME/bin:$PATH" make -j4 && make install 
+$ hash -r # Reload the bash shell to recognize the new FFmpeg binary location.
+$ source ~/.profile
+$ ffmpeg -hide_banner -i demo.mp4 -c:v libvpx -c:a libvorbis demo.webm
+
+$PATH=$PATH:/usr/local/cuda/bin PKG_CONFIG_PATH="/home/hertz/sdb1/cerbero/build/dist/linux_x86_64/lib/pkgconfig/:/home/hertz/sdb1/cerbero/test.hertz/gst-snippets/test_integration/prj/letin.prj/CloudLiveVR/VRStreamMediaService/src/vlc-dev/vlc/contrib/x86_64-linux-gnu/lib/pkgconfig/" CFLAGS="-I/usr/local/cuda/include" LDFLAGS="-L/usr/local/cuda/lib64" ../configure --enable-libnpp --enable-nonfree --enable-cuda --enable-libx264  --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes --disable-libxcb-shape --disable-vaapi --enable-gpl --enable-libfdk-aac  --enable-libass --enable-shared --enable-debug=3 --disable-optimizations --disable-asm --disable-stripping --prefix=/home/ubuntu/sdb1/install
+

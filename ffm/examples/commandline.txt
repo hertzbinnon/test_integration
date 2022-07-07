@@ -74,11 +74,11 @@ ffmpeg -i rtmp://10.9.91.51/live/ch6 -itsoffset 3 -i rtmp://10.9.91.51/live/ch6 
 
 #
 #
-#ffmpeg -hide_banner   -i test.png  -vf v360=fisheye:e           -y test-equi.png
-#ffmpeg -hide_banner   -i test-equi.png   	-vf v360=e:e:yaw=10:pitch=10   					-y test-equi-rotated.png
-#ffmpeg -hide_banner   -i test-equi-rotated.png -vf v360=e:flat  	-y test-flat.png
-#ffmpeg -hide_banner   -i test-flat.png     								-vf v360=flat:e,colorkey=0xFFFFFF:0.1  	-y test-overlay-rotated.png
-#ffmpeg -hide_banner   -i test-overlay-rotated.png    	-vf v360=e:e:pitch=-10:yaw=-10  	-y test-overlay-back.png
+#ffmpeg -hide_banner   -i test.png  -vf v360=fisheye:e  -y test-equi.png
+#ffmpeg -hide_banner   -i test-equi.png  -vf v360=e:e:yaw=10:pitch=10 -y test-equi-rotated.png
+#ffmpeg -hide_banner   -i test-equi-rotated.png -vf v360=e:flat -y test-flat.png
+#ffmpeg -hide_banner   -i test-flat.png  -vf v360=flat:e,colorkey=0xFFFFFF:0.1 	-y test-overlay-rotated.png
+#ffmpeg -hide_banner   -i test-overlay-rotated.png  -vf v360=e:e:pitch=-10:yaw=-10 -y test-overlay-back.png
 #ffmpeg -i test-equi.png -i test-overlay-back.png -filter_complex overlay -y test-final.png
 
 # 0 track start from 5s and track 1 start from 10s
