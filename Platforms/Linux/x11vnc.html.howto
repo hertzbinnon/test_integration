@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="https://c-nergy.be/blog/xmlrpc.php">
+
+<title>Ubuntu 17.10 &#038; 18.04 &#8211; Configure x11vnc to boot at startup &#8211; Griffon&#039;s IT Library</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//cdnjs.cloudflare.com' />
+<link rel='dns-prefetch' href='//use.fontawesome.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Griffon&#039;s IT Library &raquo; Feed" href="https://c-nergy.be/blog/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Griffon&#039;s IT Library &raquo; Comments Feed" href="https://c-nergy.be/blog/?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Griffon&#039;s IT Library &raquo; Ubuntu 17.10 &#038; 18.04 &#8211; Configure x11vnc to boot at startup Comments Feed" href="https://c-nergy.be/blog/?feed=rss2&#038;p=12220" />
+<script type="text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/c-nergy.be\/blog\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.0.1"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode,e=(p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0),i.toDataURL());return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([129777,127995,8205,129778,127999],[129777,127995,8203,129778,127999])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='oria-bootstrap-css'  href='https://c-nergy.be/blog/wp-content/themes/oria/css/bootstrap/bootstrap.min.css?ver=1' type='text/css' media='all' />
+<link rel='stylesheet' id='ngg_trigger_buttons-css'  href='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/trigger_buttons.css?ver=3.26' type='text/css' media='all' />
+<link rel='stylesheet' id='fancybox-0-css'  href='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/fancybox/jquery.fancybox-1.3.4.css?ver=3.26' type='text/css' media='all' />
+<link rel='stylesheet' id='fontawesome_v4_shim_style-css'  href='https://use.fontawesome.com/releases/v5.3.1/css/v4-shims.css?ver=6.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='fontawesome-css'  href='https://use.fontawesome.com/releases/v5.3.1/css/all.css?ver=6.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='nextgen_basic_singlepic_style-css'  href='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_basic_singlepic/static/nextgen_basic_singlepic.css?ver=3.26' type='text/css' media='all' />
+<link rel='stylesheet' id='oria-style-css'  href='https://c-nergy.be/blog/wp-content/themes/oria/style.css?ver=6.0.1' type='text/css' media='all' />
+<style id='oria-style-inline-css' type='text/css'>
+.footer-widgets .widget-title,.owl-theme .owl-controls .owl-buttons div,.read-more,.entry-title a:hover,a, a:hover { color:#1e73be}
+#preloader-inner,.oria-slider .slide-title a,.read-more:hover,.nav-previous:hover,.nav-next:hover, button,.button,input[type="button"],input[type="reset"],input[type="submit"] { background-color:#1e73be}
+.widget-title { border-color:#1e73be}
+.sidebar-toggle,.social-navigation li a:hover,.main-navigation a:hover {background-color:rgba(30,115,190,0.4);}
+body, .widget a { color:#717376}
+.site-title a, .site-title a:hover { color:#fff}
+.site-description { color:#bbb}
+.site-logo { max-width:200px; }
+.site-branding { padding-top:80px;padding-bottom:80px; }
+.site-title { font-size:62px; }
+.site-description { font-size:18px; }
+h1 { font-size:38px; }
+body { font-size:15px; }
+
+</style>
+<link rel='stylesheet' id='oria-body-fonts-css'  href='//fonts.googleapis.com/css?family=Lato%3A400%2C700%2C400italic%2C700italic&#038;ver=6.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='oria-headings-fonts-css'  href='//fonts.googleapis.com/css?family=Oswald%3A300%2C700&#038;ver=6.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='oria-fontawesome-css'  href='https://c-nergy.be/blog/wp-content/themes/oria/fonts/font-awesome.min.css?ver=6.0.1' type='text/css' media='all' />
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-includes/js/jquery/jquery.min.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' id='photocrati_ajax-js-extra'>
+/* <![CDATA[ */
+var photocrati_ajax = {"url":"https:\/\/c-nergy.be\/blog\/index.php?photocrati_ajax=1","wp_home_url":"https:\/\/c-nergy.be\/blog\/index.php","wp_site_url":"https:\/\/c-nergy.be\/blog\/index.php","wp_root_url":"https:\/\/c-nergy.be\/blog\/index.php","wp_plugins_url":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins","wp_content_url":"https:\/\/c-nergy.be\/blog\/wp-content","wp_includes_url":"https:\/\/c-nergy.be\/blog\/wp-includes\/","ngg_param_slug":"nggallery"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/ajax/static/ajax.min.js?ver=3.26' id='photocrati_ajax-js'></script>
+<script type='text/javascript' src='https://use.fontawesome.com/releases/v5.3.1/js/v4-shims.js?ver=5.3.1' id='fontawesome_v4_shim-js'></script>
+<script type='text/javascript' defer integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous" data-auto-replace-svg="false" data-keep-original-source="false" data-search-pseudo-elements src='https://use.fontawesome.com/releases/v5.3.1/js/all.js?ver=5.3.1' id='fontawesome-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/jquery.fitvids.js?ver=1' id='oria-fitvids-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/jquery.slicknav.min.js?ver=1' id='oria-slicknav-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/parallax.min.js?ver=1' id='oria-parallax-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/scripts.js?ver=1' id='oria-scripts-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-includes/js/imagesloaded.min.js?ver=4.1.4' id='imagesloaded-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-includes/js/masonry.min.js?ver=4.2.2' id='masonry-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/imagesloaded.pkgd.min.js?ver=1' id='oria-imagesloaded-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/masonry-init.js?ver=1' id='oria-masonry-init-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/owl.carousel.min.js?ver=1' id='oria-owl-script-js'></script>
+<script type='text/javascript' id='oria-slider-init-js-extra'>
+/* <![CDATA[ */
+var sliderOptions = {"slideshowspeed":"4000"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/slider-init.js?ver=1' id='oria-slider-init-js'></script>
+<link rel="https://api.w.org/" href="https://c-nergy.be/blog/index.php?rest_route=/" /><link rel="alternate" type="application/json" href="https://c-nergy.be/blog/index.php?rest_route=/wp/v2/posts/12220" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://c-nergy.be/blog/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://c-nergy.be/blog/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 6.0.1" />
+<link rel="canonical" href="https://c-nergy.be/blog/?p=12220" />
+<link rel='shortlink' href='https://c-nergy.be/blog/?p=12220' />
+<link rel="alternate" type="application/json+oembed" href="https://c-nergy.be/blog/index.php?rest_route=%2Foembed%2F1.0%2Fembed&#038;url=https%3A%2F%2Fc-nergy.be%2Fblog%2F%3Fp%3D12220" />
+<link rel="alternate" type="text/xml+oembed" href="https://c-nergy.be/blog/index.php?rest_route=%2Foembed%2F1.0%2Fembed&#038;url=https%3A%2F%2Fc-nergy.be%2Fblog%2F%3Fp%3D12220&#038;format=xml" />
+<!--[if lt IE 9]>
+<script src="https://c-nergy.be/blog/wp-content/themes/oria/js/html5shiv.js"></script>
+<![endif]-->
+		<style type="text/css">
+			.site-header {
+				background-image: url(https://c-nergy.be/blog/wp-content/uploads/cropped-c-nergyhd.png);
+			}
+		</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+	</head>
+
+<body class="post-template-default single single-post postid-12220 single-format-standard custom-background group-blog">
+
+
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="top-bar clearfix no-toggle">
+					
+					</div>
+
+		<div class="container">
+			<div class="site-branding">
+				<h1 class="site-title"><a href="https://c-nergy.be/blog/" rel="home">Griffon&#039;s IT Library</a></h1><h2 class="site-description">Simple IT Library for the rest of us</h2>			</div><!-- .site-branding -->
+		</div>
+
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<div class="menu-oria-container"><ul id="primary-menu" class="menu clearfix"><li id="menu-item-8640" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8640"><a href="https://c-nergy.be/blog/?cat=22">Divers</a></li>
+<li id="menu-item-8641" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-8641"><a href="https://c-nergy.be/blog/?cat=8">Linux</a>
+<ul class="sub-menu">
+	<li id="menu-item-8644" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8644"><a href="https://c-nergy.be/blog/?cat=79">XRDP</a></li>
+	<li id="menu-item-8643" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-8643"><a href="https://c-nergy.be/blog/?cat=42">Ubuntu</a></li>
+	<li id="menu-item-8645" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8645"><a href="https://c-nergy.be/blog/?cat=105">Zen Load Balancer</a></li>
+</ul>
+</li>
+<li id="menu-item-8646" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-8646"><a href="https://c-nergy.be/blog/?cat=9">Microsoft</a>
+<ul class="sub-menu">
+	<li id="menu-item-8647" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8647"><a href="https://c-nergy.be/blog/?cat=35">Deploy Technics</a></li>
+	<li id="menu-item-8648" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8648"><a href="https://c-nergy.be/blog/?cat=25">Exchange</a></li>
+	<li id="menu-item-8649" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8649"><a href="https://c-nergy.be/blog/?cat=334">MDOP</a></li>
+	<li id="menu-item-8652" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8652"><a href="https://c-nergy.be/blog/?cat=12">Scripting</a></li>
+	<li id="menu-item-8672" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8672"><a href="https://c-nergy.be/blog/?cat=420">Windows OS</a></li>
+</ul>
+</li>
+<li id="menu-item-8650" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8650"><a href="https://c-nergy.be/blog/?cat=49">Migration</a></li>
+<li id="menu-item-8651" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8651"><a href="https://c-nergy.be/blog/?cat=292">RDS 2012/16/19</a></li>
+<li id="menu-item-8661" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-8661"><a href="https://c-nergy.be/blog/?cat=3">Virtualization</a>
+<ul class="sub-menu">
+	<li id="menu-item-8662" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8662"><a href="https://c-nergy.be/blog/?cat=4">Hyper-V</a></li>
+	<li id="menu-item-8664" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8664"><a href="https://c-nergy.be/blog/?cat=7">Others</a></li>
+	<li id="menu-item-8665" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8665"><a href="https://c-nergy.be/blog/?cat=40">PROXMOX VE</a></li>
+	<li id="menu-item-8666" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8666"><a href="https://c-nergy.be/blog/?cat=5">VMWare</a></li>
+</ul>
+</li>
+<li id="menu-item-8658" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8658"><a href="https://c-nergy.be/blog/?cat=101">Storage</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+		<nav class="mobile-nav">
+    </nav>
+	</header><!-- #masthead -->
+	
+	
+	<div id="content" class="site-content clearfix">
+				<div class="container content-wrapper">
+		
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+<article id="post-12220" class="post-12220 post type-post status-publish format-standard hentry category-ubuntu tag-gdm tag-start-on-boot tag-ubuntu-17-10 tag-ubuntu-18-04 tag-x11vnc">
+
+		
+	<header class="entry-header">
+		<h1 class="entry-title">Ubuntu 17.10 &#038; 18.04 &#8211; Configure x11vnc to boot at startup</h1>
+				<div class="entry-meta">
+			<span class="posted-on"><a href="https://c-nergy.be/blog/?p=12220" rel="bookmark"><time class="entry-date published" datetime="2018-06-04T20:30:51+02:00">June 4, 2018</time><time class="updated" datetime="2021-05-07T22:08:12+02:00">May 7, 2021</time></a></span><span class="byline"> <span class="author vcard"><a class="url fn n" href="https://c-nergy.be/blog/?author=1">Griffon</a></span></span>		</div><!-- .entry-meta -->
+			</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>Hello World,</p>
+<p style="text-align: justify;">Since<strong> Canonical</strong> has dropped <strong>Unity desktop</strong> and replaced it with <strong>Gnome Desktop</strong>, it has been challenging to get a <strong>vnc server</strong> started at boot up and being able to perform a remote connection to the machine.&nbsp; &nbsp;The process of having x11vnc service started at boot time has changed slightly since<strong> lightdm</strong> manager has been replaced by the <strong>GDM display Manager</strong>. <strong>GDM display manager</strong> has introduced an additional level of complexity in the configuration.&nbsp;&nbsp;</p>
+<p>In the past, we already provided some information on how to make the<strong> vnc service start at boot</strong> time and perform a vnc connection. These information can be found hereafter&nbsp;</p>
+<ul>
+<li><a href="http://c-nergy.be/blog/?p=8984">Ubuntu 16.04 – Configure your system to have x11vnc running at startup</a></li>
+<li><a href="http://c-nergy.be/blog/?p=10426">Ubuntu 17.04 – Configure X11VNC Server to Boot at Startup</a></li>
+<li><a href="http://c-nergy.be/blog/?p=11187">Ubuntu Gnome 17.04 – Configure X11VNC Server to Boot at Startup – Part I</a></li>
+<li><a href="http://c-nergy.be/blog/?p=11231">Ubuntu Gnome 17.04 – Configure X11VNC Server to Boot at Startup – Part II</a></li>
+</ul>
+<p>This post will try to provide some updates information on how to perform this configuration against&nbsp;<strong>Ubuntu 17.10 and Ubuntu 18.04 Edition</strong></p>
+<p>Let&#8217;s do this&#8230;..</p>
+<h1>Overview&nbsp;</h1>
+<p style="text-align: justify;"><strong>VNC software</strong> has been around for a long time in Linux world.&nbsp; <strong>VNC server</strong> basically provide remote desktop against Linux machine (it&#8217;s the equivalent of remote desktop service client in Microsoft world).&nbsp; Usually, a user needs to be logged on the Ubuntu machine in order to access the remote desktop.&nbsp; When no user is logged into the system, by default, the vnc service will not be running and no connection will be allowed.&nbsp;&nbsp;This post will explain how to configure<strong> Ubuntu 17.10 and Ubuntu 18.04</strong> to have <strong>x11vnc server started at boot</strong> which would allow a user to connect to a system using vnc protocol <strong>even if no user is currently logged in.</strong></p>
+<p style="text-align: justify;">The following sections will provide some step by step instructions that can be used to have x11vnc started at boot time&#8230;.&nbsp;</p>
+<h2><span style="color: #800000;">Assumptions</span></h2>
+<p style="text-align: justify;">This procedure has been tested only within a specific scenario.&nbsp; These are the following assumptions that needs to be met in order to reproduce this configuration&nbsp;</p>
+<ul>
+<li style="text-align: justify;">This configuration has been tested only on&nbsp;<strong>Ubuntu 17.10 &amp; 18.04 edition&nbsp;</strong></li>
+<li>We have performed the test on a&nbsp;<strong>Virtual Machine running on Hyper-V Server and virtualbox</strong></li>
+<li>The<strong>&nbsp;X11vnc</strong>&nbsp;server package has been used to provide vnc server capabilities</li>
+<li><strong>No Wayland</strong>&nbsp;display server is used and we are using the<strong>&nbsp;standard X11</strong>&nbsp;session type (in <strong>Ubuntu 17.10</strong>, you have to disable the <strong>Wayland</strong> option)&nbsp;</li>
+</ul>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_1.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="46897439526aaad64aa9beb6dbcee25f" data-image-id="3091" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_1.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_1.png-nggid043091-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_1" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_1.png-nggid043091-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_1"
+         title="vncu18_1"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<h2>Step by Step Guide&nbsp;</h2>
+<h3><span style="color: #800000;">Step 1 – Disable Wayland Server&nbsp;&nbsp;</span></h3>
+<p>To have x11vnc started at boot, we need to completely disable the Wayland server.&nbsp; To perform such action, we will need to un-comment a line in the following file<strong> /etc/gdm3/custom.conf. So,</strong> first step would be to edit the file with the sudo command&nbsp;</p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_01.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="2b3e4bd8bdaadf03175622f52148254c" data-image-id="3090" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_01.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_01.png-nggid043090-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_01" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_01.png-nggid043090-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_01"
+         title="vncu18_01"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>Then, move to the line <strong>#WaylandEnable=False</strong>&nbsp;</p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_02.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="e2d621e0688953769f696101ecc2d646" data-image-id="3092" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_02.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_02.png-nggid043092-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_02" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_02.png-nggid043092-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_02"
+         title="vncu18_02"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>Remove the # sign and save the file. So you should read now&nbsp;&nbsp;<strong>WaylandEnable=False</strong></p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_03.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="ebb95f56dca7691493e62f75603d30b1" data-image-id="3094" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_03.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_03.png-nggid043094-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_03" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_03.png-nggid043094-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_03"
+         title="vncu18_03"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p><strong>Reboot the system</strong></p>
+<h3><span style="color: #800000;">Step 2 – Installing X11VNC package&nbsp;</span></h3>
+<p style="text-align: justify;"><strong>x11vnc</strong> package will provide the vnc server software capability.&nbsp; The software is available in the Ubuntu repository by default and can be installed quickly through the command line.&nbsp;To install the<strong>&nbsp;x11vnc component,</strong>&nbsp;you simply issue the following command.&nbsp;</p>
+<blockquote><p><strong>sudo apt-get install x11vnc -y</strong></p></blockquote>
+<p>you might get prompted for a <strong>password</strong>.&nbsp; Enter it and wait for the installation to complete.&nbsp;&nbsp;</p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_2.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="83a19b08b29797d8b061e726f54b2619" data-image-id="3093" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_2.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_2.png-nggid043093-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_2" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_2.png-nggid043093-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_2"
+         title="vncu18_2"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<h3><span style="color: #800000;">Step 3 – Securing VNC connection through password usage</span></h3>
+<p style="text-align: justify;">To provide a certain level of protection, it&#8217;s possible to configure<strong> x11vnc</strong> to prompt for a password before performing the remote connection.&nbsp; This password <strong>is not super secure</strong> and provide a minimum level of control.&nbsp; To configure x11vnc to use a password, you will need to issue the following command in a terminal console&nbsp;</p>
+<blockquote><p><strong>sudo x11vnc -storepasswd /etc/x11vnc.pass</strong></p></blockquote>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_3.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="2ca06f4b75e0223c67e3d8340d88890e" data-image-id="3095" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_3.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_3.png-nggid043095-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_3" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_3.png-nggid043095-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_3"
+         title="vncu18_3"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<h3><span style="color: #800000;">Step 4 – Set correct permissions on the /etc/x11vnc.pass file&nbsp;</span></h3>
+<p style="text-align: justify;">Because standard users will need to read the content of the file in order to get the vnc connection, we will ensure that the file is readable by any user needing an access remotely.&nbsp; This is obviously not the best security approach but we need this to move forward.</p>
+<p>So, in nautilus, locate the file /etc/x11vnc.pass, right click on it, go to the tab permission and ensure that the other group has read only access set&nbsp;</p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_4.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="77f1cff80a22822d2d62011b0c065f58" data-image-id="3096" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_4.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_4.png-nggid043096-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_4" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_4.png-nggid043096-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_4"
+         title="vncu18_4"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<h3><span style="color: #800000;">Step 5 – Get the UID for GDM Account&nbsp;</span></h3>
+<p style="text-align: justify;">The easiest way to get the correct UID for the gdm account is to execute the following command&nbsp;</p>
+<blockquote><p><strong>sudo loginctl&nbsp;</strong></p></blockquote>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_16a.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="f4d4311df6e6016ec2d62e96a7638bc4" data-image-id="3109" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_16a.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_16a.png-nggid043109-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_16a" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_16a.png-nggid043109-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_16a"
+         title="vncu18_16a"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p style="text-align: justify;">In this screenshot, we can see the UID of the gdm account.&nbsp; This information is critical for the rest of this post.&nbsp; Run this command and check the value used by your system as this can differ from system to system</p>
+<p><em>Note :&nbsp;</em></p>
+<p>By default, the UID for gdm shoud be set to <strong>120</strong>. However, we have encountered situation where the UID is not set to 120. In <strong>Ubuntu 17.10</strong>, the gdm uid is set on <strong>121</strong> on <strong>my system. </strong></p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_16.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="2df19c41a2ae47e40ccb8b53954d174b" data-image-id="3108" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_16.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_16.png-nggid043108-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_16" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_16.png-nggid043108-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_16"
+         title="vncu18_16"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>&nbsp;</p>
+<h3><span style="color: #800000;">Step 5 – Creating the service Unit File for x11vnc&nbsp;</span></h3>
+<p style="text-align: justify;">This file will basically control the x11vnc service behavior and make it starts at boot time.&nbsp; To configure the x11vnc service, you will need to create a file called <strong>x11vnc.service</strong> under <strong>/lib/systemd/system.&nbsp;</strong> One way to create this file is to issue the following command&nbsp;</p>
+<blockquote><p><strong>sudo gedit /lib/systemd/system/x11vnc.service</strong></p></blockquote>
+<p style="text-align: justify;">This file need to be populated with the following information. As mentioned earlier, the UID for gdm account is critical in this configuration (see text in orange).&nbsp;Ensure that the uid value in the file match your configuration.&nbsp; This information needs to be correct in order to have the service start and running&nbsp;</p>
+<blockquote>
+<pre>[Unit]
+Description=Start x11vnc at startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc -loop -forever -bg -rfbport 5900 -xkb -noxrecord -noxfixes -noxdamage -shared -norc <strong><span style="color: #ff6600;">-auth /run/user/120/gdm/Xauthority</span> </strong>-rfbauth /etc/x11vnc.pass
+
+[Install] 
+WantedBy=multi-user.target</pre>
+</blockquote>
+<p>&nbsp;Save the file and move to the next step&#8230;.</p>
+<h3><span style="color: #800000;">Step 6 – Enable and Start the Service&nbsp;</span></h3>
+<p style="text-align: justify;">This step will ensure that the service is enabled on your system.&nbsp; Once the service enabled, it will be possible to control the service using the systemctl command.&nbsp; To enable, configure and start the service, issue the following commands&nbsp;</p>
+<blockquote>
+<pre>sudo systemctl enable x11vnc.service
+sudo systemctl daemon-reload
+sudo systemctl start x11vnc.service
+</pre>
+</blockquote>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_10.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="39e117a92ba6a82738051ad660953db3" data-image-id="3102" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_10.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_10.png-nggid043102-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_10" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_10.png-nggid043102-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_10"
+         title="vncu18_10"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p><span style="color: #800000;"><span style="color: #000000;">To check that the service is running, we can issue the following command&nbsp;&nbsp;</span></span></p>
+<blockquote><p><strong><span style="color: #000000;">s</span>udo systemctl status x11vnc.service</strong></p></blockquote>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_11.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="d40fd5665f882d454d81b5b235b37198" data-image-id="3103" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_11.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_11.png-nggid043103-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_11" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_11.png-nggid043103-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_11"
+         title="vncu18_11"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>It should look like the screenshot here above</p>
+<p><strong>Reboot the system&nbsp;</strong></p>
+<h3><span style="color: #800000;">Step 7 – Try to connect&nbsp;</span></h3>
+<p>Ensure that nobody is connected/logged into the system and perform the vnc connection (using your favorite vnc client).&nbsp; If everything is fine, you should see the login screen displayed when performing the vnc connection&nbsp;</p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_12.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="a6b4c13e682b8e031e1e41511d4879d6" data-image-id="3104" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_12.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_12.png-nggid043104-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_12" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_12.png-nggid043104-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_12"
+         title="vncu18_12"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>However, as soon as you logged on, the vnc client will only show a black screen.&nbsp;&nbsp;</p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_13.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="7d027cb213700ddaf2a78ebdf5d2e7ea" data-image-id="3105" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_13.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_13.png-nggid043105-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_13" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_13.png-nggid043105-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_13"
+         title="vncu18_13"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>if you reach this stage, your vnc service is starting at boot time.&nbsp; However, additional steps are needed in order to view the gnome desktop interface&#8230;&#8230;&nbsp; &nbsp;</p>
+<h3><span style="color: #800000;">Step 8 – Start vnc at login (per user configuration)&nbsp;</span></h3>
+<p style="text-align: justify;">When nobody is connected to the remote machine and you perform a vnc connection, the screen will be black and no Gnome desktop will be displayed.&nbsp; This is <strong>a limitation</strong> of this procedure (or limitation of GDM Display manager).&nbsp; In order to display the gnome desktop, there is no other choice that performing another VNC connection (on another port than the one used by the gdm account).&nbsp;&nbsp;</p>
+<p style="text-align: justify;">So, to have this working, each user will need to perform <strong>two connections</strong>.&nbsp; one connection for <strong>gdm display</strong> server and one connection for the user session.&nbsp; In <a href="http://c-nergy.be/blog/?p=11231">this post</a>, we have explained some ways to make sure that the vnc service is also started for the user.&nbsp; &nbsp;Another option might be to create service unit for each user as well. as we do not have time, we will go for the simple option : creating a startup script for each user.&nbsp; &nbsp;</p>
+<p>To do this, click on Activities and search for <strong>Startup Applications.&nbsp;&nbsp;</strong></p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_14.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="0cebe929c8344a211716164ea99f3bed" data-image-id="3106" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_14.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_14.png-nggid043106-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_14" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_14.png-nggid043106-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_14"
+         title="vncu18_14"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>Click on it. This will open the application. Click Add and in the dialog box, provide a name and the command line to be executed (<strong>x11vnc -rfbport <span style="color: #800000;">5901</span> -rfbauth /etc/x11vnc.pass).&nbsp;</strong>&nbsp;</p>
+<p style="text-align: center;"><a href="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_15.png"
+   title=" "
+   target="_self"   class="ngg-fancybox" rel="c0044600652b9ebb4e4274f062bd73f3" data-image-id="3107" data-src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/vncu18_15.png" data-thumbnail="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_15.png-nggid043107-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png" data-title="vncu18_15" data-description=" ">
+	<img class="ngg-singlepic ngg-center"
+         src="https://c-nergy.be/blog/wp-content/gallery/ubuntu-18-04/cache/vncu18_15.png-nggid043107-ngg0dyn-320x240x100-00f0w010c010r110f110r010t010.png"
+         alt="vncu18_15"
+         title="vncu18_15"/>
+</a>
+<span> </span></p>
+<p style="text-align: center;"><em>Click on Picture for better resolution</em></p>
+<p>This configuration is needed for each user performing a remote connection.&nbsp; In the Startup script, ensure that the port used is different for each user as well..&nbsp;</p>
+<p style="text-align: justify;">At this stage, you will be able to perform a vnc connection. As mentioned aboved, if no one is connected to the system, two vnc connection would be needed in order to access the gnome Desktop interface&nbsp;</p>
+<h1>Final Notes</h1>
+<p style="text-align: justify;">As you can see, it&#8217;s still possible to have <strong>x11vnc start at boot time</strong> as long as the <strong>Wayland display manager is disabled</strong>. The change in login manager (from lightdm to gdm) does make the vnc connection less straight forward as two connection would be needed when working against Ubuntu 17.10 and later editions.&nbsp; The two connections thing is annoying but at least it&#8217;s possible to perform remote connection using vnc software.&nbsp;&nbsp;</p>
+<p style="text-align: justify;">VNC software is not the only software that can be used to perform remote connections. An other option that can be used to perform remote connection is the xrdp software package.&nbsp; We have been writing about this piece of software quite extensively now.&nbsp; xRDP offers a good solution and provide interoperability with Windows World.&nbsp; Howerver, xrdp software has also some drawback and limitations.&nbsp; So, it&#8217;s up to you to choose the better software solution for your situation&#8230;.&nbsp;</p>
+<p>That&#8217;s it for me&#8230;.</p>
+<p>Till next time&nbsp;</p>
+<p>See ya&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+			</div><!-- .entry-content -->
+
+		<footer class="entry-footer">
+		<span class="cat-links">Posted in <a href="https://c-nergy.be/blog/?cat=42" rel="category">Ubuntu</a></span><span class="tags-links">Tagged <a href="https://c-nergy.be/blog/?tag=gdm" rel="tag">gdm</a>, <a href="https://c-nergy.be/blog/?tag=start-on-boot" rel="tag">start on boot</a>, <a href="https://c-nergy.be/blog/?tag=ubuntu-17-10" rel="tag">ubuntu 17.10</a>, <a href="https://c-nergy.be/blog/?tag=ubuntu-18-04" rel="tag">Ubuntu 18.04</a>, <a href="https://c-nergy.be/blog/?tag=x11vnc" rel="tag">X11VNC</a></span>	</footer><!-- .entry-footer -->
+	</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" aria-label="Posts">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="https://c-nergy.be/blog/?p=12198" rel="prev">xRDP &#8211; Install xRDP the easy way (Scripted Installation &#8211; Version 0.3)</a></div><div class="nav-next"><a href="https://c-nergy.be/blog/?p=12176" rel="next">xRDP &#8211; How to Fix different lock screen colors in Ubuntu 18.04 remote session</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			31 thoughts on &ldquo;<span>Ubuntu 17.10 &#038; 18.04 &#8211; Configure x11vnc to boot at startup</span>&rdquo;		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-3651" class="comment even thread-even depth-1">
+			<article id="div-comment-3651" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/a4d5165710c17614ad5084708c07bf18?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/a4d5165710c17614ad5084708c07bf18?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">j7k6</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3651"><time datetime="2018-06-08T23:08:24+02:00">June 8, 2018 at 11:08 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I fixed the problem of needing to run two x11vnc processes to get it working before and after login by just replacing gdm with lightdm (<a href="https://docs.j7k6.org/x11vnc-debian-ubuntu-linux/" rel="nofollow ugc">https://docs.j7k6.org/x11vnc-debian-ubuntu-linux/</a>), now it works like it&#8217;s supposed to.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3653" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3653" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3653"><time datetime="2018-06-10T12:41:37+02:00">June 10, 2018 at 12:41 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@J7k6,</p>
+<p>This is indeed a possible approach to make x11vnc working smoothly.  I really like the lightdm solution. However, some people will stick to the default provided by Canonical i.e. GDM3, so we had to come up with some solution for them as well.  Plus, a better and more secure ? option might be xRDP solution </p>
+<p>Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3664" class="comment even thread-even depth-1">
+			<article id="div-comment-3664" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/39d7f475551fe52315bce8efb18e4590?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/39d7f475551fe52315bce8efb18e4590?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Marvin</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3664"><time datetime="2018-06-16T16:00:55+02:00">June 16, 2018 at 4:00 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I followed all the steps carefully but I still see black screen from  macOS screen sharing app. Here&#8217;s the syslog:</p>
+<p><a href="https://pastebin.com/raw/jJS3y8AE" rel="nofollow ugc">https://pastebin.com/raw/jJS3y8AE</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3665" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3665" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3665"><time datetime="2018-06-16T17:25:42+02:00">June 16, 2018 at 5:25 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Marvin; </p>
+<p>That&#8217;s a really short description of your issue.  First, we are not really familiar with MacOS&#8230;If you have performed the configuration as described in the post, you should be able to perform an initial connection to Ubuntu using vnc client on port 5900&#8230; Is this the case for you ? You see the black screen when performing the connection ?&#8230;. Leave this connection open and open a second vnc connection using a different port than the one you used initially. Do you connect or is it a black screen ? </p>
+<p>Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3666" class="comment even thread-even depth-1">
+			<article id="div-comment-3666" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/39d7f475551fe52315bce8efb18e4590?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/39d7f475551fe52315bce8efb18e4590?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Marvin</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3666"><time datetime="2018-06-17T09:27:17+02:00">June 17, 2018 at 9:27 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi Griffon,</p>
+<p>Thank you for your reply, I&#8217;m running macOS High Sierra (version 10.13.5). I&#8217;m using  Screen Sharing app (version 1.7.2). I tried opening two connection and still getting black screen. I also tried installing realvnc viewer for mac but still getting black screen. Here&#8217;s another log from Ubuntu:</p>
+<p><a href="https://pastebin.com/raw/Q5T48CX3" rel="nofollow ugc">https://pastebin.com/raw/Q5T48CX3</a></p>
+<p>Thank you!</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3667" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3667" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3667"><time datetime="2018-06-18T15:59:42+02:00">June 18, 2018 at 3:59 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Marvin, </p>
+<p>Your log show that encryption is not supported&#8230;. This is probably why you have a black screen&#8230;<br />
+You need to ensure that a vnc password is set and that no encryption is used (use dconf-editor to disable encryption)<br />
+Try to connect through vnc when somebody is connected as a test to validate your configuration&#8230;..</p>
+<p>Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3721" class="comment even thread-even depth-1">
+			<article id="div-comment-3721" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/65c5ca3c648480e5ce787084a664ae65?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/65c5ca3c648480e5ce787084a664ae65?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Michel</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3721"><time datetime="2018-08-01T15:35:35+02:00">August 1, 2018 at 3:35 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks for this very nice articles on Ubuntu and VNC</p>
+<p>Following these instructions on a PC with a fresh 18.04 installed (server + ubuntu-desktop) I also hit a black screen with GDM. Switching  to lightDM was the way to go for me</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3727" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3727" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3727"><time datetime="2018-08-03T17:38:59+02:00">August 3, 2018 at 5:38 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Michel, </p>
+<p>yep, we know we can use the lightdm to have vnc working smoothly on Ubuntu 18.x. However, as Ubuntu has been moving to GDM, our focus is now more on Gnome Desktop and xrdp as a remote desktop solution<br />
+Thank you for the visit and the feedback<br />
+Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3765" class="comment even thread-even depth-1">
+			<article id="div-comment-3765" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/62fd6abd0ef86f0284bd1cc0e4e52b09?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/62fd6abd0ef86f0284bd1cc0e4e52b09?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://none' rel='external nofollow ugc' class='url'>Cire</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3765"><time datetime="2018-08-30T21:13:09+02:00">August 30, 2018 at 9:13 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>a great guide, a lot of knowledge based on experience 🙂<br />
+Thank you very much!</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3770" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3770" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3770"><time datetime="2018-08-31T18:10:06+02:00">August 31, 2018 at 6:10 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Cire,</p>
+<p>thank you for the visit and for your positive comments.  yes indeed, we have tried and performed hands on activities in order to have it working properly and share the correct info world wide 🙂<br />
+Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3818" class="comment even thread-even depth-1">
+			<article id="div-comment-3818" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/2d2f125d8a67a69625ccb2ad1be6e5c6?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/2d2f125d8a67a69625ccb2ad1be6e5c6?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Snakebob</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3818"><time datetime="2018-10-25T15:38:54+02:00">October 25, 2018 at 3:38 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I did all the thing according to this Post.<br />
+I made it. Login is OK , desktop is also OK with different Port VNC.</p>
+<p>However, I can not reconnect to Desktop after I closed VNC client. Connection is refused.</p>
+<p>How can I solve this problem?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3821" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3821" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3821"><time datetime="2018-10-25T19:36:21+02:00">October 25, 2018 at 7:36 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@SnakeBob, </p>
+<p>When you close your VNC connection,  Do you perform the vnc connection back on the port 5900 ? or you are trying to go back to the port opened for your user&#8230;?<br />
+What should be normally the process&#8230;</p>
+<p>1/ You close your VNC Session<br />
+2/ VNC port 5901 is closed<br />
+3/ to make a new connection, you need to connect to port 5900 first<br />
+4/ the GDM account should be starting the startup script again to listn to port 5901<br />
+5/ Perform again connection of port 5901 </p>
+<p>Check also your logs to see what could be the problem  or as alternate solution use xRDP Software (see <a href="http://c-nergy.be/blog/?p=12761">http://c-nergy.be/blog/?p=12761</a></p>
+<p>Hope this help<br />
+Till next time </p>
+<p>See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3842" class="comment even thread-even depth-1">
+			<article id="div-comment-3842" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/8508f6706ad161f25ca4973e24e26684?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/8508f6706ad161f25ca4973e24e26684?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Maciej</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3842"><time datetime="2018-11-27T12:02:20+01:00">November 27, 2018 at 12:02 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thank you very much for this!</p>
+<p>The connection remains unencrypted. Does it mean that when I am typing my password for the login, it goes as it is? How safe it is? I&#8217;ve successfully tried tunnelling this with ssh, it works on linux machines however I don&#8217;t know how to do it on windows or iOS where I use realVNC. Can you suggest any solution to make the connection encrypted?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3843" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3843" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/8508f6706ad161f25ca4973e24e26684?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/8508f6706ad161f25ca4973e24e26684?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Maciej</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3843"><time datetime="2018-11-27T13:14:09+01:00">November 27, 2018 at 1:14 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thank you very much for this!</p>
+<p>The connection remains unencrypted. Does it mean that when I am typing my password for the login, it goes as it is? How safe it is? I successfully tried tunnelling this with ssh, it works on linux machines however I don&#8217;t know how to do it on windows or iOS where I use realVNC. Can you suggest any solution to make the connection encrypted?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3850" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-3850" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3850"><time datetime="2018-11-29T20:16:48+01:00">November 29, 2018 at 8:16 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@maciej,</p>
+<p>If you are using vnc with no ssl connection, connection remain unencrypted and indeed sniffing the network could provide access to password travelling through the network<br />
+To try to secure xrdp on top of ssh, you could read this old post (<a href="http://c-nergy.be/blog/?p=6020" rel="nofollow ugc">http://c-nergy.be/blog/?p=6020</a>) and see if this would work for you&#8230;.</p>
+<p>Putty works on linux and windows and you might find some putty client for MacOs</p>
+<p>hope this help<br />
+till next time<br />
+see ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3990" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-3990" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/66f51ce8bc803b0164c2e73e2952c5c5?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/66f51ce8bc803b0164c2e73e2952c5c5?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Frank Hochmuth</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3990"><time datetime="2019-05-08T14:55:33+02:00">May 8, 2019 at 2:55 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>HI,</p>
+<p>thanks for this guide which helped me succeed in setting up X11VNC.  I can connect from RealVNC and do basically anything I like remotely.</p>
+<p>However, there is a weird problem when using IDLE (Python) . As soon as I click on &#8220;File&#8221;  the connection closes and the server absolutely refuses connection until I reboot the VNC server computer.  Could you give a hint as to what could be wrong?</p>
+<p>Thanks,<br />
+Frank</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-3994" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-3994" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-3994"><time datetime="2019-05-10T18:26:36+02:00">May 10, 2019 at 6:26 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Frank Hochmuth, </p>
+<p>No clue because we are not using IDLE.. Which Ubuntu version are you running ? have you tried to run the IDLE program using sudo.  Is this the same effect ?<br />
+Do you have any logs to look at which might help identify the issue and thus solve the problem  ?<br />
+Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4127" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4127" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/7b3729e8e5805bf724c892fa207d0165?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/7b3729e8e5805bf724c892fa207d0165?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Santiago Gala</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-4127"><time datetime="2019-08-24T17:43:55+02:00">August 24, 2019 at 5:43 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I came here because I am chasing a very annoying bug where x11vnc crashes randomly on mouse input in the session, and the comment about idle gave me a hint that we were dealing with the same thing, and now I can reproduce it easily.</p>
+<p>I am running Ubuntu 18.04.3 LTS, up to date. I start x11vnc with this command line: </p>
+<p>x11vnc -display :0 -nomodtweak -rfbauth /home/sgala/.vnc/passwd -rfbport 5900 -shared -forever -nowf -norc -notruecolor -bg -noxdamage</p>
+<p>I works well, but it crashes from time to time, I need to restart it from a ssh session to keep it working. Now, after reading the comment, I &#8220;sudo apt install idle&#8221; and started it&#8230; voilá, clicking on almost any menu entry in its bar will crash x11vnc in the same way.</p>
+<p>I&#8217;m seeing in ubuntu that a version 0.9.13-3 is the current in LTS, but a version 0.9.13-6 has been pushed to releases 18.10, 19.04 and 19.10, and solves <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=859213" rel="nofollow ugc">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=859213</a> I think this is the bug I&#8217;m seeing, but I can&#8217;t find a way to:<br />
+* force ubuntu to generate a core to check<br />
+* install this 0.9.13-6 version to see if it fixes it</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4128" class="comment even thread-even depth-1">
+			<article id="div-comment-4128" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/7b3729e8e5805bf724c892fa207d0165?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/7b3729e8e5805bf724c892fa207d0165?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn">Santiago Gala</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-4128"><time datetime="2019-08-24T17:47:32+02:00">August 24, 2019 at 5:47 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Found the bug: <a href="https://bugs.launchpad.net/ubuntu/+source/x11vnc/+bug/1686084" rel="nofollow ugc">https://bugs.launchpad.net/ubuntu/+source/x11vnc/+bug/1686084</a> . Sorry for the noise here!</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4131" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4131" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-4131"><time datetime="2019-08-25T18:20:42+02:00">August 25, 2019 at 6:20 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Santiago, </p>
+<p>Thanks for your visit and sharing your issues (and solution) 🙂<br />
+No problem about the noise, this can be useful to other people<br />
+till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5104" class="comment even thread-even depth-1">
+			<article id="div-comment-5104" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://bluehorizoninfotech.com/' rel='external nofollow ugc' class='url'>Amal</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5104"><time datetime="2021-05-07T15:09:14+02:00">May 7, 2021 at 3:09 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Everything went fine till I ran the command &#8216;sudo loginctl&#8217; It doesn&#8217;t show any UID of the gdm account. Only one session is shown which is of the current user. How to fix this issue? It is working fine in other computers in the network, only handful of them have this issue of not displaying any gdm when executing the command &#8221;sudo loginctl&#8217; Please help.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5110" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5110" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='https://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5110"><time datetime="2021-05-07T22:19:54+02:00">May 7, 2021 at 10:19 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Amal,</p>
+<p>You didn&#8217;t specify which version of Ubuntu your are using&#8230;<br />
+Another way to get the UID for the GDM user Account would be to issue the following command<br />
+cat /etc/passwd | grep gdm<br />
+You should find the gdm UID </p>
+<p>hope this help<br />
+till next time<br />
+see ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5114" class="comment even thread-even depth-1">
+			<article id="div-comment-5114" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://bluehorizoninfotech.com/' rel='external nofollow ugc' class='url'>Amal</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5114"><time datetime="2021-05-10T17:35:57+02:00">May 10, 2021 at 5:35 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Before I could read your response, I tried a dirty hack of cloning the working systems and restoring it on non working systems. Now everything works fine.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5117" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5117" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='https://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5117"><time datetime="2021-05-11T20:39:10+02:00">May 11, 2021 at 8:39 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Amal, </p>
+<p>Thank you for your feedback.  No worries..  happy to see that you have been able to fix your issue<br />
+Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5123" class="comment even thread-even depth-1">
+			<article id="div-comment-5123" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://bluehorizoninfotech.com/' rel='external nofollow ugc' class='url'>Amal</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5123"><time datetime="2021-05-12T12:09:03+02:00">May 12, 2021 at 12:09 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The next issue I am faced with is when end user experiences internet outages. When the internet is back, they are no longer able to connect to 5901. 5900 shows a black screen. During this time, their remote machine is still logged into their OS user account. So I have to manually log them out before they can try connecting to 5900 and login into the computer. I did a bit of research on this issue and came across a solution to add &#8216;-forever&#8217; in the startup application script. I applied this solution and did some random testing (like unplugging the network cable or disconnecting the internet) to simulate this scenario and VNC Viewer was able to login(after the internet connection came back online) to the remote computer when connecting 5901. But when the actual scenario happened(which is, my users, losing internet connection intermittently), my users were not able to login to 5901. They get a message in TightVNC viewer mentioning &#8216;failed to recv data from socket&#8217;. Some others get the message &#8216;Connection has been gracefully closed&#8217;. I am not able to find a solution for this till now. Please help if you can.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5126" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5126" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='https://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5126"><time datetime="2021-05-13T13:17:20+02:00">May 13, 2021 at 1:17 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Amal, </p>
+<p>Never encountered this issue but it seems that other people have encountered that same issue.  Question for you&#8230;. What happens when the user tries to perform a vnc connection to port 5900 first  and then try again on port 5901 ? is this working ?  Have you have considered using xRDP software solution ? which should provide also remote capabilities to your users ? </p>
+<p>Hope this help<br />
+Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5127" class="comment even thread-even depth-1">
+			<article id="div-comment-5127" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://bluehorizoninfotech.com/' rel='external nofollow ugc' class='url'>Amal</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5127"><time datetime="2021-05-14T15:09:28+02:00">May 14, 2021 at 3:09 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Yesterday, when I tried posting a comment to this blog, I got a message &#8216;You have been flagged as spam/malicious by WordPress Zero Spam.&#8217; So, I am trying a test comment to see if it goes through today.</p>
+<p>Also, the email ID that we mention in the reply section, is that supposed to alert us when you post a comment? If so, it is not working. I never get any alert when new comments are posted.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5128" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5128" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://bluehorizoninfotech.com/' rel='external nofollow ugc' class='url'>Amal</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5128"><time datetime="2021-05-14T15:14:00+02:00">May 14, 2021 at 3:14 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The last test comment went through, so I guess the reason why it got marked as spam might be because I used the URL reference of your blog in my comment. I will strip out those URLs and submit the comment in reply to your earlier reply.</p>
+<p>To the issue I mentioned in my last comment(before my test comment), I found a solution mentioned by you &#8216;Workaround 2 – Vino server&#8217; in your blog 11231. As of now, things are working fine. I did a live scenario test with a few end-users who disconnected their internet while connected to 5901. When they restored their internet connection, they were able to connect to 5901 without any trouble.</p>
+<p>To answer your question; previously; after the internet connection is restored, when they connect to 5900, it asks for VNC password and on success shows a black screen (you can see the mouse pointer dot) and when they try connecting to 5901, they get the error message I mentioned in the last comment.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5129" class="comment even thread-even depth-1">
+			<article id="div-comment-5129" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://bluehorizoninfotech.com/' rel='external nofollow ugc' class='url'>Amal</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5129"><time datetime="2021-05-14T16:36:16+02:00">May 14, 2021 at 4:36 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>xRDP is definitely in the pipeline for me, but I heard that it has enough cons to leave sleepless nights for me. But I haven&#8217;t given it enough time to research and arrive at a conclusion. I was pushed into this due to the sudden lockdown imposed in our area due to the pandemic and as a result, I was in a total hurry to come up with a safe working solution that safeguards our intellectual property (preventing theft of our company source code).</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5130" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5130" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/700e4f854a446a3c3dcdb43731178763?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='http://bluehorizoninfotech.com/' rel='external nofollow ugc' class='url'>Amal</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5130"><time datetime="2021-05-14T16:38:02+02:00">May 14, 2021 at 4:38 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Is there any loophole in ensuring the safety of our intellectual property using your solution mentioned in blogs 12220 and 11231? Looking forward to your advice.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5132" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-5132" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=60&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/b0d1b691a244fbe86a9f41ad710aec51?s=120&#038;d=mm&#038;r=g 2x' class='avatar avatar-60 photo' height='60' width='60' loading='lazy'/>						<b class="fn"><a href='https://www.c-nergy.be' rel='external nofollow ugc' class='url'>Griffon</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="https://c-nergy.be/blog/?p=12220#comment-5132"><time datetime="2021-05-15T14:26:56+02:00">May 15, 2021 at 2:26 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Amal, </p>
+<p>Ok, That&#8217;s a lot of questions 🙂<br />
+First, we are happy to see that you have found some solution to your disconnect issue through the vino usage&#8230;. Vino is indeed a good alternative especially for Gnome Desktop</p>
+<p>About the loophole.  VNC (and any other remote desktop protocols) are at risk of being hacked.  You need to ensure that you protect your system accordingly by applying the most appropriate security settings. Depending of the version and make of VNC,  you would ensure that encryption option is always set on.  If you do the startup trick, ensure to use passwords to prevent unauthenticated access to your session.<br />
+xRDP is an interesting alternative since it basically create a separate session for each users and you can improve security through some configuration tweaks or by ensuring that you perform the xrdp over ssh connection<br />
+But at the end, the choice is yours&#8230;. </p>
+<p>Hope this answser all your questions<br />
+About the email &#8211; indeed, it&#8217;s normally used to notify you that a reply has been provided but since we had a lot of spams we might have disabled too many features&#8230;. will have a look into this</p>
+<p>Hope this help </p>
+<p>Till next time<br />
+See ya</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply</h3><form action="https://c-nergy.be/blog/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-form-comment"><label for="comment">Comment <span class="required" aria-hidden="true">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required" aria-hidden="true">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required" aria-hidden="true">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" required /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<input type="text" name="IEz45" value="" style="display: none !important;" />
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='12220' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	
+<div id="secondary" class="widget-area no-toggle" role="complementary">
+	<span class="sidebar-close"><i class="fa fa-times"></i></span>
+	<aside id="search-4" class="widget widget_search"><form role="search" method="get" class="search-form" action="https://c-nergy.be/blog/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="text-7" class="widget widget_text"><h4 class="widget-title">Copyrights &#038; Disclaimers</h4>			<div class="textwidget">This blog and its content are freely available to users but copyrights applies. The content is<b> copyright of c-nergy.be.</b> This means that you cannot duplicate or (...)<strong><br/><br/><a href=http://c-nergy.be/blog/?page_id=2030>Read more</a></strong></div>
+		</aside><aside id="block-3" class="widget widget_block">
+<h2>Support Us</h2>
+</aside><aside id="block-4" class="widget widget_block"><p align="justify">You can support us by downloading Brave Browser and tip us through Brave Browser Reward System.</p>
+<center><img src="wp-content/uploads/BraveLogo.png" alt>
+<a href="https://brave.com/cne640"
+style="color:#ff4f00" 	 
+>Download FREE Brave Browser</a></center><br/>
+<p align="justify">You can also decide to Buy us a coffee if your think that the information provided here was useful to you.
+</p>
+<br/>
+<center><script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Buy me a Ko-fi', '#e02828', 'M4M677ZVH');kofiwidget2.draw();</script></center> 
+</aside><aside id="block-2" class="widget widget_block"></aside></div><!-- #secondary -->
+
+		</div>
+	</div><!-- #content -->
+
+			
+	
+	<div id="sidebar-footer" class="footer-widgets" role="complementary">
+		<div class="container">
+							<div class="sidebar-column col-md-12">
+					<aside id="text-10" class="widget widget_text">			<div class="textwidget"><p>This website and its content is copyright of <strong>c-nergy.be &#8211; © c-nergy.be &#8211; 2008 &#8211; 2021 &#8211; All rights reserved. </strong></p>
+</div>
+		</aside>				</div>
+				
+				
+					</div>	
+	</div>	
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info container">
+			<a href="http://wordpress.org/" rel="nofollow">Proudly powered by WordPress</a><span class="sep"> | </span>Theme: <a href="http://justfreethemes.com/oria" rel="nofollow">Oria</a> by JustFreeThemes.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' id='ngg_common-js-extra'>
+/* <![CDATA[ */
+
+var galleries = {};
+galleries.gallery_46897439526aaad64aa9beb6dbcee25f = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3091"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"46897439526aaad64aa9beb6dbcee25f"};
+galleries.gallery_46897439526aaad64aa9beb6dbcee25f.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_2b3e4bd8bdaadf03175622f52148254c = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3090"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"2b3e4bd8bdaadf03175622f52148254c"};
+galleries.gallery_2b3e4bd8bdaadf03175622f52148254c.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_e2d621e0688953769f696101ecc2d646 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3092"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"e2d621e0688953769f696101ecc2d646"};
+galleries.gallery_e2d621e0688953769f696101ecc2d646.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_ebb95f56dca7691493e62f75603d30b1 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3094"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"ebb95f56dca7691493e62f75603d30b1"};
+galleries.gallery_ebb95f56dca7691493e62f75603d30b1.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_83a19b08b29797d8b061e726f54b2619 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3093"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"83a19b08b29797d8b061e726f54b2619"};
+galleries.gallery_83a19b08b29797d8b061e726f54b2619.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_2ca06f4b75e0223c67e3d8340d88890e = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3095"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"2ca06f4b75e0223c67e3d8340d88890e"};
+galleries.gallery_2ca06f4b75e0223c67e3d8340d88890e.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_77f1cff80a22822d2d62011b0c065f58 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3096"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"77f1cff80a22822d2d62011b0c065f58"};
+galleries.gallery_77f1cff80a22822d2d62011b0c065f58.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_f4d4311df6e6016ec2d62e96a7638bc4 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3109"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"f4d4311df6e6016ec2d62e96a7638bc4"};
+galleries.gallery_f4d4311df6e6016ec2d62e96a7638bc4.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_2df19c41a2ae47e40ccb8b53954d174b = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3108"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"2df19c41a2ae47e40ccb8b53954d174b"};
+galleries.gallery_2df19c41a2ae47e40ccb8b53954d174b.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_39e117a92ba6a82738051ad660953db3 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3102"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"39e117a92ba6a82738051ad660953db3"};
+galleries.gallery_39e117a92ba6a82738051ad660953db3.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_d40fd5665f882d454d81b5b235b37198 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3103"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"d40fd5665f882d454d81b5b235b37198"};
+galleries.gallery_d40fd5665f882d454d81b5b235b37198.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_a6b4c13e682b8e031e1e41511d4879d6 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3104"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"a6b4c13e682b8e031e1e41511d4879d6"};
+galleries.gallery_a6b4c13e682b8e031e1e41511d4879d6.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_7d027cb213700ddaf2a78ebdf5d2e7ea = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3105"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"7d027cb213700ddaf2a78ebdf5d2e7ea"};
+galleries.gallery_7d027cb213700ddaf2a78ebdf5d2e7ea.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_0cebe929c8344a211716164ea99f3bed = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3106"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"0cebe929c8344a211716164ea99f3bed"};
+galleries.gallery_0cebe929c8344a211716164ea99f3bed.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+galleries.gallery_c0044600652b9ebb4e4274f062bd73f3 = {"id":null,"ids":null,"source":"galleries","src":"","container_ids":[],"gallery_ids":[],"album_ids":[],"tag_ids":[],"display_type":"photocrati-nextgen_basic_singlepic","display":"","exclusions":[],"order_by":"sortorder","order_direction":"ASC","entity_ids":["3107"],"tagcloud":false,"returns":"included","slug":null,"sortorder":[],"display_settings":{"width":"320","height":"240","link":"","float":"center","quality":"100","crop":"0","display_watermark":"0","display_reflection":"0","template":"\/customers\/6\/2\/f\/c-nergy.be\/httpd.www\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/ngglegacy\/view\/singlepic.php","use_lightbox_effect":true,"mode":"","ngg_triggers_display":"never","link_target":"_blank","_errors":[],"w":"320","h":"240"},"excluded_container_ids":[],"maximum_entity_count":500,"__defaults_set":true,"_errors":[],"ID":"c0044600652b9ebb4e4274f062bd73f3"};
+galleries.gallery_c0044600652b9ebb4e4274f062bd73f3.wordpress_page_root = "https:\/\/c-nergy.be\/blog\/?p=12220";
+var nextgen_lightbox_settings = {"static_path":"https:\/\/c-nergy.be\/blog\/wp-content\/plugins\/nextgen-gallery\/products\/photocrati_nextgen\/modules\/lightbox\/static\/{placeholder}","context":"nextgen_images"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_gallery_display/static/common.js?ver=3.26' id='ngg_common-js'></script>
+<script type='text/javascript' id='ngg_common-js-after'>
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+
+            var nggLastTimeoutVal = 1000;
+
+			var nggRetryFailedImage = function(img) {
+				setTimeout(function(){
+					img.src = img.src;
+				}, nggLastTimeoutVal);
+			
+				nggLastTimeoutVal += 500;
+			}
+        
+</script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/lightbox_context.js?ver=3.26' id='ngg_lightbox_context-js'></script>
+<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery-browser/0.1.0/jquery.browser.min.js?ver=3.26' id='fancybox-0-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/fancybox/jquery.easing-1.3.pack.js?ver=3.26' id='fancybox-1-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/fancybox/jquery.fancybox-1.3.4.pack.js?ver=3.26' id='fancybox-2-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/plugins/nextgen-gallery/products/photocrati_nextgen/modules/lightbox/static/fancybox/nextgen_fancybox_init.js?ver=3.26' id='fancybox-3-js'></script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/themes/oria/js/skip-link-focus-fix.js?ver=20130115' id='oria-skip-link-focus-fix-js'></script>
+<script type='text/javascript' id='zerospam-davidwalsh-js-extra'>
+/* <![CDATA[ */
+var ZeroSpamDavidWalsh = {"key":"uBnIr","selectors":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://c-nergy.be/blog/wp-content/plugins/zero-spam/modules/davidwalsh/assets/js/davidwalsh.js?ver=5.3.9' id='zerospam-davidwalsh-js'></script>
+
+</body>
+</html>

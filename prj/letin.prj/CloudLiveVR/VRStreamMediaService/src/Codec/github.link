@@ -10,4 +10,8 @@
 	url = https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
 	url = https://github.com/Tencent/Real-SR.git
 	url = https://github.com/OpenVisualCloud/SVT-HEVC.git
+	url = https://github.com/google/spatial-media.git
+	url = https://github.com/nokiatech/heif
+	url = https://github.com/nokiatech/omaf
+	url = https://github.com/nokia/libdash
 	url = https://github.com/ultravideo/kvazaar

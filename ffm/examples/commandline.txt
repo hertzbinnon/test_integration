@@ -137,3 +137,16 @@ one
 # snapshot
 ffmpeg -ss 00:00:00  -i ../../../../4k/4K_Travel_Beijing_Tourism_360_2D_100M.mp4 -frames:v 1 -s 480x240 -f image2 -y output.jpg
 #time ffmpeg  -i ../../../../4k/4K_Travel_Beijing_Tourism_360_2D_100M.mp4 -ss 00:00:00 -frames:v 1 -f image2 -y output.jpg
+
+# 2D to 3D
+https://wiki.multimedia.cx/index.php?title=How_to_make_a_3d_movie_with_ffmpeg
+## how to combine two seperate videos into one left-right 3d video
+## just want to play two files side by side
+
+ffplay -i inputleft.avi -vf "movie=inputright.avi [in1]; [in]pad=iw*2:ih:iw:0[in0]; [in0][in1] overlay=0:0 [out]"
+ffplay -codec:v h264_cuvid  -i Normal2D.mp4 -vf "movie=Normal2D.mp4 [in1]; [in]pad=iw*2:ih:iw:0[in0]; [in0][in1] overlay=0:0 [out]" -x 960 -y 480
+
+combine seperate videos into one, side by side
+ffmpeg -i inputleft.avi -vf "movie=inputright.avi [in1]; [in]pad=iw*2:ih:iw:0[in0]; [in0][in1] overlay=0:0 [out]" sidebyside.avi
+
+MORE INFO: http://stackoverflow.com/questions/9293265/ffmpeg-2-videos-transcoded-and-side-by-side-in-1-frame http://stackoverflow.com/questions/7581665/multiple-video-sources-combined-into-one

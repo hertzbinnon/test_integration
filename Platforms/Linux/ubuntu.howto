@@ -1,2 +1,17 @@
 https://www.howtogeek.com/194247/whats-the-difference-between-main-restricted-universe-and-multiverse-on-ubuntu/
 https://ubuntu.com/tutorials/viewing-and-monitoring-log-files
+https://cloud.tencent.com/developer/article/1958592 
+
+# 'sudo apt upgrade' lead to reboot  
+# 
+# 'sudo dpkg --configure -a' lead to reboot
+#
+# 1. flatpak uninstall <all in it>
+#
+# 2. sudo rm -f /var/lib/dpkg/updates/*
+#
+# 3. sudo apt update # not upgrade
+#
+# 4. sudo apt autoremove # remove old linux-headers-5.13.0-51-generic linux-hwe-5.13-headers-5.13.0-51 linux-image-5.13.0-51-generic linux-modules-5.13.0-51-generic linux-modules-extra-5.13.0-51-generic
+#
+# 5. sudo apt install dstat linux-tools-`uname -r` # checkout correct kernel
