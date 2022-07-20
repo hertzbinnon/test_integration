@@ -75,9 +75,37 @@ https://docs.blender.org/manual/zh-hans/dev/advanced/scripting/security.html
 #版权
 http://www.bgteach.com/article/153
 
-#
+# Render 360 using eevee
 https://www.oneminutevideotutorials.com/2020/08/20/how-to-render-a-stereoscopic-360-animation-from-blender-eevee/
 https://www.bilibili.com/video/BV1LU4y1V7Qi/
+##
+How to render a stereoscopic 360 animation from Blender EEVEE
+Rendering out stereo 360 from Blender EEVEE is actually pretty easy thanks to the new eeVR addon.
+
+Here are the steps to take if you want to do an equirectangular render from EEVEE:
+
+1. Download the eeVR addon from Github: https://github.com/EternalTrail/eeVR
+2. Install the VRRenderer.py file using the normal addon installation process
+3. Open the new “Testing” tab in the addons and activate eeVR there
+4. Open the eeVR settings in the viewport view3d-settings area (the panel that opens with the N-key)
+5. Set field of view to 360
+6. Go to the render settings (the symbol with a printer icon) and enable stereoscopy
+7. Model your scene and remember to save it.
+8. Hit “render animation” from the eeVR panel.
+9. You will soon have a folder full of stereoscopic 360 PNG images in the folder that contains your Blender file.
+
+If you want to convert the PNG files into an Oculus Quest compatible file, you can use this FFMPEG command (frame%6d means that the filenames have the word frame followed by 6 digits):
+
+ffmpeg -i frame%6d.png -framerate 30 -c:v libx265 -preset slow -crf 17 -vf "scale=4096x4096" -pix_fmt yuv420p -an -movflags faststart -r 30 "output_sideload_4096_h265_crf17.mp4"
+
+That script was adapted from https://echeng.com/articles/encoding-for-oculus-media-studio/
+
+If you want to upload the video to Youtube, simply use this Metadata Injector before uploading:
+
+https://github.com/google/spatial-media/releases/tag/v2.0
+
+After injecting the file with the correct metadata, Youtube should understand the file as stereoscopic 360 video. Note that the processing of the file might take some time and it might not work correctly as 360 video before the processing for that is ready.
 
 # https://monochrome.sutic.nu/2018/02/14/360-video-with-blender.html
+
 

@@ -15,3 +15,16 @@ https://cloud.tencent.com/developer/article/1958592
 # 4. sudo apt autoremove # remove old linux-headers-5.13.0-51-generic linux-hwe-5.13-headers-5.13.0-51 linux-image-5.13.0-51-generic linux-modules-5.13.0-51-generic linux-modules-extra-5.13.0-51-generic
 #
 # 5. sudo apt install dstat linux-tools-`uname -r` # checkout correct kernel
+
+# delete a repos
+## examples gcc-11
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo apt purge --autoremove -y gcc-11
+sudo rm -rf /etc/apt/trusted.gpg.d/ubuntu-toolchain-r_ubuntu_test.gpg
+sudo rm -rf /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-focal.list
+
+## examples vulkan-sdk
+wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list http://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
+sudo apt update
+sudo apt install vulkan-sdk
