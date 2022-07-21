@@ -1,0 +1,2 @@
+# deb http://ppa.launchpad.net/nnstreamer-example/ppa/ubuntu focal main # disabled on upgrade to focal
+# deb-src http://ppa.launchpad.net/nnstreamer-example/ppa/ubuntu bionic main

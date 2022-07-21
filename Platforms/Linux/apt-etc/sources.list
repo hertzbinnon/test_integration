@@ -1,0 +1,22 @@
+deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ focal main multiverse universe restricted
+deb-src http://archive.ubuntu.com/ubuntu/ focal main multiverse universe restricted
+deb http://archive.ubuntu.com/ubuntu/ focal-updates restricted universe main multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ focal-updates restricted universe main multiverse
+deb http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe main multiverse
+deb-src http://archive.ubuntu.com/ubuntu/ focal-security main restricted universe main multiverse
+deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main
+# deb-src [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main
+deb https://cli.github.com/packages focal main
+# deb-src https://cli.github.com/packages focal main

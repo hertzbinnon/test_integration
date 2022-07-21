@@ -1,0 +1,6 @@
+deb [arch=amd64,i386] https://repo.steampowered.com/steam/ stable steam
+deb-src [arch=amd64,i386] https://repo.steampowered.com/steam/ stable steam
+
+# Uncomment these lines to try the beta version of the Steam launcher
+#deb [arch=amd64,i386] https://repo.steampowered.com/steam/ beta steam
+#deb-src [arch=amd64,i386] https://repo.steampowered.com/steam/ beta steam
