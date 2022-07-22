@@ -1,0 +1,59 @@
+https://www.khronos.org/opengl/wiki/Programming_OpenGL_in_Linux:_GLX_and_Xlib
+
+https://www.freesion.com/article/9851591288/
+//声明顶点数据，实际应用的时候，应该是从FBX等文件里面读取的。
+//很少自己生成
+float vertices[] = {
+    -0.5f, -0.5f, 0.0f, // left  
+    0.5f, -0.5f, 0.0f, // right 
+    0.0f,  0.5f, 0.0f  // top   
+};
+ 
+//创建顶点数组对象和顶点缓存对象
+unsigned int VBO, VAO;
+glGenVertexArrays(1, &VAO);
+glGenBuffers(1, &VBO);
+ 
+//绑定，或者说“选用”这个顶点缓存对象。
+glBindVertexArray(VAO);	
+ 
+//绑定VBO对象，并拷贝数据到VBO
+//注意数据不是拷贝给VAO的，VAO里面不存顶点数据
+//GL_STATIC_DRAW，这是不是Unity区分Static和non-static物件的原因？
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), 
+             vertices, GL_STATIC_DRAW);
+ 
+//描述顶点，并把它在0号位置**，一个VAO可以有多个描述对象。
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+glEnableVertexAttribArray(0);
+ 
+//相当于解除绑定。注意是解绑，不是删除。
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+//简单来讲，按照绑定的反顺序进行解绑就对了。先解绑VBO，再解绑VAO
+glBindVertexArray(0);
+//到此位置，该送入GPU的数据以及都“送”进去了
+ 
+//开始进入渲染主循环
+while (!glfwWindowShouldClose(window))
+{
+    //处理输入
+    processInput(window);
+    //清屏
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    //选择shader，这里不是本篇要讲的内容，略过
+    glUseProgram(shaderProgram);
+    //因为没有其他数据，所以不用绑定解绑也没事，这么做是为了规范。
+    //思考：当VBO有多个的时候，这里要怎么做？
+    glBindVertexArray(VAO); 
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+    
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+ 
+//这里才是删除缓存
+glDeleteVertexArrays(1, &VAO);
+glDeleteBuffers(1, &VBO);

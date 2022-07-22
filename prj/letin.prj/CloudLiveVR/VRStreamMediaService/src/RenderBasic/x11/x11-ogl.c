@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
  
  while(1) {
  	XNextEvent(dpy, &xev);
+        printf("event %x\n", xev.type);
         
         if(xev.type == Expose) {
         	XGetWindowAttributes(dpy, win, &gwa);
