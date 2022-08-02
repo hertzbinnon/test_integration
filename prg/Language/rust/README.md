@@ -1,3 +1,5 @@
+https://github.com/Dhghomon/easy_rust
+https://github.com/kumakichi/easy_rust_chs
 https://www.rust-lang.org/zh-CN/learn/get-started
 https://github.com/rust-unofficial/awesome-rust
 # error refs : https://www.jianshu.com/p/fa3b8b4896cc

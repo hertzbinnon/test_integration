@@ -152,6 +152,11 @@ int main(int argc, char *argv[]) {
  
  glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
  glXMakeCurrent(dpy, win, glc);
+#if 1
+ int nrAttributes = -1;
+ glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+ printf("Maximum nr of vertex attributes supported: %d\n",nrAttributes);
+#endif
  
   // VBO VAO IBO
    GLuint programID = LoadShaders( "SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader" );
@@ -187,6 +192,7 @@ int main(int argc, char *argv[]) {
                 glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT);
                 glUseProgram(programID);
+                //glBindBuffer(GL_ARRAY_BUFFER, VBO);
                 glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
                 glDrawArrays(GL_TRIANGLES, 0, 3);
                 glXSwapBuffers(dpy, win);

@@ -1,1 +1,21 @@
 git clone https://github.com/ustclug/qtguide.git
+~/Downloads/qt-unified-linux-x64-4.4.1-online.run se | grep "5.15"
+mkdir -v ~/sdb1/Qt/Qt-5.15.2-binary
+~/Downloads/qt-unified-linux-x64-4.4.1-online.run in qt.qt5.5152 -t /home/hertz/sdb1/Qt/Qt-5.15.2-binary
+
+[0] Arguments: /home/hertz/Downloads/qt-unified-linux-x64-4.4.1-online.run se
+[2] Operations sanity check succeeded.
+[2] Reading Qt Account settings from disk: "/home/hertz/.local/share/Qt/qtaccount.ini"
+[2] QtAccount information:
+[2] Login completed: false
+[2] Email: "1007052803@qq.com"
+[2] Total number of licenses: 0
+[2] Account type: 3
+[1796] Login completed to Qt Account: "1007052803@qq.com"
+[2579] Saving licenses to file: "/home/hertz/.local/share/Qt/qtlicenses.ini"
+[2579] Saving Qt Account settings to file: "/home/hertz/.local/share/Qt/qtaccount.ini"
+[2788] "Installation preconditions ok, installation can proceed!" [ "success" ]
+[3449] Searching packages with regular expression: ""
+[3449] Preparing meta information download...
+<?xml version="1.0"?>
+
