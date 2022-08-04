@@ -271,3 +271,5 @@ sudo apt install gh
 
 # set access token
 gh auth login
+# modify token
+vim ~/.config/gh/hosts.yml 
