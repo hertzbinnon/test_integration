@@ -1,0 +1,44 @@
+audio software:
+# 1. da pu 
+1.1 MuseScore
+##  music maker
+1.2 https://github.com/pernyblom/pernyblom.github.io/tree/master/abundant-music
+
+# 2. voice process and edit
+Ardour
+Audacity
+Qtractor
+
+3. SVS
+3.1 # singing-voice for github keyword topic
+https://nnsvs.github.io/
+Open-source: NNSVS is fully open-source. You can create your own voicebanks with your dataset.
+Multiple languages: NNSVS has been used for creating singing voice synthesis (SVS) systems for multiple languages by VocalSynth comminities (8+ as far as I know).
+Research friendly: NNSVS comes with reproducible Kaldi/ESPnet-style recipes. You can use NNSVS to create baseline systems for your research.
+
+3.2 # 'pu tong hua' voice data , 
+https://github.com/wenet-e2e/opencpop
+
+4. SoundFont # yin se 
+https://trisamples.com/free-soundfonts/
+
+5. singing software or make music program(app)
+https://www.libhunt.com/topic/karaoke
+https://awesomeopensource.com/projects/karaoke
+OpenKJ 
+performous
+UltraStar Deluxe/Play
+
+6. AI
+#text-to-speech AI Voice Generators
+6.1
+https://github.com/google/voice-builder
+#speech-to-text
+6.2
+kaldi
+6.3 extract music
+ultimatevocalremovergui
+
+6.4 
+#conversational-ai
+rasa
