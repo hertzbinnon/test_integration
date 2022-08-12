@@ -28,3 +28,16 @@ wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key 
 sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list http://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
 sudo apt update
 sudo apt install vulkan-sdk
+
+## upgrade to new version
+https://linuxize.com/post/how-to-upgrade-to-ubuntu-22-04/
+sudo apt-mark showhold
+sudo apt-mark unhold package_name
+sudo apt update
+sudo apt upgrade
+sudo apt full-upgrade
+sudo apt --purge autoremove
+sudo apt install update-manager-core
+sudo iptables -I INPUT -p tcp --dport 1022 -j ACCEPT
+sudo do-release-upgrade
+

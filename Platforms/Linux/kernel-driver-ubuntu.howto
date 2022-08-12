@@ -44,3 +44,10 @@ sudo reboot
 
 # check Opengl Vender
 glxinfo -B 
+
+# NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running. 
+MOK 
+sudo mokutil --import /var/lib/shim-signed/mok/MOK.der
+
+https://forums.developer.nvidia.com/t/nvidia-smi-has-failed-because-it-couldn-t-communicate-with-the-nvidia-driver-after-updating-ubuntu-20-04/170985/5
+https://clay-atlas.com/us/blog/2022/07/29/solved-nvidia-smi-has-failed-because-it-couldnt-communicate-with-the-nvidia-driver-make-sure-that-the-latest-nvidia-driver-is-installed-and-running/
