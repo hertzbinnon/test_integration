@@ -1,6 +1,12 @@
 0.靠靠
 https://ipaddress.com/website/github.com  #靠靠靠IP
 https://.232.69.194 github.global.ssl.fastly.net
+https://ipaddress.com/website/www.github.com # firefox 55.0.3 
+140.82.113.3 github.com
+199.232.69.194 github.global.ssl.fastly.net
+185.199.108.153 assets-cdn.github.com
+185.199.110.153 assets-cdn.github.com
+185.199.111.153 assets-cdn.github.com
 
 1.拉取远程仓库指定分支代码
 git pull <远程库名> <远程分支名>:<本地分支名>
@@ -185,12 +191,14 @@ git pull -v
 git checkout subbranch
 git merge master 
 
-8. window set
+8. Proxy (un)set
 git config --global  --list
 git config --global https.proxy https://127.0.0.1:33103
 git config --global http.proxy http://127.0.0.1:33103
 git config --global --unset http.proxy
 git config --global --unset https.proxy
+
+8. window set
 git config --global core.autocrlf input
 git config --global --list
 git config --list
@@ -273,3 +281,5 @@ sudo apt install gh
 gh auth login
 # modify token
 vim ~/.config/gh/hosts.yml 
+
+

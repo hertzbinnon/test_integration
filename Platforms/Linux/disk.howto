@@ -30,3 +30,6 @@ Be careful before using the write command.
 The size of this disk is 3.7 TiB (4000787030016 bytes). DOS partition table form                                                                                                                                   at cannot be used on drives for volumes larger than 2199023255040 bytes for 512-                                                                                                                                   byte sectors. Use GUID partition table format (GPT).
 
 #  testdisk : select 'effi gpt' to check, not pc for dos
+
+2. ssd and hd
+cat /sys/block/sda/queue/rotational 

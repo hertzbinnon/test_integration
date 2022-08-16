@@ -4,3 +4,5 @@ https://linuxconfig.org/install-the-latest-nvidia-linux-driver
 https://blog.csdn.net/aa119101/article/details/124974018
 
 # perf 
+sudo apt install linux-tools-common
+sudo apt install linux-tools-$(uname -r)
