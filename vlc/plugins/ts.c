@@ -2,7 +2,7 @@
  * ts.c: Transport Stream input module for VLC.
  *****************************************************************************
  * Copyright (C) 2004-2016 VLC authors and VideoLAN
- * $Id: 54befb49ded3b213d658c8d6133d55e83f2beabe $
+ * $Id: 67abfdf44f02ea21db86b1d0ae99f3849ef3488b $
  *
  * Authors: Laurent Aimar <fenrir@via.ecp.fr>
  *          Jean-Paul Saman <jpsaman #_at_# m2x.nl>
@@ -76,6 +76,9 @@ static void Close ( vlc_object_t * );
  *          1. pid:pcr (to force the pcr pid)
  *          2. pid:stream_type
  *          3. pid:type=fourcc where type=(video|audio|spu)
+ *   Ex: Program 1 on pid 8190 with hevc on pid 289, aac on pid 305
+ *       and pcr on 305
+ *      "8190:1=289:video=hevc,305:pcr,305:audio=mp4a"
  */
 #define PMT_TEXT N_("Extra PMT")
 #define PMT_LONGTEXT N_( \
@@ -549,7 +552,7 @@ static int Open( vlc_object_t *p_this )
 static void FreeDictAttachment( void *p_value, void *p_obj )
 {
     VLC_UNUSED(p_obj);
-    vlc_input_attachment_Release( (input_attachment_t *) p_value );
+    vlc_input_attachment_Delete( (input_attachment_t *) p_value );
 }
 
 static void Close( vlc_object_t *p_this )
@@ -1174,7 +1177,7 @@ static int Control( demux_t *p_demux, int i_query, va_list args )
                                          p_entry; p_entry = p_entry->p_next )
             {
                 msg_Err(p_demux, "GET ATTACHMENT %s", p_entry->psz_key);
-                (*ppp_attach)[*pi_int] = vlc_input_attachment_Hold(
+                (*ppp_attach)[*pi_int] = vlc_input_attachment_Duplicate(
                                                 (input_attachment_t *) p_entry->p_value );
                 if( (*ppp_attach)[*pi_int] )
                     (*pi_int)++;
@@ -1766,7 +1769,8 @@ static block_t* ReadTSPacket( demux_t *p_demux )
                 }
                 i_skip++;
             }
-            msg_Dbg( p_demux, "skipping %d bytes of garbage", i_skip );
+            msg_Dbg( p_demux, "skipping %d bytes of garbage at %"PRIu64,
+                     i_skip, vlc_stream_Tell( p_sys->stream ) );
             if (vlc_stream_Read( p_sys->stream, NULL, i_skip ) != i_skip)
                 return NULL;
 
@@ -1775,6 +1779,7 @@ static block_t* ReadTSPacket( demux_t *p_demux )
                 break;
             }
         }
+        msg_Dbg( p_demux, "resynced at %" PRIu64, vlc_stream_Tell( p_sys->stream ) );
         if( !( p_pkt = vlc_stream_Block( p_sys->stream, p_sys->i_packet_size ) ) )
         {
             msg_Dbg( p_demux, "eof ?" );
@@ -1790,10 +1795,15 @@ static mtime_t GetPCR( const block_t *p_pkt )
 
     mtime_t i_pcr = -1;
 
-    if( likely(p_pkt->i_buffer > 11) &&
-        ( p[3]&0x20 ) && /* adaptation */
-        ( p[5]&0x10 ) &&
-        ( p[4] >= 7 ) )
+    if(unlikely(p_pkt->i_buffer < 12))
+        return i_pcr;
+
+    const uint8_t i_adaption = p[3] & 0x30;
+
+    if( ( ( i_adaption == 0x30 && p[4] <= 182 ) ||   /* adaptation 0b11 */
+          ( i_adaption == 0x20 && p[4] == 183 ) ) && /* adaptation 0b10 */
+        ( p[4] >= 7 )  &&
+        ( p[5] & 0x10 ) ) /* PCR carry flag */
     {
         /* PCR is 33 bits */
         i_pcr = ( (mtime_t)p[6] << 25 ) |
