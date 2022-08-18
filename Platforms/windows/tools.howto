@@ -10,3 +10,6 @@ runas /trustlevel:0x40000 .\Walterlv.Demo.exe
 sfc /scannow
 # C:\Windows\System32\drivers\etc¿¿hosts¿¿¿¿¿¿¿¿¿
 ipconfig /flushdns 
+
+¿¿¿¿: net user
+¿¿¿¿¿¿: whoami
