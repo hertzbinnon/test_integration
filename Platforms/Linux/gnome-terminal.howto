@@ -1,0 +1,17 @@
+https://www.linuxshelltips.com/export-import-gnome-terminal-profile/
+$ sudo apt update
+$ sudo apt install dconf-editor
+$ dconf-editor & 
+$ dconf list /org/gnome/terminal/legacy/keybindings/
+$ dconf read /org/gnome/terminal/legacy/keybindings/new-tab
+$ dconf dump /org/gnome/terminal/legacy/keybindings/ > ~/keys.dconf
+$ cat ~/keys.dconf
+$ dconf reset -f /org/gnome/terminal/legacy/keybindings/
+$ dconf load /org/gnome/terminal/legacy/keybindings/ < ~/keys.dconf
+
+How to Export and Import Gnome Terminal Profile
+
+$ dconf list /org/gnome/terminal/legacy/profiles:/
+$ dconf dump /org/gnome/terminal/legacy/profiles:/:18222fd9-6982-4ab9-b100-1da0710154fa/ > ubuntu1.dconf
+$ dconf reset -f /org/gnome/terminal/legacy/profiles:/
+$ dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ < ~/ubuntu1.dconf 
