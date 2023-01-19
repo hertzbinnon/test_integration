@@ -15,3 +15,10 @@ https://www.jianshu.com/p/e4c3af965376
 #
 https://blogs.igalia.com/vjaquez/2021/07/09/video-decoding-in-gstreamer-with-vulkan/
 https://github.com/nvpro-samples
+
+#fov encoder
+
+https://blog.csdn.net/zhaoxinyao9/article/details/126659729
+
+# super-resolution
+https://www.collabora.com/news-and-blog/blog/2020/09/21/open-source-meets-super-resolution-part-1/

@@ -64,6 +64,9 @@ cat /proc/asound/cards
 ./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink    
 ./gst-launch-1.0 alsasrc device="hw:3,0" ! queue ! webrtcdsp ! webrtcechoprobe ! pulsesink		   # multiopen device 
 
+# windows capture audio(mics)
+gst-launch-1.0 wasapisrc ! audioconvert ! webrtcdsp ! webrtcechoprobe ! audioconvert ! autoaudiosink
+
 #https://gitlab.com/garfvl/denv 
 vlc-windows build on docker :
 	#apt-get install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 mingw-w64-tools

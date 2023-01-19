@@ -5,6 +5,9 @@ https://github.com/topics/java
 https://github.com/topics/python
 https://github.com/topics/javascript
 
+--一个很好的入口点
+https://learnxinyminutes.com/
+https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/rust.html
 --技术摘要
 
 1.IO

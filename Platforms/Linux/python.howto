@@ -5,3 +5,6 @@ sudo update-alternatives --config python
 
 pip3 install --target=/usr/bin --upgrade meson
 pip3 uninstall meson
+
+# create virtual enviroment
+python -m  venv test_env

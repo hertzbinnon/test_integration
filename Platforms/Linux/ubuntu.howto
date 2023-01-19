@@ -41,3 +41,17 @@ sudo apt install update-manager-core
 sudo iptables -I INPUT -p tcp --dport 1022 -j ACCEPT
 sudo do-release-upgrade
 
+## netplan
+# /etc/netplan/02-netconfig.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+          enp3s0:
+                  dhcp4: no 
+                  addresses:
+                          - 192.168.1.211/24
+                  gateway4: 192.168.1.1
+                  nameservers:
+                          addresses: [8.8.8.8]
+sudo netplan apply

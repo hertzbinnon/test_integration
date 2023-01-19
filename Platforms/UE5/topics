@@ -1,3 +1,16 @@
+# Document 
+https://docs.unrealengine.com/5.1/zh-CN/developing-for-xr-experiences-in-unreal-engine/
+https://docs.unrealengine.com/5.1/en-US/getting-started-with-pixel-streaming-in-unreal-engine/
+
 # how to support 8k hevc encoding on ue5 pixelstreaming
 https://blog.csdn.net/ustcwudi/article/details/126590686
+
+# FFMPEG Media Plugin for unreal engine
+https://github.com/bakjos/FFMPEGMedia
+
+# ue4 gstreamer plugins
+https://github.com/VegetableWithChicken/GStreamer-UE4
+
+# deploy pixelstreaming on linux 
+https://betheme.net/houduan/32500.html?action=onClick
 
