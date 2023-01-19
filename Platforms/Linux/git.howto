@@ -285,3 +285,13 @@ gh auth login
 vim ~/.config/gh/hosts.yml 
 
 
+# 
+1.¿¿¿¿¿¿¿¿ rm
+¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿.
+git checkout -- fileName¿
+2.¿¿git rm ¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿,¿
+git reset HEAD fileName;
+¿¿¿checkout¿¿¿¿¿
+git checkout -- fileName
+3.¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿
+git checkout 13899130f34668654a996dfff4687c605de669a5 --  third-party/PanoTools/stitchEm/env.sh
