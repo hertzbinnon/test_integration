@@ -131,7 +131,7 @@ for((;;)); do \
         -vcodec copy -acodec copy \
         -f flv -y rtmp://192.168.1.170/live/livestream; \
         sleep 1; \
-one
+done
 
 
 # snapshot
@@ -150,3 +150,18 @@ combine seperate videos into one, side by side
 ffmpeg -i inputleft.avi -vf "movie=inputright.avi [in1]; [in]pad=iw*2:ih:iw:0[in0]; [in0][in1] overlay=0:0 [out]" sidebyside.avi
 
 MORE INFO: http://stackoverflow.com/questions/9293265/ffmpeg-2-videos-transcoded-and-side-by-side-in-1-frame http://stackoverflow.com/questions/7581665/multiple-video-sources-combined-into-one
+
+## capture hdmi video and audio 
+List Input Devices
+ffmpeg -list_devices true -f dshow -i dummy
+List Device Modes
+ffmpeg -f dshow -list_options true -i video="USB Video"
+Display (1080p 30fps)
+ffplay -f dshow -video_size 1920x1080 -framerate 30 -vcodec mjpeg -i video="USB Video":audio="Digital Audio Interface (USB Digital Audio)"
+Display (720p 60fps)
+ffplay -f dshow -video_size 1280x720 -framerate 60 -vcodec mjpeg -i video="USB Video":audio="Digital Audio Interface (USB Digital Audio)"
+Capture (1080p 30fps)
+ffmpeg -f dshow -rtbufsize 100M -video_size 1920x1080 -framerate 30 -vcodec mjpeg -i video="USB Video":audio="Digital Audio Interface (USB Digital Audio)" -vcodec h264_qsv -b:v 7000k -acodec aac vid_1080p_30fps.mp4
+Capture (720p 60fps)
+ffmpeg -f dshow -rtbufsize 100M -video_size 1280x720 -framerate 60 -vcodec mjpeg -i video="USB Video":audio="Digital Audio Interface (USB Digital Audio)" -vcodec h264_qsv -b:v 7000k -acodec aac vid_720p_60fps.mp4
+These ffmpeg commands are using a hardware accelerated codec for Intel Quicksync. On systems that don’t support Quicksync (e.g. AMD, Nvidia, etc…) use ‘libx264’ in place of h264_qsv.
