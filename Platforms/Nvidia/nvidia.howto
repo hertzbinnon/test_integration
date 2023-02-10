@@ -119,6 +119,7 @@ sudo systemctl daemon-reload
 sudo systemctl start x11vnc.service
 
 
+# nvcodec 
 https://docs.nvidia.com/video-technologies/video-codec-sdk/read-me/
 https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/
 ### nvidia docker 

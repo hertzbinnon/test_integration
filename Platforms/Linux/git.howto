@@ -295,3 +295,12 @@ git reset HEAD fileName;
 git checkout -- fileName
 3.¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿
 git checkout 13899130f34668654a996dfff4687c605de669a5 --  third-party/PanoTools/stitchEm/env.sh
+
+###
+token¿¿
+¿¿¿¿ > Settings > Personal access tokens > Generate new token
+
+token¿¿
+clone¿¿¿¿¿¿¿¿token¿http¿¿¿https://$GH_TOKEN@github.com/owner/repo.git
+clone¿¿¿¿¿¿¿http¿¿¿¿¿¿¿token
+¿¿clone¿¿¿¿¿.git/config¿¿¿¿¿http¿¿¿token¿https://$GH_TOKEN@github.com/owner/repo.git
