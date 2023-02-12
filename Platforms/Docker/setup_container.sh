@@ -76,3 +76,8 @@ nvidia-docker exec -u root -it vrsmsz-nvidia-18.04 bash
 sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
 # 2. 
 nvidia-docker run -i -t  --hostname vrsmsz-nvidia-docker --name test -u root --restart always --gpus all  --volume /:/opt/root 58da04891421 bash
+
+#
+newgrp docker
+
+sudo gpasswd -a $USER docker
