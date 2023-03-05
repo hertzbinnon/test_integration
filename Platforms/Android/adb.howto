@@ -63,3 +63,9 @@ adb shell getprop|grep arm
 https://stackoverflow.com/questions/25274296/adb-install-fails-with-install-failed-test-only
 https://stackoverflow.com/questions/14460656/android-debug-bridge-adb-device-no-permissions
 https://askubuntu.com/questions/908306/adb-no-permissions-on-ubuntu-17-04
+
+#
+adb shell "cat /system/build.prop | grep "product""
+adb shell getprop ro.build.version.release
+adb shell getprop ro.build.version.sdk
+adb shell getprop ro.product.model
