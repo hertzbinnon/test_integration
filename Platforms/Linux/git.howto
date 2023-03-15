@@ -304,3 +304,13 @@ token¿¿
 clone¿¿¿¿¿¿¿¿token¿http¿¿¿https://$GH_TOKEN@github.com/owner/repo.git
 clone¿¿¿¿¿¿¿http¿¿¿¿¿¿¿token
 ¿¿clone¿¿¿¿¿.git/config¿¿¿¿¿http¿¿¿token¿https://$GH_TOKEN@github.com/owner/repo.git
+
+### find commit reletive to ffmpeg
+git log --color=always --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad)' --date=short | grep --color=never ffmpeg
+
+##
+git clone  hertz@192.168.1.211:/home/hertz/stitchEm
+git push hertz@192.168.1.211:/home/hertz/stitchEm  hertz-windows-dev  
+
+## modify .git/config
+git remote set-url origin https://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@github.com/EpicGames/UnrealEngine.git
